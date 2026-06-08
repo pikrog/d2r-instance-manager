@@ -1,0 +1,50 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="AvaloniaApplication1.App"
+             xmlns:local="using:AvaloniaApplication1"
+             xmlns:converters="using:AvaloniaApplication1.Converters"
+             RequestedThemeVariant="Default">
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+  
+    <Application.Styles>
+        <FluentTheme/>
+        <StyleInclude Source="Styles/AppDefault.axaml"/>
+        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+        <StyleInclude Source="/Themes/Section.axaml"/>
+        <StyleInclude Source="/Themes/HotkeyBox.axaml"/>
+    </Application.Styles>
+
+    <Application.Resources>
+		<!--
+		<SolidColorBrush x:Key="PrimaryBackground">#14172D</SolidColorBrush>
+		<SolidColorBrush x:Key="PrimaryText">#CFCFCF</SolidColorBrush>
+        <LinearGradientBrush x:Key="PrimaryBackgroundGradient" StartPoint="0%, 0%" EndPoint="100%, 0%">
+            <GradientStop Offset="0" Color="#111214"></GradientStop>
+            <GradientStop Offset="1" Color="#151E3E"></GradientStop>
+        </LinearGradientBrush>
+
+        <SolidColorBrush x:Key="PrimaryHoverBackground">#333B5A</SolidColorBrush>
+		<SolidColorBrush x:Key="PrimaryHoverForeground">White</SolidColorBrush>
+		-->
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="SectionUnderlineBrush">#DDDD</SolidColorBrush>
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="SectionUnderlineBrush">#4444</SolidColorBrush>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+            <StreamGeometry x:Key="ErrorGeometry">M14,7 A7,7 0 0,0 0,7 M0,7 A7,7 0 1,0 14,7 M7,3l0,5 M7,9l0,2</StreamGeometry>
+            <converters:ReferenceEqualsConverter x:Key="ReferenceEqualsConverter" />
+            <converters:ReferenceNotEqualsConverter x:Key="ReferenceNotEqualsConverter" />
+            <converters:ReferenceNotNullAndNotEqualsConverter x:Key="ReferenceNotNullAndNotEqualsConverter" />
+            <converters:GameInstanceStatusToBorderBrushConverter x:Key="GameInstanceStatusToBorderBrushConverter" />
+            <converters:GameInstanceStatusToBackgroundConverter x:Key="GameInstanceStatusToBackgroundConverter" />
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

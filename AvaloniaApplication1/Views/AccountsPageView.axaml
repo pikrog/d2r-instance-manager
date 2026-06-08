@@ -1,0 +1,88 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="using:AvaloniaApplication1.ViewModels"
+             xmlns:designViewModels="using:AvaloniaApplication1.Design.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AvaloniaApplication1.Views.AccountsPageView"
+             x:DataType="viewModels:AccountsPageViewModel">
+     <Design.DataContext>
+        <designViewModels:AccountsPageDesignViewModel/>
+    </Design.DataContext>
+    <DockPanel>
+
+        <!--<Border BorderThickness="1" BorderBrush="Black" DockPanel.Dock="Top">
+            <WrapPanel Classes="table-actions" RenderOptions.BitmapInterpolationMode="HighQuality">
+                
+                <StackPanel Orientation="Horizontal">
+                    <Button>
+                        <StackPanel>
+                            <TextBlock>New</TextBlock>
+                            <Image Source="/Assets/images/new.png"/>
+                        </StackPanel>
+                    </Button>
+                    <Button>
+                        <StackPanel>
+                            <TextBlock>Edit</TextBlock>
+                            <Image Source="/Assets/images/edit.png"/>
+                        </StackPanel>
+                    </Button>
+                    <Button>
+                        <StackPanel>
+                            <TextBlock>Delete</TextBlock>
+                            <Image Source="/Assets/images/delete.png"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+                
+                <Rectangle VerticalAlignment="Stretch" Width="1" Fill="Black" Margin="5 0 5 0"/>
+                
+                <StackPanel Orientation="Horizontal">
+                    <Button>
+                        <StackPanel>
+                            <TextBlock>Test</TextBlock>
+                            <Image Source="/Assets/images/recall.png"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+                
+            </WrapPanel>
+        </Border>-->
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" FlowDirection="RightToLeft" Margin="40">
+            <Border BoxShadow="1 5 10 0 #80000000" Background="Transparent" CornerRadius="50">
+                <!--<Border.Clip>
+                    <EllipseGeometry Rect="0,0,50,50"/>
+                </Border.Clip>-->
+                <Button Padding="0" CornerRadius="50">
+                    <Image Source="/Assets/images/new.png" Height="50"/>
+                </Button>
+            </Border>
+        </StackPanel>
+        
+        <ItemsControl ItemsSource="{Binding Accounts}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <Border Padding="10" Margin="20 10 20 0" CornerRadius="10" BoxShadow="0 1 3 0 #80000000">
+                            <DockPanel Height="50">
+                                <Grid ColumnDefinitions="Auto, Auto, *" DockPanel.Dock="Left" ColumnSpacing="8">
+                                    <Image Grid.Column="0" Source="{SvgImage /Assets/images/profile.svg}" Margin="0 0 10 0"/>
+                                    <TextBlock Grid.Column="1" VerticalAlignment="Center" FontWeight="Bold" Text="{Binding Username}"/>
+                                    <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Right">
+                                        <Button Width="75" HorizontalContentAlignment="Center" CornerRadius="10">
+                                            Edit
+                                        </Button>                                
+                                        <Button Width="75" HorizontalContentAlignment="Center" CornerRadius="10">
+                                            Delete
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
+                            </DockPanel>
+                        </Border>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </DockPanel>
+</UserControl>

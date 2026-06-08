@@ -1,0 +1,118 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:AvaloniaApplication1.ViewModels"
+             xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
+             xmlns:designViewModels="clr-namespace:AvaloniaApplication1.Design.ViewModels"
+             xmlns:dtos="clr-namespace:AvaloniaApplication1.Models"
+             mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="650"
+             Width="450" Height="650"
+             x:Class="AvaloniaApplication1.Views.EditInstanceForm"
+             x:DataType="viewModels:EditInstanceFormDialogViewModel"
+             WindowStartupLocation="CenterOwner">
+    <Design.DataContext>
+        <designViewModels:EditInstanceFormDesignViewModel/>
+    </Design.DataContext>
+    
+    <DockPanel>
+        <Grid DockPanel.Dock="Bottom" VerticalAlignment="Bottom" Height="60"
+              RowDefinitions="*" ColumnDefinitions="*, *" Opacity="1">
+            <Button Grid.Column="0" 
+                    Command="{Binding SaveCommand}"
+                    HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="10 0 2 0">Save</Button>
+            <Button Grid.Column="1" 
+                    Command="{Binding CancelCommand}"
+                    HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="2 0 10 0">Cancel</Button>
+        </Grid>
+
+        <ScrollViewer>
+            <StackPanel Margin="15" DataContext="{Binding Form}">
+                <StackPanel.Styles>
+                    <Style Selector="controls|Section">
+                        <Setter Property="Margin" Value="0 8 0 2"/>    <!--todo: StackPanel spacing + StackPanel per label + input-->
+                    </Style>
+                    <Style Selector="StackPanel > TextBox,ComboBox,CheckBox,controls|HotkeyBox">
+                        <Setter Property="Margin" Value="0 0 0 16"/>
+                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                    </Style>
+                    <Style Selector="StackPanel > TextBlock"> 
+                        <Setter Property="Margin" Value="0,0,0,4"/> 
+                    </Style>
+                </StackPanel.Styles>
+                
+                <TextBlock x:Name="ProfileNameLabel">Profile name</TextBlock>
+                <TextBox Classes="h1"
+                         AutomationProperties.LabeledBy="{Binding #ProfileNameLabel}"
+                         Text="{Binding Name}"/>
+
+                <controls:Section Title="Multiplayer"/>
+
+                <CheckBox IsChecked="{Binding IsOnlineMode}"
+                          Margin="0 0 0 8">Online Mode</CheckBox>
+                    
+                <TextBlock x:Name="AccountLabel">Account</TextBlock>
+                <ComboBox AutomationProperties.LabeledBy="{Binding #AccountLabel}"
+                          ItemsSource="{Binding Accounts}"
+                          SelectedItem="{Binding SelectedAccount}"
+                          IsEditable="False" IsEnabled="{Binding IsOnlineMode}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="{x:Type dtos:AccountOption}">
+                            <TextBlock Text="{Binding Username}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                    
+                <TextBlock x:Name="CredentialsVectorLabel">Credentials vector</TextBlock>
+                <ComboBox AutomationProperties.LabeledBy="{Binding #CredentialsVectorLabel}"
+                          ItemsSource="{x:Static viewModels:EditInstanceFormViewModel.CredentialsVectorOptions}"
+                          SelectedItem="{Binding SelectedCredentialsVector}"
+                          IsEditable="False" IsEnabled="{Binding IsOnlineMode}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="{x:Type viewModels:CredentialsVectorOption}">
+                            <TextBlock Text="{Binding Label}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                    
+                <TextBlock x:Name="RegionLabel">Region</TextBlock>
+                <ComboBox AutomationProperties.LabeledBy="{Binding #RegionLabel}"
+                          ItemsSource="{Binding Regions}"
+                          SelectedItem="{Binding SelectedRegion}"
+                          IsEditable="False" IsEnabled="{Binding IsOnlineMode}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="{x:Type dtos:RegionOption}">
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <controls:Section Title="Window"/>
+                
+                <TextBlock x:Name="DisplayLabel">Display</TextBlock>
+                <ComboBox AutomationProperties.LabeledBy="{Binding #DisplayLabel}"
+                          ItemsSource="{Binding Displays}"
+                          SelectedItem="{Binding Display}"
+                          IsEditable="False"/>
+                
+                <TextBlock VerticalAlignment="Center" x:Name="RecallHotKeyLabel">Recall Hotkey</TextBlock>
+                <controls:HotkeyBox AutomationProperties.LabeledBy="{Binding #RecallHotKeyLabel}"
+                              KeyGesture="{Binding RecallHotKeyGesture}"/>
+                
+                
+                <controls:Section Title="General game settings"/>
+                <WrapPanel>
+                    <WrapPanel.Styles>
+                        <Style Selector="CheckBox">
+                            <Setter Property="Width" Value="180"></Setter>
+                        </Style>
+                    </WrapPanel.Styles>
+                    <CheckBox IsChecked="{Binding IsNoSound}">No sound</CheckBox>
+                    <CheckBox IsChecked="{Binding IsWindowedMode}">Windowed mode</CheckBox>
+                    <!--<CheckBox>No controller rumble</CheckBox>
+                    <CheckBox>Low quality mode</CheckBox>-->
+                </WrapPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </DockPanel>
+</Window>

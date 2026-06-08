@@ -1,0 +1,90 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="using:AvaloniaApplication1.ViewModels"
+             xmlns:services="clr-namespace:AvaloniaApplication1.Services"
+             xmlns:designViewModels="clr-namespace:AvaloniaApplication1.Design.ViewModels"
+             xmlns:dtos="clr-namespace:AvaloniaApplication1.Models"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AvaloniaApplication1.Views.InstancesPageView"
+             x:DataType="viewModels:InstancesPageViewModel"
+             services:DialogService.Register="{Binding}">
+    <Design.DataContext>
+        <designViewModels:InstancesPageDesignViewModel/>
+    </Design.DataContext>
+    <DockPanel>
+        <Border DockPanel.Dock="Top">
+            <WrapPanel Classes="table-actions" RenderOptions.BitmapInterpolationMode="HighQuality">
+                
+                <StackPanel Orientation="Horizontal" Margin="0 0 3 0">
+                    <Button Command="{Binding NewInstanceCommand}">
+                        <Grid ColumnDefinitions="Auto, *">
+                            <Image Grid.Column="0" Source="/Assets/images/new.png"/>
+                            <TextBlock Grid.Column="1">New</TextBlock>
+                        </Grid>
+                    </Button>
+                    <Button Command="{Binding EditInstanceCommand}">
+                        <Grid ColumnDefinitions="Auto, *">
+                            <Image Grid.Column="0" Source="/Assets/images/edit.png"/>
+                            <TextBlock Grid.Column="1">Edit</TextBlock>
+                        </Grid>
+                    </Button>
+                    <Button Command="{Binding RemoveInstanceCommand}">
+                        <Grid ColumnDefinitions="Auto, *">
+                            <Image Grid.Column="0" Source="/Assets/images/delete.png"/>
+                            <TextBlock Grid.Column="1">Delete</TextBlock>
+                        </Grid>
+                    </Button>
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal">
+                    <Button>
+                        <Grid ColumnDefinitions="Auto, *">
+                            <Image Grid.Column="0" Source="/Assets/images/launch.png"/>
+                            <TextBlock Grid.Column="1">Launch</TextBlock>
+                        </Grid>
+                    </Button>
+                    <Button>
+                        <Grid ColumnDefinitions="Auto, *">
+                            <Image Grid.Column="0" Source="/Assets/images/close.png"/>
+                            <TextBlock Grid.Column="1">Close</TextBlock>
+                        </Grid>
+                    </Button>
+                    <Button>
+                        <Grid ColumnDefinitions="Auto, *">
+                            <Image Grid.Column="0" Source="/Assets/images/recall.png"/>
+                            <TextBlock Grid.Column="1">Recall</TextBlock>
+                        </Grid>
+                    </Button>
+                </StackPanel>
+                
+            </WrapPanel>
+        </Border>
+        
+        <DataGrid ItemsSource="{Binding Instances}" IsReadOnly="True" 
+                  GridLinesVisibility="Horizontal" HeadersVisibility="All" RowHeight="50" SelectedItem="{Binding SelectedInstance}">
+            <DataGrid.Styles>
+                <Style Selector="DataGridColumnHeader">
+                    <Setter Property="FontWeight" Value="Black"/>  
+                    <!-- <Setter Property="Background" Value="AliceBlue"/> -->
+                </Style>
+            </DataGrid.Styles>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="1.5*"/>
+                <DataGridTemplateColumn Header="Status" Width="*">
+                    <DataTemplate x:DataType="{x:Type dtos:GameInstanceTableRow}">
+                        <Border Width="100" CornerRadius="8"  Margin="5"
+                                BorderThickness="1" 
+                                BorderBrush="{Binding Status, Converter={StaticResource GameInstanceStatusToBorderBrushConverter}}"
+                                Background="{Binding Status, Converter={StaticResource GameInstanceStatusToBackgroundConverter}}"
+                                Opacity="0.5"
+                                HorizontalAlignment="Left">
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Status}" Opacity="2"/>
+                        </Border>
+                    </DataTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</UserControl>

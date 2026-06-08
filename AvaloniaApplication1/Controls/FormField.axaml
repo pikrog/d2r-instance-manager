@@ -1,0 +1,27 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AvaloniaApplication1.Controls.FormField"
+             x:Name="Root">
+    <StackPanel Spacing="4">
+        <StackPanel Orientation="Horizontal" Spacing="4">
+            <TextBlock FontSize="12" Text="{Binding #Root.Label}"/>
+            
+            <Path Stroke="Red" StrokeThickness="1" Fill="Transparent" Stretch="Uniform" Height="12"
+                  Data="{StaticResource ErrorGeometry}"
+                  IsVisible="{Binding #Root.(DataValidationErrors.HasErrors)}">
+                <ToolTip.Tip>
+                    <ItemsControl ItemsSource="{Binding #Root.(DataValidationErrors.Errors)}"/>
+                </ToolTip.Tip>
+            </Path>
+        </StackPanel>
+        <TextBox Name="Input" Text="{Binding  #Root.Text, Mode=TwoWay}" 
+                 DataValidationErrors.HasErrors="{Binding #Root.(DataValidationErrors.HasErrors)}">
+            <ToolTip.Tip>
+                <ItemsControl ItemsSource="{Binding #Root.(DataValidationErrors.Errors)}"/>
+            </ToolTip.Tip>
+        </TextBox>
+    </StackPanel>
+</UserControl>

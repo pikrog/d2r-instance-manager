@@ -1,0 +1,35 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:cc="using:AvaloniaApplication1.Controls"
+        xmlns:lang="using:AvaloniaApplication1.Languages">
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <cc:HotkeyBox Width="200"/>
+        </Border>
+    </Design.PreviewWith>
+
+    <Style Selector="cc|HotkeyBox">
+        <Setter Property="EmptyPlaceholderText" Value="{x:Static lang:HotkeyBoxStrings.EmptyPlaceholderText}"/>
+        <Setter Property="CapturingPlaceholderText" Value="{x:Static lang:HotkeyBoxStrings.CapturingPlaceholderText}"/>
+        <Setter Property="Template">
+            <ControlTemplate TargetType="{x:Type cc:HotkeyBox}">
+                <TextBox Name="PART_TextBox"
+                         IsReadOnly="True"
+                         CaretBrush="Transparent"
+                         SelectionBrush="Transparent"
+                         Text="{Binding DisplayText, RelativeSource={RelativeSource TemplatedParent}}"
+                         PlaceholderText="{Binding PlaceholderText, RelativeSource={RelativeSource TemplatedParent}}">
+                    <TextBox.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Clear" InputGesture="Delete" Command="{Binding ClearCommand, RelativeSource={RelativeSource TemplatedParent}}"/>
+                        </ContextMenu>
+                    </TextBox.ContextMenu>
+                </TextBox>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+    
+    <!--<Style Selector="cc|HotkeyBox:capturing /template/ TextBox#PART_TextBox">
+        
+    </Style>-->
+</Styles>
