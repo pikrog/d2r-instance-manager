@@ -16,7 +16,7 @@ public class ProcessStartInfoFactory(ArgumentsFactory argumentsFactory)
         {
             ExecutablePath = context.ExecutablePath,
             Arguments = argumentsFactory.CreateString(argumentsContext),
-            DisplayHandle = DisplayResolver.GetDisplayHandle(context.DisplayId),
+            DisplayHandle = Display.GetDisplayHandle(context.DisplayId),
         };
     }
 }

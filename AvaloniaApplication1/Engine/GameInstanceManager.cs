@@ -38,7 +38,7 @@ public class GameInstanceManager(GameInstanceEngineFactory engineFactory)
     private GameInstanceEngine Get(Guid id)
     {
         _instances.TryGetValue(id, out var instance);
-        return instance ?? throw new GameInstanceNotFoundException($"Instance with id {id} not found");
+        return instance ?? throw new GameInstanceNotFoundException(id);
     }
 
     public RuntimeSnapshot GetRuntimeState(Guid id)

@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace AvaloniaApplication1.Engine.Platform;
 
 public static class DisplayResolver
 {
-    public static IntPtr GetDisplayHandle(int index)
+
+    
+    public static Display GetDisplay(int index)
     {
         throw new NotImplementedException();
     }
