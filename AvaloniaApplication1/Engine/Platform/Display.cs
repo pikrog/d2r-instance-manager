@@ -9,7 +9,7 @@ public class Display(int index, IntPtr handle)
     
     public IntPtr Handle { get; } = handle;
 
-    public static Display GetPrimary => GetByIndex(0);
+    public static Display GetPrimary() => GetByIndex(0);
 
     public static Display GetByIndex(int index)
     {

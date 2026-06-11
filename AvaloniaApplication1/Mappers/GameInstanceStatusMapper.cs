@@ -10,7 +10,7 @@ public static class GameInstanceStatusMapper
 {
     public static GameInstanceStatus Map(RuntimeSnapshot snapshot)
     {
-        var status = snapshot.State switch
+        return snapshot.State switch
         {
             /*case State.Inactive:
                 if (snapshot.Errors.Length > 0)
@@ -55,9 +55,9 @@ public static class GameInstanceStatusMapper
             State.WaitingForUnlock => GameInstanceStatus.Unlocking,
             State.Running => GameInstanceStatus.Running,
             State.Stopping => GameInstanceStatus.Stopping,
-            _ => throw new ArgumentOutOfRangeException()
+            _ => throw new InvalidOperationException($"Unknown state {snapshot.State}")
         };
 
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 }

@@ -19,6 +19,7 @@ public static class AppBootstrapper
     {
         var services = new ServiceCollection();
         services.AddConfigServices(coreConfigServicesBundle);
+        services.AddEngineServices();
         services.AddApplicationServices();
         return services;
     }

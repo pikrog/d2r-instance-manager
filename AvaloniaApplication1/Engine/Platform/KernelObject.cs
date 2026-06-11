@@ -46,7 +46,7 @@ public class KernelObject(ProcessIdentity processIdentity, IntPtr sourceHandle, 
             // resume process?
             return CloseResult.Success;
         }
-        catch (ArgumentException) // ProcessException
+        catch (ProcessException e) when (e is ProcessNotFoundException or ProcessAccessDeniedException)
         {
             return CloseResult.Failure;
         }

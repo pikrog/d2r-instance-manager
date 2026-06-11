@@ -20,7 +20,7 @@ public static class ArgumentsContextMapper
             _ => throw new InvalidOperationException($"Unexpected authentication context: {context.AuthenticationContext.GetType().Name}")
         };
 
-        return new ArgumentsContext()
+        return new ArgumentsContext
         {
             AuthenticationArgumentsContext = authenticationArgumentsContext,
             IsNoSound = context.IsNoSound,
