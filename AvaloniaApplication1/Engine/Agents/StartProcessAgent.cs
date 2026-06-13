@@ -23,14 +23,7 @@ public class StartProcessAgent(ProcessStartInfo startInfo) : GameInstanceEngineA
         result switch
         {
             ProcessStarter.StartResult.Success r => new ProcessStarted(r.Process),
-            ProcessStarter.StartResult.Failure r => r.Reason switch
-            {
-                ProcessStarter.FailureReason.FileNotFound => new ProcessStartKnownFailure(ProcessStartFailureReason
-                    .FileNotFound),
-                ProcessStarter.FailureReason.AccessDenied => new ProcessStartKnownFailure(ProcessStartFailureReason
-                    .AccessDenied),
-                _ => throw new InvalidOperationException($"Unexpected failure reason: {r.Reason}")
-            },
+            ProcessStarter.StartResult.Failure r => new ProcessStartKnownFailure(r.Exception),
             _ => throw new InvalidOperationException($"Unexpected process start result type: {result.GetType().Name}")
         };
 }

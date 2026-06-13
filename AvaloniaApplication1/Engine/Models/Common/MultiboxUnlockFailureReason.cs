@@ -1,4 +1,4 @@
-﻿namespace AvaloniaApplication1.Engine.Models.Events.MultiboxUnlock;
+﻿namespace AvaloniaApplication1.Engine.Models.Common;
 
 public enum MultiboxUnlockFailureReason
 {

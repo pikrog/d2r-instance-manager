@@ -220,18 +220,15 @@ public sealed class Process : IDisposable
         WinApi.Win32Error? error = null)
     {
         error ??= WinApi.GetLastPInvokeError();
-        return error switch
+        var failureReason = error switch
         {
-            WinApi.Win32Error.FileNotFound or WinApi.Win32Error.PathNotFound =>
-                new ProcessStartFileNotFoundException(executablePath),
-            WinApi.Win32Error.AccessDenied =>
-                new ProcessStartAccessDeniedException(executablePath),
-            WinApi.Win32Error.BadExeFormat =>
-                new ProcessStartInvalidFormatException(executablePath),
-            WinApi.Win32Error.DllNotFound =>
-                new ProcessStartDllNotFoundException(executablePath),
-            _ => CreateExceptionForWin32Error(error.Value)
+            WinApi.Win32Error.FileNotFound or WinApi.Win32Error.PathNotFound => ProcessStartFailureReason.FileNotFound,
+            WinApi.Win32Error.AccessDenied => ProcessStartFailureReason.AccessDenied,
+            WinApi.Win32Error.BadExeFormat => ProcessStartFailureReason.InvalidExecutableFormat,
+            WinApi.Win32Error.DllNotFound => ProcessStartFailureReason.DllNotFound,
+            _ => ProcessStartFailureReason.Unknown,
         };
+        return new ProcessStartException(failureReason, executablePath, (int)error);
     }
 
     private static ProcessException CreateProcessExceptionForOpenProcess(uint processId,

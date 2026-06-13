@@ -10,21 +10,13 @@ namespace AvaloniaApplication1.Engine.Helpers;
 
 public static class ProcessStarter
 {
-    public enum FailureReason
-    {
-        FileNotFound,
-        AccessDenied,
-        InvalidExecutableFormat,
-        DllNotFound,
-    }
-
     public abstract record StartResult
     {
         private StartResult() { }
         
         public sealed record Success(Process Process) : StartResult;
 
-        public sealed record Failure(FailureReason Reason, Exception Exception) : StartResult;
+        public sealed record Failure(ProcessStartException Exception) : StartResult;
     }
     
     public static StartResult Start(ProcessStartInfo startInfo)
@@ -34,21 +26,9 @@ public static class ProcessStarter
             var process = Process.Start(startInfo);
             return new StartResult.Success(process);
         }
-        catch (ProcessStartFileNotFoundException e) // todo: Process.Start => throws ProcessStartException(FailureReason)
+        catch (ProcessStartException e)
         {
-            return new StartResult.Failure(FailureReason.FileNotFound, e);
-        }
-        catch (ProcessStartAccessDeniedException e)
-        {
-            return new StartResult.Failure(FailureReason.AccessDenied, e);
-        }
-        catch (ProcessStartInvalidFormatException e)
-        {
-            return new StartResult.Failure(FailureReason.InvalidExecutableFormat, e);
-        }
-        catch (ProcessStartDllNotFoundException e)
-        {
-            return new StartResult.Failure(FailureReason.DllNotFound, e);
+            return new StartResult.Failure(e);
         }
     }
 }

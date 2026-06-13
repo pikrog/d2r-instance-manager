@@ -1,3 +1,5 @@
-﻿namespace AvaloniaApplication1.Engine.Models.Events.MultiboxUnlock;
+﻿using AvaloniaApplication1.Engine.Exceptions;
 
-public sealed record MultiboxUnlockKnownFailure(MultiboxUnlockFailureReason Reason) : MultiboxUnlockFailed;
+namespace AvaloniaApplication1.Engine.Models.Events.MultiboxUnlock;
+
+public sealed record MultiboxUnlockKnownFailure(MultiboxUnlockException Exception) : MultiboxUnlockFailed;

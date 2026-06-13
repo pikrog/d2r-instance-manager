@@ -1,3 +1,5 @@
-﻿namespace AvaloniaApplication1.Engine.Models.Events.ProcessStart;
+﻿using AvaloniaApplication1.Engine.Exceptions.Platform;
 
-public sealed record ProcessStartKnownFailure(ProcessStartFailureReason Reason) : ProcessStartFailed;
+namespace AvaloniaApplication1.Engine.Models.Events.ProcessStart;
+
+public sealed record ProcessStartKnownFailure(ProcessStartException Exception) : ProcessStartFailed;
