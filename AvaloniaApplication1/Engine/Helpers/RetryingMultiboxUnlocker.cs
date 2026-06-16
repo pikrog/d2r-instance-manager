@@ -2,38 +2,34 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AvaloniaApplication1.Engine.Models.Common;
+using AvaloniaApplication1.Engine.Models.Errors;
 
 namespace AvaloniaApplication1.Engine.Helpers;
 
+using MultiboxUnlockResult = Result<Unit, RetryingMultiboxUnlockError>;
+
 public class RetryingMultiboxUnlocker(RetryPolicy retryPolicy)
 {
-    public enum UnlockResult
-    {
-        Success,
-        Timeout,
-        CloseSourceFailed,
-    }
-
-    public async Task<UnlockResult> UnlockAsync(CancellationToken cancellationToken = default)
+    public async Task<MultiboxUnlockResult> UnlockAsync(CancellationToken cancellationToken = default)
     {
         var retries = 0;
         while (retries < retryPolicy.MaxRetries)
         {
             ++retries;
             var result = await MultiboxUnlocker.UnlockAsync(cancellationToken);
-            switch (result)
+            if (result.IsSuccess)
+                return MultiboxUnlockResult.Success();
+            switch (result.Error)
             {
-                case MultiboxUnlocker.UnlockResult.Success:
-                    return UnlockResult.Success;
-                case MultiboxUnlocker.UnlockResult.EventNotFound:
+                case MultiboxUnlockError.EventNotFound:
                     await Task.Delay(retryPolicy.Delay, cancellationToken);
                     break;
-                case MultiboxUnlocker.UnlockResult.CloseSourceFailed:
-                    return UnlockResult.CloseSourceFailed;
+                case MultiboxUnlockError.CloseSourceFailed:
+                    return MultiboxUnlockResult.Failure(RetryingMultiboxUnlockError.CloseSourceFailed);
                 default:
                     throw new InvalidOperationException($"Unexpected multibox unlock result: {result}");
             }
         }
-        return UnlockResult.Timeout;
+        return MultiboxUnlockResult.Failure(RetryingMultiboxUnlockError.Timeout);
     }
 }

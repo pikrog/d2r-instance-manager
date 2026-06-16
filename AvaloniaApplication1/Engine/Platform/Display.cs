@@ -24,7 +24,7 @@ public class Display(int index, IntPtr handle)
         WinApi.EnumDisplayMonitors(
             IntPtr.Zero,
             IntPtr.Zero,
-            (IntPtr monitorHandle, IntPtr monitorDisplayContextHandle, ref WinApi.Rect monitorRect, IntPtr data) =>
+            (monitorHandle, monitorDisplayContextHandle, ref monitorRect, data) =>
             {
                 var display = new Display(index++, monitorHandle);
                 list.Add(display);

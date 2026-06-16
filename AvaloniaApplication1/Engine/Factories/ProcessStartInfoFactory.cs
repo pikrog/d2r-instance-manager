@@ -18,7 +18,7 @@ public class ProcessStartInfoFactory(ArgumentsFactory argumentsFactory, DisplayR
         
         return new ProcessStartInfo
         {
-            ExecutablePath = context.ExecutablePath,
+            FileName = context.ExecutablePath,
             Arguments = argumentsFactory.CreateString(argumentsContext),
             DisplayHandle = display.Handle,
         };

@@ -3,14 +3,14 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using AvaloniaApplication1.Engine.Exceptions;
 using AvaloniaApplication1.Engine.Exceptions.Platform;
+using AvaloniaApplication1.Engine.Models.Common;
 using AvaloniaApplication1.Engine.Models.Platform.Process;
 using Microsoft.Win32.SafeHandles;
-using FileNotFoundException = System.IO.FileNotFoundException;
 
 namespace AvaloniaApplication1.Engine.Platform;
 
+using ProcessStartResult = Result<Process, ProcessStartError>;
 
 public sealed class Process : IDisposable
 {
@@ -176,7 +176,7 @@ public sealed class Process : IDisposable
         var info = new WinApi.ShellExecuteInfo()
         {
             Size = Marshal.SizeOf<WinApi.ShellExecuteInfo>(),
-            File = startInfo.ExecutablePath,
+            File = startInfo.FileName,
             Parameters = startInfo.Arguments,
             Show = WinApi.ShowCommand.ShowNormal,
             Mask = mask,
@@ -185,7 +185,7 @@ public sealed class Process : IDisposable
         };
         return WinApi.ShellExecuteEx(ref info)
             ? GetProcessByOwnedHandle(info.ProcessHandle) 
-            : throw CreateProcessExceptionForShellExecuteEx(startInfo.ExecutablePath);
+            : throw CreateProcessExceptionForShellExecuteEx(startInfo.FileName);
     }
 
     public static Process GetProcessByOwnedHandle(IntPtr handle, uint? expectedProcessId = null) =>

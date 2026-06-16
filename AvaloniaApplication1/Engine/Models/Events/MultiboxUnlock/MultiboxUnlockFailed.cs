@@ -1,3 +1,15 @@
-﻿namespace AvaloniaApplication1.Engine.Models.Events.MultiboxUnlock;
+﻿using System;
+using AvaloniaApplication1.Engine.Models.Errors;
 
-public abstract record MultiboxUnlockFailed : ErrorEvent;
+namespace AvaloniaApplication1.Engine.Models.Events.MultiboxUnlock;
+
+public sealed record MultiboxUnlockFailed : FailedEvent<RetryingMultiboxUnlockError>
+{
+    public MultiboxUnlockFailed(RetryingMultiboxUnlockError error) : base(error)
+    {
+    }
+
+    public MultiboxUnlockFailed(Exception exception) : base(exception)
+    {
+    }
+};

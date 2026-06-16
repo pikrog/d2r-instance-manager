@@ -3,23 +3,22 @@ using System.Threading;
 using System.Threading.Tasks;
 using AvaloniaApplication1.Engine.Helpers;
 using AvaloniaApplication1.Engine.Models.Common;
+using AvaloniaApplication1.Engine.Models.Errors;
 using AvaloniaApplication1.Engine.Models.Events;
 using AvaloniaApplication1.Engine.Models.Events.MultiboxUnlock;
 
 namespace AvaloniaApplication1.Engine.Agents;
 
-public class UnlockMultiboxAgent(RetryingMultiboxUnlocker unlocker) : GameInstanceEngineAgentBase<RetryingMultiboxUnlocker.UnlockResult>
+using MultiboxUnlockResult = Result<Unit, RetryingMultiboxUnlockError>;
+
+public class UnlockMultiboxAgent(RetryingMultiboxUnlocker unlocker) : GameInstanceEngineAgentBase<MultiboxUnlockResult>
 {
-    protected override async Task<RetryingMultiboxUnlocker.UnlockResult> RunAgentTaskAsync(CancellationToken cancellationToken) => await unlocker.UnlockAsync(cancellationToken);
+    protected override async Task<MultiboxUnlockResult> RunAgentTaskAsync(CancellationToken cancellationToken) => 
+        await unlocker.UnlockAsync(cancellationToken);
 
-    protected override ErrorEvent CreateErrorForGenericException(Exception exception) => new MultiboxUnlockUnknownFailure(exception);
+    protected override ErrorEvent CreateErrorForGenericException(Exception exception) => 
+        new MultiboxUnlockFailed(exception);
 
-    protected override Event MapAgentResultToEvent(RetryingMultiboxUnlocker.UnlockResult result) =>
-        result switch
-        {
-            RetryingMultiboxUnlocker.UnlockResult.Success => new MultiboxUnlocked(),
-            RetryingMultiboxUnlocker.UnlockResult.Timeout => new MultiboxUnlockKnownFailure(MultiboxUnlockFailureReason.Timeout),
-            RetryingMultiboxUnlocker.UnlockResult.CloseSourceFailed => new MultiboxUnlockKnownFailure(MultiboxUnlockFailureReason.CloseSourceFailed),
-            _ => throw new InvalidOperationException($"Unexpected multibox unlock result: {result}")
-        };
+    protected override Event MapAgentResultToEvent(MultiboxUnlockResult result) => 
+        result.IsSuccess ? new MultiboxUnlocked() : new MultiboxUnlockFailed(result.Error);
 }
