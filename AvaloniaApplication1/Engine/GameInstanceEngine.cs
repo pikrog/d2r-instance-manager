@@ -10,11 +10,6 @@ using AvaloniaApplication1.Engine.Models.Common;
 using AvaloniaApplication1.Engine.Models.Contexts.Launch;
 using AvaloniaApplication1.Engine.Models.Effects;
 using AvaloniaApplication1.Engine.Models.Events;
-using AvaloniaApplication1.Engine.Models.Events.Authentication;
-using AvaloniaApplication1.Engine.Models.Events.LaunchLease;
-using AvaloniaApplication1.Engine.Models.Events.MultiboxUnlock;
-using AvaloniaApplication1.Engine.Models.Events.ProcessExit;
-using AvaloniaApplication1.Engine.Models.Events.ProcessStart;
 using AvaloniaApplication1.Engine.Models.SessionOperations;
 using AvaloniaApplication1.Engine.Models.StateMachine;
 

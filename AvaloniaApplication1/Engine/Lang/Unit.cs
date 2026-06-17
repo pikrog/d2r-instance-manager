@@ -1,4 +1,4 @@
-﻿namespace AvaloniaApplication1.Engine.Models.Common;
+﻿namespace AvaloniaApplication1.Engine.Lang;
 
 public readonly struct Unit
 {

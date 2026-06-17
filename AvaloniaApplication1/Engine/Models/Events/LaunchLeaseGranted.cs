@@ -1,3 +1,3 @@
-﻿namespace AvaloniaApplication1.Engine.Models.Events.LaunchLease;
+﻿namespace AvaloniaApplication1.Engine.Models.Events;
 
 public sealed record LaunchLeaseGranted(CriticalSectionLease Lease) : Event;

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Threading;
-using AvaloniaApplication1.Engine.Exceptions;
 using AvaloniaApplication1.Engine.Exceptions.Platform;
 using AvaloniaApplication1.Engine.Models.Platform.Process;
 
@@ -27,29 +26,25 @@ public class KernelObject(ProcessIdentity processIdentity, IntPtr sourceHandle, 
     
     public CloseResult CloseSource()
     {
-        try
-        {
-            using var process = Process.GetProcessById(ProcessIdentity.Id);
-            if (process.Identity != ProcessIdentity)
-                return CloseResult.Failure; // CloseResult.DifferentProcess
-            // todo:
-            // suspend process?
-            // duplicate handle without inheriting
-            // check handle identity
-            var transferredHandle =
-                DuplicateHandle(process.Handle, SourceHandle, options: WinApi.DuplicateOptions.CloseSource);
-            if (transferredHandle is null)
-                return CloseResult.Failure;
-            transferredHandle.Dispose();
-            // todo:
-            // dispose test handle
-            // resume process?
-            return CloseResult.Success;
-        }
-        catch (ProcessException e) when (e is ProcessNotFoundException or ProcessAccessDeniedException)
-        {
+        var processResult = Process.GetProcessById(ProcessIdentity.Id);
+        if (!processResult.IsSuccess)
             return CloseResult.Failure;
-        }
+        using var process = processResult.Value;
+        if (process.Identity != ProcessIdentity)
+            return CloseResult.Failure; // CloseResult.DifferentProcess
+        // todo:
+        // suspend process?
+        // duplicate handle without inheriting
+        // check handle identity
+        var transferredHandle =
+            DuplicateHandle(process.Handle, SourceHandle, options: WinApi.DuplicateOptions.CloseSource);
+        if (transferredHandle is null)
+            return CloseResult.Failure;
+        transferredHandle.Dispose();
+        // todo:
+        // dispose test handle
+        // resume process?
+        return CloseResult.Success;
     }
     
     public static IEnumerable<KernelObject> GetAll(Func<string, bool> typeFilter, Func<string, bool>? nameFilter = null, CancellationToken cancellationToken = default)
@@ -65,16 +60,8 @@ public class KernelObject(ProcessIdentity processIdentity, IntPtr sourceHandle, 
                 var processId = checked((uint)handle.UniqueProcessId.ToInt64());
                 if (!processes.TryGetValue(processId, out var process))
                 {
-                    try
-                    {
-                        process = Process.GetProcessById(processId);
-                        processes[processId] = process;
-                    }
-                    catch (ArgumentException)
-                    {
-                        processes[processId] = null;
-                        continue;
-                    }
+                    process = Process.GetProcessById(processId).Value;
+                    processes[processId] = process;
                 }
 
                 if (process is null)
@@ -201,8 +188,13 @@ public class KernelObject(ProcessIdentity processIdentity, IntPtr sourceHandle, 
     
     private static SafeKernelObjectHandle? DuplicateHandle(IntPtr sourceProcessHandle, IntPtr sourceHandle, WinApi.AccessMask desiredAccess = 0, uint attributes = 0, WinApi.DuplicateOptions options = WinApi.DuplicateOptions.Default)
     {
-        var status = WinApi.NtDuplicateObject(sourceProcessHandle, sourceHandle, Process.GetCurrentProcess().Handle, out var duplicatedHandle, desiredAccess, attributes, options);
-        return status != WinApi.NtStatus.Success ? null : new SafeKernelObjectHandle(duplicatedHandle, true);
+        var process = Process.GetCurrentProcess();
+        if (!process.IsSuccess)
+            return null;
+        var status = WinApi.NtDuplicateObject(sourceProcessHandle, sourceHandle, process.Value.Handle, out var duplicatedHandle, desiredAccess, attributes, options);
+        return status == WinApi.NtStatus.Success 
+            ? new SafeKernelObjectHandle(duplicatedHandle, true)
+            : null;
     }
     #endregion
 }

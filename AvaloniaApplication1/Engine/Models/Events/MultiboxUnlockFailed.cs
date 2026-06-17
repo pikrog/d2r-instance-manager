@@ -1,7 +1,7 @@
 ﻿using System;
 using AvaloniaApplication1.Engine.Models.Errors;
 
-namespace AvaloniaApplication1.Engine.Models.Events.MultiboxUnlock;
+namespace AvaloniaApplication1.Engine.Models.Events;
 
 public sealed record MultiboxUnlockFailed : FailedEvent<RetryingMultiboxUnlockError>
 {

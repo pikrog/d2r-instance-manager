@@ -1,29 +1,24 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using AvaloniaApplication1.Engine.Helpers;
+using AvaloniaApplication1.Engine.Lang;
+using AvaloniaApplication1.Engine.Models.Common;
 using AvaloniaApplication1.Engine.Models.Events;
-using AvaloniaApplication1.Engine.Models.Events.ProcessStart;
-using AvaloniaApplication1.Engine.Models.Events.ProcessStop;
-using ProcessStartInfo = AvaloniaApplication1.Engine.Models.Platform.Process.ProcessStartInfo;
-
+using AvaloniaApplication1.Engine.Models.Platform.Process;
+using AvaloniaApplication1.Engine.Platform;
 
 namespace AvaloniaApplication1.Engine.Agents;
 
-public class StartProcessAgent(ProcessStartInfo startInfo) : GameInstanceEngineAgentBase<ProcessStarter.StartResult>
+using ProcessResult = Result<Process, ProcessError>;
+
+public class StartProcessAgent(ProcessStartInfo startInfo) : GameInstanceEngineAgentBase<ProcessResult>
 {
-    protected override Task<ProcessStarter.StartResult> RunAgentTaskAsync(CancellationToken cancellationToken) =>
-        Task.FromResult(ProcessStarter.Start(startInfo));
+    protected override Task<ProcessResult> RunAgentTaskAsync(CancellationToken cancellationToken) =>
+        Task.FromResult(Process.Start(startInfo));
 
     protected override ErrorEvent CreateErrorForGenericException(Exception exception) =>
-        new ProcessStartUnknownFailure(exception);
+        new ProcessStartFailed(exception);
 
-    protected override Event MapAgentResultToEvent(ProcessStarter.StartResult result) =>
-        result switch
-        {
-            ProcessStarter.StartResult.Success r => new ProcessStarted(r.Process),
-            ProcessStarter.StartResult.Failure r => new ProcessStartKnownFailure(r.Exception),
-            _ => throw new InvalidOperationException($"Unexpected process start result type: {result.GetType().Name}")
-        };
+    protected override Event MapAgentResultToEvent(ProcessResult result) =>
+        result.IsSuccess ? new ProcessStarted(result.Value) : new ProcessStartFailed(result.Error);
 }

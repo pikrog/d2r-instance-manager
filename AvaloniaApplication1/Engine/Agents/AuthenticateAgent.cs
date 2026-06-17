@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using AvaloniaApplication1.Engine.Models.Contexts;
 using AvaloniaApplication1.Engine.Models.Contexts.Launch;
 using AvaloniaApplication1.Engine.Models.Events;
-using AvaloniaApplication1.Engine.Models.Events.Authentication;
 
 namespace AvaloniaApplication1.Engine.Agents;
 

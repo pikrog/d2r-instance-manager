@@ -1,16 +1,21 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using AvaloniaApplication1.Engine.Exceptions.Platform;
-using AvaloniaApplication1.Engine.Models.Common;
+using AvaloniaApplication1.Engine.Lang;
 using AvaloniaApplication1.Engine.Models.Platform.Process;
+using AvaloniaApplication1.Engine.Models.Platform.Results;
 using Microsoft.Win32.SafeHandles;
 
 namespace AvaloniaApplication1.Engine.Platform;
 
-using ProcessStartResult = Result<Process, ProcessStartError>;
+using HasExitedResult = Result<bool, ProcessError>;
+using ExitCodeResult = Result<uint?, ProcessError>;
+using KillResult = Result<RequestState, ProcessError>;
+using ProcessIdResult = Result<uint, ProcessError>;
+using CreationTimeResult = Result<long, ProcessError>;
+using IdentityResult = Result<ProcessIdentity, ProcessError>;
+using ProcessResult = Result<Process, ProcessError>;
 
 public sealed class Process : IDisposable
 {
@@ -26,30 +31,31 @@ public sealed class Process : IDisposable
     
     public uint Id => Identity.Id;
     
-    public bool HasExited
+    public HasExitedResult CheckIfExited()
     {
-        get
+        var result = (WinApi.WaitResult)WinApi.WaitForSingleObject(Handle, 0);
+        return result switch
         {
-            var result = (WinApi.WaitResult)WinApi.WaitForSingleObject(Handle, 0);
-            return result switch
-            {
-                WinApi.WaitResult.Object0 => true,
-                WinApi.WaitResult.Timeout => false,
-                WinApi.WaitResult.Failed => throw CreateGenericProcessException(),
-                _ => throw new InvalidOperationException($"Unexpected WaitForSingleObject result: {result}")
-            };
-        }
+            WinApi.WaitResult.Object0 => HasExitedResult.Success(true),
+            WinApi.WaitResult.Timeout => HasExitedResult.Success(false),
+            WinApi.WaitResult.Failed => HasExitedResult.Failure(ProcessError.ForQuery(Handle, Id)),
+            _ => throw new InvalidOperationException($"Unexpected WaitForSingleObject result: {result}")
+        };
     }
 
-    public uint ExitCode
+    public ExitCodeResult ExitCode
     {
         get
         {
-            if (!HasExited)
-                throw new ProcessStillActiveException(Id);
+            var hasExitedCheck = CheckIfExited();
+            if (!hasExitedCheck.IsSuccess)
+                return ExitCodeResult.Failure(hasExitedCheck.Error);
+            var hasExited = hasExitedCheck.Value;
+            if (!hasExited)
+                return ExitCodeResult.Success(null);
             return WinApi.GetExitCodeProcess(Handle, out var exitCode) 
-                ? exitCode 
-                : throw CreateGenericProcessException();
+                ? ExitCodeResult.Success(exitCode)
+                : ExitCodeResult.Failure(ProcessError.ForQuery(Handle, Id));
         }
     }
 
@@ -77,7 +83,7 @@ public sealed class Process : IDisposable
         WinApi.EnumWindows((h, _) =>
         {
             WinApi.GetWindowThreadProcessId(h, out var processId);
-            if (processId != Identity.Id || !WinApi.IsWindowVisible(h)) 
+            if (processId != Id || !WinApi.IsWindowVisible(h)) 
                 return true;
             handle = h;
             return false;
@@ -86,13 +92,13 @@ public sealed class Process : IDisposable
         return handle;
     }
     
-    public bool CloseMainWindow()
+    public RequestState CloseMainWindow() // todo: RequestState enum { Requested, NotRequested }
     {
-        if (HasExited)
-            throw new ProcessAlreadyExitedException(Id);
         var mainWindowHandle = MainWindowHandle;
         return mainWindowHandle != IntPtr.Zero 
-               && WinApi.PostMessage(mainWindowHandle, WinApi.WindowMessages.Close, IntPtr.Zero, IntPtr.Zero);
+               && WinApi.PostMessage(mainWindowHandle, WinApi.WindowMessages.Close, IntPtr.Zero, IntPtr.Zero)
+               ? RequestState.Accepted
+               : RequestState.Rejected;
     }
 
     public void Suspend()
@@ -100,14 +106,18 @@ public sealed class Process : IDisposable
         throw new NotImplementedException();
     }
     
-    public void Kill(uint exitCode = 0)
+    public KillResult Kill(uint exitCode = 0)
     {
         if (WinApi.TerminateProcess(Handle, exitCode))
-            return;
-        var lastError = WinApi.GetLastPInvokeError();
-        if (HasExited)
-            throw new ProcessAlreadyExitedException(Id);
-        throw CreateGenericProcessException(lastError);
+            return KillResult.Success(RequestState.Accepted);
+        var lastError = Marshal.GetLastPInvokeError();
+        var hasExitedCheck = CheckIfExited();
+        if (!hasExitedCheck.IsSuccess)
+            return KillResult.Failure(hasExitedCheck.Error);
+        var hasExited = hasExitedCheck.Value;
+        return hasExited
+            ? KillResult.Success(RequestState.Rejected) 
+            : KillResult.Failure(ProcessError.ForKill(Handle, Id, lastError));
     }
 
     public Task WaitForExitAsync(CancellationToken cancellationToken = default)
@@ -134,45 +144,43 @@ public sealed class Process : IDisposable
         return completionSource.Task;
     }
 
-    private static uint GetProcessId(IntPtr handle, uint? expectedId = null)
+    private static ProcessIdResult GetProcessId(IntPtr handle, uint? expectedId = null)
     {
         var id = WinApi.GetProcessId(handle);
-        if (id != 0)
-        {
-            if (expectedId is not null && id != expectedId)
-                throw new ArgumentException($"Process ID mismatch: expected {expectedId}, got {id}");
-            return id;
-        }
+        if (id == 0) 
+            return ProcessIdResult.Failure(ProcessError.ForQuery(handle, expectedId));
+        if (expectedId is not null && id != expectedId)
+            throw new ArgumentException($"Process ID mismatch: expected {expectedId}, got {id}");
+        return ProcessIdResult.Success(id);
 
-        if (expectedId is not null)
-            throw CreateGenericProcessException(expectedId.Value);
-
-        throw CreateGenericProcessException(handle);
     }
     
-    private static long GetProcessCreationTime(IntPtr handle, uint? knownId = null)
+    private static CreationTimeResult GetProcessCreationTime(IntPtr handle, uint? knownId = null)
     {
-        if (WinApi.GetProcessTimes(handle, out var creationTime, out _, out _, out _))
-            return creationTime.ToLong();
-        
-        if (knownId is not null)
-            throw CreateGenericProcessException(knownId.Value);
-        
-        throw CreateGenericProcessException(handle);
+        return WinApi.GetProcessTimes(handle, out var creationTime, out _, out _, out _) 
+            ? CreationTimeResult.Success(creationTime.ToLong()) 
+            : CreationTimeResult.Failure(ProcessError.ForQuery(handle, knownId));
     }
 
-    private static ProcessIdentity CreateIdentity(IntPtr handle, uint? expectedId = null)
+    private static IdentityResult CreateIdentity(IntPtr handle, uint? expectedId = null)
     {
         var id = GetProcessId(handle, expectedId);
-        var creationTime = GetProcessCreationTime(handle, id);
-        return new ProcessIdentity(id, creationTime);
+        if (!id.IsSuccess)
+            return IdentityResult.Failure(id.Error);
+        
+        var creationTime = GetProcessCreationTime(handle, id.Value);
+        if (!creationTime.IsSuccess)
+            return IdentityResult.Failure(creationTime.Error);
+        
+        return IdentityResult.Success(new ProcessIdentity(id.Value, creationTime.Value));
     }
     
-    public static Process Start(ProcessStartInfo startInfo)
+    public static ProcessResult Start(ProcessStartInfo startInfo)
     {
         var mask = WinApi.ShellExecuteMask.NoCloseProcess;
         if (startInfo.DisplayHandle is not null)
             mask |= WinApi.ShellExecuteMask.Monitor;
+        var monitorHandle = startInfo.DisplayHandle ?? IntPtr.Zero;
         var info = new WinApi.ShellExecuteInfo()
         {
             Size = Marshal.SizeOf<WinApi.ShellExecuteInfo>(),
@@ -180,95 +188,40 @@ public sealed class Process : IDisposable
             Parameters = startInfo.Arguments,
             Show = WinApi.ShowCommand.ShowNormal,
             Mask = mask,
-            MonitorHandle = startInfo.DisplayHandle ?? IntPtr.Zero,
+            MonitorHandle = monitorHandle,
             Verb = WinApi.ShellExecuteVerbs.Open,
         };
         return WinApi.ShellExecuteEx(ref info)
             ? GetProcessByOwnedHandle(info.ProcessHandle) 
-            : throw CreateProcessExceptionForShellExecuteEx(startInfo.FileName);
+            : ProcessResult.Failure(ProcessError.ForStart(startInfo.FileName));
     }
 
-    public static Process GetProcessByOwnedHandle(IntPtr handle, uint? expectedProcessId = null) =>
+    public static ProcessResult GetProcessByOwnedHandle(IntPtr handle, uint? expectedProcessId = null) =>
         GetProcessByHandle(handle, true, expectedProcessId);
     
-    public static Process GetProcessByBorrowedHandle(IntPtr handle, uint? expectedProcessId = null) =>
+    public static ProcessResult GetProcessByBorrowedHandle(IntPtr handle, uint? expectedProcessId = null) =>
         GetProcessByHandle(handle, false, expectedProcessId);
     
-    private static Process GetProcessByHandle(IntPtr handle, bool ownsHandle, uint? expectedProcessId = null)
+    private static ProcessResult GetProcessByHandle(IntPtr handle, bool ownsHandle, uint? expectedProcessId = null)
     {
         var runtimeInfo = CreateIdentity(handle, expectedProcessId);
+        if (!runtimeInfo.IsSuccess)
+            return ProcessResult.Failure(runtimeInfo.Error);
         var safeHandle = new SafeProcessHandle(handle, ownsHandle);
-        return new Process(safeHandle, runtimeInfo);
+        return ProcessResult.Success(new Process(safeHandle, runtimeInfo.Value));
     }
 
-    public static Process GetProcessById(uint processId)
+    public static ProcessResult GetProcessById(uint processId)
     {
         var handle = WinApi.OpenProcess(WinApi.ProcessAccessFlags.All, false, processId);
-        return handle != IntPtr.Zero 
-            ? GetProcessByOwnedHandle(handle, processId) 
-            : throw CreateProcessExceptionForOpenProcess(processId);
+        return handle != IntPtr.Zero
+            ? GetProcessByOwnedHandle(handle, processId)
+            : ProcessResult.Failure(ProcessError.ForOpen(processId));
     }
 
-    public static Process GetCurrentProcess()
+    public static ProcessResult GetCurrentProcess()
     {
         var handle = WinApi.GetCurrentProcess();
         return GetProcessByBorrowedHandle(handle);
     }
-    
-    #region Exception factories
-    private static ProcessException CreateProcessExceptionForShellExecuteEx(string executablePath,
-        WinApi.Win32Error? error = null)
-    {
-        error ??= WinApi.GetLastPInvokeError();
-        var failureReason = error switch
-        {
-            WinApi.Win32Error.FileNotFound or WinApi.Win32Error.PathNotFound => ProcessStartFailureReason.FileNotFound,
-            WinApi.Win32Error.AccessDenied => ProcessStartFailureReason.AccessDenied,
-            WinApi.Win32Error.BadExeFormat => ProcessStartFailureReason.InvalidExecutableFormat,
-            WinApi.Win32Error.DllNotFound => ProcessStartFailureReason.DllNotFound,
-            _ => ProcessStartFailureReason.Unknown,
-        };
-        return new ProcessStartException(failureReason, executablePath, (int)error);
-    }
-
-    private static ProcessException CreateProcessExceptionForOpenProcess(uint processId,
-        WinApi.Win32Error? error = null)
-    {
-        error ??= WinApi.GetLastPInvokeError();
-        return error switch
-        {
-            WinApi.Win32Error.InvalidParameter => new ProcessNotFoundException(processId),
-            WinApi.Win32Error.AccessDenied => new ProcessAccessDeniedException(processId),
-            _ => CreateExceptionForWin32Error(error.Value)
-        };   
-    }
-        
-    
-    private ProcessException CreateGenericProcessException(WinApi.Win32Error? error = null) => CreateGenericProcessException(Id, error);
-
-    private static ProcessException CreateGenericProcessException(IntPtr handle, WinApi.Win32Error? error = null)
-    {
-        error ??= WinApi.GetLastPInvokeError();
-        return error switch
-        {
-            WinApi.Win32Error.AccessDenied => new ProcessAccessDeniedException(handle),
-            WinApi.Win32Error.InvalidHandle => new ProcessInvalidHandleException(handle),
-            _ => CreateExceptionForWin32Error(error.Value)
-        };
-    }
-    
-    private static ProcessException CreateGenericProcessException(uint id, WinApi.Win32Error? error = null)
-    {
-        error ??= WinApi.GetLastPInvokeError();
-        return error switch
-        {
-            WinApi.Win32Error.AccessDenied => new ProcessAccessDeniedException(id),
-            WinApi.Win32Error.InvalidHandle => new ProcessInvalidHandleException(id),
-            _ => CreateExceptionForWin32Error(error.Value)
-        };
-    }
-    
-    private static ProcessUnknownError CreateExceptionForWin32Error(WinApi.Win32Error error) => 
-        new(new Win32Exception((int)error));
-    #endregion
 }
