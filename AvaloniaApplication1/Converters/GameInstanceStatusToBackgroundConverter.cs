@@ -3,6 +3,7 @@ using System.Globalization;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
 using AvaloniaApplication1.Engine.Models;
+using AvaloniaApplication1.Models;
 
 namespace AvaloniaApplication1.Converters;
 
@@ -19,10 +20,12 @@ public class GameInstanceStatusToBackgroundConverter : IValueConverter
         return status switch
         {
             GameInstanceStatus.Inactive => Brushes.LightGray,
+            GameInstanceStatus.Authenticating => Brushes.LightYellow,
             GameInstanceStatus.QueuedForStart => Brushes.LightYellow,
+            GameInstanceStatus.Starting => Brushes.LightYellow,
             GameInstanceStatus.Unlocking => Brushes.LightYellow,
             GameInstanceStatus.Running => Brushes.LightGreen,
-            GameInstanceStatus.Closing => Brushes.LightYellow,
+            GameInstanceStatus.Stopping => Brushes.LightYellow,
             GameInstanceStatus.Exited => Brushes.LightGray,
             GameInstanceStatus.ExitedPrematurely => Brushes.LightCoral,
             GameInstanceStatus.Terminated => Brushes.LightCoral,

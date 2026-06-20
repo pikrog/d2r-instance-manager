@@ -13,7 +13,7 @@ public enum AuthenticationResult
     Failure,
 }
 
-public class AuthenticateAgent(AuthenticationContext context) : GameInstanceEngineAgentBase<AuthenticationResult>
+public class AuthenticateAgent(AuthenticationContext context) : AgentBase<AuthenticationResult>
 {
     protected override Task<AuthenticationResult> RunAgentTaskAsync(CancellationToken cancellationToken) =>
         throw new NotImplementedException("AuthenticateAgent not implemented yet");

@@ -6,7 +6,7 @@ using AvaloniaApplication1.Engine.Models.Events;
 
 namespace AvaloniaApplication1.Engine.Agents;
 
-public interface IGameInstanceEngineAgent
+public interface IAgent
 {
     Task<Event?> RunAsync(CancellationToken cancellationToken);
 }

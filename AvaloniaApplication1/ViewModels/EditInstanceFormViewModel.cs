@@ -48,13 +48,13 @@ public partial class EditInstanceFormViewModel : FormViewModelBase
     [NotifyDataErrorInfo]
     [RequiredIf(nameof(IsOnlineMode), true)]
     public partial RegionOption? SelectedRegion { get; set; }
+    
+    public IReadOnlyList<DisplayOption> Displays { get; set; }
 
     [ObservableProperty]
-    public partial int[] Displays { get; set; }
-
-    [ObservableProperty]
+    [NotifyDataErrorInfo]
     [Required]
-    public partial int Display { get; set; } = 1;
+    public partial DisplayOption SelectedDisplay { get; set; }
 
     public HotKey RecallHotKey
     {
@@ -71,11 +71,11 @@ public partial class EditInstanceFormViewModel : FormViewModelBase
     [ObservableProperty]
     public partial bool IsWindowedMode { get; set; }
 
-    public EditInstanceFormViewModel(IReadOnlyList<AccountOption> accounts, IReadOnlyList<RegionOption> regions, IReadOnlyList<int> displays)
+    public EditInstanceFormViewModel(IReadOnlyList<AccountOption> accounts, IReadOnlyList<RegionOption> regions, IReadOnlyList<DisplayOption> displays)
     {
         Accounts = accounts;
         Regions = regions;
-        Displays = displays.ToArray(); // todo: make this a list of options?
+        Displays = displays;
         
         PropertyChanged += OnPropertyChanged;
     }

@@ -1,0 +1,38 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:AvaloniaApplication1.ViewModels"
+             xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
+             xmlns:dtos="clr-namespace:AvaloniaApplication1.Models"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AvaloniaApplication1.Views.GlobalSettingsPageView"
+             x:DataType="viewModels:GlobalSettingsPageViewModel">
+    <ScrollViewer>
+            <StackPanel Name="Panel" Margin="15">
+                <StackPanel.Styles>
+                    <Style Selector="controls|Section">
+                        <Setter Property="Margin" Value="0 8 0 2"/>    <!--todo: StackPanel spacing + StackPanel per label + input-->
+                    </Style>
+                    <Style Selector="StackPanel > TextBox,ComboBox,CheckBox,controls|HotkeyBox">
+                        <Setter Property="Margin" Value="0 0 0 16"/>
+                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                    </Style>
+                    <Style Selector="StackPanel > TextBlock"> 
+                        <Setter Property="Margin" Value="0,0,0,4"/> 
+                    </Style>
+                </StackPanel.Styles>
+                
+                <TextBlock x:Name="ProfileNameLabel">Game executable path</TextBlock>
+                <TextBox Classes="h1"
+                         AutomationProperties.LabeledBy="{Binding #ProfileNameLabel}"
+                         Text="{Binding GameExecutablePath}"/>
+
+                <controls:Section Title="Behavior"/>
+
+                <CheckBox IsChecked="{Binding FallbackToPrimaryDisplayIfInvalid}"
+                          Margin="0 0 0 8">Allow fallback to the primary display if the launched instance refers to an unavailable one</CheckBox>
+                
+            </StackPanel>
+        </ScrollViewer>
+</UserControl>

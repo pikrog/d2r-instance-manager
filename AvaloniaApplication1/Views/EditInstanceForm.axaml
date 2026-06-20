@@ -92,7 +92,7 @@
                 <TextBlock x:Name="DisplayLabel">Display</TextBlock>
                 <ComboBox AutomationProperties.LabeledBy="{Binding #DisplayLabel}"
                           ItemsSource="{Binding Displays}"
-                          SelectedItem="{Binding Display}"
+                          SelectedItem="{Binding SelectedDisplay}"
                           IsEditable="False"/>
                 
                 <TextBlock VerticalAlignment="Center" x:Name="RecallHotKeyLabel">Recall Hotkey</TextBlock>

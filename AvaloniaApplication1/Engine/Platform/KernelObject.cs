@@ -60,8 +60,11 @@ public class KernelObject(ProcessIdentity processIdentity, IntPtr sourceHandle, 
                 var processId = checked((uint)handle.UniqueProcessId.ToInt64());
                 if (!processes.TryGetValue(processId, out var process))
                 {
-                    process = Process.GetProcessById(processId).Value;
-                    processes[processId] = process;
+                    var processResult = Process.GetProcessById(processId);
+                    if (processResult.IsSuccess)
+                        processes[processId] = process = processResult.Value;
+                    else
+                        processes[processId] = null;
                 }
 
                 if (process is null)

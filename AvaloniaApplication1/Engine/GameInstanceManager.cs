@@ -11,7 +11,7 @@ namespace AvaloniaApplication1.Engine;
 
 public class GameInstanceManager(GameInstanceEngineFactory engineFactory)
 {
-    public event Action<RuntimeSnapshot>? InstanceStateChanged;
+    public event Action<Guid>? InstanceStateChanged;
     
     private readonly Dictionary<Guid, GameInstanceEngine> _instances = [];
     
@@ -25,9 +25,9 @@ public class GameInstanceManager(GameInstanceEngineFactory engineFactory)
         _instances[id] = instance;
     }
 
-    private void OnInstanceStateChanged(object? sender, RuntimeSnapshot e)
+    private void OnInstanceStateChanged(object? sender, Guid id)
     {
-        InstanceStateChanged?.Invoke(e);
+        InstanceStateChanged?.Invoke(id);
     }
 
     public void Remove(Guid id)
@@ -41,7 +41,7 @@ public class GameInstanceManager(GameInstanceEngineFactory engineFactory)
         return instance ?? throw new GameInstanceNotFoundException(id);
     }
 
-    public RuntimeSnapshot GetRuntimeState(Guid id)
+    public RuntimeSnapshot GetRuntimeSnapshot(Guid id)
     {
         var instance = Get(id);
         return instance.RuntimeSnapshot;

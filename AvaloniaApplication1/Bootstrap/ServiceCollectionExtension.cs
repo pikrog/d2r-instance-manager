@@ -1,7 +1,9 @@
 ﻿using AvaloniaApplication1.Config;
 using AvaloniaApplication1.Engine;
 using AvaloniaApplication1.Engine.CommandLine;
+using AvaloniaApplication1.Engine.Coordination;
 using AvaloniaApplication1.Engine.Factories;
+using AvaloniaApplication1.Engine.Helpers;
 using AvaloniaApplication1.Engine.Providers;
 using AvaloniaApplication1.Services;
 using AvaloniaApplication1.ViewModels;
@@ -26,10 +28,10 @@ public static class ServiceCollectionExtension
         public void AddEngineServices()
         {
             services.AddSingleton<LaunchCoordinator>();
-            services.AddSingleton<ShellExecuteArgumentFormatter>();
-            services.AddSingleton<ArgumentStringBuilder>();
+            services.AddSingleton<IArgumentFormatter, ShellExecuteArgumentFormatter>();
+            services.AddSingleton<ArgumentListFormatter>();
+            services.AddSingleton<IArgumentStringBuilder, ArgumentStringBuilder>();
             services.AddSingleton<ArgumentsFactory>();
-            services.AddSingleton<DisplayResolverSettingsProvider>();
             services.AddSingleton<DisplayResolver>();
             services.AddSingleton<ProcessStartInfoFactory>();
             services.AddSingleton<GameInstanceEngineFactory>();
@@ -38,17 +40,22 @@ public static class ServiceCollectionExtension
 
         public void AddApplicationServices()
         {
+            services.AddSingleton<IDisplayResolverSettingsProvider, DisplayResolverSettingsProvider>();
+            
             services.AddSingleton<GameInstanceManagerBootstrapper>();
 
             services.AddSingleton<AccountService>();
             services.AddSingleton<RegionService>();
             services.AddSingleton<GameInstanceService>();
+            services.AddSingleton<GlobalSettingsService>();
+            services.AddSingleton<DisplayService>();
             services.AddSingleton<DialogService>();
-
+            
             services.AddTransient<MainWindowViewModel>();
             services.AddTransient<RegionsPageViewModel>();
             services.AddTransient<AccountsPageViewModel>();
             services.AddTransient<InstancesPageViewModel>();
+            services.AddTransient<GlobalSettingsPageViewModel>();
         }
     }
 }

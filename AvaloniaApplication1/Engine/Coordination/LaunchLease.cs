@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading;
 
-namespace AvaloniaApplication1.Engine;
+namespace AvaloniaApplication1.Engine.Coordination;
 
-public sealed class CriticalSectionLease(SemaphoreSlim semaphore) : IDisposable
+public sealed class LaunchLease(SemaphoreSlim semaphore) : IDisposable
 {
     private int _disposed = 0;
         

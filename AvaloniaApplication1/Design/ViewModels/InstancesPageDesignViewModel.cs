@@ -10,7 +10,10 @@ namespace AvaloniaApplication1.Design.ViewModels;
 
 public class InstancesPageDesignViewModel : InstancesPageViewModel
 {
-    public InstancesPageDesignViewModel() : base(DesignServices.GameInstanceService, DesignServices.AccountService, DesignServices.RegionService) // todo: replace with DesignServices?
+    public InstancesPageDesignViewModel() : base(DesignServices.GameInstanceService,
+        DesignServices.AccountService,
+        DesignServices.RegionService,
+        DesignServices.DisplayService) // todo: replace with DesignServices?
     {
         Instances.Clear();
         

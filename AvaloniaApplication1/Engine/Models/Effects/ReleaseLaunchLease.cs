@@ -1,3 +1,5 @@
-﻿namespace AvaloniaApplication1.Engine.Models.Effects;
+﻿using AvaloniaApplication1.Engine.Coordination;
 
-public sealed record ReleaseLaunchLease(CriticalSectionLease Lease) : Effect;
+namespace AvaloniaApplication1.Engine.Models.Effects;
+
+public sealed record ReleaseLaunchLease(LaunchLease Lease) : Effect;

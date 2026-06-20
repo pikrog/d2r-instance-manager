@@ -17,14 +17,16 @@ public class EditInstanceFormDesignViewModel : EditInstanceFormViewModel
         new RegionOption(Guid.NewGuid(), "Asia"),
         new RegionOption(Guid.NewGuid(), "United States")
     ],
-    [1, 2])
+    [
+        new DisplayOption(0, "1"),
+        new DisplayOption(1, "2")
+    ])
     {
         Name = "Hammer";
         IsOnlineMode = true;
         SelectedAccount = Accounts[0];
         SelectedRegion = Regions[0];
-        Displays = [1, 2];
-        Display = 1;
+        SelectedDisplay = Displays[0];
         RecallHotKey = new HotKey(Key.F1, KeyModifiers.Control);
         IsNoSound = true;
     }

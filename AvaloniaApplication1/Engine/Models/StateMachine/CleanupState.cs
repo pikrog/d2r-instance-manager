@@ -1,12 +1,22 @@
-﻿namespace AvaloniaApplication1.Engine.Models.StateMachine;
+﻿using System;
 
-public record CleanupState
+namespace AvaloniaApplication1.Engine.Models.StateMachine;
+
+[Flags]
+public enum CleanupItem
 {
-    public bool IsLeaseRequested { get; init; }
-    public bool IsProcessStartRequested { get; init; }
-    public bool IsLeaseCleanedUp { get; init; }
-    public bool IsProcessCleanedUp { get; init; }
+    None = 0,
+    LaunchLease = 1,
+    Process = 2,
+}
 
-    public bool IsCleanupComplete =>
-        (!IsLeaseRequested || IsLeaseCleanedUp) && (!IsProcessStartRequested || IsProcessCleanedUp);
+public sealed record CleanupState(CleanupItem Pending = CleanupItem.None)
+{
+    public bool IsCleanupComplete => Pending == CleanupItem.None;
+
+    public CleanupState Require(CleanupItem item) =>
+        this with { Pending = Pending | item };
+
+    public CleanupState Complete(CleanupItem item) =>
+        this with { Pending = Pending & ~item };
 }

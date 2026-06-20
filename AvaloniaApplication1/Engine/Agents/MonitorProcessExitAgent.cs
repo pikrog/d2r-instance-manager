@@ -10,7 +10,7 @@ namespace AvaloniaApplication1.Engine.Agents;
 
 using ExitCodeResult = Result<uint?, ProcessError>;
 
-public class MonitorProcessExitAgent(Process process) : GameInstanceEngineAgentBase<ExitCodeResult>
+public class MonitorProcessExitAgent(Process process) : AgentBase<ExitCodeResult>
 {
     protected override async Task<ExitCodeResult> RunAgentTaskAsync(CancellationToken cancellationToken)
     {

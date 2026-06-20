@@ -11,7 +11,7 @@ public class DisplayResolver(IDisplayResolverSettingsProvider settingsProvider)
         {
             return Display.GetByIndex(index);
         }
-        catch (ArgumentOutOfRangeException)
+        catch (ArgumentOutOfRangeException) // todo: replace exception with Result<Display, Error>
         {
             if (!settingsProvider.AllowFallbackToPrimaryDisplay)
                 throw;

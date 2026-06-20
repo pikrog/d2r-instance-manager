@@ -5,7 +5,9 @@ using AvaloniaApplication1.Config;
 using AvaloniaApplication1.Design.Config;
 using AvaloniaApplication1.Engine;
 using AvaloniaApplication1.Engine.CommandLine;
+using AvaloniaApplication1.Engine.Coordination;
 using AvaloniaApplication1.Engine.Factories;
+using AvaloniaApplication1.Engine.Helpers;
 using AvaloniaApplication1.Engine.Platform;
 using AvaloniaApplication1.Engine.Providers;
 using AvaloniaApplication1.Models;
@@ -27,6 +29,10 @@ public static class DesignServices
     public static AccountService AccountService { get; } = new(ConfigService);
     
     public static RegionService RegionService { get; } = new(ConfigService);
+
+    public static DisplayService DisplayService { get; } = new();
+
+    public static GlobalSettingsService GlobalSettingsService { get; } = new(ConfigService);
     
     private static readonly LaunchCoordinator LaunchCoordinator = new();
 

@@ -92,7 +92,7 @@ public sealed class Process : IDisposable
         return handle;
     }
     
-    public RequestState CloseMainWindow() // todo: RequestState enum { Requested, NotRequested }
+    public RequestState CloseMainWindow()
     {
         var mainWindowHandle = MainWindowHandle;
         return mainWindowHandle != IntPtr.Zero 

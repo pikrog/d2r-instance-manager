@@ -5,7 +5,7 @@ using AvaloniaApplication1.Engine.Models.Events;
 
 namespace AvaloniaApplication1.Engine.Agents;
 
-public abstract class GameInstanceEngineAgentBase<TResult> : IGameInstanceEngineAgent
+public abstract class AgentBase<TResult> : IAgent
 {
     protected abstract Task<TResult> RunAgentTaskAsync(CancellationToken cancellationToken);
     

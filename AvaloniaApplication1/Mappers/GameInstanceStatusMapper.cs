@@ -3,6 +3,7 @@ using System.Linq;
 using AvaloniaApplication1.Engine.Models;
 using AvaloniaApplication1.Engine.Models.Events;
 using AvaloniaApplication1.Engine.Models.StateMachine;
+using AvaloniaApplication1.Models;
 
 namespace AvaloniaApplication1.Mappers;
 
@@ -48,7 +49,7 @@ public static class GameInstanceStatusMapper
                 break;
             default:
                 throw new ArgumentOutOfRangeException(); // todo: InvalidOperationException or ArgumentOutOfRangeException?*/
-            State.Inactive => GameInstanceStatus.Inactive,
+            State.Inactive => ResolveInactiveStatus(snapshot),
             State.Authenticating => GameInstanceStatus.Authenticating,
             State.WaitingForStart => GameInstanceStatus.QueuedForStart,
             State.Starting => GameInstanceStatus.Starting,
@@ -59,5 +60,10 @@ public static class GameInstanceStatusMapper
         };
 
         //throw new NotImplementedException();
+    }
+    
+    private static GameInstanceStatus ResolveInactiveStatus(RuntimeSnapshot snapshot)
+    {
+        return snapshot.Errors.Length == 0 ? GameInstanceStatus.Failed : GameInstanceStatus.Inactive;
     }
 }

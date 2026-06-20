@@ -63,7 +63,7 @@
                 <Button Command="{Binding SetPageCommand}" CommandParameter="{Binding RegionsPageViewModel}">Regions</Button>
                 <Button Command="{Binding SetPageCommand}">Game config files</Button>
                 <Button Command="{Binding SetPageCommand}">Logs</Button>
-                <Button Command="{Binding SetPageCommand}">System settings</Button>
+                <Button Command="{Binding SetPageCommand}" CommandParameter="{Binding GlobalSettingsPageViewModel}">Global settings</Button>
             </StackPanel>
         </Border>
         

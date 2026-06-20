@@ -11,7 +11,7 @@ namespace AvaloniaApplication1.Engine.Agents;
 
 using ProcessResult = Result<Process, ProcessError>;
 
-public class StartProcessAgent(ProcessStartInfo startInfo) : GameInstanceEngineAgentBase<ProcessResult>
+public class StartProcessAgent(ProcessStartInfo startInfo) : AgentBase<ProcessResult>
 {
     protected override Task<ProcessResult> RunAgentTaskAsync(CancellationToken cancellationToken) =>
         Task.FromResult(Process.Start(startInfo));

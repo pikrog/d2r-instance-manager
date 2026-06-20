@@ -8,7 +8,8 @@ public class MainWindowDesignViewModel : MainWindowViewModel
         : base(
             new InstancesPageDesignViewModel(),
             new AccountsPageDesignViewModel(),
-            new RegionsPageDesignViewModel())
+            new RegionsPageDesignViewModel(),
+            new GlobalSettingsPageDesignViewModel())
     {
     }
 }

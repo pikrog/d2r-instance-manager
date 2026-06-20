@@ -14,15 +14,19 @@ public partial class MainWindowViewModel : ViewModelBase, IDialogParticipant
     public AccountsPageViewModel AccountsPageViewModel { get; }
 
     public RegionsPageViewModel RegionsPageViewModel { get; }
+    
+    public GlobalSettingsPageViewModel GlobalSettingsPageViewModel { get; }
 
     public MainWindowViewModel(
         InstancesPageViewModel instancesPageViewModel,
         AccountsPageViewModel accountsPageViewModel,
-        RegionsPageViewModel regionsPageViewModel)
+        RegionsPageViewModel regionsPageViewModel,
+        GlobalSettingsPageViewModel globalSettingsPageViewModel)
     {
         InstancesPageViewModel = instancesPageViewModel;
         AccountsPageViewModel = accountsPageViewModel;
         RegionsPageViewModel = regionsPageViewModel;
+        GlobalSettingsPageViewModel = globalSettingsPageViewModel;
 
         CurrentPage = InstancesPageViewModel;
     }

@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Input;
+using Avalonia.Threading;
 using AvaloniaApplication1.Models;
 using AvaloniaApplication1.Services;
 using AvaloniaApplication1.Snapshots;
@@ -20,27 +23,52 @@ public partial class InstancesPageViewModel : ViewModelBase, IDialogParticipant
     
     private readonly RegionService _regionService;
 
+    private readonly DisplayService _displayService;
+
     public ObservableCollection<GameInstanceTableRow> Instances { get; } = [];
     
     [ObservableProperty]
     //[NotifyPropertyChangedFor(nameof(IsInstanceSelected))]
-    [NotifyCanExecuteChangedFor(nameof(EditInstanceCommand), nameof(RemoveInstanceCommand))]
+    [NotifyCanExecuteChangedFor(nameof(EditInstanceCommand), nameof(RemoveInstanceCommand), nameof(LaunchInstanceCommand))]
     public partial GameInstanceTableRow? SelectedInstance { get; set; }
     
+    [MemberNotNullWhen(true, nameof(SelectedInstance))] // todo? remove
     public bool IsInstanceSelected => SelectedInstance is not null;
     
     public InstancesPageViewModel(GameInstanceService gameInstanceService,
         AccountService accountService,
-        RegionService regionService)
+        RegionService regionService,
+        DisplayService displayService)
     {
         _gameInstanceService = gameInstanceService;
         _accountService = accountService;
         _regionService = regionService;
+        _displayService = displayService;
+
+        _gameInstanceService.InstanceStateChanged += OnInstanceStateChanged;
         
-        Populate();
+        RefreshTable();
     }
-    
-    private void Populate()
+
+    private void OnInstanceStateChanged(Guid id)
+    {
+        Dispatcher.UIThread.Post(() => RefreshRow(id));
+    }
+
+    private void RefreshRow(Guid id)
+    {
+        var (targetRowId, targetRow) = Instances.Index().SingleOrDefault(r => r.Item.Id == id);
+        if (targetRow is null)
+        {
+            RefreshTable();
+            return;
+        }
+        
+        var newRow = _gameInstanceService.GetTableRow(id);
+        Instances[targetRowId] = newRow;
+    }
+
+    private void RefreshTable()
     {
         Instances.Clear();
         var table = _gameInstanceService.GetTable();
@@ -51,8 +79,11 @@ public partial class InstancesPageViewModel : ViewModelBase, IDialogParticipant
     {
         var accountOptions = _accountService.GetOptions();
         var regionOptions = _regionService.GetOptions();
-        var displayOptions = new List<int> { 1, 2 }; // todo: display service
-        var form =  new EditInstanceFormViewModel(accountOptions, regionOptions, displayOptions);
+        var displayOptions = _displayService.GetOptions();
+        var form = new EditInstanceFormViewModel(accountOptions, regionOptions, displayOptions)
+        {
+            SelectedDisplay = displayOptions[0],
+        };
 
         if (snapshot is null)
             return form;
@@ -60,13 +91,15 @@ public partial class InstancesPageViewModel : ViewModelBase, IDialogParticipant
         var selectedAccount = accountOptions.SingleOrDefault(x => x.Id == snapshot.AccountId);
         var selectedRegion = regionOptions.SingleOrDefault(x => x.Id == snapshot.RegionId);
         var selectedCredentialsVector = EditInstanceFormViewModel.CredentialsVectorOptions.SingleOrDefault(o => o.CredentialsVector == snapshot.CredentialsVector);
+        var selectedDisplay = displayOptions.SingleOrDefault(x => x.Id == snapshot.DisplayId) 
+                              ?? _displayService.GetOption(snapshot.DisplayId);
         form.Id = snapshot.Id;
         form.Name = snapshot.Name;
         form.IsOnlineMode = snapshot.IsOnlineMode;
         form.SelectedAccount = selectedAccount;
         form.SelectedCredentialsVector = selectedCredentialsVector;
         form.SelectedRegion = selectedRegion;
-        form.Display = snapshot.DisplayId;
+        form.SelectedDisplay = selectedDisplay;
         form.RecallHotKey = snapshot.RecallHotKey;
         form.IsNoSound = snapshot.IsNoSound;
         form.IsWindowedMode = snapshot.IsWindowedMode;
@@ -82,7 +115,7 @@ public partial class InstancesPageViewModel : ViewModelBase, IDialogParticipant
             form.SelectedAccount?.Id,
             form.SelectedCredentialsVector?.CredentialsVector,
             form.SelectedRegion?.Id,
-            form.Display,
+            form.SelectedDisplay.Id,
             form.IsNoSound,
             form.IsWindowedMode, 
             form.RecallHotKey
@@ -97,13 +130,13 @@ public partial class InstancesPageViewModel : ViewModelBase, IDialogParticipant
             return;
         var draft = CreateDraft(form);
         await _gameInstanceService.Save(draft);
-        Populate();
+        RefreshTable();
     }
     
     [RelayCommand]
     private async Task NewInstance()
     {
-        await EditInstance();
+        await CoreEditInstance();
     }
     
     [RelayCommand(CanExecute = nameof(IsInstanceSelected))]
@@ -111,7 +144,7 @@ public partial class InstancesPageViewModel : ViewModelBase, IDialogParticipant
     {
         if (SelectedInstance is null)
             return;
-        var snapshot = _gameInstanceService.GetInstanceSnapshot(SelectedInstance.Id);
+        var snapshot = _gameInstanceService.GetInstanceConfigSnapshot(SelectedInstance.Id);
         await CoreEditInstance(snapshot);
     }
     
@@ -121,8 +154,15 @@ public partial class InstancesPageViewModel : ViewModelBase, IDialogParticipant
         if (SelectedInstance is null)
             return;
         await _gameInstanceService.Remove(SelectedInstance.Id);
-        Populate();
+        RefreshTable();
     }
 
-
+    [RelayCommand(CanExecute = nameof(IsInstanceSelected))]
+    // [RelayCommand]
+    private async Task LaunchInstance()
+    {
+        if (SelectedInstance is null)
+            return;
+        await _gameInstanceService.Launch(SelectedInstance.Id);
+    }
 }

@@ -3,6 +3,7 @@ using System.Globalization;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
 using AvaloniaApplication1.Engine.Models;
+using AvaloniaApplication1.Models;
 
 namespace AvaloniaApplication1.Converters;
 
@@ -19,10 +20,12 @@ public class GameInstanceStatusToBorderBrushConverter : IValueConverter
         return status switch
         {
             GameInstanceStatus.Inactive => Brushes.Gray,
+            GameInstanceStatus.Authenticating => Brushes.Orange,
             GameInstanceStatus.QueuedForStart => Brushes.Orange,
+            GameInstanceStatus.Starting => Brushes.Orange,
             GameInstanceStatus.Unlocking => Brushes.Orange,
             GameInstanceStatus.Running => Brushes.Green,
-            GameInstanceStatus.Closing => Brushes.Orange,
+            GameInstanceStatus.Stopping => Brushes.Orange,
             GameInstanceStatus.Exited => Brushes.Gray,
             GameInstanceStatus.ExitedPrematurely => Brushes.Red,
             GameInstanceStatus.Terminated => Brushes.Red,

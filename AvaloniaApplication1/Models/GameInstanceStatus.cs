@@ -1,22 +1,22 @@
-﻿namespace AvaloniaApplication1.Engine.Models;
+﻿using System.ComponentModel;
 
-// todo: this is a service layer enum
+namespace AvaloniaApplication1.Models;
+
 public enum GameInstanceStatus
 {
     Inactive,
     
     Authenticating,
     
-    QueuedForStart,
+    [Description("Queued for start")] QueuedForStart,
     Starting,
     Unlocking,
     Running,
 
     Stopping,
-    Closing, // ?
 
     Exited,
-    ExitedPrematurely,
+    [Description("Exited prematurely")] ExitedPrematurely,
     Terminated,
     Timeout,
     Failed,

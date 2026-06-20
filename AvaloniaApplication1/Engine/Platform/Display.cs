@@ -11,7 +11,7 @@ public class Display(int index, IntPtr handle)
 
     public static Display GetPrimary() => GetByIndex(0);
 
-    public static Display GetByIndex(int index)
+    public static Display GetByIndex(int index) // todo: TryGetByIndex
     {
         var list = GetAll();
         return list[index];

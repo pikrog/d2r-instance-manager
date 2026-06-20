@@ -11,7 +11,7 @@ namespace AvaloniaApplication1.Engine.Agents;
 
 using MultiboxUnlockResult = Result<Unit, RetryingMultiboxUnlockError>;
 
-public class UnlockMultiboxAgent(RetryingMultiboxUnlocker unlocker) : GameInstanceEngineAgentBase<MultiboxUnlockResult>
+public class UnlockMultiboxAgent(RetryingMultiboxUnlocker unlocker) : AgentBase<MultiboxUnlockResult>
 {
     protected override async Task<MultiboxUnlockResult> RunAgentTaskAsync(CancellationToken cancellationToken) => 
         await unlocker.UnlockAsync(cancellationToken);

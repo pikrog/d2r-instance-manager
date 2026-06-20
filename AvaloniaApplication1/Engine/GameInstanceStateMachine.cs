@@ -1,0 +1,156 @@
+using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using AvaloniaApplication1.Engine.Models.Contexts.Launch;
+using AvaloniaApplication1.Engine.Models.Effects;
+using AvaloniaApplication1.Engine.Models.Events;
+using AvaloniaApplication1.Engine.Models.StateMachine;
+
+namespace AvaloniaApplication1.Engine;
+
+public static class GameInstanceStateMachine
+{
+    public static TransitionResult Apply(Session session, Event @event)
+    {
+        var result = ApplyTransition(session, @event);
+        result = AddErrorEvent(result, @event);
+        return CompleteCleanupIfNeeded(result);
+    }
+
+    private static TransitionResult ApplyTransition(Session session, Event @event)
+    {
+        switch (session.State, @event)
+        {
+            case (State.Inactive, StartRequested e):
+                return StartNewSession(e);
+
+            case (State.Authenticating, Authenticated):
+                return To(
+                    session.RequireCleanup(CleanupItem.LaunchLease),
+                    State.WaitingForStart,
+                    [new AcquireLaunchLease()]
+                    );
+            case (State.Authenticating, AuthenticationFailed):
+            case (State.Authenticating, StopRequested):
+                return To(session, State.Stopping);
+
+            case (State.WaitingForStart, LaunchLeaseGranted e):
+                return To(
+                    (session with { Lease = e.Lease }).RequireCleanup(CleanupItem.Process),
+                    State.Starting,
+                    [new StartProcess(Require(session.ProcessStartInfo, nameof(Session.ProcessStartInfo)))]
+                    );
+            case (State.WaitingForStart, LaunchLeaseCanceled):
+                return To(session.CompleteCleanup(CleanupItem.LaunchLease), State.Stopping);
+            case (State.WaitingForStart, StopRequested):
+                return To(session, State.Stopping);
+
+            case (State.Starting, ProcessStarted e):
+                return To(
+                    session with { Process = e.Process },
+                    State.WaitingForUnlock,
+                    [new MonitorProcessExit(e.Process), new UnlockMultibox()]
+                    );
+            case (State.Starting, ProcessStartFailed):
+                return To(
+                    session.CompleteCleanup(CleanupItem.Process),
+                    State.Stopping,
+                    [new ReleaseLaunchLease(Require(session.Lease))]
+                    );
+            case (State.Starting, StopRequested):
+                return To(
+                    session,
+                    State.Stopping,
+                    [new ReleaseLaunchLease(Require(session.Lease))]
+                    );
+
+            case (State.WaitingForUnlock, MultiboxUnlocked):
+                return To(
+                    session,
+                    State.Running,
+                    [new ReleaseLaunchLease(Require(session.Lease))]
+                    );
+            case (State.WaitingForUnlock, MultiboxUnlockFailed):
+            case (State.WaitingForUnlock, StopRequested):
+                return To(
+                    session,
+                    State.Stopping,
+                    [
+                        new ReleaseLaunchLease(Require(session.Lease)),
+                        new StopProcess(Require(session.Process))
+                    ]);
+            case (State.WaitingForUnlock, ProcessExited e):
+                return To(
+                    (session with { ExitCode = e.ExitCode }).CompleteCleanup(CleanupItem.Process),
+                    State.Stopping,
+                    [new ReleaseLaunchLease(Require(session.Lease))]
+                    );
+
+            case (State.Running, LaunchLeaseReleased):
+                return To(session.CompleteCleanup(CleanupItem.LaunchLease), State.Running);
+            case (State.Running, StopRequested):
+                return To(
+                    session, 
+                    State.Stopping, 
+                    [new StopProcess(Require(session.Process))]
+                    );
+            case (State.Running, ProcessExited e):
+                return To((session with { ExitCode = e.ExitCode }).CompleteCleanup(CleanupItem.Process), State.Stopping);
+
+            case (State.Stopping, ProcessStarted e):
+                return To(session, State.Stopping, [new MonitorProcessExit(e.Process), new StopProcess(e.Process)]);
+            case (State.Stopping, LaunchLeaseGranted e):
+                return To(session, State.Stopping, [new ReleaseLaunchLease(e.Lease)]);
+            case (State.Stopping, ProcessExited e):
+                return To((session with { ExitCode = e.ExitCode }).CompleteCleanup(CleanupItem.Process), State.Stopping);
+            case (State.Stopping, ProcessStartFailed):
+                return To(session.CompleteCleanup(CleanupItem.Process), State.Stopping);
+            case (State.Stopping, LaunchLeaseReleased):
+            case (State.Stopping, LaunchLeaseCanceled):
+                return To(session.CompleteCleanup(CleanupItem.LaunchLease), State.Stopping);
+
+            default:
+                return new TransitionResult(session);
+        }
+    }
+
+    private static TransitionResult StartNewSession(StartRequested @event)
+    {
+        var session = new Session
+        {
+            ProcessStartInfo = @event.ProcessStartInfo,
+        };
+
+        return @event.AuthenticationContext switch
+        {
+            OsiAuthenticationContext => To(
+                session,
+                State.Authenticating,
+                [new Authenticate(@event.AuthenticationContext)]),
+            OfflineAuthenticationContext or CliAuthenticationContext => To(
+                session.RequireCleanup(CleanupItem.LaunchLease),
+                State.WaitingForStart,
+                [new AcquireLaunchLease()]),
+            _ => throw new InvalidOperationException($"Unexpected authentication context: {@event.AuthenticationContext.GetType().Name}")
+        };
+    }
+
+    private static TransitionResult AddErrorEvent(TransitionResult result, Event @event) =>
+        @event is ErrorEvent errorEvent
+            ? result with { Session = result.Session with { ErrorEvents = result.Session.ErrorEvents.Add(errorEvent) } }
+            : result;
+
+    private static TransitionResult CompleteCleanupIfNeeded(TransitionResult result) =>
+        result.Session is { State: State.Stopping, CleanupState.IsCleanupComplete: true }
+            ? result with { Session = result.Session with { State = State.Inactive } }
+            : result;
+
+    private static TransitionResult To(Session session, State state) =>
+        new(session with { State = state });
+
+    private static TransitionResult To(Session session, State state, IReadOnlyList<Effect> effects) =>
+        new(session with { State = state }, effects);
+
+    private static T Require<T>(T? value, [CallerArgumentExpression(nameof(value))] string name = "") where T : class =>
+        value ?? throw new InvalidOperationException($"Session is missing required value: {name}");
+}

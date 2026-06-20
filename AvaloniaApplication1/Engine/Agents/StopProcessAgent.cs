@@ -13,7 +13,7 @@ namespace AvaloniaApplication1.Engine.Agents;
 
 using StopResult = Result<ProcessStopMode, ProcessStopError>;
 
-public class StopProcessAgent(Process process, RetryingProcessStopper stopper) : GameInstanceEngineAgentBase<StopResult>
+public class StopProcessAgent(Process process, RetryingProcessStopper stopper) : AgentBase<StopResult>
 {
     protected override Task<StopResult> RunAgentTaskAsync(CancellationToken cancellationToken) => 
         stopper.StopAsync(process, cancellationToken);
