@@ -7,15 +7,12 @@ namespace AvaloniaApplication1.Services;
 
 public class DisplayService
 {
-    public DisplayOption GetOption(int index) => new DisplayOption(index, GetDisplayName(index));
-    
     public List<DisplayOption> GetOptions()
     {
-        return Display.GetAll().Select(d =>
-        {
-            var name = GetDisplayName(d.Index);
-            return new DisplayOption(d.Index, name);
-        }).ToList();
+        return Display.GetAll()
+            .Select(DisplayOption (d) => new DisplayOption.Specific(d.Index, d.Id, d.Description, d.Width, d.Height))
+            .Prepend(new DisplayOption.Primary())
+            .ToList();
     }
     
     public string GetDisplayName(int index) => (index + 1).ToString();

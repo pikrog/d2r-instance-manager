@@ -3,17 +3,17 @@ using AvaloniaApplication1.Engine.Platform;
 
 namespace AvaloniaApplication1.Engine.Providers;
 
-public class DisplayResolver(IDisplayResolverSettingsProvider settingsProvider)
+public static class DisplayResolver
 {
-    public Display GetByIndex(int index)
+    public static Display GetByIndex(int index, bool allowFallbackToPrimary = false)
     {
         try
         {
             return Display.GetByIndex(index);
         }
-        catch (ArgumentOutOfRangeException) // todo: replace exception with Result<Display, Error>
+        catch (ArgumentOutOfRangeException) // todo: replace exception with Result<Display, Error>.
         {
-            if (!settingsProvider.AllowFallbackToPrimaryDisplay)
+            if (!allowFallbackToPrimary)
                 throw;
             return Display.GetPrimary();
         }

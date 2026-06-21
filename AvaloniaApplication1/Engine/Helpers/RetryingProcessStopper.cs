@@ -5,6 +5,7 @@ using AvaloniaApplication1.Engine.Exceptions;
 using AvaloniaApplication1.Engine.Exceptions.Platform;
 using AvaloniaApplication1.Engine.Lang;
 using AvaloniaApplication1.Engine.Models.Common;
+using AvaloniaApplication1.Engine.Models.Contexts.Helpers;
 using AvaloniaApplication1.Engine.Models.Errors;
 using AvaloniaApplication1.Engine.Models.Platform.Process;
 using AvaloniaApplication1.Engine.Models.Platform.Results;
@@ -15,12 +16,16 @@ namespace AvaloniaApplication1.Engine.Helpers;
 
 using StopResult = Result<ProcessStopMode, ProcessStopError>;
 
-public class RetryingProcessStopper(RetryPolicy closeRetryPolicy, TimeSpan killTimeout)
+public class RetryingProcessStopper(ProcessStopPolicies policies)
 {
+    public const uint DefaultForcefulExitCode = 0xe0000001;
+    
+    public uint ForcefulExitCode => policies.ForcefulExitCode;
+    
     public async Task<StopResult> StopAsync(Process process, CancellationToken token = default)
     {
         var retries = 0;
-        while (retries < closeRetryPolicy.MaxRetries)
+        while (retries < policies.GracefulProcessStopRetryPolicy.MaxRetries)
         {
             ++retries;
             
@@ -34,7 +39,7 @@ public class RetryingProcessStopper(RetryPolicy closeRetryPolicy, TimeSpan killT
             var closeRequestState = process.CloseMainWindow();
 
             using var closeTimeoutCts = CancellationTokenSource.CreateLinkedTokenSource(token);
-            closeTimeoutCts.CancelAfter(closeRetryPolicy.Delay);
+            closeTimeoutCts.CancelAfter(policies.GracefulProcessStopRetryPolicy.Delay);
 
             try
             {
@@ -47,13 +52,13 @@ public class RetryingProcessStopper(RetryPolicy closeRetryPolicy, TimeSpan killT
         }
 
 
-        var killResult = process.Kill();
+        var killResult = process.Kill(policies.ForcefulExitCode);
         if (!killResult.IsSuccess)
             return StopResult.Failure(ProcessStopError.ProcessError(killResult.Error));
         var killRequestState = killResult.Value;
         
         using var killTimeoutCts = CancellationTokenSource.CreateLinkedTokenSource(token);
-        killTimeoutCts.CancelAfter(killTimeout);
+        killTimeoutCts.CancelAfter(policies.ForcefulProcessStopTimeout);
 
         try
         {

@@ -11,7 +11,7 @@ public abstract class AgentBase<TResult> : IAgent
     
     protected abstract Event MapAgentResultToEvent(TResult result);
     
-    protected virtual ErrorEvent CreateErrorForGenericException(Exception exception) => new UnknownError(exception, GetType().Name);
+    protected virtual ErrorEvent CreateErrorForGenericException(Exception exception) => new UnexpectedError(exception, GetType().Name);
 
     protected virtual Event? CreateCanceledEvent() => null;
     

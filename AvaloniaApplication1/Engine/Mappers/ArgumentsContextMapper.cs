@@ -7,7 +7,7 @@ namespace AvaloniaApplication1.Engine.Mappers;
 
 public static class ArgumentsContextMapper
 {
-    public static ArgumentsContext Map(LaunchContext context)
+    public static ArgumentsContext Map(InstanceLaunchContext context)
     {
         AuthenticationArgumentsContext authenticationArgumentsContext = context.AuthenticationContext switch
         {

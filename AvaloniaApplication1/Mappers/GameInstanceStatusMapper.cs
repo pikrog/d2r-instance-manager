@@ -64,6 +64,10 @@ public static class GameInstanceStatusMapper
     
     private static GameInstanceStatus ResolveInactiveStatus(RuntimeSnapshot snapshot)
     {
-        return snapshot.Errors.Length == 0 ? GameInstanceStatus.Failed : GameInstanceStatus.Inactive;
+        return snapshot.Errors.Length > 0 
+            ? GameInstanceStatus.Failed 
+            : snapshot.ExitCode is not null
+                ? GameInstanceStatus.Exited
+                : GameInstanceStatus.Inactive;
     }
 }

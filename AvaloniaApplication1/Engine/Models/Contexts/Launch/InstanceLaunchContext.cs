@@ -1,10 +1,11 @@
 ﻿namespace AvaloniaApplication1.Engine.Models.Contexts.Launch;
 
-public record LaunchContext
+public record InstanceLaunchContext
 (
     string ExecutablePath,
     AuthenticationContext AuthenticationContext,
     int DisplayId,
     bool IsNoSound,
-    bool IsWindowedMode
+    bool IsWindowedMode,
+    bool FallbackToPrimaryDisplayIfInvalid
 );

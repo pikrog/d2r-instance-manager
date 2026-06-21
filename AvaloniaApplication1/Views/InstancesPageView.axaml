@@ -6,6 +6,7 @@
              xmlns:services="clr-namespace:AvaloniaApplication1.Services"
              xmlns:designViewModels="clr-namespace:AvaloniaApplication1.Design.ViewModels"
              xmlns:dtos="clr-namespace:AvaloniaApplication1.Models"
+             xmlns:behaviors="clr-namespace:AvaloniaApplication1.Behaviors"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="AvaloniaApplication1.Views.InstancesPageView"
              x:DataType="viewModels:InstancesPageViewModel"
@@ -39,7 +40,7 @@
                 </StackPanel>
                 
                 <StackPanel Orientation="Horizontal">
-                    <Button Command="{Binding LaunchInstanceCommand}">
+                    <Button Command="{Binding LaunchInstancesCommand}">
                         <Grid ColumnDefinitions="Auto, *">
                             <Image Grid.Column="0" Source="/Assets/images/launch.png"/>
                             <TextBlock Grid.Column="1">Launch</TextBlock>
@@ -63,7 +64,9 @@
         </Border>
         
         <DataGrid ItemsSource="{Binding Instances}" IsReadOnly="True" 
-                  GridLinesVisibility="Horizontal" HeadersVisibility="All" RowHeight="50" SelectedItem="{Binding SelectedInstance}">
+                  GridLinesVisibility="Horizontal" HeadersVisibility="All" RowHeight="50" 
+                  SelectedItem="{Binding SelectedInstance}"
+                  behaviors:DataGridSelectedItemsBehavior.SelectedItems="{Binding SelectedInstances}">
             <DataGrid.Styles>
                 <Style Selector="DataGridColumnHeader">
                     <Setter Property="FontWeight" Value="Black"/>  

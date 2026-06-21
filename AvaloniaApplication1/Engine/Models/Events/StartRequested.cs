@@ -3,4 +3,4 @@ using AvaloniaApplication1.Engine.Models.Platform.Process;
 
 namespace AvaloniaApplication1.Engine.Models.Events;
 
-public sealed record StartRequested(AuthenticationContext AuthenticationContext, ProcessStartInfo ProcessStartInfo) : Event;
+public sealed record StartRequested(AuthenticationContext AuthenticationContext, ProcessStartInfo ProcessStartInfo, EnginePolicies EnginePolicies) : Event;

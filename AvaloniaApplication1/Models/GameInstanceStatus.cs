@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace AvaloniaApplication1.Models;
 
@@ -8,7 +9,7 @@ public enum GameInstanceStatus
     
     Authenticating,
     
-    [Description("Queued for start")] QueuedForStart,
+    [Display(Name = "Queued for start")] QueuedForStart,
     Starting,
     Unlocking,
     Running,
@@ -16,7 +17,7 @@ public enum GameInstanceStatus
     Stopping,
 
     Exited,
-    [Description("Exited prematurely")] ExitedPrematurely,
+    [Display(Name = "Exited prematurely")] ExitedPrematurely,
     Terminated,
     Timeout,
     Failed,

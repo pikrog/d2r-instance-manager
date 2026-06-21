@@ -65,10 +65,10 @@ public class GameInstanceEngine
         await _eventChannel.Writer.WriteAsync(@event, _engineCancellationTokenSource.Token);
     }
     
-    public async Task StartAsync(LaunchContext launchContext)
+    public async Task StartAsync(EngineLaunchContext context)
     {
-        var processStartInfo = _processStartInfoFactory.Create(launchContext);
-        var @event = new StartRequested(launchContext.AuthenticationContext, processStartInfo);
+        var processStartInfo = _processStartInfoFactory.Create(context.InstanceLaunchContext);
+        var @event = new StartRequested(context.InstanceLaunchContext.AuthenticationContext, processStartInfo, context.Policies);
         await PublishAsync(@event);
     }
     
@@ -100,8 +100,8 @@ public class GameInstanceEngine
         catch (OperationCanceledException) { }
         catch (Exception e)
         {
-            // todo: Log
-            Console.Error.WriteLine(e);
+            _session = _session.AddErrorEvent(new UnexpectedError(e, nameof(Loop)));
+            RuntimeSnapshot = Snap();
         }
         finally
         {
@@ -145,14 +145,14 @@ public class GameInstanceEngine
             case StartProcess e:
                 RunSessionAgent(new StartProcessAgent(e.ProcessStartInfo));
                 break;
-            case UnlockMultibox:
-                RunSessionAgent(new UnlockMultiboxAgent(new RetryingMultiboxUnlocker(new RetryPolicy(TimeSpan.FromSeconds(1), 3)))); // todo: read policy from event
+            case UnlockMultibox e:
+                RunSessionAgent(new UnlockMultiboxAgent(new RetryingMultiboxUnlocker(e.RetryPolicy)));
                 break;
             case MonitorProcessExit e:
                 RunCleanupAgent(new MonitorProcessExitAgent(e.Process));
                 break;
             case StopProcess e:
-                RunCleanupAgent(new StopProcessAgent(e.Process, new RetryingProcessStopper(new RetryPolicy(TimeSpan.FromSeconds(1), 3), TimeSpan.FromSeconds(10))));
+                RunCleanupAgent(new StopProcessAgent(e.Process, new RetryingProcessStopper(e.Policies)));
                 break;
             default:
                 throw new InvalidOperationException($"Unexpected effect: {effect.GetType().Name}");
@@ -179,10 +179,10 @@ public class GameInstanceEngine
         }
         catch (Exception e)
         {
-            var error = new UnknownError(e, agent.GetType().Name);
+            var error = new UnexpectedError(e, agent.GetType().Name);
             await PublishAsync(error);
         }
     }
 
-    private RuntimeSnapshot Snap() => new(Id, _session.State, _session.ExitCode, _session.StopMode, _session.ErrorEvents);
+    private RuntimeSnapshot Snap() => new(Id, _session.State, _session.ExitCode, _session.ErrorEvents);
 }

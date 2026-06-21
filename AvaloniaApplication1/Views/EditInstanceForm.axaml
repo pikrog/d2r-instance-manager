@@ -93,12 +93,20 @@
                 <ComboBox AutomationProperties.LabeledBy="{Binding #DisplayLabel}"
                           ItemsSource="{Binding Displays}"
                           SelectedItem="{Binding SelectedDisplay}"
-                          IsEditable="False"/>
+                          IsEditable="True" TextSearch.Text="Name">
+                    <ComboBox.DataTemplates>
+                        <DataTemplate x:DataType="{x:Type dtos:DisplayOption+Primary}">
+                            <TextBlock Text="Primary (auto)"/>
+                        </DataTemplate>
+                        <DataTemplate x:DataType="{x:Type dtos:DisplayOption+Specific}">
+                            <TextBlock Text="{Binding Label}"/>
+                        </DataTemplate>
+                    </ComboBox.DataTemplates>
+                </ComboBox>
                 
                 <TextBlock VerticalAlignment="Center" x:Name="RecallHotKeyLabel">Recall Hotkey</TextBlock>
                 <controls:HotkeyBox AutomationProperties.LabeledBy="{Binding #RecallHotKeyLabel}"
                               KeyGesture="{Binding RecallHotKeyGesture}"/>
-                
                 
                 <controls:Section Title="General game settings"/>
                 <WrapPanel>
@@ -109,8 +117,6 @@
                     </WrapPanel.Styles>
                     <CheckBox IsChecked="{Binding IsNoSound}">No sound</CheckBox>
                     <CheckBox IsChecked="{Binding IsWindowedMode}">Windowed mode</CheckBox>
-                    <!--<CheckBox>No controller rumble</CheckBox>
-                    <CheckBox>Low quality mode</CheckBox>-->
                 </WrapPanel>
             </StackPanel>
         </ScrollViewer>

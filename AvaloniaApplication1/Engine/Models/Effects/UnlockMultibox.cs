@@ -1,3 +1,5 @@
-﻿namespace AvaloniaApplication1.Engine.Models.Effects;
+﻿using AvaloniaApplication1.Engine.Models.Common;
 
-public sealed record UnlockMultibox : Effect;
+namespace AvaloniaApplication1.Engine.Models.Effects;
+
+public sealed record UnlockMultibox(RetryPolicy RetryPolicy) : Effect;

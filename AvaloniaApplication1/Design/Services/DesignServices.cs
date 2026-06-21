@@ -41,12 +41,8 @@ public static class DesignServices
     private static readonly ArgumentStringBuilder ArgumentStringBuilder = new(ArgumentFormatter);
 
     private static readonly ArgumentsFactory ArgumentsFactory = new(ArgumentStringBuilder);
-
-    private static readonly DisplayResolverSettingsProvider DisplayResolverSettingsProvider = new(ConfigService);
     
-    private static readonly DisplayResolver DisplayResolver = new(DisplayResolverSettingsProvider);
-    
-    private static readonly ProcessStartInfoFactory ProcessStartInfoFactory = new(ArgumentsFactory, DisplayResolver);
+    private static readonly ProcessStartInfoFactory ProcessStartInfoFactory = new(ArgumentsFactory);
 
     private static readonly GameInstanceEngineFactory GameInstanceEngineFactory = new(LaunchCoordinator, ProcessStartInfoFactory);
     

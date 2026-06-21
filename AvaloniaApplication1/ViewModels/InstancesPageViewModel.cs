@@ -29,9 +29,11 @@ public partial class InstancesPageViewModel : ViewModelBase, IDialogParticipant
     
     [ObservableProperty]
     //[NotifyPropertyChangedFor(nameof(IsInstanceSelected))]
-    [NotifyCanExecuteChangedFor(nameof(EditInstanceCommand), nameof(RemoveInstanceCommand), nameof(LaunchInstanceCommand))]
+    [NotifyCanExecuteChangedFor(nameof(EditInstanceCommand), nameof(RemoveInstanceCommand), nameof(LaunchInstancesCommand))]
     public partial GameInstanceTableRow? SelectedInstance { get; set; }
-    
+
+    public ObservableCollection<GameInstanceTableRow> SelectedInstances { get; set; } = [];
+
     [MemberNotNullWhen(true, nameof(SelectedInstance))] // todo? remove
     public bool IsInstanceSelected => SelectedInstance is not null;
     
@@ -91,7 +93,7 @@ public partial class InstancesPageViewModel : ViewModelBase, IDialogParticipant
         var selectedAccount = accountOptions.SingleOrDefault(x => x.Id == snapshot.AccountId);
         var selectedRegion = regionOptions.SingleOrDefault(x => x.Id == snapshot.RegionId);
         var selectedCredentialsVector = EditInstanceFormViewModel.CredentialsVectorOptions.SingleOrDefault(o => o.CredentialsVector == snapshot.CredentialsVector);
-        var selectedDisplay = displayOptions.SingleOrDefault(x => x.Id == snapshot.DisplayId) 
+        var selectedDisplay = displayOptions.SingleOrDefault(x => x.Index == snapshot.DisplayId) 
                               ?? _displayService.GetOption(snapshot.DisplayId);
         form.Id = snapshot.Id;
         form.Name = snapshot.Name;
@@ -115,7 +117,7 @@ public partial class InstancesPageViewModel : ViewModelBase, IDialogParticipant
             form.SelectedAccount?.Id,
             form.SelectedCredentialsVector?.CredentialsVector,
             form.SelectedRegion?.Id,
-            form.SelectedDisplay.Id,
+            form.SelectedDisplay.Index,
             form.IsNoSound,
             form.IsWindowedMode, 
             form.RecallHotKey
@@ -159,10 +161,11 @@ public partial class InstancesPageViewModel : ViewModelBase, IDialogParticipant
 
     [RelayCommand(CanExecute = nameof(IsInstanceSelected))]
     // [RelayCommand]
-    private async Task LaunchInstance()
+    private async Task LaunchInstances()
     {
-        if (SelectedInstance is null)
+        if (SelectedInstances.Count == 0)
             return;
-        await _gameInstanceService.Launch(SelectedInstance.Id);
+        foreach (var instance in SelectedInstances)
+            await _gameInstanceService.Launch(instance.Id);
     }
 }

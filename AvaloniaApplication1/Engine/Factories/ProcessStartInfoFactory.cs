@@ -9,12 +9,12 @@ using AvaloniaApplication1.Engine.Providers;
 
 namespace AvaloniaApplication1.Engine.Factories;
 
-public class ProcessStartInfoFactory(ArgumentsFactory argumentsFactory, DisplayResolver displayResolver)
+public class ProcessStartInfoFactory(ArgumentsFactory argumentsFactory)
 {
-    public ProcessStartInfo Create(LaunchContext context)
+    public ProcessStartInfo Create(InstanceLaunchContext context)
     {
         var argumentsContext = ArgumentsContextMapper.Map(context);
-        var display = displayResolver.GetByIndex(context.DisplayId);
+        var display = DisplayResolver.GetByIndex(context.DisplayId, context.FallbackToPrimaryDisplayIfInvalid);
         
         return new ProcessStartInfo
         {

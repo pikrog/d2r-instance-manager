@@ -38,7 +38,7 @@ public static class GameInstanceStateMachine
                 return To(
                     (session with { Lease = e.Lease }).RequireCleanup(CleanupItem.Process),
                     State.Starting,
-                    [new StartProcess(Require(session.ProcessStartInfo, nameof(Session.ProcessStartInfo)))]
+                    [new StartProcess(Require(session.ProcessStartInfo))]
                     );
             case (State.WaitingForStart, LaunchLeaseCanceled):
                 return To(session.CompleteCleanup(CleanupItem.LaunchLease), State.Stopping);
@@ -49,7 +49,9 @@ public static class GameInstanceStateMachine
                 return To(
                     session with { Process = e.Process },
                     State.WaitingForUnlock,
-                    [new MonitorProcessExit(e.Process), new UnlockMultibox()]
+                    [
+                        new MonitorProcessExit(e.Process), 
+                        new UnlockMultibox(Require(session.Policies?.UnlockMultiboxRetryPolicy))]
                     );
             case (State.Starting, ProcessStartFailed):
                 return To(
@@ -77,7 +79,7 @@ public static class GameInstanceStateMachine
                     State.Stopping,
                     [
                         new ReleaseLaunchLease(Require(session.Lease)),
-                        new StopProcess(Require(session.Process))
+                        new StopProcess(Require(session.Process), Require(session.Policies?.ProcessStopPolicies))
                     ]);
             case (State.WaitingForUnlock, ProcessExited e):
                 return To(
@@ -92,13 +94,20 @@ public static class GameInstanceStateMachine
                 return To(
                     session, 
                     State.Stopping, 
-                    [new StopProcess(Require(session.Process))]
-                    );
+                    [
+                        new StopProcess(Require(session.Process), Require(session.Policies?.ProcessStopPolicies))
+                    ]);
             case (State.Running, ProcessExited e):
                 return To((session with { ExitCode = e.ExitCode }).CompleteCleanup(CleanupItem.Process), State.Stopping);
 
             case (State.Stopping, ProcessStarted e):
-                return To(session, State.Stopping, [new MonitorProcessExit(e.Process), new StopProcess(e.Process)]);
+                return To(
+                    session, 
+                    State.Stopping, 
+                    [
+                        new MonitorProcessExit(e.Process), 
+                        new StopProcess(e.Process, Require(session.Policies?.ProcessStopPolicies))
+                    ]);
             case (State.Stopping, LaunchLeaseGranted e):
                 return To(session, State.Stopping, [new ReleaseLaunchLease(e.Lease)]);
             case (State.Stopping, ProcessExited e):
@@ -119,6 +128,7 @@ public static class GameInstanceStateMachine
         var session = new Session
         {
             ProcessStartInfo = @event.ProcessStartInfo,
+            Policies = @event.EnginePolicies
         };
 
         return @event.AuthenticationContext switch
@@ -137,7 +147,7 @@ public static class GameInstanceStateMachine
 
     private static TransitionResult AddErrorEvent(TransitionResult result, Event @event) =>
         @event is ErrorEvent errorEvent
-            ? result with { Session = result.Session with { ErrorEvents = result.Session.ErrorEvents.Add(errorEvent) } }
+            ? result with { Session = result.Session.AddErrorEvent(errorEvent) }
             : result;
 
     private static TransitionResult CompleteCleanupIfNeeded(TransitionResult result) =>

@@ -50,7 +50,7 @@ public class GameInstanceManager(GameInstanceEngineFactory engineFactory)
     public IReadOnlyList<RuntimeSnapshot> GetAllRuntimeStates() =>
         _instances.Select(p => p.Value.RuntimeSnapshot).ToList().AsReadOnly();
 
-    public async Task LaunchAsync(Guid id, LaunchContext context)
+    public async Task LaunchAsync(Guid id, EngineLaunchContext context)
     {
         var instance = Get(id);
         await instance.StartAsync(context);

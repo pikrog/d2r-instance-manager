@@ -32,7 +32,6 @@ public static class ServiceCollectionExtension
             services.AddSingleton<ArgumentListFormatter>();
             services.AddSingleton<IArgumentStringBuilder, ArgumentStringBuilder>();
             services.AddSingleton<ArgumentsFactory>();
-            services.AddSingleton<DisplayResolver>();
             services.AddSingleton<ProcessStartInfoFactory>();
             services.AddSingleton<GameInstanceEngineFactory>();
             services.AddSingleton<GameInstanceManager>();
@@ -40,8 +39,6 @@ public static class ServiceCollectionExtension
 
         public void AddApplicationServices()
         {
-            services.AddSingleton<IDisplayResolverSettingsProvider, DisplayResolverSettingsProvider>();
-            
             services.AddSingleton<GameInstanceManagerBootstrapper>();
 
             services.AddSingleton<AccountService>();

@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using AvaloniaApplication1.Config;
 using AvaloniaApplication1.Engine;
 using AvaloniaApplication1.Engine.Models;
+using AvaloniaApplication1.Engine.Models.Common;
 using AvaloniaApplication1.Engine.Models.Contexts;
+using AvaloniaApplication1.Engine.Models.Contexts.Helpers;
 using AvaloniaApplication1.Engine.Models.Contexts.Launch;
 using AvaloniaApplication1.Engine.Models.StateMachine;
 using AvaloniaApplication1.Mappers;
@@ -163,18 +165,36 @@ public class GameInstanceService(ConfigService configService, GameInstanceManage
             };
         }
         
-        var context = new LaunchContext(
+        var instanceLaunchContext = new InstanceLaunchContext(
             settings.GameExecutablePath,
             authenticationContext,
             snapshot.DisplayId,
             snapshot.IsNoSound,
-            snapshot.IsWindowedMode
+            snapshot.IsWindowedMode,
+            settings.FallbackToPrimaryDisplayIfInvalid
         );
-        // todo:
-        // settings context?
-        /*
-         * var settings = new SettingsContext(settings.CenterMouseCursorInRecalledWindow, settings.FallbackToPrimaryDisplayIfInvalid, CloseTimeout, CloseRetries...);
-         */
-        await gameInstanceManager.LaunchAsync(snapshot.Id, context);
+
+        var multiboxUnlockRetryPolicy = new RetryPolicy(
+            TimeSpan.FromMilliseconds(settings.UnlockMultiboxRetryDelayMs),
+            settings.UnlockMultiboxMaxRetries
+        );
+
+        var gracefulInstanceStopRetryPolicy = new RetryPolicy(
+            TimeSpan.FromMilliseconds(settings.GracefulInstanceCloseTimeoutMs),
+            settings.GracefulInstanceCloseRetries
+        );
+        
+        var forcefulInstanceStopTimeout = TimeSpan.FromMilliseconds(settings.ForcefulInstanceCloseTimeoutMs);
+        
+        var processStopPolicies = new ProcessStopPolicies(gracefulInstanceStopRetryPolicy, forcefulInstanceStopTimeout);
+        
+        var enginePolicies = new EnginePolicies(
+            multiboxUnlockRetryPolicy,
+            processStopPolicies
+        );
+        
+        var engineLaunchContext = new EngineLaunchContext(instanceLaunchContext, enginePolicies);
+        
+        await gameInstanceManager.LaunchAsync(snapshot.Id, engineLaunchContext);
     }
 }

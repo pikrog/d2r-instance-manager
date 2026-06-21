@@ -8,6 +8,7 @@ public enum CleanupItem
     None = 0,
     LaunchLease = 1,
     Process = 2,
+    //StopProcess = 4,
 }
 
 public sealed record CleanupState(CleanupItem Pending = CleanupItem.None)

@@ -6,4 +6,4 @@ using AvaloniaApplication1.Engine.Models.Results;
 
 namespace AvaloniaApplication1.Engine.Models.StateMachine;
 
-public record RuntimeSnapshot(Guid Id, State State, uint? ExitCode, ProcessStopMode? StopMode, ImmutableArray<ErrorEvent> Errors);
+public record RuntimeSnapshot(Guid Id, State State, uint? ExitCode, ImmutableArray<ErrorEvent> Errors);

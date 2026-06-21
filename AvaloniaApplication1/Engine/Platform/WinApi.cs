@@ -169,7 +169,7 @@ internal static partial class WinApi
         public int Bottom;
     }
 
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     internal struct ShellExecuteInfo
     {
         public int Size;
@@ -222,6 +222,49 @@ internal static partial class WinApi
         Win         = 0x0008,
     }
     
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    public struct DisplayDevice
+    {
+        public int Size;
+        
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
+        public string DeviceName;
+
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
+        public string DeviceString;
+
+        public uint StateFlags;
+
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
+        public string DeviceId;
+
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
+        public string DeviceKey;
+    }
+    
+    [Flags]
+    public enum MonitorInfoExFlags : uint
+    {
+        None = 0,
+        Primary = 1,
+        Enhanced = 2,
+    }
+    
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    public struct MonitorInfoEx
+    {
+        public int Size;
+        
+        public Rect Monitor;
+        
+        public Rect Work;
+        
+        public MonitorInfoExFlags Flags;
+
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
+        public string Device;
+    }
+    
     internal static WinApi.Win32Error GetLastPInvokeError() => (Win32Error)Marshal.GetLastPInvokeError();
 
     [LibraryImport("ntdll.dll")]
@@ -237,7 +280,7 @@ internal static partial class WinApi
     [return: MarshalAs(UnmanagedType.Bool)]
     internal static partial bool CloseHandle(IntPtr objectHandle);
 
-    [DllImport("shell32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+    [DllImport("shell32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     internal static extern bool ShellExecuteEx(ref ShellExecuteInfo shellExecuteInfo); // todo: use LibraryImport?
 
@@ -319,4 +362,12 @@ internal static partial class WinApi
     [LibraryImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
     internal static partial bool IsWindowVisible(IntPtr windowHandle);
+    
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static extern bool EnumDisplayDevices(string? device, uint devNum, ref DisplayDevice displayDevice, uint flags);
+    
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static extern bool GetMonitorInfo(nint monitorHandle, ref MonitorInfoEx monitorInfo);
 }
