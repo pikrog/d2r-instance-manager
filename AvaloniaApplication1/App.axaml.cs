@@ -11,6 +11,7 @@ using AvaloniaApplication1.Services;
 using AvaloniaApplication1.ViewModels;
 using AvaloniaApplication1.Views;
 using Microsoft.Extensions.DependencyInjection;
+using MainWindowViewModel = AvaloniaApplication1.ViewModels.MainWindowViewModel;
 
 namespace AvaloniaApplication1
 {
@@ -26,14 +27,14 @@ namespace AvaloniaApplication1
         private async Task InitializeAsync(IClassicDesktopStyleApplicationLifetime desktop)
         {
             // todo: cleanup. error window. initial window = progress bar
-            InitialWindow? initialWindow = null;
+            var initialWindow = new InitialWindow();
             try
             {
-                initialWindow = new InitialWindow();
-                initialWindow.Show();
+                await Dispatcher.UIThread.InvokeAsync(initialWindow.Show);
                 
                 Services = await AppBootstrapper.BootstrapAsync();
                 await Task.Delay(1000);
+                
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
                     desktop.MainWindow = new MainWindow
@@ -46,7 +47,12 @@ namespace AvaloniaApplication1
             } catch (Exception e)
             {
                 Console.Error.WriteLine(e);
-                initialWindow?.Close();
+                
+                await Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    initialWindow.Close();
+                    desktop.Shutdown(1);
+                });
             }
         }
         

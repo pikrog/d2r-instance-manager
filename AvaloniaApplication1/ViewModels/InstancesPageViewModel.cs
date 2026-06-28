@@ -1,14 +1,15 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Input;
 using Avalonia.Threading;
+using AvaloniaApplication1.Mappers;
 using AvaloniaApplication1.Models;
 using AvaloniaApplication1.Services;
 using AvaloniaApplication1.Snapshots;
+using AvaloniaApplication1.ViewModels.Dialog;
+using AvaloniaApplication1.ViewModels.Instance;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
@@ -28,8 +29,7 @@ public partial class InstancesPageViewModel : ViewModelBase, IDialogParticipant
     public ObservableCollection<GameInstanceTableRow> Instances { get; } = [];
     
     [ObservableProperty]
-    //[NotifyPropertyChangedFor(nameof(IsInstanceSelected))]
-    [NotifyCanExecuteChangedFor(nameof(EditInstanceCommand), nameof(RemoveInstanceCommand), nameof(LaunchInstancesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(EditCommand), nameof(RemoveCommand), nameof(LaunchCommand))]
     public partial GameInstanceTableRow? SelectedInstance { get; set; }
 
     public ObservableCollection<GameInstanceTableRow> SelectedInstances { get; set; } = [];
@@ -77,11 +77,11 @@ public partial class InstancesPageViewModel : ViewModelBase, IDialogParticipant
         Instances.AddRange(table);
     }
 
-    private EditInstanceFormViewModel CreateForm(GameInstanceSnapshot? snapshot = null)
+    private async Task<EditInstanceFormViewModel> CreateForm(GameInstanceSnapshot? snapshot = null)
     {
         var accountOptions = _accountService.GetOptions();
         var regionOptions = _regionService.GetOptions();
-        var displayOptions = _displayService.GetOptions();
+        var displayOptions = await _displayService.GetOptionsAsync(snapshot?.Display as DisplaySelection.Specific);
         var form = new EditInstanceFormViewModel(accountOptions, regionOptions, displayOptions)
         {
             SelectedDisplay = displayOptions[0],
@@ -93,8 +93,8 @@ public partial class InstancesPageViewModel : ViewModelBase, IDialogParticipant
         var selectedAccount = accountOptions.SingleOrDefault(x => x.Id == snapshot.AccountId);
         var selectedRegion = regionOptions.SingleOrDefault(x => x.Id == snapshot.RegionId);
         var selectedCredentialsVector = EditInstanceFormViewModel.CredentialsVectorOptions.SingleOrDefault(o => o.CredentialsVector == snapshot.CredentialsVector);
-        var selectedDisplay = displayOptions.SingleOrDefault(x => x.Index == snapshot.DisplayId) 
-                              ?? _displayService.GetOption(snapshot.DisplayId);
+        var selectedDisplay = displayOptions.SingleOrDefault(o => DisplayMatcher.IsMatch(snapshot.Display, o)) ?? displayOptions[0];
+        
         form.Id = snapshot.Id;
         form.Name = snapshot.Name;
         form.IsOnlineMode = snapshot.IsOnlineMode;
@@ -117,55 +117,54 @@ public partial class InstancesPageViewModel : ViewModelBase, IDialogParticipant
             form.SelectedAccount?.Id,
             form.SelectedCredentialsVector?.CredentialsVector,
             form.SelectedRegion?.Id,
-            form.SelectedDisplay.Index,
+            DisplaySelectionMapper.Map(form.SelectedDisplay),
             form.IsNoSound,
             form.IsWindowedMode, 
             form.RecallHotKey
         );
     }
     
-    private async Task CoreEditInstance(GameInstanceSnapshot? snapshot = null)
+    private async Task CoreEdit(GameInstanceSnapshot? snapshot = null)
     {
-        var form = CreateForm(snapshot);
+        var form = await CreateForm(snapshot);
         var okPressed = await this.OpenForm(form);
         if (!okPressed)
             return;
         var draft = CreateDraft(form);
-        await _gameInstanceService.Save(draft);
+        await _gameInstanceService.SaveAsync(draft);
         RefreshTable();
     }
     
     [RelayCommand]
-    private async Task NewInstance()
+    private async Task New()
     {
-        await CoreEditInstance();
+        await CoreEdit();
     }
     
     [RelayCommand(CanExecute = nameof(IsInstanceSelected))]
-    private async Task EditInstance() // todo: pass instance or no args and just get selected item?
+    private async Task Edit() // todo: pass instance or no args and just get selected item?
     {
         if (SelectedInstance is null)
             return;
         var snapshot = _gameInstanceService.GetInstanceConfigSnapshot(SelectedInstance.Id);
-        await CoreEditInstance(snapshot);
+        await CoreEdit(snapshot);
     }
     
     [RelayCommand(CanExecute = nameof(IsInstanceSelected))]
-    private async Task RemoveInstance()
+    private async Task Remove()
     {
         if (SelectedInstance is null)
             return;
-        await _gameInstanceService.Remove(SelectedInstance.Id);
+        await _gameInstanceService.RemoveAsync(SelectedInstance.Id);
         RefreshTable();
     }
 
     [RelayCommand(CanExecute = nameof(IsInstanceSelected))]
-    // [RelayCommand]
-    private async Task LaunchInstances()
+    private async Task Launch()
     {
         if (SelectedInstances.Count == 0)
             return;
         foreach (var instance in SelectedInstances)
-            await _gameInstanceService.Launch(instance.Id);
+            await _gameInstanceService.LaunchAsync(instance.Id);
     }
 }

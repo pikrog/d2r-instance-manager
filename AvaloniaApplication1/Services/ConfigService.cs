@@ -1,10 +1,8 @@
 ﻿using System;
-using System.IO;
 using System.Threading.Tasks;
-using AvaloniaApplication1.Snapshots;
+using AvaloniaApplication1.Config;
 
-// todo: move to Services
-namespace AvaloniaApplication1.Config;
+namespace AvaloniaApplication1.Services;
 
 public class ConfigService(ConfigContext configContext, IConfigStore configStore)
 {

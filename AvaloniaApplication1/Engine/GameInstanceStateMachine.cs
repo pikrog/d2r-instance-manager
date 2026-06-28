@@ -113,6 +113,7 @@ public static class GameInstanceStateMachine
             case (State.Stopping, ProcessExited e):
                 return To((session with { ExitCode = e.ExitCode }).CompleteCleanup(CleanupItem.Process), State.Stopping);
             case (State.Stopping, ProcessStartFailed):
+            case (State.Stopping, ProcessStopFailed):
                 return To(session.CompleteCleanup(CleanupItem.Process), State.Stopping);
             case (State.Stopping, LaunchLeaseReleased):
             case (State.Stopping, LaunchLeaseCanceled):

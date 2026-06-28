@@ -1,0 +1,26 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+             x:Class="AvaloniaApplication1.Design.Controls.CardPreview">
+    <StackPanel Margin="10" Spacing="10" ClipToBounds="False">
+        <StackPanel.Styles>
+            <Style Selector="controls|EditableCard">
+                <Setter Property="MinHeight" Value="120"/>
+            </Style>
+        </StackPanel.Styles>
+        <controls:EditableCard Title="Card 1" Subtitle="Description 1" />
+        <controls:EditableCard Title="Card 2" Subtitle="Description 2" IsDimmed="True"/>
+        <controls:EditableCard Title="Card 3" Subtitle="Description 3" IsEdited="True">
+            <controls:EditableCard.EditContent>
+                <StackPanel Orientation="Vertical" Spacing="8">
+                    <controls:FormField Label="Card name"/>
+                    <controls:FormField Label="Descritpion"/>
+                </StackPanel>
+            </controls:EditableCard.EditContent>
+        </controls:EditableCard>
+        <controls:AddCard/>
+    </StackPanel>
+</UserControl>

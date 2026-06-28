@@ -11,7 +11,7 @@ public class GlobalSettingsService(ConfigService configService)
 {
     private readonly SemaphoreSlim _semaphore = new(1, 1);
     
-    public async Task Save(GlobalSettingsDraft draft)
+    public async Task SaveAsync(GlobalSettingsDraft draft)
     {
         // Validate draft
 

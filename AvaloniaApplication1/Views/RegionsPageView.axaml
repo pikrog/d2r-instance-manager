@@ -1,4 +1,5 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
+﻿<!--
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -21,8 +22,6 @@
         
         <Style Selector="Button:disabled /template/ ContentPresenter#PART_ContentPresenter">
             <Setter Property="Background" Value="Transparent" />
-            <!--<Setter Property="Foreground" Value="{DynamicResource ButtonForeground}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrush}" />-->
         </Style>
         
         <Style Selector="DataValidationErrors">
@@ -134,16 +133,6 @@
                                         <controls:FormField Grid.Row="0" Grid.Column="0" Label="Name" Text="{Binding Name}"/>
                                         <controls:FormField Grid.Row="1" Grid.Column="0" Label="Address" Text="{Binding Address}"/>
                                         
-                                        <!--<StackPanel Grid.Row="0" Grid.Column="0">
-                                        <TextBlock FontSize="12" Text="Name"/>
-                                        <TextBox VerticalAlignment="Center" FontWeight="Bold" Text="{Binding Name}"/>
-                                        </StackPanel>
-                                        <StackPanel Grid.Row="1" Grid.Column="0">
-                                        <TextBlock Margin="0 8 0 0" FontSize="12" Text="Address"/>
-                                        <TextBox VerticalAlignment="Center" Text="{Binding Address}"/>
-                                        </StackPanel>-->
-                                        
-                                        <!-- todo: fix button pos, should be centered on card, not the grid -->
                                         <StackPanel Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" 
                                                     Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
                                             <Button Classes="action"
@@ -167,6 +156,67 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
+-->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="using:AvaloniaApplication1.ViewModels"
+             xmlns:services="using:AvaloniaApplication1.Services"
+             xmlns:designViewModels="using:AvaloniaApplication1.Design.ViewModels"
+             xmlns:controls="using:AvaloniaApplication1.Controls"
+             xmlns:region="clr-namespace:AvaloniaApplication1.ViewModels.Region"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AvaloniaApplication1.Views.RegionsPageView"
+             x:DataType="viewModels:RegionsPageViewModel"
+             services:DialogService.Register="{Binding}">
+     <Design.DataContext>
+        <designViewModels:RegionsPageDesignViewModel/>
+    </Design.DataContext>
+    
+    <Grid>
+        <ScrollViewer>
+            <StackPanel Orientation="Vertical" Margin="10" Spacing="10">
+                <ItemsControl ItemsSource="{Binding Regions}" ClipToBounds="False">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" Spacing="10"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <controls:EditableCard Title="{Binding Name}" Subtitle="{Binding Address}"
+                                                   IsEdited="{Binding EditForm,Converter={x:Static ObjectConverters.IsNotNull}}"
+                                                   EditCommand="{Binding $parent[UserControl].((viewModels:RegionsPageViewModel)DataContext).EditCommand}"
+                                                   DeleteCommand="{Binding $parent[UserControl].((viewModels:RegionsPageViewModel)DataContext).DeleteCommand}"
+                                                   AcceptCommand="{Binding $parent[UserControl].((viewModels:RegionsPageViewModel)DataContext).SaveCommand}"
+                                                   DiscardCommand="{Binding $parent[UserControl].((viewModels:RegionsPageViewModel)DataContext).EndEditCommand}"
+                                                   EditCommandParameter="{Binding}"
+                                                   DeleteCommandParameter="{Binding}"
+                                                   AcceptCommandParameter="{Binding EditForm}"
+                                                   DiscardCommandParameter="{Binding EditForm}"
+                                                   >
+                                <controls:EditableCard.IsDimmed>
+                                    <MultiBinding Converter="{StaticResource ReferenceNotNullAndNotEqualsConverter}" ConverterParameter="dimmed">
+                                        <Binding Path="$parent[ItemsControl].((viewModels:RegionsPageViewModel)DataContext).EditedCard"/>
+                                        <Binding/>
+                                    </MultiBinding>
+                                </controls:EditableCard.IsDimmed>
+                                <controls:EditableCard.EditContent> 
+                                    <StackPanel Orientation="Vertical" Spacing="8" DataContext="{Binding EditForm}">
+                                        <controls:FormField Label="Name" Text="{Binding Name}"/>
+                                        <controls:FormField Label="Address" Text="{Binding Address}"/>
+                                    </StackPanel>
+                                </controls:EditableCard.EditContent>
+                            </controls:EditableCard>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <controls:AddCard Command="{Binding NewCommand}" IsDimmed="{Binding EditedCard,Converter={x:Static ObjectConverters.IsNotNull}}"/>
+            </StackPanel>
         </ScrollViewer>
     </Grid>
 </UserControl>

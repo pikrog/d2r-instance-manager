@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Avalonia.Input;
 using AvaloniaApplication1.Config;
+using AvaloniaApplication1.Engine.Platform;
 using AvaloniaApplication1.Models;
 using AvaloniaApplication1.Snapshots;
 
@@ -47,44 +48,42 @@ public class AppDesignConfig : AppConfig
                 Accounts[0].Id,
                 CredentialsVector.OsiTokenRegistry,
                 Regions[0].Id,
-                1,
+                new DisplaySelection.Primary(),
                 false,
                 false,
-                new HotKey(Key.F1,
-                    KeyModifiers.Control)),
+                new HotKey(Key.F1, KeyModifiers.Control)),
             new GameInstanceSnapshot(Guid.NewGuid(),
                 "Battle Orders",
                 true,
                 Accounts[1].Id,
                 CredentialsVector.OsiTokenRegistry,
                 Regions[0].Id,
-                2,
+                new DisplaySelection.Primary(),
                 true,
                 true,
-                new HotKey(Key.F2,
-                    KeyModifiers.Control)),
+                new HotKey(Key.F2, KeyModifiers.Control)),
             new GameInstanceSnapshot(Guid.NewGuid(),
                 "Mule [EU]",
                 true,
                 Accounts[2].Id,
                 CredentialsVector.OsiTokenRegistry,
                 Regions[0].Id,
-                1,
+                new DisplaySelection.Specific("FAKE_DISPLAY_ID_1"),
                 true,
                 true,
-                new HotKey(Key.F3,
-                    KeyModifiers.Control)),
+                new HotKey(Key.F3, KeyModifiers.Control)),
             new GameInstanceSnapshot(Guid.NewGuid(),
                 "Mule [US]",
                 true,
                 Accounts[2].Id,
                 CredentialsVector.OsiTokenRegistry,
                 Regions[1].Id,
-                1,
+                new DisplaySelection.Specific("FAKE_DISPLAY_ID_2"),
                 true,
                 true,
-                new HotKey(Key.F3,
-                    KeyModifiers.Control)),
+                new HotKey(Key.F3, KeyModifiers.Control)),
         ];
+
+        Displays = [];
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AvaloniaApplication1.ViewModels;
+namespace AvaloniaApplication1.ViewModels.Dialog;
 
 public interface IDialogAware
 {

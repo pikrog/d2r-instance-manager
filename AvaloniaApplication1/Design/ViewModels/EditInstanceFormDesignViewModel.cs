@@ -2,6 +2,7 @@
 using Avalonia.Input;
 using AvaloniaApplication1.Models;
 using AvaloniaApplication1.ViewModels;
+using EditInstanceFormViewModel = AvaloniaApplication1.ViewModels.Instance.EditInstanceFormViewModel;
 
 namespace AvaloniaApplication1.Design.ViewModels;
 
@@ -18,8 +19,9 @@ public class EditInstanceFormDesignViewModel : EditInstanceFormViewModel
         new RegionOption(Guid.NewGuid(), "United States")
     ],
     [
-        new DisplayOption(0, "1"),
-        new DisplayOption(1, "2")
+        new DisplayOption.Primary(),
+        new DisplayOption.Specific(1, "FAKE_DISPLAY_ID_1", "MSI X01", 1920, 1080, true),
+        new DisplayOption.Specific(2, "FAKE_DISPLAY_ID_2", "LG Y02", 1440, 900, true)
     ])
     {
         Name = "Hammer";

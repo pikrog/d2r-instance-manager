@@ -12,7 +12,7 @@ public record GameInstanceSnapshot
     Guid? AccountId,
     CredentialsVector? CredentialsVector,
     Guid? RegionId,
-    int DisplayId,
+    DisplaySelection Display,
     bool IsNoSound,
     bool IsWindowedMode,
     HotKey RecallHotKey

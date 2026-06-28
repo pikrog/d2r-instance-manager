@@ -7,7 +7,13 @@ using AvaloniaApplication1.Engine.Helpers;
 using AvaloniaApplication1.Engine.Providers;
 using AvaloniaApplication1.Services;
 using AvaloniaApplication1.ViewModels;
+using AvaloniaApplication1.ViewModels.Account;
 using Microsoft.Extensions.DependencyInjection;
+using AccountsPageViewModel = AvaloniaApplication1.ViewModels.AccountsPageViewModel;
+using GlobalSettingsPageViewModel = AvaloniaApplication1.ViewModels.GlobalSettingsPageViewModel;
+using InstancesPageViewModel = AvaloniaApplication1.ViewModels.InstancesPageViewModel;
+using MainWindowViewModel = AvaloniaApplication1.ViewModels.MainWindowViewModel;
+using RegionsPageViewModel = AvaloniaApplication1.ViewModels.RegionsPageViewModel;
 
 namespace AvaloniaApplication1.Bootstrap;
 

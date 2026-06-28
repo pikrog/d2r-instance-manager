@@ -17,7 +17,7 @@ using DynamicData.Kernel;
 
 namespace AvaloniaApplication1.Services;
 
-public class GameInstanceService(ConfigService configService, GameInstanceManager gameInstanceManager, AccountService accountService, RegionService regionService)
+public class GameInstanceService(ConfigService configService, GameInstanceManager gameInstanceManager, AccountService accountService, RegionService regionService, DisplayService displayService)
 {
     public class GameInstanceValidationRules // todo: implement
     {
@@ -68,18 +68,18 @@ public class GameInstanceService(ConfigService configService, GameInstanceManage
         remove => gameInstanceManager.InstanceStateChanged -= value;
     }
 
-    private async Task Add(GameInstanceSnapshot snapshot)
+    private async Task AddAsync(GameInstanceSnapshot snapshot)
     {
         await configService.ChangeAsync(context => context.AddInstance(snapshot));
         gameInstanceManager.Register(snapshot.Id);
     }
 
-    private async Task Update(GameInstanceSnapshot snapshot)
+    private async Task UpdateAsync(GameInstanceSnapshot snapshot)
     {
         await configService.ChangeAsync(context => context.UpdateInstance(snapshot));
     }
 
-    public async Task Save(GameInstanceDraft draft)
+    public async Task SaveAsync(GameInstanceDraft draft)
     {
         Validate(draft);
 
@@ -91,19 +91,19 @@ public class GameInstanceService(ConfigService configService, GameInstanceManage
             draft.AccountId,
             draft.CredentialsVector,
             draft.RegionId,
-            draft.DisplayId,
+            draft.Display,
             draft.IsNoSound,
             draft.IsWindowedMode,
             draft.RecallHotKey
         );
 
         if (draft.Id is null)
-            await Add(snapshot);
+            await AddAsync(snapshot);
         else
-            await Update(snapshot);
+            await UpdateAsync(snapshot);
     }
     
-    public async Task Remove(Guid id)
+    public async Task RemoveAsync(Guid id)
     {
         await configService.ChangeAsync(context => context.RemoveInstance(id));
         gameInstanceManager.Remove(id);
@@ -132,7 +132,7 @@ public class GameInstanceService(ConfigService configService, GameInstanceManage
         return new GameInstanceTableRow(id, configSnapshot.Name, status);
     }
 
-    public List<GameInstanceTableRow> GetTable()
+    public IReadOnlyList<GameInstanceTableRow> GetTable()
     {
         var instances = gameInstanceManager.GetAllRuntimeStates().ToDictionary(i => i.Id);
         return configService.Config.GetAllInstances().Select(i =>
@@ -145,7 +145,7 @@ public class GameInstanceService(ConfigService configService, GameInstanceManage
             }).ToList();
     }
 
-    public async Task Launch(Guid id)
+    public async Task LaunchAsync(Guid id)
     {
         var settings = GetSettingsSnapshot();
         
@@ -164,14 +164,19 @@ public class GameInstanceService(ConfigService configService, GameInstanceManage
                 _ => throw new InvalidOperationException($"Unknown credentials vector {snapshot.CredentialsVector}")
             };
         }
+
+        var displayId = displayService.ResolveDisplayId(snapshot.Display);
+        if (displayId is null)
+            throw new InvalidOperationException("Failed to resolve display id"); // todo: return Result<Unit, Error>
+        
+        // todo: check if path is valid
         
         var instanceLaunchContext = new InstanceLaunchContext(
             settings.GameExecutablePath,
             authenticationContext,
-            snapshot.DisplayId,
+            displayId,
             snapshot.IsNoSound,
-            snapshot.IsWindowedMode,
-            settings.FallbackToPrimaryDisplayIfInvalid
+            snapshot.IsWindowedMode
         );
 
         var multiboxUnlockRetryPolicy = new RetryPolicy(

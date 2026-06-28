@@ -1,16 +1,14 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace AvaloniaApplication1.ViewModels;
+namespace AvaloniaApplication1.ViewModels.Region;
 
 public partial class RegionCardViewModel(Guid? id = null, string name = "", string address = "") : ViewModelBase
 {
     [ObservableProperty]
     public partial EditRegionFormViewModel? EditForm { get; private set; }
     
-    public Guid? Id { get; } = id;
+    public Guid? Id { get; set; } = id;
     
     [ObservableProperty]
     public partial string Name { get; set; } = name;

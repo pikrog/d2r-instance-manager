@@ -4,8 +4,7 @@ public record InstanceLaunchContext
 (
     string ExecutablePath,
     AuthenticationContext AuthenticationContext,
-    int DisplayId,
+    string DisplayId,
     bool IsNoSound,
-    bool IsWindowedMode,
-    bool FallbackToPrimaryDisplayIfInvalid
+    bool IsWindowedMode
 );

@@ -1,0 +1,66 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
+             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="200"
+             x:Class="AvaloniaApplication1.Controls.EditableCard"
+             x:Name="Root"
+             ClipToBounds="False">
+    <UserControl.Styles>
+        <Style Selector="Button:disabled /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+    </UserControl.Styles>
+    
+    <controls:Card IsDimmed="{Binding #Root.IsDimmed}" Padding="10">
+        <Grid>
+            <Grid RowDefinitions="Auto, Auto, *" ColumnDefinitions="*, Auto" RowSpacing="10" ColumnSpacing="16"
+                  Margin="12"
+                  IsVisible="{Binding !#Root.IsEdited}">
+                <TextBlock Grid.Row="0" Grid.Column="0"
+                           Classes="h2" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding #Root.Title}"/>
+                <TextBlock Grid.Row="1" Grid.Column="0"
+                           Classes="subh2" VerticalAlignment="Center" Text="{Binding #Root.Subtitle}"/>
+                <ContentPresenter Grid.Row="2" Grid.Column="0" Content="{Binding #Root.ViewContent}"/>
+                <StackPanel Grid.Row="0" Grid.RowSpan="3" Grid.Column="1"
+                            Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Opacity="0.60">
+                    <Button Classes="action"
+                            Command="{Binding #Root.EditCommand}"
+                            CommandParameter="{Binding #Root.EditCommandParameter}"
+                            >
+                        <Image Source="{SvgImage /Assets/images/edit.svg}"/>
+                    </Button>                                
+                    <Button Classes="action"
+                            Command="{Binding #Root.DeleteCommand}"
+                            CommandParameter="{Binding #Root.DeleteCommandParameter}"
+                            > 
+                        <Image Source="{SvgImage /Assets/images/delete.svg}"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+            
+            <Grid ColumnDefinitions="*, Auto" ColumnSpacing="16" Margin="12"
+                  IsVisible="{Binding #Root.IsEdited}">
+                <ContentPresenter Grid.Column="0" Content="{Binding #Root.EditContent}"/>
+                
+                <!-- todo: fix button pos, should be centered on card, not the grid -->
+                <StackPanel Grid.Column="1" 
+                            Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <Button Classes="action"
+                            Command="{Binding #Root.AcceptCommand}"
+                            CommandParameter="{Binding #Root.AcceptCommandParameter}"
+                            IsDefault="True">
+                        <Image Source="{SvgImage /Assets/images/accept.svg}"/>
+                    </Button>                                
+                    <Button Classes="action"
+                            Command="{Binding #Root.DiscardCommand}"
+                            CommandParameter="{Binding #Root.DiscardCommandParameter}"
+                            IsCancel="True">
+                        <Image Source="{SvgImage /Assets/images/discard.svg}"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </controls:Card>
+</UserControl>

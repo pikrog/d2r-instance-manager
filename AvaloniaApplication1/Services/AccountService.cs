@@ -10,13 +10,13 @@ namespace AvaloniaApplication1.Services;
 
 public class AccountService(ConfigService configService)
 {
-    private async Task Add(AccountSnapshot snapshot) => 
+    private async Task AddAsync(AccountSnapshot snapshot) => 
         await configService.ChangeAsync(context => context.AddAccount(snapshot));
 
-    private async Task Update(AccountSnapshot snapshot) => 
+    private async Task UpdateAsync(AccountSnapshot snapshot) => 
         await configService.ChangeAsync(context => context.UpdateAccount(snapshot));
 
-    public async Task Save(AccountDraft draft)
+    public async Task SaveAsync(AccountDraft draft)
     {
         // Validate(draft);
 
@@ -24,18 +24,18 @@ public class AccountService(ConfigService configService)
         var snapshot = new AccountSnapshot(id, draft.Username, draft.Password);
         
         if (draft.Id is null)
-            await Add(snapshot);
+            await AddAsync(snapshot);
         else
-            await Update(snapshot);
+            await UpdateAsync(snapshot);
     }
 
-    public async Task Remove(Guid id) => await configService.ChangeAsync(context => context.RemoveAccount(id));
+    public async Task RemoveAsync(Guid id) => await configService.ChangeAsync(context => context.RemoveAccount(id));
 
     public AccountSnapshot GetSnapshot(Guid id) => configService.Config.GetAccount(id);
     
     public IReadOnlyList<AccountSnapshot> GetAllSnapshots() => configService.Config.GetAllAccounts();
     
-    public List<AccountOption> GetOptions() => 
+    public IReadOnlyList<AccountOption> GetOptions() => 
         GetAllSnapshots().Select(a => new AccountOption(a.Id, a.Username)).ToList();
 
     public bool Exists(Guid id) => configService.Config.AccountExists(id);

@@ -1,8 +1,9 @@
 using AvaloniaApplication1.ViewModels;
+using MainWindowViewModel = AvaloniaApplication1.ViewModels.MainWindowViewModel;
 
 namespace AvaloniaApplication1.Design.ViewModels;
 
-public class MainWindowDesignViewModel : MainWindowViewModel
+public class MainWindowDesignViewModel : AvaloniaApplication1.ViewModels.MainWindowViewModel
 {
     public MainWindowDesignViewModel()
         : base(

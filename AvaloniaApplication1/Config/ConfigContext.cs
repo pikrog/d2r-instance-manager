@@ -18,7 +18,8 @@ public class ConfigContext(AppConfig appConfig) : IConfigReader
             GlobalSettings = _appConfig.GlobalSettings,
             GameInstances = [.. _appConfig.GameInstances],
             Regions = [.. _appConfig.Regions],
-            Accounts = [.. _appConfig.Accounts]
+            Accounts = [.. _appConfig.Accounts],
+            Displays = [.. _appConfig.Displays]
         };
     }
     
@@ -139,6 +140,25 @@ public class ConfigContext(AppConfig appConfig) : IConfigReader
     public bool AccountExists(Guid id)
     {
         return _appConfig.Accounts.Exists(i => i.Id == id);
+    }
+    #endregion
+    
+    #region Displays
+    public CachedDisplaySnapshot GetCachedDisplay(string id)
+    {
+        var display = _appConfig.Displays.Find(i => i.Id == id);
+        return display ?? throw new ConfigNotFoundException($"Display with id {id} not found");
+    }
+    
+    public void CacheDisplay(CachedDisplaySnapshot snapshot)
+    {
+        var index = _appConfig.Displays.FindIndex(i => i.Id == snapshot.Id);
+        if (index == -1)
+        {
+            _appConfig.Displays.Add(snapshot);
+            return;
+        }
+        _appConfig.Displays[index] = snapshot;
     }
     #endregion
 }

@@ -30,7 +30,7 @@ public static class DesignServices
     
     public static RegionService RegionService { get; } = new(ConfigService);
 
-    public static DisplayService DisplayService { get; } = new();
+    public static DisplayService DisplayService { get; } = new(ConfigService);
 
     public static GlobalSettingsService GlobalSettingsService { get; } = new(ConfigService);
     
@@ -52,7 +52,7 @@ public static class DesignServices
         new(ConfigContext, GameInstanceManager);
 
     public static GameInstanceService GameInstanceService { get; } =
-        new(ConfigService, GameInstanceManager, AccountService, RegionService);
+        new(ConfigService, GameInstanceManager, AccountService, RegionService, DisplayService);
     
     static DesignServices()
     {

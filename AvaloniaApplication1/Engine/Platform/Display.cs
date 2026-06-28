@@ -23,13 +23,13 @@ public class Display(int index, IntPtr handle, string id, string description, in
 
     public static Display GetPrimary() => GetAll().Single(d => d.IsPrimary);
 
-    public static Display GetByIndex(int index) => GetAll()[index];
+    public static Display? GetById(string id) => GetAll().SingleOrDefault(d => d.Id == id);
     
-    public static Display GetById(string id) => GetAll().Single(d => d.Id == id); // todo: don't use these functions
+    public static bool Exists(string id) => GetAll().Any(d => d.Id == id);
     
     public static IReadOnlyList<Display> GetAll()
     {
-        var index = 0;
+        var index = 1;
         var handleList = new List<Display>();
         WinApi.EnumDisplayMonitors(
             IntPtr.Zero,

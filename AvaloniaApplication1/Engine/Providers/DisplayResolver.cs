@@ -5,7 +5,9 @@ namespace AvaloniaApplication1.Engine.Providers;
 
 public static class DisplayResolver
 {
-    public static Display GetByIndex(int index, bool allowFallbackToPrimary = false)
+    public static Display? GetById(string id) => Display.GetById(id);
+    
+    /*public static Display GetByIndex(int index, bool allowFallbackToPrimary = false)
     {
         try
         {
@@ -17,5 +19,5 @@ public static class DisplayResolver
                 throw;
             return Display.GetPrimary();
         }
-    }
+    }*/
 }

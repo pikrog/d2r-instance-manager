@@ -5,18 +5,18 @@ namespace AvaloniaApplication1.Bootstrap;
 
 public static class ConfigBootstrapper
 {
-    public static Task<CoreConfigServicesBundle> Bootstrap()
+    public static Task<CoreConfigServicesBundle> BootstrapAsync()
     {
         var appEnvironment = AppEnvironment.CreateInApplicationDataDirectory();
-        return Bootstrap(appEnvironment);
+        return BootstrapAsync(appEnvironment);
     }
 
-    public static Task<CoreConfigServicesBundle> Bootstrap(AppEnvironment appEnvironment)
+    public static Task<CoreConfigServicesBundle> BootstrapAsync(AppEnvironment appEnvironment)
     {
-        return Bootstrap(appEnvironment, new JsonConfigStore(appEnvironment));
+        return BootstrapAsync(appEnvironment, new JsonConfigStore(appEnvironment));
     }
 
-    public static async Task<CoreConfigServicesBundle> Bootstrap(
+    public static async Task<CoreConfigServicesBundle> BootstrapAsync(
         AppEnvironment appEnvironment,
         IConfigStore configStore)
     {

@@ -49,6 +49,9 @@
       <DependentUpon>RegionsPageView.axaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Controls\Card.axaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -61,5 +64,8 @@
   <ItemGroup>
     <Folder Include="Engine\CommandLine\" />
     <Folder Include="Factories\" />
+    <Folder Include="Themes\" />
+    <Folder Include="ViewModels\GlobalSettings\" />
+    <Folder Include="ViewModels\MainWindow\" />
   </ItemGroup>
 </Project>

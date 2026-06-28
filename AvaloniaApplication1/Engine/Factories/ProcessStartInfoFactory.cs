@@ -14,7 +14,8 @@ public class ProcessStartInfoFactory(ArgumentsFactory argumentsFactory)
     public ProcessStartInfo Create(InstanceLaunchContext context)
     {
         var argumentsContext = ArgumentsContextMapper.Map(context);
-        var display = DisplayResolver.GetByIndex(context.DisplayId, context.FallbackToPrimaryDisplayIfInvalid);
+        var display = Display.GetById(context.DisplayId) 
+                      ?? throw new InvalidOperationException($"Display with id {context.DisplayId} not found.");
         
         return new ProcessStartInfo
         {

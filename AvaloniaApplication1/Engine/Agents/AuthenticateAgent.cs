@@ -18,6 +18,9 @@ public class AuthenticateAgent(AuthenticationContext context) : AgentBase<Authen
     protected override Task<AuthenticationResult> RunAgentTaskAsync(CancellationToken cancellationToken) =>
         throw new NotImplementedException("AuthenticateAgent not implemented yet");
 
+    protected override ErrorEvent CreateErrorForGenericException(Exception exception) =>
+        new AuthenticationFailed();
+
     protected override Event MapAgentResultToEvent(AuthenticationResult result) =>
         new AuthenticationFailed();
 }

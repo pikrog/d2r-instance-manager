@@ -348,7 +348,7 @@ internal static partial class WinApi
     [LibraryImport("kernel32.dll", SetLastError = true)]
     internal static partial uint WaitForSingleObject(IntPtr handle, uint milliseconds);
     
-    [LibraryImport("user32.dll", SetLastError = true)]
+    [LibraryImport("user32.dll", SetLastError = true, EntryPoint = "PostMessageW")]
     [return: MarshalAs(UnmanagedType.Bool)]
     internal static partial bool PostMessage(IntPtr windowHandle, uint message, IntPtr wParam, IntPtr lParam);
     

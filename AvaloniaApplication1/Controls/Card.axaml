@@ -1,0 +1,28 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:AvaloniaApplication1.Controls">
+    <Design.PreviewWith>
+        <controls:Card Width="400" Height="160" Margin="20"/>
+    </Design.PreviewWith>
+    
+    <Style Selector="controls|Card">
+        <Setter Property="ClipToBounds" Value="False"/>
+        <!--<Setter Property="Opacity" Value="1"/>-->
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border Classes="card" Classes.dimmed="{TemplateBinding IsDimmed}" Padding="{TemplateBinding Padding}">
+                    <ContentPresenter Content="{TemplateBinding Content}"/>    
+                </Border>
+            </ControlTemplate>
+        </Setter>
+        <Setter Property="Transitions">
+            <Transitions>
+                <DoubleTransition Property="Opacity" Duration="0:0:0.2"/>
+            </Transitions>
+        </Setter>
+    </Style>
+    
+    <Style Selector="controls|Card:dimmed">
+        <Setter Property="Opacity" Value="0.25"/>
+    </Style>
+</Styles>

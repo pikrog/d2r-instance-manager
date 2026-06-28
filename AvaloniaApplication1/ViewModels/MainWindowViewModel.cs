@@ -1,4 +1,4 @@
-using AvaloniaApplication1.Services;
+using AvaloniaApplication1.ViewModels.Dialog;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 

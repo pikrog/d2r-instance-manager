@@ -14,8 +14,9 @@
         <FluentTheme/>
         <StyleInclude Source="Styles/AppDefault.axaml"/>
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
-        <StyleInclude Source="/Themes/Section.axaml"/>
-        <StyleInclude Source="/Themes/HotkeyBox.axaml"/>
+        <StyleInclude Source="/Controls/Section.axaml"/>
+        <StyleInclude Source="/Controls/HotkeyBox.axaml"/>
+        <StyleInclude Source="/Controls/Card.axaml"/>
     </Application.Styles>
 
     <Application.Resources>

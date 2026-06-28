@@ -9,7 +9,7 @@ public static class AppBootstrapper
 {
     public static async Task<IServiceProvider> BootstrapAsync()
     {
-        var coreConfigServicesBundle = await ConfigBootstrapper.Bootstrap();
+        var coreConfigServicesBundle = await ConfigBootstrapper.BootstrapAsync();
         var provider = BuildServiceProvider(coreConfigServicesBundle);
         BootstrapRuntime(provider);
         return provider;

@@ -5,10 +5,11 @@ using AvaloniaApplication1.Models;
 using AvaloniaApplication1.Services;
 using AvaloniaApplication1.ViewModels;
 using DynamicData;
+using InstancesPageViewModel = AvaloniaApplication1.ViewModels.InstancesPageViewModel;
 
 namespace AvaloniaApplication1.Design.ViewModels;
 
-public class InstancesPageDesignViewModel : InstancesPageViewModel
+public class InstancesPageDesignViewModel : AvaloniaApplication1.ViewModels.InstancesPageViewModel
 {
     public InstancesPageDesignViewModel() : base(DesignServices.GameInstanceService,
         DesignServices.AccountService,
