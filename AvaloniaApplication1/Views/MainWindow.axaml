@@ -52,33 +52,26 @@
     </Design.DataContext>
 
     <DockPanel>
-        <!--<Border DockPanel.Dock="Bottom">
-            <StackPanel Orientation="Horizontal">
-                <ProgressBar Width="210" Height="25" Value="50"/>
-                <TextBlock VerticalAlignment="Center">No errors</TextBlock>
-            </StackPanel>
-        </Border>-->
-        
-        <Border DockPanel.Dock="Left" Padding="10" BoxShadow="0 1 3 0 #80000000"> <!-- Margin="0 0 0 4" CornerRadius="0 0 8 0"-->
-                <StackPanel Orientation="Vertical" Width="200" Spacing="6">
-                    <StackPanel.Styles>
+        <Border DockPanel.Dock="Left" BoxShadow="0 0 64 0 #14000000">
+                <DockPanel Width="200" ClipToBounds="True">
+                    <DockPanel.Styles>
                         <Style Selector="Button">
                             <Setter Property="Height" Value="60"/>
                             <Setter Property="HorizontalAlignment" Value="Stretch"/>
                             <Setter Property="VerticalContentAlignment" Value="Center"/>
                         </Style>
-                    </StackPanel.Styles>
-                    <Border CornerRadius="8" BoxShadow="0 1 1 0 #80000000" Height="120">
+                    </DockPanel.Styles>
+                    <Border DockPanel.Dock="Top" Height="140">
                         <StackPanel Orientation="Vertical" Spacing="6" VerticalAlignment="Center">
-                            <Image Height="40" Source="/Assets/images/barb-bo.bmp" Margin="5" RenderOptions.BitmapInterpolationMode="HighQuality"/>
-                            <TextBlock HorizontalAlignment="Center" FontWeight="Bold">D2R Instance Manager</TextBlock>
+                            <Image Height="75" Source="/Assets/images/barb-bo.bmp" Margin="5" RenderOptions.BitmapInterpolationMode="HighQuality"/>
+                            <TextBlock HorizontalAlignment="Center" FontWeight="Bold" FontSize="15">D2R Instance Manager</TextBlock>
                         </StackPanel>
                     </Border>
-                    <ScrollViewer VerticalScrollBarVisibility="Visible">
-                        <StackPanel Orientation="Vertical">
+                    <ScrollViewer>
+                        <StackPanel Orientation="Vertical" Margin="10 20">
                             <RadioButton Classes="nav-tab" Command="{Binding SetPageCommand}" 
-                                             CommandParameter="{Binding InstancesPageViewModel}" 
-                                             IsChecked="True">
+                                         CommandParameter="{Binding InstancesPageViewModel}" 
+                                         IsChecked="True">
                                 <StackPanel Orientation="Vertical" Spacing="6">
                                     <Image Source="{SvgImage /Assets/images/play.svg}" Width="24"/>
                                     <TextBlock HorizontalAlignment="Center">Instances</TextBlock>
@@ -103,7 +96,7 @@
                                     <TextBlock HorizontalAlignment="Center">Game config files</TextBlock>
                                 </StackPanel>
                             </RadioButton>-->
-                            <RadioButton Classes="nav-tab" Command="{Binding SetPageCommand}">
+                            <RadioButton Classes="nav-tab"> <!--Command="{Binding SetPageCommand}"-->
                                 <StackPanel Orientation="Vertical" Spacing="6">
                                     <Image Source="{SvgImage /Assets/images/book.svg}" Width="24"/>
                                     <TextBlock HorizontalAlignment="Center">Logs</TextBlock>
@@ -117,10 +110,15 @@
                             </RadioButton>
                         </StackPanel>
                     </ScrollViewer>
-                </StackPanel>
+                </DockPanel>
         </Border>
         
         <ContentControl Content="{Binding CurrentPage}"/>
+        <!--<TransitioningContentControl Content="{Binding CurrentPage}">
+            <TransitioningContentControl.PageTransition>
+                <PageSlide Duration="0:0:0.25"></PageSlide>
+            </TransitioningContentControl.PageTransition>
+        </TransitioningContentControl>-->
     </DockPanel>
 
 </Window>
