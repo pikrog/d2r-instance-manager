@@ -1,9 +1,9 @@
 ﻿using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace AvaloniaApplication1.ViewModels.Region;
+namespace AvaloniaApplication1.ViewModels;
 
-public partial class RegionCardViewModel(Guid? id = null, string name = "", string address = "") : ViewModelBase
+public partial class RegionCardViewModel(Guid? id = null, string name = "", string address = "") : CardViewModel
 {
     [ObservableProperty]
     public partial EditRegionFormViewModel? EditForm { get; private set; }

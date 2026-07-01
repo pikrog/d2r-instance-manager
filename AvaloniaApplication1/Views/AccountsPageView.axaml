@@ -3,57 +3,73 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:designViewModels="using:AvaloniaApplication1.Design.ViewModels"
-             xmlns:account="clr-namespace:AvaloniaApplication1.ViewModels.Account"
              xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
-             xmlns:region="clr-namespace:AvaloniaApplication1.ViewModels.Region"
              xmlns:viewModels="clr-namespace:AvaloniaApplication1.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="AvaloniaApplication1.Views.AccountsPageView"
              x:DataType="viewModels:AccountsPageViewModel">
-     <Design.DataContext>
-        <designViewModels:AccountsPageDesignViewModel/>
+    <Design.DataContext>
+        <designViewModels:AccountsPageDesignViewModel />
     </Design.DataContext>
-    
-        <Grid>
-        <ScrollViewer>
-            <StackPanel Orientation="Vertical" Margin="10" Spacing="10">
-                <ItemsControl ItemsSource="{Binding Accounts}" ClipToBounds="False">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical" Spacing="10"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <controls:EditableCard Title="{Binding Username}"
-                                                   IsEdited="{Binding EditForm,Converter={x:Static ObjectConverters.IsNotNull}}"
-                                                   EditCommand="{Binding $parent[UserControl].((viewModels:AccountsPageViewModel)DataContext).EditCommand}"
-                                                   DeleteCommand="{Binding $parent[UserControl].((viewModels:AccountsPageViewModel)DataContext).DeleteCommand}"
-                                                   AcceptCommand="{Binding $parent[UserControl].((viewModels:AccountsPageViewModel)DataContext).SaveCommand}"
-                                                   DiscardCommand="{Binding $parent[UserControl].((viewModels:AccountsPageViewModel)DataContext).EndEditCommand}"
-                                                   EditCommandParameter="{Binding}"
-                                                   DeleteCommandParameter="{Binding}"
-                                                   AcceptCommandParameter="{Binding EditForm}"
-                                                   DiscardCommandParameter="{Binding EditForm}"
-                                                   >
-                                <controls:EditableCard.IsDimmed>
-                                    <MultiBinding Converter="{StaticResource ReferenceNotNullAndNotEqualsConverter}" ConverterParameter="dimmed">
-                                        <Binding Path="$parent[ItemsControl].((viewModels:AccountsPageViewModel)DataContext).EditedCard"/>
-                                        <Binding/>
-                                    </MultiBinding>
-                                </controls:EditableCard.IsDimmed>
-                                <controls:EditableCard.EditContent> 
-                                    <StackPanel Orientation="Vertical" Spacing="8" DataContext="{Binding EditForm}">
-                                        <controls:FormField Label="Username" Text="{Binding Username}"/>
-                                        <controls:FormField Label="Password" Text="{Binding Password}" PasswordChar="•"/>
-                                    </StackPanel>
-                                </controls:EditableCard.EditContent>
-                            </controls:EditableCard>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-                <controls:AddCard Command="{Binding NewCommand}" IsDimmed="{Binding EditedCard,Converter={x:Static ObjectConverters.IsNotNull}}"/>
-            </StackPanel>
-        </ScrollViewer>
-    </Grid>
+
+    <UserControl.Styles>
+        <Style Selector="controls|EditableCard.tile,controls|AddCard.tile">
+            <!-- <Setter Property="MinWidth" Value="200"/> -->
+            <!-- <Setter Property="MaxWidth" Value="400"/> -->
+            <Setter Property="Width" Value="300" />
+            <Setter Property="MinHeight" Value="160" />
+            <!-- <Setter Property="Height" Value="260"/> -->
+        </Style>
+        <!--<Style Selector="controls|EditableCard.tile:editing">
+            <Setter Property="Height" Value="200"/>
+        </Style>-->
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <ItemsControl ItemsSource="{Binding Cards}" ClipToBounds="False" Margin="30">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel ItemSpacing="30" LineSpacing="30" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.DataTemplates>
+                <DataTemplate x:DataType="viewModels:AccountCardViewModel">
+                    <controls:EditableCard Classes="tile" Title="Unnamed account"
+                                           VerticalAlignment="Top"
+                                           Subtitle="{Binding Username}"
+                                           IsEdited="{Binding EditForm,Converter={x:Static ObjectConverters.IsNotNull}}"
+                                           EditCommand="{Binding $parent[UserControl].((viewModels:AccountsPageViewModel)DataContext).EditCommand}"
+                                           DeleteCommand="{Binding $parent[UserControl].((viewModels:AccountsPageViewModel)DataContext).DeleteCommand}"
+                                           AcceptCommand="{Binding $parent[UserControl].((viewModels:AccountsPageViewModel)DataContext).SaveCommand}"
+                                           DiscardCommand="{Binding $parent[UserControl].((viewModels:AccountsPageViewModel)DataContext).EndEditCommand}"
+                                           EditCommandParameter="{Binding}"
+                                           DeleteCommandParameter="{Binding}"
+                                           AcceptCommandParameter="{Binding EditForm}"
+                                           DiscardCommandParameter="{Binding EditForm}">
+                        <controls:EditableCard.IsDimmed>
+                            <MultiBinding Converter="{StaticResource ReferenceNotNullAndNotEqualsConverter}"
+                                          ConverterParameter="dimmed">
+                                <Binding
+                                    Path="$parent[ItemsControl].((viewModels:AccountsPageViewModel)DataContext).EditedCard" />
+                                <Binding />
+                            </MultiBinding>
+                        </controls:EditableCard.IsDimmed>
+                        <controls:EditableCard.EditContent>
+                            <StackPanel Orientation="Vertical" Spacing="14" DataContext="{Binding EditForm}">
+                                <controls:FormField Label="Display name" />
+                                <controls:FormField Label="Username" Text="{Binding Username}" />
+                                <controls:FormField Label="Password" Text="{Binding Password}" PasswordChar="•" />
+                            </StackPanel>
+                        </controls:EditableCard.EditContent>
+                    </controls:EditableCard>
+                </DataTemplate>
+                <DataTemplate x:DataType="viewModels:AddCardViewModel">
+                    <controls:AddCard Classes="tile"
+                                      VerticalAlignment="Top"
+                                      Command="{Binding $parent[UserControl].((viewModels:AccountsPageViewModel)DataContext).NewCommand}"
+                                      IsDimmed="{Binding $parent[UserControl].((viewModels:AccountsPageViewModel)DataContext).EditedCard,Converter={x:Static ObjectConverters.IsNotNull}}" />
+                </DataTemplate>
+            </ItemsControl.DataTemplates>
+        </ItemsControl>
+    </ScrollViewer>
 </UserControl>

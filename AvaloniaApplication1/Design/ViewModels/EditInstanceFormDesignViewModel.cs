@@ -2,11 +2,11 @@
 using Avalonia.Input;
 using AvaloniaApplication1.Models;
 using AvaloniaApplication1.ViewModels;
-using EditInstanceFormViewModel = AvaloniaApplication1.ViewModels.Instance.EditInstanceFormViewModel;
+using EditInstanceFormViewModel = AvaloniaApplication1.ViewModels.EditInstanceFormViewModel;
 
 namespace AvaloniaApplication1.Design.ViewModels;
 
-public class EditInstanceFormDesignViewModel : EditInstanceFormViewModel
+public class EditInstanceFormDesignViewModel : AvaloniaApplication1.ViewModels.EditInstanceFormViewModel
 {
     public EditInstanceFormDesignViewModel() : base([
         new AccountOption(Guid.NewGuid(), "user1"),

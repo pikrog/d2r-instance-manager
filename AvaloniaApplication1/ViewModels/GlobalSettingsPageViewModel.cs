@@ -5,7 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace AvaloniaApplication1.ViewModels;
 
-public partial class GlobalSettingsPageViewModel : ViewModelBase
+public partial class GlobalSettingsPageViewModel : PageViewModel
 {
     private readonly GlobalSettingsService _globalSettingsService;
 
@@ -47,4 +47,8 @@ public partial class GlobalSettingsPageViewModel : ViewModelBase
         
         await _globalSettingsService.SaveAsync(draft);
     }
+
+    public override void OnEnter() => Refresh();
+
+    public override bool OnLeave() => true;
 }

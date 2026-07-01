@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,49 +11,55 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace AvaloniaApplication1.ViewModels;
 
-public partial class RegionsPageViewModel(RegionService regionService) : PageViewModel, IDialogParticipant
+public partial class RegionsPageViewModel : PageViewModel, IDialogParticipant
 {
-    public ObservableCollection<CardViewModel> Cards { get; } = [];//[new AddCardViewModel()];
+    private readonly RegionService _regionService;
+
+    private readonly ObservableCollection<RegionCardViewModel> _regions = [];
+
+    private readonly CardCollection<RegionCardViewModel> _cards;
     
-    private int EntityCardsCount => Cards.Count;
+    public ReadOnlyObservableCollection<CardViewModel> Cards => _cards.Cards;
 
     public bool IsNotEditing => EditedCard is null;
     
     [NotifyCanExecuteChangedFor(nameof(NewCommand), nameof(EditCommand), nameof(DeleteCommand))]
     [ObservableProperty]
     public partial RegionCardViewModel? EditedCard { get; set; }
-
-    private void AddEntityCard(RegionCardViewModel card)
+    
+    public RegionsPageViewModel(RegionService regionService)
     {
-        Cards.Insert(EntityCardsCount, card);
+        _regionService = regionService;
+
+        _cards = new CardCollection<RegionCardViewModel>(_regions);
     }
     
     public void Refresh()
     {
-        var regions = regionService.GetAllSnapshots()
+        var regions = _regionService.GetAllSnapshots()
             .ToList(); // todo: Get Snapshot Projection for UI? RegionTableRow
         
         var i = 0;
-        for (; i < Math.Min(regions.Count, EntityCardsCount); i++)
+        for (; i < Math.Min(regions.Count, _regions.Count); i++)
         {
-            var card = (Cards[i] as RegionCardViewModel)!;
-            card.Id = regions[i].Id;
-            card.Name = regions[i].Name;
-            card.Address = regions[i].Address;
+            var regionCard = _regions[i];
+            regionCard.Id = regions[i].Id;
+            regionCard.Name = regions[i].Name;
+            regionCard.Address = regions[i].Address;
         }
 
         for(; i < regions.Count; i++)
-            AddEntityCard(new RegionCardViewModel(regions[i].Id, regions[i].Name, regions[i].Address));
+            _regions.Add(new RegionCardViewModel(regions[i].Id, regions[i].Name, regions[i].Address));
 
-        for (; i < EntityCardsCount; )
-            Cards.RemoveAt(i);
+        for (; i < _regions.Count; )
+            _regions.RemoveAt(i);
     }
 
     [RelayCommand(CanExecute = nameof(IsNotEditing))]
     private void New()
     {
         var region = new RegionCardViewModel();
-        AddEntityCard(region);
+        _regions.Add(region);
         Edit(region);
     }
 
@@ -63,7 +70,7 @@ public partial class RegionsPageViewModel(RegionService regionService) : PageVie
             return;
         
         var draft = new RegionDraft(form.Id, form.Name, form.Address);
-        await regionService.SaveAsync(draft);
+        await _regionService.SaveAsync(draft);
         
         EndEdit();
         Refresh(); // [optional] todo: OnRegionsChanged from Service with event type Added/Updated
@@ -81,7 +88,7 @@ public partial class RegionsPageViewModel(RegionService regionService) : PageVie
     private async Task Delete(RegionCardViewModel region)
     {
         EndEdit();
-        await regionService.RemoveAsync(region.Id!.Value);
+        await _regionService.RemoveAsync(region.Id!.Value);
         Refresh(); // [optional] todo: OnRegionsChanged from Service with event type Removed
     }
 
@@ -90,18 +97,10 @@ public partial class RegionsPageViewModel(RegionService regionService) : PageVie
     {
         EditedCard?.CloseForm();
         if (EditedCard is not null && EditedCard.Id is null)
-            Cards.Remove(EditedCard);
+            _regions.Remove(EditedCard);
         EditedCard = null;
     }
 
-    public override void OnEnter()
-    {
-        Refresh();
-    }
-
-    public override bool OnLeave()
-    {
-        // todo: save changes?
-        return true;
-    }
+    public override void OnEnter() => Refresh();
+    public override bool OnLeave() => true;
 }

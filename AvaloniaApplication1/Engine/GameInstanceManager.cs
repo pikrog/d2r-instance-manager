@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using AvaloniaApplication1.Engine.Exceptions;
@@ -53,6 +54,18 @@ public class GameInstanceManager(GameInstanceEngineFactory engineFactory)
     public async Task LaunchAsync(Guid id, EngineLaunchContext context)
     {
         var instance = Get(id);
-        await instance.StartAsync(context);
+        await instance.LaunchAsync(context);
+    }
+
+    public async Task StopAsync(Guid id)
+    {
+        var instance = Get(id);
+        await instance.StopAsync();
+    }
+    
+    public void Show(Guid id)
+    {
+        var snapshot = GetRuntimeSnapshot(id);
+        snapshot.Process?.BringMainWindowToTop();
     }
 }

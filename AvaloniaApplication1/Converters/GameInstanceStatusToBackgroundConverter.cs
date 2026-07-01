@@ -19,14 +19,14 @@ public class GameInstanceStatusToBackgroundConverter : IValueConverter
         
         return status switch
         {
-            GameInstanceStatus.Inactive => Brushes.LightGray,
+            GameInstanceStatus.Inactive => Brushes.White,
             GameInstanceStatus.Authenticating => Brushes.LightYellow,
             GameInstanceStatus.QueuedForStart => Brushes.LightYellow,
             GameInstanceStatus.Starting => Brushes.LightYellow,
             GameInstanceStatus.Unlocking => Brushes.LightYellow,
             GameInstanceStatus.Running => Brushes.LightGreen,
             GameInstanceStatus.Stopping => Brushes.LightYellow,
-            GameInstanceStatus.Exited => Brushes.LightGray,
+            GameInstanceStatus.Exited => Brushes.White,
             GameInstanceStatus.ExitedPrematurely => Brushes.LightCoral,
             GameInstanceStatus.Terminated => Brushes.LightCoral,
             GameInstanceStatus.Timeout => Brushes.LightCoral,

@@ -7,7 +7,7 @@ namespace AvaloniaApplication1.ViewModels;
 public partial class MainWindowViewModel : ViewModelBase, IDialogParticipant
 {
     [ObservableProperty]
-    public partial ViewModelBase CurrentPage { get; set; }
+    public partial PageViewModel CurrentPage { get; set; }
 
     public InstancesPageViewModel InstancesPageViewModel { get; }
 
@@ -29,11 +29,15 @@ public partial class MainWindowViewModel : ViewModelBase, IDialogParticipant
         GlobalSettingsPageViewModel = globalSettingsPageViewModel;
 
         CurrentPage = InstancesPageViewModel;
+        CurrentPage.OnEnter();
     }
 
     [RelayCommand]
-    private void SetPage(ViewModelBase page)
+    private void SetPage(PageViewModel page)
     {
+        if (!CurrentPage.OnLeave())
+            return;
         CurrentPage = page;
+        CurrentPage.OnEnter();
     }
 }

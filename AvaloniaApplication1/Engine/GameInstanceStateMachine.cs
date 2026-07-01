@@ -19,9 +19,9 @@ public static class GameInstanceStateMachine
 
     private static TransitionResult ApplyTransition(Session session, Event @event)
     {
-        switch (session.State, @event)
+        switch (session.State, @event) // todo: handle UnexpectedError (-> stop instance)
         {
-            case (State.Inactive, StartRequested e):
+            case (State.Inactive, LaunchRequested e):
                 return StartNewSession(e);
 
             case (State.Authenticating, Authenticated):
@@ -124,7 +124,7 @@ public static class GameInstanceStateMachine
         }
     }
 
-    private static TransitionResult StartNewSession(StartRequested @event)
+    private static TransitionResult StartNewSession(LaunchRequested @event)
     {
         var session = new Session
         {

@@ -129,7 +129,7 @@ public class GameInstanceService(ConfigService configService, GameInstanceManage
         var configSnapshot = GetInstanceConfigSnapshot(id);
         var runtimeSnapshot = GetInstanceRuntimeSnapshot(id);
         var status = GameInstanceStatusMapper.Map(runtimeSnapshot);
-        return new GameInstanceTableRow(id, configSnapshot.Name, status);
+        return new GameInstanceTableRow(id, configSnapshot.Name, status, runtimeSnapshot.IsActive);
     }
 
     public IReadOnlyList<GameInstanceTableRow> GetTable()
@@ -140,8 +140,9 @@ public class GameInstanceService(ConfigService configService, GameInstanceManage
                 instances.TryGetValue(i.Id, out var runtimeSnapshot);
                 var status = runtimeSnapshot is not null  
                     ? GameInstanceStatusMapper.Map(runtimeSnapshot) 
-                    : GameInstanceStatus.Unknown;
-                return new GameInstanceTableRow(i.Id, i.Name, status);
+                    : GameInstanceStatus.Unknown; // todo: throw or ignore?
+                var isActive = runtimeSnapshot?.IsActive ?? false; // ?
+                return new GameInstanceTableRow(i.Id, i.Name, status, isActive);
             }).ToList();
     }
 
@@ -202,4 +203,8 @@ public class GameInstanceService(ConfigService configService, GameInstanceManage
         
         await gameInstanceManager.LaunchAsync(snapshot.Id, engineLaunchContext);
     }
+
+    public async Task StopAsync(Guid id) => await gameInstanceManager.StopAsync(id);
+
+    public void Show(Guid id) => gameInstanceManager.Show(id);
 }

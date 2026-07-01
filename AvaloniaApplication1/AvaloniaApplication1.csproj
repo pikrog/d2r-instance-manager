@@ -65,7 +65,5 @@
     <Folder Include="Engine\CommandLine\" />
     <Folder Include="Factories\" />
     <Folder Include="Themes\" />
-    <Folder Include="ViewModels\GlobalSettings\" />
-    <Folder Include="ViewModels\MainWindow\" />
   </ItemGroup>
 </Project>

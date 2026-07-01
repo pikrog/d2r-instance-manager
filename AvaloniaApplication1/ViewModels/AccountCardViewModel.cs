@@ -1,10 +1,9 @@
 ﻿using System;
-using AvaloniaApplication1.ViewModels.Region;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace AvaloniaApplication1.ViewModels.Account;
+namespace AvaloniaApplication1.ViewModels;
 
-public partial class AccountCardViewModel(Guid? id = null, string username = "", string password = "") : ViewModelBase
+public partial class AccountCardViewModel(Guid? id = null, string username = "", string password = "") : CardViewModel
 {
     [ObservableProperty]
     public partial EditAccountFormViewModel? EditForm { get; private set; }

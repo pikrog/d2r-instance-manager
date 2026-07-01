@@ -5,12 +5,11 @@ using RegionsPageViewModel = AvaloniaApplication1.ViewModels.RegionsPageViewMode
 
 namespace AvaloniaApplication1.Design.ViewModels;
 
-public class RegionsPageDesignViewModel : RegionsPageViewModel
+public sealed class RegionsPageDesignViewModel : RegionsPageViewModel
 {
     public RegionsPageDesignViewModel() : base(DesignServices.RegionService)
     {
-        this.EditCommand.Execute(Regions[2]);
+        OnEnter();
+        EditCommand.Execute(Cards[2]);
     }
-    
-
 }

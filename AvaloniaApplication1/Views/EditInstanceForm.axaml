@@ -6,11 +6,10 @@
              xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
              xmlns:designViewModels="clr-namespace:AvaloniaApplication1.Design.ViewModels"
              xmlns:dtos="clr-namespace:AvaloniaApplication1.Models"
-             xmlns:instance="clr-namespace:AvaloniaApplication1.ViewModels.Instance"
              mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="650"
              Width="450" Height="650"
              x:Class="AvaloniaApplication1.Views.EditInstanceForm"
-             x:DataType="instance:EditInstanceFormDialogViewModel"
+             x:DataType="viewModels:EditInstanceFormDialogViewModel"
              WindowStartupLocation="CenterOwner">
     <Design.DataContext>
         <designViewModels:EditInstanceFormDesignViewModel/>
@@ -66,7 +65,7 @@
                     
                 <TextBlock x:Name="CredentialsVectorLabel">Credentials vector</TextBlock>
                 <ComboBox AutomationProperties.LabeledBy="{Binding #CredentialsVectorLabel}"
-                          ItemsSource="{x:Static instance:EditInstanceFormViewModel.CredentialsVectorOptions}"
+                          ItemsSource="{x:Static viewModels:EditInstanceFormViewModel.CredentialsVectorOptions}"
                           SelectedItem="{Binding SelectedCredentialsVector}"
                           IsEditable="False" IsEnabled="{Binding IsOnlineMode}">
                     <ComboBox.ItemTemplate>

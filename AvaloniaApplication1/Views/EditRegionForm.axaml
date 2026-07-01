@@ -4,11 +4,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="using:AvaloniaApplication1.ViewModels"
         xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
-        xmlns:region="clr-namespace:AvaloniaApplication1.ViewModels.Region"
         mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="220"
         Width="400" Height="220"
         x:Class="AvaloniaApplication1.Views.EditRegionForm"
-        x:DataType="region:EditRegionFormDialogViewModel"
+        x:DataType="viewModels:EditRegionFormDialogViewModel"
         Title="EditRegionForm">
         <!--<Design.DataContext>
                 

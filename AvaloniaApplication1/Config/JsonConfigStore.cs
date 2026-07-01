@@ -8,8 +8,6 @@ namespace AvaloniaApplication1.Config;
 
 public class JsonConfigStore(AppEnvironment appEnvironment) : IConfigStore
 {
-    //public string FilePath { get; } = appEnvironment.ConfigFilePath;
-    
     private static readonly JsonSerializerOptions JsonSerializerOptions = new() { WriteIndented = true };
 
     public async Task SaveAsync(AppConfig config, CancellationToken cancellationToken = default)

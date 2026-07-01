@@ -66,7 +66,7 @@ public static class GameInstanceStatusMapper
     {
         return snapshot.Errors.Length > 0 
             ? GameInstanceStatus.Failed 
-            : snapshot.ExitCode is not null
+            : snapshot.Process is not null
                 ? GameInstanceStatus.Exited
                 : GameInstanceStatus.Inactive;
     }

@@ -23,9 +23,7 @@ public sealed class Process : IDisposable
     
     public SafeProcessHandle SafeHandle { get; }
 
-    private readonly Lazy<IntPtr> _mainWindowHandle;
-    
-    public IntPtr MainWindowHandle => _mainWindowHandle.Value;
+    public IntPtr MainWindowHandle => FindMainWindowHandle();
     
     public ProcessIdentity Identity { get; }
     
@@ -63,8 +61,6 @@ public sealed class Process : IDisposable
 
     private Process(SafeProcessHandle handle, ProcessIdentity identity)
     {
-        _mainWindowHandle = new Lazy<IntPtr>(FindMainWindowHandle);
-        
         SafeHandle = handle;
         Identity = identity;
     }
@@ -101,6 +97,26 @@ public sealed class Process : IDisposable
                : RequestState.Rejected;
     }
 
+    public RequestState BringMainWindowToTop()
+    {
+        var mainWindowHandle = MainWindowHandle;
+        if (mainWindowHandle == IntPtr.Zero)
+            return RequestState.Rejected;
+        
+        WinApi.ShowWindow(mainWindowHandle, WinApi.ShowCommand.Restore);
+        var currentThreadId = WinApi.GetCurrentThreadId();
+        var foregroundWindowHandle = WinApi.GetForegroundWindow();
+        var foregroundWindowThreadId = WinApi.GetWindowThreadProcessId(foregroundWindowHandle, out _);
+        if (foregroundWindowThreadId == 0 || currentThreadId != foregroundWindowThreadId 
+            && !WinApi.AttachThreadInput(foregroundWindowThreadId, currentThreadId, true) 
+            || !WinApi.BringWindowToTop(mainWindowHandle))
+            return RequestState.Rejected;
+        WinApi.ShowWindow(mainWindowHandle, WinApi.ShowCommand.Show);
+        if (currentThreadId != foregroundWindowThreadId)
+            WinApi.AttachThreadInput(foregroundWindowThreadId, currentThreadId, false);
+        return RequestState.Accepted;
+    }
+    
     public void Suspend()
     {
         throw new NotImplementedException();

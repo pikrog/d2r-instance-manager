@@ -9,7 +9,7 @@ public enum GameInstanceStatus
     
     Authenticating,
     
-    [Display(Name = "Queued for start")] QueuedForStart,
+    QueuedForStart,
     Starting,
     Unlocking,
     Running,
@@ -17,7 +17,7 @@ public enum GameInstanceStatus
     Stopping,
 
     Exited,
-    [Display(Name = "Exited prematurely")] ExitedPrematurely,
+    ExitedPrematurely,
     Terminated,
     Timeout,
     Failed,

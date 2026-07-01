@@ -9,8 +9,6 @@ namespace AvaloniaApplication1.Services;
 
 public class GlobalSettingsService(ConfigService configService)
 {
-    private readonly SemaphoreSlim _semaphore = new(1, 1);
-    
     public async Task SaveAsync(GlobalSettingsDraft draft)
     {
         // Validate draft
@@ -23,15 +21,8 @@ public class GlobalSettingsService(ConfigService configService)
             CloseInstancesOnAppExit = draft.CloseInstancesOnAppExit
         };
         
-        await _semaphore.WaitAsync();
-        try
-        {
-            await configService.ChangeAsync(context => context.UpdateGlobalSettings(snapshot));   
-        }
-        finally
-        {
-            _semaphore.Release();
-        }
+        await configService.ChangeAsync(context => context.UpdateGlobalSettings(snapshot));   
+
     }
     
     public GlobalSettingsSnapshot GetSnapshot()

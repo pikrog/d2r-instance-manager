@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using AvaloniaApplication1.ViewModels.Form;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace AvaloniaApplication1.ViewModels.Region;
+namespace AvaloniaApplication1.ViewModels;
 
 [NotifyDataErrorInfo]
 public partial class EditRegionFormViewModel : FormViewModelBase

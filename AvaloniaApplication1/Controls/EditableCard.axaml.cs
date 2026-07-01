@@ -7,10 +7,10 @@ using Avalonia.Data;
 
 namespace AvaloniaApplication1.Controls;
 
-[PseudoClasses(Card.DimmedPseudoClass, EditedPseudoClass)]
+[PseudoClasses(Card.DimmedPseudoClass, EditingPseudoClass)]
 public partial class EditableCard : UserControl
 {
-    private const string EditedPseudoClass = ":edited";
+    private const string EditingPseudoClass = ":editing";
 
     public static readonly StyledProperty<bool> IsDimmedProperty =
         Card.IsDimmedProperty.AddOwner<EditableCard>();
@@ -143,6 +143,6 @@ public partial class EditableCard : UserControl
         InitializeComponent();
 
         this.GetObservable(IsDimmedProperty).Subscribe(isDimmed => PseudoClasses.Set(Card.DimmedPseudoClass, isDimmed));
-        this.GetObservable(IsEditedProperty).Subscribe(isEdited => PseudoClasses.Set(EditedPseudoClass, isEdited));
+        this.GetObservable(IsEditedProperty).Subscribe(isEdited => PseudoClasses.Set(EditingPseudoClass, isEdited));
     }
 }

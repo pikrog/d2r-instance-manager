@@ -16,8 +16,9 @@
         </Style> <!--todo: rewrite smarter? use IsEnabled to dim?-->
     </UserControl.Styles>
     <controls:Card IsDimmed="{Binding #Root.IsDimmed}">
-        <Button VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
-                CornerRadius="10" BorderThickness="0" Background="Transparent" Padding="0 24" 
+        <Button Classes="rounded"
+                VerticalAlignment="Stretch" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                BorderThickness="0" Background="Transparent" Padding="0 24" 
                 Command="{Binding #Root.Command}">
             <Grid ColumnDefinitions="Auto, Auto" ColumnSpacing="8" Opacity="0.60">
                 <Image Grid.Column="0" VerticalAlignment="Center" Source="{SvgImage /Assets/images/add.svg}" Width="32" Height="32"/>

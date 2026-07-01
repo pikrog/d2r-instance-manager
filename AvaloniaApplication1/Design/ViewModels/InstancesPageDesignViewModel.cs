@@ -9,20 +9,20 @@ using InstancesPageViewModel = AvaloniaApplication1.ViewModels.InstancesPageView
 
 namespace AvaloniaApplication1.Design.ViewModels;
 
-public class InstancesPageDesignViewModel : AvaloniaApplication1.ViewModels.InstancesPageViewModel
+public class InstancesPageDesignViewModel : InstancesPageViewModel
 {
     public InstancesPageDesignViewModel() : base(DesignServices.GameInstanceService,
         DesignServices.AccountService,
         DesignServices.RegionService,
-        DesignServices.DisplayService) // todo: replace with DesignServices?
+        DesignServices.DisplayService)
     {
         Instances.Clear();
         
         Instances.AddRange([
-            new GameInstanceTableRow(Guid.NewGuid(), "Main", GameInstanceStatus.Running),
-            new GameInstanceTableRow(Guid.NewGuid(), "Battle Orders", GameInstanceStatus.QueuedForStart),
-            new GameInstanceTableRow(Guid.NewGuid(), "Enchant", GameInstanceStatus.Failed),
-            new GameInstanceTableRow(Guid.NewGuid(), "Mule", GameInstanceStatus.Inactive),
+            new GameInstanceTableRow(Guid.NewGuid(), "Main", GameInstanceStatus.Running, true),
+            new GameInstanceTableRow(Guid.NewGuid(), "Battle Orders", GameInstanceStatus.QueuedForStart, true),
+            new GameInstanceTableRow(Guid.NewGuid(), "Enchant", GameInstanceStatus.Failed, false),
+            new GameInstanceTableRow(Guid.NewGuid(), "Mule", GameInstanceStatus.Inactive, false),
         ]);
     }
 }

@@ -65,15 +65,17 @@ public class GameInstanceEngine
         await _eventChannel.Writer.WriteAsync(@event, _engineCancellationTokenSource.Token);
     }
     
-    public async Task StartAsync(EngineLaunchContext context)
+    public async Task LaunchAsync(EngineLaunchContext context)
     {
         var processStartInfo = _processStartInfoFactory.Create(context.InstanceLaunchContext);
-        var @event = new StartRequested(context.InstanceLaunchContext.AuthenticationContext, processStartInfo, context.Policies);
+        var @event = new LaunchRequested(context.InstanceLaunchContext.AuthenticationContext, processStartInfo, context.Policies);
         await PublishAsync(@event);
     }
     
     public async Task StopAsync()
     {
+        var @event = new StopRequested();
+        await PublishAsync(@event);
         await _sessionCancellationTokenSource.CancelAsync();
     }
 
@@ -184,5 +186,5 @@ public class GameInstanceEngine
         }
     }
 
-    private RuntimeSnapshot Snap() => new(Id, _session.State, _session.ExitCode, _session.ErrorEvents);
+    private RuntimeSnapshot Snap() => new(Id, _session.State, _session.Process, _session.ErrorEvents);
 }

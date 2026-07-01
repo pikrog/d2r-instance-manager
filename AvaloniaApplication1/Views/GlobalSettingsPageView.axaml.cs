@@ -15,7 +15,9 @@ public partial class GlobalSettingsPageView : UserControl
     {
         InitializeComponent();
         
-        Panel.AddHandler(LostFocusEvent, Internal_OnLostFocus, RoutingStrategies.Bubble);
+        // todo: save on page change?
+        AddHandler(LostFocusEvent, Internal_OnLostFocus, RoutingStrategies.Bubble);
+        AddHandler(Button.ClickEvent, OnButtonClick, RoutingStrategies.Bubble);
     }
 
     private async Task SaveAsync()
@@ -27,6 +29,11 @@ public partial class GlobalSettingsPageView : UserControl
     }
 
     private async void Internal_OnLostFocus(object? sender, FocusChangedEventArgs e) // todo: saving info, exceptions with async void, disable ui with overlay...?
+    {
+        await SaveAsync();
+    }
+    
+    private async void OnButtonClick(object? sender, RoutedEventArgs e)
     {
         await SaveAsync();
     }

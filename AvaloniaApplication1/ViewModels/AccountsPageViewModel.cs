@@ -4,17 +4,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using AvaloniaApplication1.Models;
 using AvaloniaApplication1.Services;
-using AvaloniaApplication1.ViewModels.Account;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 namespace AvaloniaApplication1.ViewModels;
 
-public partial class AccountsPageViewModel : ViewModelBase
+public partial class AccountsPageViewModel : PageViewModel
 {
     private readonly AccountService _accountService;
 
-    public ObservableCollection<AccountCardViewModel> Accounts { get; } = [];
+    private readonly ObservableCollection<AccountCardViewModel> _accounts = [];
+    
+    private readonly CardCollection<AccountCardViewModel> _cards;
+    
+    public ReadOnlyObservableCollection<CardViewModel> Cards => _cards.Cards;
 
     public bool IsNotEditing => EditedCard is null;
     
@@ -25,35 +28,35 @@ public partial class AccountsPageViewModel : ViewModelBase
     public AccountsPageViewModel(AccountService accountService)
     {
         _accountService = accountService;
-        Refresh();
+        
+        _cards = new CardCollection<AccountCardViewModel>(_accounts);
     }
     
     public void Refresh()
     {
-        // todo: rely on service event instead of polling
-        
         var accounts = _accountService.GetAllSnapshots().ToList();
         
         var i = 0;
-        for (; i < Math.Min(accounts.Count, Accounts.Count); i++)
+        for (; i < Math.Min(accounts.Count, _accounts.Count); i++)
         {
-            Accounts[i].Id = accounts[i].Id;
-            Accounts[i].Username = accounts[i].Username;
-            Accounts[i].Password = accounts[i].Password;
+            var accountCard = _accounts[i];
+            accountCard.Username = accounts[i].Username;
+            accountCard.Password = accounts[i].Password;
+            accountCard.Id = accounts[i].Id;
         }
         
         for(; i < accounts.Count; i++)
-            Accounts.Add(new AccountCardViewModel(accounts[i].Id, accounts[i].Username, accounts[i].Password));
+            _accounts.Add(new AccountCardViewModel(accounts[i].Id, accounts[i].Username, accounts[i].Password));
         
-        for (; i < Accounts.Count; i++)
-            Accounts.RemoveAt(i);
+        for (; i < _accounts.Count; )
+            _accounts.RemoveAt(i);
     }
 
     [RelayCommand(CanExecute = nameof(IsNotEditing))]
     private void New()
     {
         var account = new AccountCardViewModel();
-        Accounts.Add(account);
+        _accounts.Add(account);
         Edit(account);
     }
 
@@ -91,7 +94,11 @@ public partial class AccountsPageViewModel : ViewModelBase
     {
         EditedCard?.CloseForm();
         if (EditedCard is not null && EditedCard.Id is null)
-            Accounts.Remove(EditedCard);
+            _accounts.Remove(EditedCard);
         EditedCard = null;
     }
+
+    public override void OnEnter() => Refresh();
+
+    public override bool OnLeave() => true;
 }

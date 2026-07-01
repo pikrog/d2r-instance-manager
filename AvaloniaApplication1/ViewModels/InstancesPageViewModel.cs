@@ -9,14 +9,13 @@ using AvaloniaApplication1.Models;
 using AvaloniaApplication1.Services;
 using AvaloniaApplication1.Snapshots;
 using AvaloniaApplication1.ViewModels.Dialog;
-using AvaloniaApplication1.ViewModels.Instance;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 
 namespace AvaloniaApplication1.ViewModels;
 
-public partial class InstancesPageViewModel : ViewModelBase, IDialogParticipant
+public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
 {
     private readonly GameInstanceService _gameInstanceService;
 
@@ -29,14 +28,16 @@ public partial class InstancesPageViewModel : ViewModelBase, IDialogParticipant
     public ObservableCollection<GameInstanceTableRow> Instances { get; } = [];
     
     [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(EditCommand), nameof(RemoveCommand), nameof(LaunchCommand))]
+    [NotifyCanExecuteChangedFor(nameof(EditCommand), nameof(DeleteCommand), nameof(LaunchCommand))]
     public partial GameInstanceTableRow? SelectedInstance { get; set; }
 
     public ObservableCollection<GameInstanceTableRow> SelectedInstances { get; set; } = [];
 
     [MemberNotNullWhen(true, nameof(SelectedInstance))] // todo? remove
     public bool IsInstanceSelected => SelectedInstance is not null;
-    
+
+    public bool IsTableEmpty => Instances.Count == 0;
+
     public InstancesPageViewModel(GameInstanceService gameInstanceService,
         AccountService accountService,
         RegionService regionService,
@@ -48,8 +49,6 @@ public partial class InstancesPageViewModel : ViewModelBase, IDialogParticipant
         _displayService = displayService;
 
         _gameInstanceService.InstanceStateChanged += OnInstanceStateChanged;
-        
-        RefreshTable();
     }
 
     private void OnInstanceStateChanged(Guid id)
@@ -62,7 +61,7 @@ public partial class InstancesPageViewModel : ViewModelBase, IDialogParticipant
         var (targetRowId, targetRow) = Instances.Index().SingleOrDefault(r => r.Item.Id == id);
         if (targetRow is null)
         {
-            RefreshTable();
+            Refresh();
             return;
         }
         
@@ -70,7 +69,7 @@ public partial class InstancesPageViewModel : ViewModelBase, IDialogParticipant
         Instances[targetRowId] = newRow;
     }
 
-    private void RefreshTable()
+    private void Refresh()
     {
         Instances.Clear();
         var table = _gameInstanceService.GetTable();
@@ -132,7 +131,7 @@ public partial class InstancesPageViewModel : ViewModelBase, IDialogParticipant
             return;
         var draft = CreateDraft(form);
         await _gameInstanceService.SaveAsync(draft);
-        RefreshTable();
+        Refresh();
     }
     
     [RelayCommand]
@@ -141,30 +140,39 @@ public partial class InstancesPageViewModel : ViewModelBase, IDialogParticipant
         await CoreEdit();
     }
     
-    [RelayCommand(CanExecute = nameof(IsInstanceSelected))]
-    private async Task Edit() // todo: pass instance or no args and just get selected item?
+    [RelayCommand]
+    private async Task Edit(GameInstanceTableRow instance)
     {
-        if (SelectedInstance is null)
-            return;
-        var snapshot = _gameInstanceService.GetInstanceConfigSnapshot(SelectedInstance.Id);
+        var snapshot = _gameInstanceService.GetInstanceConfigSnapshot(instance.Id);
         await CoreEdit(snapshot);
     }
     
-    [RelayCommand(CanExecute = nameof(IsInstanceSelected))]
-    private async Task Remove()
+    [RelayCommand]
+    private async Task Delete(GameInstanceTableRow instance)
     {
-        if (SelectedInstance is null)
-            return;
-        await _gameInstanceService.RemoveAsync(SelectedInstance.Id);
-        RefreshTable();
+        await _gameInstanceService.RemoveAsync(instance.Id);
+        Refresh();
     }
 
-    [RelayCommand(CanExecute = nameof(IsInstanceSelected))]
-    private async Task Launch()
+    [RelayCommand]
+    private async Task Launch(GameInstanceTableRow instance)
     {
-        if (SelectedInstances.Count == 0)
-            return;
-        foreach (var instance in SelectedInstances)
-            await _gameInstanceService.LaunchAsync(instance.Id);
+        await _gameInstanceService.LaunchAsync(instance.Id);
     }
+
+    [RelayCommand]
+    private async Task Stop(GameInstanceTableRow instance)
+    {
+        await _gameInstanceService.StopAsync(instance.Id);
+    }
+
+    [RelayCommand]
+    private void Show(GameInstanceTableRow instance)
+    {
+        _gameInstanceService.Show(instance.Id);
+    }
+
+    public override void OnEnter() => Refresh();
+
+    public override bool OnLeave() => true;
 }
