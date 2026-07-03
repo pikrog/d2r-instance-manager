@@ -13,8 +13,8 @@ using ProcessResult = Result<Process, ProcessError>;
 
 public class StartProcessAgent(ProcessStartInfo startInfo) : AgentBase<ProcessResult>
 {
-    protected override Task<ProcessResult> RunAgentTaskAsync(CancellationToken cancellationToken) =>
-        Task.FromResult(Process.Start(startInfo));
+    protected override async Task<ProcessResult> RunAgentTaskAsync(CancellationToken cancellationToken) =>
+        await Process.StartAsync(startInfo);
 
     protected override ErrorEvent CreateErrorForGenericException(Exception exception) =>
         new ProcessStartFailed(exception);

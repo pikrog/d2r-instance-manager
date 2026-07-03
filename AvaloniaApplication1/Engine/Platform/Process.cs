@@ -212,6 +212,8 @@ public sealed class Process : IDisposable
             : ProcessResult.Failure(ProcessError.ForStart(startInfo.FileName));
     }
 
+    public static Task<ProcessResult> StartAsync(ProcessStartInfo startInfo) => Task.Run(() => Start(startInfo));
+
     public static ProcessResult GetProcessByOwnedHandle(IntPtr handle, uint? expectedProcessId = null) =>
         GetProcessByHandle(handle, true, expectedProcessId);
     
