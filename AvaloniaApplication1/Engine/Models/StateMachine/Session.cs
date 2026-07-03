@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Immutable;
+using System.Threading;
+using System.Threading.Tasks;
 using AvaloniaApplication1.Engine.Coordination;
 using AvaloniaApplication1.Engine.Models.Common;
 using AvaloniaApplication1.Engine.Models.Contexts.Launch;
@@ -10,7 +12,7 @@ using AvaloniaApplication1.Engine.Platform;
 
 namespace AvaloniaApplication1.Engine.Models.StateMachine;
 
-public record Session
+public sealed record Session : IDisposable
 {
     public State State { get; init; } = State.Inactive;
     public LaunchLease? Lease { get; init; }
@@ -29,4 +31,10 @@ public record Session
 
     public Session AddErrorEvent(ErrorEvent @event) => 
         this with { ErrorEvents = ErrorEvents.Add(@event) };
+
+    public void Dispose()
+    {
+        Lease?.Dispose();
+        Process?.Dispose();
+    }
 }

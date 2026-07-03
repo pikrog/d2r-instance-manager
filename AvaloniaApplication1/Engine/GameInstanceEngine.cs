@@ -16,7 +16,7 @@ using AvaloniaApplication1.Engine.Models.StateMachine;
 
 namespace AvaloniaApplication1.Engine;
 
-public class GameInstanceEngine
+public class GameInstanceEngine : IAsyncDisposable
 {
     public Guid Id { get; }
     
@@ -25,10 +25,12 @@ public class GameInstanceEngine
     private Session _session = new();
     
     private readonly CancellationTokenSource _engineCancellationTokenSource = new();
+
+    private readonly Task _loopTask;
     
-    private readonly CancellationTokenSource _sessionCancellationTokenSource = new();
+    private CancellationTokenSource _sessionCancellationTokenSource = new();
     
-    private readonly List<Task> _tasks = []; // todo: await all
+    private readonly List<Task> _sessionTasks = [];
     
     private readonly LaunchCoordinator _launchCoordinator;
     
@@ -57,7 +59,7 @@ public class GameInstanceEngine
         
         _runtimeSnapshot = Snap();
         
-        _ = Loop();
+        _loopTask = Loop();
     }
 
     private async Task PublishAsync(Event @event)
@@ -76,13 +78,17 @@ public class GameInstanceEngine
     {
         var @event = new StopRequested();
         await PublishAsync(@event);
-        await _sessionCancellationTokenSource.CancelAsync();
     }
 
     public async Task ShutdownAsync()
     {
-        await _engineCancellationTokenSource.CancelAsync();
-        // todo: await _loopTask;
+        await _engineCancellationTokenSource.CancelAsync(); 
+        await _loopTask;
+        await _sessionCancellationTokenSource.CancelAsync();
+        await Task.WhenAll(_sessionTasks);
+        _session.Dispose();
+        _sessionCancellationTokenSource.Dispose();
+        _engineCancellationTokenSource.Dispose();
     }
 
     private async Task Loop()
@@ -92,7 +98,8 @@ public class GameInstanceEngine
         {
             while (await _eventChannel.Reader.WaitToReadAsync(engineCancellationToken).ConfigureAwait(false))
             {
-                await foreach (var @event in _eventChannel.Reader.ReadAllAsync(engineCancellationToken).ConfigureAwait(false))
+                await foreach (var @event in _eventChannel.Reader.ReadAllAsync(engineCancellationToken)
+                                   .ConfigureAwait(false))
                 {
                     await HandleEvent(@event);
                     RuntimeSnapshot = Snap();
@@ -102,16 +109,8 @@ public class GameInstanceEngine
         catch (OperationCanceledException) { }
         catch (Exception e)
         {
-            _session = _session.AddErrorEvent(new UnexpectedError(e, nameof(Loop)));
+            _session = _session.AddErrorEvent(new UnexpectedError(e, nameof(Loop))) with { State = State.Inactive };
             RuntimeSnapshot = Snap();
-        }
-        finally
-        {
-            _session.Lease?.Dispose();
-            _session.Process?.Dispose();
-            
-            _engineCancellationTokenSource.Dispose(); // todo: move to Dispose
-            _sessionCancellationTokenSource.Dispose();
         }
     }
     
@@ -156,6 +155,16 @@ public class GameInstanceEngine
             case StopProcess e:
                 RunCleanupAgent(new StopProcessAgent(e.Process, new RetryingProcessStopper(e.Policies)));
                 break;
+            case Cancel:
+                await _sessionCancellationTokenSource.CancelAsync();
+                break;
+            case Reset:
+                await Task.WhenAll(_sessionTasks);
+                _sessionTasks.Clear();
+                _sessionCancellationTokenSource.Dispose();
+                _sessionCancellationTokenSource = new CancellationTokenSource();
+                _session.Dispose();
+                break;
             default:
                 throw new InvalidOperationException($"Unexpected effect: {effect.GetType().Name}");
         }
@@ -168,7 +177,7 @@ public class GameInstanceEngine
     private void RunAgent(IAgent agent, CancellationToken cancellationToken)
     {
         var task = RunAgentAndPublishEvent(agent, cancellationToken);
-        _tasks.Add(task);
+        _sessionTasks.Add(task);
     }
 
     private async Task RunAgentAndPublishEvent(IAgent agent, CancellationToken cancellationToken)
@@ -187,4 +196,9 @@ public class GameInstanceEngine
     }
 
     private RuntimeSnapshot Snap() => new(Id, _session.State, _session.Process, _session.ErrorEvents);
+
+    public async ValueTask DisposeAsync()
+    {
+        await ShutdownAsync();
+    }
 }

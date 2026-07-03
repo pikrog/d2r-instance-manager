@@ -31,8 +31,9 @@ public static class GameInstanceStateMachine
                     [new AcquireLaunchLease()]
                     );
             case (State.Authenticating, AuthenticationFailed):
-            case (State.Authenticating, StopRequested):
                 return To(session, State.Stopping);
+            case (State.Authenticating, StopRequested):
+                return To(session, State.Stopping, [new Cancel()]);
 
             case (State.WaitingForStart, LaunchLeaseGranted e):
                 return To(
@@ -43,7 +44,7 @@ public static class GameInstanceStateMachine
             case (State.WaitingForStart, LaunchLeaseCanceled):
                 return To(session.CompleteCleanup(CleanupItem.LaunchLease), State.Stopping);
             case (State.WaitingForStart, StopRequested):
-                return To(session, State.Stopping);
+                return To(session, State.Stopping, [new Cancel()]);
 
             case (State.Starting, ProcessStarted e):
                 return To(
@@ -63,8 +64,10 @@ public static class GameInstanceStateMachine
                 return To(
                     session,
                     State.Stopping,
-                    [new ReleaseLaunchLease(Require(session.Lease))]
-                    );
+                    [
+                        //new ReleaseLaunchLease(Require(session.Lease)), // do NOT release the lease, extend the critical section neyond to the Stopping state
+                        new Cancel()
+                    ]);
 
             case (State.WaitingForUnlock, MultiboxUnlocked):
                 return To(
@@ -78,8 +81,9 @@ public static class GameInstanceStateMachine
                     session,
                     State.Stopping,
                     [
-                        new ReleaseLaunchLease(Require(session.Lease)),
-                        new StopProcess(Require(session.Process), Require(session.Policies?.ProcessStopPolicies))
+                        //new ReleaseLaunchLease(Require(session.Lease)), // do NOT release the lease, extend the critical section beyond to the Stopping state
+                        new StopProcess(Require(session.Process), Require(session.Policies?.ProcessStopPolicies)),
+                        new Cancel()
                     ]);
             case (State.WaitingForUnlock, ProcessExited e):
                 return To(
@@ -95,14 +99,15 @@ public static class GameInstanceStateMachine
                     session, 
                     State.Stopping, 
                     [
-                        new StopProcess(Require(session.Process), Require(session.Policies?.ProcessStopPolicies))
+                        new StopProcess(Require(session.Process), Require(session.Policies?.ProcessStopPolicies)),
+                        new Cancel()
                     ]);
             case (State.Running, ProcessExited e):
                 return To((session with { ExitCode = e.ExitCode }).CompleteCleanup(CleanupItem.Process), State.Stopping);
 
             case (State.Stopping, ProcessStarted e):
                 return To(
-                    session, 
+                    session with { Process = e.Process }, 
                     State.Stopping, 
                     [
                         new MonitorProcessExit(e.Process), 
@@ -111,10 +116,14 @@ public static class GameInstanceStateMachine
             case (State.Stopping, LaunchLeaseGranted e):
                 return To(session, State.Stopping, [new ReleaseLaunchLease(e.Lease)]);
             case (State.Stopping, ProcessExited e):
-                return To((session with { ExitCode = e.ExitCode }).CompleteCleanup(CleanupItem.Process), State.Stopping);
+                return To(
+                    (session with { ExitCode = e.ExitCode }).CompleteCleanup(CleanupItem.Process), 
+                    State.Stopping, 
+                    [new ReleaseLaunchLease(Require(session.Lease))]
+                    );
             case (State.Stopping, ProcessStartFailed):
             case (State.Stopping, ProcessStopFailed):
-                return To(session.CompleteCleanup(CleanupItem.Process), State.Stopping);
+                return To(session.CompleteCleanup(CleanupItem.Process), State.Stopping, [new ReleaseLaunchLease(Require(session.Lease))]);
             case (State.Stopping, LaunchLeaseReleased):
             case (State.Stopping, LaunchLeaseCanceled):
                 return To(session.CompleteCleanup(CleanupItem.LaunchLease), State.Stopping);
@@ -153,7 +162,7 @@ public static class GameInstanceStateMachine
 
     private static TransitionResult CompleteCleanupIfNeeded(TransitionResult result) =>
         result.Session is { State: State.Stopping, CleanupState.IsCleanupComplete: true }
-            ? result with { Session = result.Session with { State = State.Inactive } }
+            ? new TransitionResult(result.Session with { State = State.Inactive }, [..result.Effects, new Reset()])
             : result;
 
     private static TransitionResult To(Session session, State state) =>
