@@ -9,9 +9,18 @@
         Title="D2R Profile Manager - Loading"
         CanResize="False" CanMinimize="False" CanMaximize="False"
         WindowDecorations="BorderOnly">
+    <Window.Styles>
+        <Style Selector="ProgressBar">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="Opacity" Duration="0:0:0.4"/>
+                </Transitions>
+            </Setter>
+        </Style>
+    </Window.Styles>
+    
     <DockPanel>
-        <!-- <TextBlock>Loading</TextBlock> -->
-        <ProgressBar DockPanel.Dock="Bottom" IsIndeterminate="True"/>
+        <ProgressBar x:Name="ProgressBar" DockPanel.Dock="Bottom" IsIndeterminate="True" Opacity="0"/>
         <Grid>
             <Image Source="/Assets/images/barb-bo.bmp" Stretch="None" HorizontalAlignment="Center"/>
         </Grid>

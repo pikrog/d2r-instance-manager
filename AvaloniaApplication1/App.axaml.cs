@@ -31,9 +31,11 @@ namespace AvaloniaApplication1
             try
             {
                 await Dispatcher.UIThread.InvokeAsync(initialWindow.Show);
+                await Task.Delay(1000);
+                await Dispatcher.UIThread.InvokeAsync(() => initialWindow.ProgressBar.Opacity = 1);
                 
                 Services = await AppBootstrapper.BootstrapAsync();
-                await Task.Delay(1000);
+                //await Task.Delay(1000);
                 
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
