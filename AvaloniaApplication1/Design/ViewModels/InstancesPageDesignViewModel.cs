@@ -20,9 +20,10 @@ public class InstancesPageDesignViewModel : InstancesPageViewModel
         
         Instances.AddRange([
             new GameInstanceTableRow(Guid.NewGuid(), "Main", GameInstanceStatus.Running, true),
-            new GameInstanceTableRow(Guid.NewGuid(), "Battle Orders", GameInstanceStatus.QueuedForStart, true),
+            new GameInstanceTableRow(Guid.NewGuid(), "Battle Orders", GameInstanceStatus.Starting, true),
             new GameInstanceTableRow(Guid.NewGuid(), "Enchant", GameInstanceStatus.Failed, false),
-            new GameInstanceTableRow(Guid.NewGuid(), "Mule", GameInstanceStatus.Inactive, false),
+            new GameInstanceTableRow(Guid.NewGuid(), "Mule [EU]", GameInstanceStatus.QueuedForStart, false),
+            new GameInstanceTableRow(Guid.NewGuid(), "Mule [US]", GameInstanceStatus.Inactive, false),
         ]);
     }
 }

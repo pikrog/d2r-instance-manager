@@ -4,59 +4,52 @@
              xmlns:local="using:AvaloniaApplication1"
              xmlns:converters="using:AvaloniaApplication1.Converters"
              RequestedThemeVariant="Default">
-    <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
-
     <Application.DataTemplates>
         <local:ViewLocator />
     </Application.DataTemplates>
 
-    <Application.Styles>
-        <FluentTheme />
-        <StyleInclude Source="Styles/AppDefault.axaml" />
-        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
-        <StyleInclude Source="/Controls/Section.axaml" />
-        <StyleInclude Source="/Controls/HotkeyBox.axaml" />
-        <StyleInclude Source="/Controls/Card.axaml" />
-    </Application.Styles>
-
     <Application.Resources>
-        <!--
-		<SolidColorBrush x:Key="PrimaryBackground">#14172D</SolidColorBrush>
-		<SolidColorBrush x:Key="PrimaryText">#CFCFCF</SolidColorBrush>
-        <LinearGradientBrush x:Key="PrimaryBackgroundGradient" StartPoint="0%, 0%" EndPoint="100%, 0%">
-            <GradientStop Offset="0" Color="#111214"></GradientStop>
-            <GradientStop Offset="1" Color="#151E3E"></GradientStop>
-        </LinearGradientBrush>
-
-        <SolidColorBrush x:Key="PrimaryHoverBackground">#333B5A</SolidColorBrush>
-		<SolidColorBrush x:Key="PrimaryHoverForeground">White</SolidColorBrush>
-		-->
         <ResourceDictionary>
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Light">
                     <SolidColorBrush x:Key="PrimaryBackgroundBrush">White</SolidColorBrush>
                     <SolidColorBrush x:Key="PrimaryTextBrush">Black</SolidColorBrush>
                     <SolidColorBrush x:Key="SectionUnderlineBrush">#DDDD</SolidColorBrush>
-                    <SolidColorBrush x:Key="HoverBackgroundBrush">LightGoldenrodYellow</SolidColorBrush>
+                    <SolidColorBrush x:Key="HoverBackgroundBrush" Opacity="0.05" Color="#0B0BA0" />
                     <SolidColorBrush x:Key="EvenRowBackgroundBrush">White</SolidColorBrush>
                     <SolidColorBrush x:Key="OddRowBackgroundBrush">#F9F9F9</SolidColorBrush>
+                    <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Opacity="0.05" Color="#0B0BA0" />
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Dark">
                     <SolidColorBrush x:Key="PrimaryBackgroundBrush">Black</SolidColorBrush>
                     <SolidColorBrush x:Key="PrimaryTextBrush">White</SolidColorBrush>
                     <SolidColorBrush x:Key="SectionUnderlineBrush">#4444</SolidColorBrush>
-                    <SolidColorBrush x:Key="HoverBackgroundBrush">LightGoldenrodYellow</SolidColorBrush> <!--temp-->
+                    <SolidColorBrush x:Key="HoverBackgroundBrush" Opacity="0.05" Color="White" />
                     <SolidColorBrush x:Key="EvenRowBackgroundBrush">Black</SolidColorBrush>
                     <SolidColorBrush x:Key="OddRowBackgroundBrush">#060606</SolidColorBrush>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
             <StreamGeometry x:Key="ErrorGeometry">M14,7 A7,7 0 0,0 0,7 M0,7 A7,7 0 1,0 14,7 M7,3l0,5 M7,9l0,2</StreamGeometry>
+            <StreamGeometry x:Key="SpinnerGeometry">M12,2 A10,10 0 1 1 11.99,2</StreamGeometry>
+            <x:Double x:Key="UnrevealedOpacity">0.25</x:Double>
             <converters:ReferenceEqualsConverter x:Key="ReferenceEqualsConverter" />
             <converters:ReferenceNotEqualsConverter x:Key="ReferenceNotEqualsConverter" />
             <converters:ReferenceNotNullAndNotEqualsConverter x:Key="ReferenceNotNullAndNotEqualsConverter" />
             <converters:GameInstanceStatusToBorderBrushConverter x:Key="GameInstanceStatusToBorderBrushConverter" />
             <converters:GameInstanceStatusToBackgroundConverter x:Key="GameInstanceStatusToBackgroundConverter" />
+            <converters:GameInstanceStatusToSpinnerOpacityConverter x:Key="GameInstanceStatusToSpinnerOpacityConverter" />
             <converters:CollectionIsEmptyConverter x:Key="CollectionIsEmptyConverter" />
         </ResourceDictionary>
     </Application.Resources>
+
+    <Application.Styles>
+        <FluentTheme />
+        
+        <StyleInclude Source="Styles/AppDefault.axaml" />
+        
+        <StyleInclude Source="/Controls/Section.axaml" />
+        <StyleInclude Source="/Controls/HotkeyBox.axaml" />
+        <StyleInclude Source="/Controls/Card.axaml" />
+        <StyleInclude Source="/Controls/Spinner.axaml" />
+    </Application.Styles>
 </Application>
