@@ -11,13 +11,18 @@
         <Style Selector="Button:disabled /template/ ContentPresenter#PART_ContentPresenter">
             <Setter Property="Background" Value="Transparent" />
         </Style>
+        
+        <Style Selector="controls|Card:pointerover StackPanel.action-bar">
+            <Setter Property="Opacity" Value="1"/>
+        </Style>
     </UserControl.Styles>
 
-    <controls:Card IsDimmed="{Binding #Root.IsDimmed}" Padding="10">
+    <controls:Card IsDimmed="{Binding #Root.IsDimmed}" Padding="10" Background="{DynamicResource PrimaryBackgroundBrush}">
         <Grid>
             <DockPanel IsVisible="{Binding !#Root.IsEdited}">
                 <StackPanel DockPanel.Dock="Bottom"
-                            Orientation="Horizontal" HorizontalAlignment="Right" Opacity="0.60">
+                            Classes="action-bar"
+                            Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button Classes="action rounded"
                             Command="{Binding #Root.EditCommand}"
                             CommandParameter="{Binding #Root.EditCommandParameter}">
