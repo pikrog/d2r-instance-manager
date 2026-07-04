@@ -4,9 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:AvaloniaApplication1.ViewModels"
              xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
+             xmlns:services="clr-namespace:AvaloniaApplication1.Services"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="AvaloniaApplication1.Views.GlobalSettingsPageView"
-             x:DataType="viewModels:GlobalSettingsPageViewModel">
+             x:DataType="viewModels:GlobalSettingsPageViewModel"
+             services:DialogService.Register="{Binding}">
     <ScrollViewer>
             <StackPanel Name="Panel" Margin="40">
                 <StackPanel.Styles>
@@ -22,16 +24,35 @@
                     </Style>
                 </StackPanel.Styles>
                 
-                <TextBlock x:Name="ProfileNameLabel">Game executable path</TextBlock>
-                <TextBox Classes="h1"
-                         AutomationProperties.LabeledBy="{Binding #ProfileNameLabel}"
-                         Text="{Binding GameExecutablePath}"/>
+                <TextBlock x:Name="GameExecutablePathLabel">Game executable path</TextBlock>
+                <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="4">
 
+                    <TextBox Grid.Column="0" Classes="h1" 
+                             AutomationProperties.LabeledBy="{Binding #GameExecutablePathLabel}"
+                             Text="{Binding GameExecutablePath}"/>
+                    <Button Grid.Column="1" Classes="action" Command="{Binding BrowseForGameExecutablePathCommand}">
+                        <Image Source="{SvgImage /Assets/images/browse.svg}"/>
+                    </Button>
+                    <Button Grid.Column="2" Classes="action" Command="{Binding AutoDetectGameExecutablePathCommand}">
+                        <Image Source="{SvgImage /Assets/images/auto.svg}"/>
+                    </Button>
+                </Grid>
+
+                <controls:Section Title="Default authentication"/>
+                
+                <TextBlock>Credentials vector</TextBlock>
+                <ComboBox>Command-line arguments</ComboBox>
+                
+                <CheckBox>Enable automated token acquisition</CheckBox>
+                
                 <controls:Section Title="Behavior"/>
 
                 <CheckBox IsChecked="{Binding FallbackToPrimaryDisplayIfInvalid}"
-                          Margin="0 0 0 8">Allow fallback to the primary display if the launched instance refers to an unavailable one</CheckBox>
-                
+                          Margin="0 0 0 8">Fall back to the primary display if the target display is unavailable</CheckBox>
+                <CheckBox IsChecked="{Binding CenterMouseCursorInRecalledWindow}"
+                          Margin="0 0 0 8">Center the mouse cursor when showing an instance window</CheckBox>
+                <CheckBox IsChecked="{Binding CloseInstancesOnAppExit}"
+                          Margin="0 0 0 8">Close all instances on application exit</CheckBox>
             </StackPanel>
         </ScrollViewer>
 </UserControl>

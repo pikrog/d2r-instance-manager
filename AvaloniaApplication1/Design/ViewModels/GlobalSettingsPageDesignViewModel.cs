@@ -4,4 +4,5 @@ using GlobalSettingsPageViewModel = AvaloniaApplication1.ViewModels.GlobalSettin
 
 namespace AvaloniaApplication1.Design.ViewModels;
 
-public class GlobalSettingsPageDesignViewModel() : AvaloniaApplication1.ViewModels.GlobalSettingsPageViewModel(DesignServices.GlobalSettingsService);
+public class GlobalSettingsPageDesignViewModel() : GlobalSettingsPageViewModel(DesignServices.GlobalSettingsService,
+    DesignServices.GameExecutablePathLocator);

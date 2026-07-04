@@ -3,6 +3,7 @@ using AvaloniaApplication1.Engine;
 using AvaloniaApplication1.Engine.CommandLine;
 using AvaloniaApplication1.Engine.Coordination;
 using AvaloniaApplication1.Engine.Factories;
+using AvaloniaApplication1.Providers.GameExecutablePath;
 using AvaloniaApplication1.Services;
 using Microsoft.Extensions.DependencyInjection;
 using AccountsPageViewModel = AvaloniaApplication1.ViewModels.AccountsPageViewModel;
@@ -49,6 +50,11 @@ public static class ServiceCollectionExtension
             services.AddSingleton<GlobalSettingsService>();
             services.AddSingleton<DisplayService>();
             services.AddSingleton<DialogService>();
+            
+            services.AddSingleton<IGameExecutablePathProvider, GameStorePathProvider>();
+            services.AddSingleton<IGameExecutablePathProvider, UninstallEntryPathProvider>();
+            services.AddSingleton<IGameExecutablePathProvider, ProgramFilesPathProvider>();
+            services.AddSingleton<GameExecutablePathLocator>();
             
             services.AddTransient<MainWindowViewModel>();
             services.AddTransient<RegionsPageViewModel>();

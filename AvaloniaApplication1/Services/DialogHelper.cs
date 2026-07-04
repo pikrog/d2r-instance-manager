@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Platform.Storage;
 using AvaloniaApplication1.ViewModels;
 using AvaloniaApplication1.ViewModels.Dialog;
 using AvaloniaApplication1.ViewModels.Form;
@@ -11,6 +14,10 @@ namespace AvaloniaApplication1.Services;
 
 public static class DialogHelper
 {
+    private const string GameExecutableName = "D2R.exe"; // todo: move to constants class
+    private const string FilePickerExecutableTypeName = "Executable files";
+    private const string FilePickerExecutableTypeExtension = "*.exe";
+    
     public static Window ResolveFormView(IFormViewModel form)
     {
         return form switch
@@ -31,10 +38,11 @@ public static class DialogHelper
     
     extension(IDialogParticipant participant)
     {
+        private Window GetMainWindow() => DialogService.GetMainWindow(participant) ?? throw new InvalidOperationException($"Main window for participant {participant.GetType().Name} not found");
+        
         public Task<T> OpenDialog<T>(Window dialog)
         {
-            var mainWindow = DialogService.GetMainWindow(participant);
-            ArgumentNullException.ThrowIfNull(mainWindow);
+            var mainWindow = participant.GetMainWindow();
             return dialog.ShowDialog<T>(mainWindow);
         }
 
@@ -45,6 +53,26 @@ public static class DialogHelper
             dialogWindow.DataContext = dialogViewModel;
             dialogViewModel.CloseDialog = result => dialogWindow.Close(result);
             return participant.OpenDialog<bool>(dialogWindow);
+        }
+
+        public Task<IReadOnlyList<IStorageFile>> OpenFilePicker(FilePickerOpenOptions options)
+        {
+            var mainWindow = participant.GetMainWindow();
+            return mainWindow.StorageProvider.OpenFilePickerAsync(options);
+        }
+
+        public async Task<string?> OpenFilePickerForGameExecutable()
+        {
+            var files = await participant.OpenFilePicker(new FilePickerOpenOptions
+            {
+                SuggestedFileName = GameExecutableName,
+                FileTypeFilter = [
+                    new FilePickerFileType(FilePickerExecutableTypeName)
+                    {
+                        Patterns = [FilePickerExecutableTypeExtension] 
+                    }]
+            });
+            return files.Count > 0 ? files[0].Path.LocalPath : null;
         }
     }
 }

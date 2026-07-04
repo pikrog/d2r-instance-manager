@@ -3,6 +3,7 @@ using Avalonia.Input;
 using AvaloniaApplication1.Bootstrap;
 using AvaloniaApplication1.Config;
 using AvaloniaApplication1.Design.Config;
+using AvaloniaApplication1.Design.Providers.GameExecutablePath;
 using AvaloniaApplication1.Engine;
 using AvaloniaApplication1.Engine.CommandLine;
 using AvaloniaApplication1.Engine.Coordination;
@@ -11,6 +12,7 @@ using AvaloniaApplication1.Engine.Helpers;
 using AvaloniaApplication1.Engine.Platform;
 using AvaloniaApplication1.Engine.Providers;
 using AvaloniaApplication1.Models;
+using AvaloniaApplication1.Providers.GameExecutablePath;
 using AvaloniaApplication1.Services;
 using AvaloniaApplication1.Snapshots;
 
@@ -33,6 +35,11 @@ public static class DesignServices
     public static DisplayService DisplayService { get; } = new(ConfigService);
 
     public static GlobalSettingsService GlobalSettingsService { get; } = new(ConfigService);
+
+    private static readonly IGameExecutablePathProvider GameExecutablePathProvider =
+        new DesignGameExecutablePathProvider();
+
+    public static GameExecutablePathLocator GameExecutablePathLocator { get; } = new([GameExecutablePathProvider]);
     
     private static readonly LaunchCoordinator LaunchCoordinator = new();
 
