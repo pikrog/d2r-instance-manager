@@ -7,6 +7,7 @@
              xmlns:designViewModels="using:AvaloniaApplication1.Design.ViewModels"
              xmlns:controls="using:AvaloniaApplication1.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Name="Root"
              x:Class="AvaloniaApplication1.Views.RegionsPageView"
              x:DataType="viewModels:RegionsPageViewModel"
              services:DialogService.Register="{Binding}">
@@ -34,18 +35,17 @@
                                            VerticalAlignment="Top"
                                            Title="{Binding Name}" Subtitle="{Binding Address}"
                                            IsEdited="{Binding EditForm,Converter={x:Static ObjectConverters.IsNotNull}}"
-                                           EditCommand="{Binding $parent[UserControl].((viewModels:RegionsPageViewModel)DataContext).EditCommand}"
-                                           DeleteCommand="{Binding $parent[UserControl].((viewModels:RegionsPageViewModel)DataContext).DeleteCommand}"
-                                           AcceptCommand="{Binding $parent[UserControl].((viewModels:RegionsPageViewModel)DataContext).SaveCommand}"
-                                           DiscardCommand="{Binding $parent[UserControl].((viewModels:RegionsPageViewModel)DataContext).EndEditCommand}"
+                                           EditCommand="{Binding DataContext.EditCommand,ElementName=Root}"
+                                           DeleteCommand="{Binding DataContext.DeleteCommand,ElementName=Root}"
+                                           AcceptCommand="{Binding DataContext.SaveCommand,ElementName=Root}"
+                                           DiscardCommand="{Binding DataContext.EndEditCommand,ElementName=Root}"
                                            EditCommandParameter="{Binding}"
                                            DeleteCommandParameter="{Binding}"
                                            AcceptCommandParameter="{Binding EditForm}"
                                            DiscardCommandParameter="{Binding EditForm}">
                         <controls:EditableCard.IsDimmed>
                             <MultiBinding Converter="{StaticResource ReferenceNotNullAndNotEqualsConverter}">
-                                <Binding
-                                    Path="$parent[ItemsControl].((viewModels:RegionsPageViewModel)DataContext).EditedCard" />
+                                <Binding Path="DataContext.EditedCard" ElementName="Root" />
                                 <Binding />
                             </MultiBinding>
                         </controls:EditableCard.IsDimmed>
@@ -60,8 +60,8 @@
                 <DataTemplate x:DataType="viewModels:AddCardViewModel">
                     <controls:AddCard Classes="tile"
                                       VerticalAlignment="Top"
-                                      Command="{Binding $parent[UserControl].((viewModels:RegionsPageViewModel)DataContext).NewCommand}"
-                                      IsDimmed="{Binding $parent[UserControl].((viewModels:RegionsPageViewModel)DataContext).EditedCard,Converter={x:Static ObjectConverters.IsNotNull}}" />
+                                      Command="{Binding DataContext.NewCommand,ElementName=Root}"
+                                      IsDimmed="{Binding DataContext.EditedCard,ElementName=Root,Converter={x:Static ObjectConverters.IsNotNull}}" />
                 </DataTemplate>
             </ItemsControl.DataTemplates>
         </ItemsControl>

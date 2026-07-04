@@ -6,6 +6,7 @@
              xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
              xmlns:viewModels="clr-namespace:AvaloniaApplication1.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Name="Root"
              x:Class="AvaloniaApplication1.Views.AccountsPageView"
              x:DataType="viewModels:AccountsPageViewModel">
     <Design.DataContext>
@@ -38,10 +39,10 @@
                                            VerticalAlignment="Top"
                                            Subtitle="{Binding Username}"
                                            IsEdited="{Binding EditForm,Converter={x:Static ObjectConverters.IsNotNull}}"
-                                           EditCommand="{Binding $parent[UserControl].((viewModels:AccountsPageViewModel)DataContext).EditCommand}"
-                                           DeleteCommand="{Binding $parent[UserControl].((viewModels:AccountsPageViewModel)DataContext).DeleteCommand}"
-                                           AcceptCommand="{Binding $parent[UserControl].((viewModels:AccountsPageViewModel)DataContext).SaveCommand}"
-                                           DiscardCommand="{Binding $parent[UserControl].((viewModels:AccountsPageViewModel)DataContext).EndEditCommand}"
+                                           EditCommand="{Binding DataContext.EditCommand, ElementName=Root}"
+                                           DeleteCommand="{Binding DataContext.DeleteCommand, ElementName=Root}"
+                                           AcceptCommand="{Binding DataContext.SaveCommand, ElementName=Root}"
+                                           DiscardCommand="{Binding DataContext.EndEditCommand, ElementName=Root}"
                                            EditCommandParameter="{Binding}"
                                            DeleteCommandParameter="{Binding}"
                                            AcceptCommandParameter="{Binding EditForm}"
@@ -49,8 +50,7 @@
                         <controls:EditableCard.IsDimmed>
                             <MultiBinding Converter="{StaticResource ReferenceNotNullAndNotEqualsConverter}"
                                           ConverterParameter="dimmed">
-                                <Binding
-                                    Path="$parent[ItemsControl].((viewModels:AccountsPageViewModel)DataContext).EditedCard" />
+                                <Binding Path="DataContext.EditedCard" ElementName="Root" />
                                 <Binding />
                             </MultiBinding>
                         </controls:EditableCard.IsDimmed>
@@ -66,8 +66,8 @@
                 <DataTemplate x:DataType="viewModels:AddCardViewModel">
                     <controls:AddCard Classes="tile"
                                       VerticalAlignment="Top"
-                                      Command="{Binding $parent[UserControl].((viewModels:AccountsPageViewModel)DataContext).NewCommand}"
-                                      IsDimmed="{Binding $parent[UserControl].((viewModels:AccountsPageViewModel)DataContext).EditedCard,Converter={x:Static ObjectConverters.IsNotNull}}" />
+                                      Command="{Binding DataContext.NewCommand,ElementName=Root}"
+                                      IsDimmed="{Binding DataContext.EditedCard,ElementName=Root,Converter={x:Static ObjectConverters.IsNotNull}}" />
                 </DataTemplate>
             </ItemsControl.DataTemplates>
         </ItemsControl>
