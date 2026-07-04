@@ -2,15 +2,18 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="clr-namespace:AvaloniaApplication1.Controls">
     <Design.PreviewWith>
-        <controls:Card Width="400" Height="160" Margin="20"/>
+        <controls:Card Width="400" Height="160" Margin="20" />
     </Design.PreviewWith>
-    
+
     <Style Selector="controls|Card">
-        <Setter Property="ClipToBounds" Value="False"/>
+        <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="Template">
             <ControlTemplate>
-                <Border Classes="hovering rounded outlined" Classes.dimmed="{TemplateBinding IsDimmed}" Padding="{TemplateBinding Padding}">
-                    <ContentPresenter Content="{TemplateBinding Content}"/>    
+                <Border Classes="hovering rounded outlined"
+                        Classes.dimmed="{TemplateBinding IsDimmed}"
+                        Padding="{TemplateBinding Padding}"
+                        Background="{TemplateBinding Background}">
+                    <ContentPresenter Content="{TemplateBinding Content}" />
                 </Border>
             </ControlTemplate>
         </Setter>
