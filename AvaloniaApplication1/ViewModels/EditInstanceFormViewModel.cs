@@ -22,7 +22,6 @@ public partial class EditInstanceFormViewModel : FormViewModelBase
     [ObservableProperty]
     public partial bool IsOnlineMode { get; set; }
     
-    //public ObservableCollection<AccountTableRow> Accounts { get; set; } = [];
     public IReadOnlyList<AccountOption> Accounts { get; set; }
     
     [ObservableProperty]
@@ -30,18 +29,17 @@ public partial class EditInstanceFormViewModel : FormViewModelBase
     [RequiredIf(nameof(IsOnlineMode), true)]
     public partial AccountOption? SelectedAccount { get; set; }
 
-    public static IReadOnlyList<CredentialsVectorOption> CredentialsVectorOptions { get; } =
+    public static IReadOnlyList<AuthenticationMethodOption> AuthenticationMethodOptions { get; } =
     [
-        new(CredentialsVector.OsiTokenRegistry, "OSI Token registry"),
-        new(CredentialsVector.CommandLineArguments, "Command-line arguments")
+        new(AuthenticationMethod.OsiTokenRegistry, "OSI Token registry"),
+        new(AuthenticationMethod.CommandLineArguments, "Command-line arguments")
     ];
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
     [RequiredIf(nameof(IsOnlineMode), true)]
-    public partial CredentialsVectorOption? SelectedCredentialsVector { get; set; } // = CredentialsVectorOptions.First();
-
-    //public ObservableCollection<RegionTableRow> Regions { get; set; } = [];
+    public partial AuthenticationMethodOption? SelectedAuthenticationMethod { get; set; }
+    
     public IReadOnlyList<RegionOption> Regions { get; set; }
     
     [ObservableProperty]
@@ -85,7 +83,7 @@ public partial class EditInstanceFormViewModel : FormViewModelBase
         if (e.PropertyName != nameof(IsOnlineMode) || IsOnlineMode)
             return;
         ClearErrors(nameof(SelectedAccount));
-        ClearErrors(nameof(SelectedCredentialsVector));
+        ClearErrors(nameof(SelectedAuthenticationMethod));
         ClearErrors(nameof(SelectedRegion));
     }
 }

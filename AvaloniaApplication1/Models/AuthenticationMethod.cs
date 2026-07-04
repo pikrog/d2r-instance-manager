@@ -1,6 +1,6 @@
 ﻿namespace AvaloniaApplication1.Models;
 
-public enum CredentialsVector
+public enum AuthenticationMethod
 {
     OsiTokenRegistry,
     CommandLineArguments,

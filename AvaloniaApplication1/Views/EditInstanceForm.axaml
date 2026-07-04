@@ -63,13 +63,13 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
                     
-                <TextBlock x:Name="CredentialsVectorLabel">Credentials vector</TextBlock>
-                <ComboBox AutomationProperties.LabeledBy="{Binding #CredentialsVectorLabel}"
-                          ItemsSource="{x:Static viewModels:EditInstanceFormViewModel.CredentialsVectorOptions}"
-                          SelectedItem="{Binding SelectedCredentialsVector}"
+                <TextBlock x:Name="AuthenticationMethodLabel">Authentication method</TextBlock>
+                <ComboBox AutomationProperties.LabeledBy="{Binding #AuthenticationMethodLabel}"
+                          ItemsSource="{x:Static viewModels:EditInstanceFormViewModel.AuthenticationMethodOptions}"
+                          SelectedItem="{Binding SelectedAuthenticationMethod}"
                           IsEditable="False" IsEnabled="{Binding IsOnlineMode}">
                     <ComboBox.ItemTemplate>
-                        <DataTemplate x:DataType="{x:Type dtos:CredentialsVectorOption}">
+                        <DataTemplate x:DataType="{x:Type dtos:AuthenticationMethodOption}">
                             <TextBlock Text="{Binding Label}"/>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>

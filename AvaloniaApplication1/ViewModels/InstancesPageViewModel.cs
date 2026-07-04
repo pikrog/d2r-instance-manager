@@ -91,14 +91,14 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         
         var selectedAccount = accountOptions.SingleOrDefault(x => x.Id == snapshot.AccountId);
         var selectedRegion = regionOptions.SingleOrDefault(x => x.Id == snapshot.RegionId);
-        var selectedCredentialsVector = EditInstanceFormViewModel.CredentialsVectorOptions.SingleOrDefault(o => o.CredentialsVector == snapshot.CredentialsVector);
+        var selectedAuthenticationMethod = EditInstanceFormViewModel.AuthenticationMethodOptions.SingleOrDefault(o => o.AuthenticationMethod == snapshot.AuthenticationMethod);
         var selectedDisplay = displayOptions.SingleOrDefault(o => DisplayMatcher.IsMatch(snapshot.Display, o)) ?? displayOptions[0];
         
         form.Id = snapshot.Id;
         form.Name = snapshot.Name;
         form.IsOnlineMode = snapshot.IsOnlineMode;
         form.SelectedAccount = selectedAccount;
-        form.SelectedCredentialsVector = selectedCredentialsVector;
+        form.SelectedAuthenticationMethod = selectedAuthenticationMethod;
         form.SelectedRegion = selectedRegion;
         form.SelectedDisplay = selectedDisplay;
         form.RecallHotKey = snapshot.RecallHotKey;
@@ -114,7 +114,7 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
             form.Name,
             form.IsOnlineMode,
             form.SelectedAccount?.Id,
-            form.SelectedCredentialsVector?.CredentialsVector,
+            form.SelectedAuthenticationMethod?.AuthenticationMethod,
             form.SelectedRegion?.Id,
             DisplaySelectionMapper.Map(form.SelectedDisplay),
             form.IsNoSound,

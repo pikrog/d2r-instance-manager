@@ -40,7 +40,7 @@
 
                 <controls:Section Title="Default authentication"/>
                 
-                <TextBlock>Credentials vector</TextBlock>
+                <TextBlock>Authentication method</TextBlock>
                 <ComboBox>Command-line arguments</ComboBox>
                 
                 <CheckBox>Enable automated token acquisition</CheckBox>

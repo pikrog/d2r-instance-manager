@@ -13,6 +13,6 @@ public record GlobalSettingsSnapshot
     bool CenterMouseCursorInRecalledWindow = true, // per instance config? + minimize to tray if another window is recalled
     bool FallbackToPrimaryDisplayIfInvalid = true,
     bool CloseInstancesOnAppExit = true, // used only by GameInstanceService
-    CredentialsVector CredentialsVector = CredentialsVector.OsiTokenRegistry
+    AuthenticationMethod AuthenticationMethod = AuthenticationMethod.OsiTokenRegistry
     // todo: option: osi: auto authentication / browser authentication
 );

@@ -10,7 +10,7 @@ public record GameInstanceSnapshot
     string Name,
     bool IsOnlineMode,
     Guid? AccountId,
-    CredentialsVector? CredentialsVector,
+    AuthenticationMethod? AuthenticationMethod,
     Guid? RegionId,
     DisplaySelection Display,
     bool IsNoSound,

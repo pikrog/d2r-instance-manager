@@ -89,7 +89,7 @@ public class GameInstanceService(ConfigService configService, GameInstanceManage
             draft.Name,
             draft.IsOnlineMode,
             draft.AccountId,
-            draft.CredentialsVector,
+            draft.AuthenticationMethod,
             draft.RegionId,
             draft.Display,
             draft.IsNoSound,
@@ -157,12 +157,12 @@ public class GameInstanceService(ConfigService configService, GameInstanceManage
             var account = accountService.GetSnapshot(snapshot.AccountId!.Value);
             var region = regionService.GetSnapshot(snapshot.RegionId!.Value);
             
-            authenticationContext = snapshot.CredentialsVector switch
+            authenticationContext = snapshot.AuthenticationMethod switch
             {
-                CredentialsVector.CommandLineArguments => new CliAuthenticationContext(account.Username, account.Password,
+                AuthenticationMethod.CommandLineArguments => new CliAuthenticationContext(account.Username, account.Password,
                     region.Address),
-                CredentialsVector.OsiTokenRegistry => new OsiAuthenticationContext(region.Address),
-                _ => throw new InvalidOperationException($"Unknown credentials vector {snapshot.CredentialsVector}")
+                AuthenticationMethod.OsiTokenRegistry => new OsiAuthenticationContext(region.Address),
+                _ => throw new InvalidOperationException($"Unknown authentication method {snapshot.AuthenticationMethod}")
             };
         }
 
