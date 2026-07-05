@@ -49,7 +49,6 @@ public static class ServiceCollectionExtension
             services.AddSingleton<GameInstanceService>();
             services.AddSingleton<GlobalSettingsService>();
             services.AddSingleton<DisplayService>();
-            services.AddSingleton<DialogService>();
             
             services.AddSingleton<IGameExecutablePathProvider, GameConfigStorePathProvider>();
             services.AddSingleton<IGameExecutablePathProvider, UninstallEntryPathProvider>();
