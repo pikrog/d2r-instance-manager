@@ -4,7 +4,7 @@ using AvaloniaApplication1.ViewModels;
 using AvaloniaApplication1.ViewModels.Form;
 using AvaloniaApplication1.Views;
 
-namespace AvaloniaApplication1.Mappers;
+namespace AvaloniaApplication1.Resolvers;
 
 public static class FormViewResolver
 {

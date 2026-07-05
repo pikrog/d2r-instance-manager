@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using AvaloniaApplication1.Constants;
-using AvaloniaApplication1.Mappers;
+using AvaloniaApplication1.Resolvers;
 using AvaloniaApplication1.ViewModels;
 using AvaloniaApplication1.ViewModels.Dialog;
 using AvaloniaApplication1.ViewModels.Form;

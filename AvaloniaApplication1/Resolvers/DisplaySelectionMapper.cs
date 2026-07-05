@@ -1,7 +1,7 @@
 ﻿using System;
 using AvaloniaApplication1.Models;
 
-namespace AvaloniaApplication1.Mappers;
+namespace AvaloniaApplication1.Resolvers;
 
 public class DisplaySelectionMapper
 {

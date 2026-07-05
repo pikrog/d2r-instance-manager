@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Linq;
-using AvaloniaApplication1.Engine.Models;
-using AvaloniaApplication1.Engine.Models.Events;
 using AvaloniaApplication1.Engine.Models.StateMachine;
 using AvaloniaApplication1.Models;
 
-namespace AvaloniaApplication1.Mappers;
+namespace AvaloniaApplication1.Resolvers;
 
 public static class GameInstanceStatusMapper
 {

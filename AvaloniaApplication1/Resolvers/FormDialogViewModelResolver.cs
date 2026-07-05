@@ -3,7 +3,7 @@ using AvaloniaApplication1.ViewModels;
 using AvaloniaApplication1.ViewModels.Dialog;
 using AvaloniaApplication1.ViewModels.Form;
 
-namespace AvaloniaApplication1.Mappers;
+namespace AvaloniaApplication1.Resolvers;
 
 public static class FormDialogViewModelResolver
 {

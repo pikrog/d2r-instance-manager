@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using AvaloniaApplication1.Config;
 using AvaloniaApplication1.Engine.Platform;
-using AvaloniaApplication1.Mappers;
 using AvaloniaApplication1.Models;
+using AvaloniaApplication1.Resolvers;
 using AvaloniaApplication1.Snapshots;
 
 namespace AvaloniaApplication1.Services;
