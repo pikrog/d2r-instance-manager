@@ -8,7 +8,7 @@
              xmlns:dtos="clr-namespace:AvaloniaApplication1.Models"
              mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="650"
              Width="450" Height="650"
-             x:Class="AvaloniaApplication1.Views.EditInstanceForm"
+             x:Class="AvaloniaApplication1.Views.EditInstanceFormView"
              x:DataType="viewModels:EditInstanceFormDialogViewModel"
              WindowStartupLocation="CenterOwner">
     <Design.DataContext>

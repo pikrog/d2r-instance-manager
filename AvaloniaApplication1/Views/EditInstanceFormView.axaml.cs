@@ -2,9 +2,9 @@
 
 namespace AvaloniaApplication1.Views;
 
-public partial class EditInstanceForm : Window
+public partial class EditInstanceFormView : Window
 {
-    public EditInstanceForm()
+    public EditInstanceFormView()
     {
         InitializeComponent();
     }

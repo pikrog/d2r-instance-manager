@@ -5,7 +5,7 @@
         mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="220"
         Width="300" Height="220"
         WindowStartupLocation="CenterScreen"
-        x:Class="AvaloniaApplication1.Views.InitialWindow"
+        x:Class="AvaloniaApplication1.Views.InitialWindowView"
         Title="D2R Profile Manager - Loading"
         CanResize="False" CanMinimize="False" CanMaximize="False"
         WindowDecorations="BorderOnly">

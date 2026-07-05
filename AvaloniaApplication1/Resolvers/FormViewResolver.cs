@@ -12,7 +12,7 @@ public static class FormViewResolver
     {
         return form switch
         {
-            EditInstanceFormViewModel => new EditInstanceForm(),
+            EditInstanceFormViewModel => new EditInstanceFormView(),
             _ => throw new NotImplementedException($"Form view not mapped: {form.GetType().FullName}")
         };
     }

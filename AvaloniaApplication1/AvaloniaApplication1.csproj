@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Views\EditInstanceForm.axaml.cs">
+    <Compile Update="Views\EditInstanceFormView.axaml.cs">
       <DependentUpon>EditProfileForm.axaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>

@@ -2,9 +2,9 @@
 
 namespace AvaloniaApplication1.Views;
 
-public partial class EditRegionForm : Window
+public partial class EditRegionFormView : Window
 {
-    public EditRegionForm()
+    public EditRegionFormView()
     {
         InitializeComponent();
     }

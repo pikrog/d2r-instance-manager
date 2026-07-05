@@ -27,7 +27,7 @@ namespace AvaloniaApplication1
         private async Task InitializeAsync(IClassicDesktopStyleApplicationLifetime desktop)
         {
             // todo: cleanup. error window. initial window = progress bar
-            var initialWindow = new InitialWindow();
+            var initialWindow = new InitialWindowView();
             try
             {
                 await Dispatcher.UIThread.InvokeAsync(initialWindow.Show);
@@ -39,7 +39,7 @@ namespace AvaloniaApplication1
                 
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    desktop.MainWindow = new MainWindow
+                    desktop.MainWindow = new MainWindowView
                     {
                         DataContext = Services.GetRequiredService<MainWindowViewModel>(),
                     };
