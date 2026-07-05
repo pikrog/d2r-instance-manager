@@ -4,7 +4,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="using:AvaloniaApplication1.ViewModels"
         xmlns:services="using:AvaloniaApplication1.Services"
-        xmlns:views="using:AvaloniaApplication1.Views"
         xmlns:designViewModels="using:AvaloniaApplication1.Design.ViewModels"
         mc:Ignorable="d" 
         d:DesignWidth="900" d:DesignHeight="600"
@@ -13,39 +12,10 @@
         x:DataType="viewModels:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Title="AvaloniaApplication1"
-        services:DialogService.Register="{Binding}"
-        >
+        services:DialogService.Register="{Binding}">
     <Window.RequestedThemeVariant> <!-- temp for design -->
         Light
     </Window.RequestedThemeVariant>
-    
-    <Window.DataTemplates> <!-- temp for design -->
-        <DataTemplate DataType="designViewModels:AccountsPageDesignViewModel"> <!--todo: ViewLocator for design-->
-            <views:AccountsPageView/>
-        </DataTemplate>
-        <DataTemplate DataType="designViewModels:InstancesPageDesignViewModel">
-            <views:InstancesPageView/>
-        </DataTemplate>            
-        <DataTemplate DataType="designViewModels:RegionsPageDesignViewModel">
-            <views:RegionsPageView/>
-        </DataTemplate> 
-        <DataTemplate DataType="designViewModels:GlobalSettingsPageDesignViewModel">
-            <views:GlobalSettingsPageView/>
-        </DataTemplate>
-        
-        <!--<DataTemplate DataType="viewModels:InstancesPageViewModel">
-            <views:InstancesPageView/>
-        </DataTemplate>
-        <DataTemplate DataType="designViewModels:AccountsPageDesignViewModel">
-            <views:InstancesPageView/>
-        </DataTemplate>
-        <DataTemplate DataType="designViewModels:InstancesPageDesignViewModel">
-            <views:InstancesPageView/>
-        </DataTemplate>
-        <DataTemplate DataType="designViewModels:InstancesPageDesignViewModel">
-            <views:InstancesPageView/>
-        </DataTemplate>-->
-    </Window.DataTemplates>
     
     <Design.DataContext>
         <designViewModels:MainWindowDesignViewModel/>
