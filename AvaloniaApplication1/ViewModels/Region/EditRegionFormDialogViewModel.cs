@@ -1,4 +1,4 @@
-﻿using AvaloniaApplication1.ViewModels.Form;
+﻿using AvaloniaApplication1.ViewModels.Common.Form;
 
 namespace AvaloniaApplication1.ViewModels.Region;
 

@@ -6,7 +6,7 @@
              xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
              xmlns:viewModels="clr-namespace:AvaloniaApplication1.ViewModels"
              xmlns:account="clr-namespace:AvaloniaApplication1.ViewModels.Account"
-             xmlns:card="clr-namespace:AvaloniaApplication1.ViewModels.Card"
+             xmlns:card="clr-namespace:AvaloniaApplication1.ViewModels.Common.Card"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Name="Root"
              x:Class="AvaloniaApplication1.Views.AccountsPageView"

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.LogicalTree;
-using AvaloniaApplication1.ViewModels.Dialog;
+using AvaloniaApplication1.ViewModels.Common.Dialog;
 
 namespace AvaloniaApplication1.Services;
 

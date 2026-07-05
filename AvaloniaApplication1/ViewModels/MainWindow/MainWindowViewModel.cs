@@ -1,5 +1,6 @@
-using AvaloniaApplication1.ViewModels.Dialog;
-using AvaloniaApplication1.ViewModels.Page;
+using AvaloniaApplication1.ViewModels.Common;
+using AvaloniaApplication1.ViewModels.Common.Dialog;
+using AvaloniaApplication1.ViewModels.Common.Page;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 

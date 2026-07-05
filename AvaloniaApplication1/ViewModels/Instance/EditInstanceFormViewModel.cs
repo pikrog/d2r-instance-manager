@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using Avalonia.Input;
 using AvaloniaApplication1.Attributes;
 using AvaloniaApplication1.Models;
-using AvaloniaApplication1.ViewModels.Form;
+using AvaloniaApplication1.ViewModels.Common.Form;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace AvaloniaApplication1.ViewModels.Instance;

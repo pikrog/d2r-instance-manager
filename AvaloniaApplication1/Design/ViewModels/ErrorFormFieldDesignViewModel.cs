@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using AvaloniaApplication1.ViewModels;
-using AvaloniaApplication1.ViewModels.Form;
+using AvaloniaApplication1.ViewModels.Common.Form;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace AvaloniaApplication1.Design.ViewModels;

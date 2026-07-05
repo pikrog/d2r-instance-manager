@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 
-namespace AvaloniaApplication1.ViewModels.Card;
+namespace AvaloniaApplication1.ViewModels.Common.Card;
 
 public sealed class CardCollection<T> : IDisposable where T : CardViewModel
 {

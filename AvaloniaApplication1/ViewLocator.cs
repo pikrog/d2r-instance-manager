@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using AvaloniaApplication1.ViewModels;
+using AvaloniaApplication1.ViewModels.Common;
 
 namespace AvaloniaApplication1;
 

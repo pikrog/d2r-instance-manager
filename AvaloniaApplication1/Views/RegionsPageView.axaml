@@ -7,7 +7,7 @@
              xmlns:designViewModels="using:AvaloniaApplication1.Design.ViewModels"
              xmlns:controls="using:AvaloniaApplication1.Controls"
              xmlns:region="clr-namespace:AvaloniaApplication1.ViewModels.Region"
-             xmlns:card="clr-namespace:AvaloniaApplication1.ViewModels.Card"
+             xmlns:card="clr-namespace:AvaloniaApplication1.ViewModels.Common.Card"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Name="Root"
              x:Class="AvaloniaApplication1.Views.RegionsPageView"

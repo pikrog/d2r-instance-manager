@@ -7,8 +7,8 @@ using Avalonia.Platform.Storage;
 using AvaloniaApplication1.Constants;
 using AvaloniaApplication1.Resolvers;
 using AvaloniaApplication1.ViewModels;
-using AvaloniaApplication1.ViewModels.Dialog;
-using AvaloniaApplication1.ViewModels.Form;
+using AvaloniaApplication1.ViewModels.Common.Dialog;
+using AvaloniaApplication1.ViewModels.Common.Form;
 using AvaloniaApplication1.Views;
 using EditInstanceFormViewModel = AvaloniaApplication1.ViewModels.Instance.EditInstanceFormViewModel;
 

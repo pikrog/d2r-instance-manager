@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using AvaloniaApplication1.Models;
 using AvaloniaApplication1.Services;
-using AvaloniaApplication1.ViewModels.Card;
-using AvaloniaApplication1.ViewModels.Dialog;
-using AvaloniaApplication1.ViewModels.Page;
+using AvaloniaApplication1.ViewModels.Common.Card;
+using AvaloniaApplication1.ViewModels.Common.Dialog;
+using AvaloniaApplication1.ViewModels.Common.Page;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using Avalonia.Controls;
 using AvaloniaApplication1.ViewModels;
-using AvaloniaApplication1.ViewModels.Form;
+using AvaloniaApplication1.ViewModels.Common.Form;
 using AvaloniaApplication1.Views;
 using EditInstanceFormViewModel = AvaloniaApplication1.ViewModels.Instance.EditInstanceFormViewModel;
 
