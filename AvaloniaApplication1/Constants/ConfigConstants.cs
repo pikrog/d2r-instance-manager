@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AvaloniaApplication1.Config;
+namespace AvaloniaApplication1.Constants;
 
 public static class ConfigConstants
 {

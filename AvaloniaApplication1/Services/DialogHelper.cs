@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
+using AvaloniaApplication1.Constants;
 using AvaloniaApplication1.ViewModels;
 using AvaloniaApplication1.ViewModels.Dialog;
 using AvaloniaApplication1.ViewModels.Form;
@@ -14,7 +15,6 @@ namespace AvaloniaApplication1.Services;
 
 public static class DialogHelper
 {
-    private const string GameExecutableName = "D2R.exe"; // todo: move to constants class
     private const string FilePickerExecutableTypeName = "Executable files";
     private const string FilePickerExecutableTypeExtension = "*.exe";
     
@@ -65,7 +65,7 @@ public static class DialogHelper
         {
             var files = await participant.OpenFilePicker(new FilePickerOpenOptions
             {
-                SuggestedFileName = GameExecutableName,
+                SuggestedFileName = GameConstants.ExecutableName,
                 FileTypeFilter = [
                     new FilePickerFileType(FilePickerExecutableTypeName)
                     {

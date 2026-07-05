@@ -1,22 +1,21 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using AvaloniaApplication1.Constants;
 using Microsoft.Win32;
 
 namespace AvaloniaApplication1.Providers.GameExecutablePath;
 
 [SuppressMessage("Interoperability", "CA1416")]
-public class GameStorePathProvider : IGameExecutablePathProvider
+public class GameConfigStorePathProvider : IGameExecutablePathProvider
 {
-    private const string ChildrenKey = @"System\GameConfigStore\Children";
+    private const string GameConfigStoreChildrenKey = @"System\GameConfigStore\Children";
 
     private const string TitleIdValueName = "TitleId";
-    private const string ExecutableValueName = "MatchedExeFullPath";
-
-    private const string ExpectedTitleId = "1904560378";
+    private const string ExecutablePathValueName = "MatchedExeFullPath";
 
     public string? TryGet()
     {
-        using var root = Registry.CurrentUser.OpenSubKey(ChildrenKey);
+        using var root = Registry.CurrentUser.OpenSubKey(GameConfigStoreChildrenKey);
         if (root is null)
             return null;
 
@@ -27,10 +26,10 @@ public class GameStorePathProvider : IGameExecutablePathProvider
                 continue;
 
             var titleId = subKey.GetValue(TitleIdValueName) as string;
-            if (titleId != ExpectedTitleId)
+            if (titleId != GameConstants.GameConfigStoreTitleId)
                 continue;
 
-            var path = subKey.GetValue(ExecutableValueName) as string;
+            var path = subKey.GetValue(ExecutablePathValueName) as string;
             if (!string.IsNullOrWhiteSpace(path) && File.Exists(path))
                 return path;
         }
