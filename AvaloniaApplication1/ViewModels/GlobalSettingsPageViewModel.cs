@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using AvaloniaApplication1.Factories;
 using AvaloniaApplication1.Models;
 using AvaloniaApplication1.Services;
 using AvaloniaApplication1.ViewModels.Dialog;
@@ -59,7 +60,8 @@ public partial class GlobalSettingsPageViewModel : PageViewModel, IDialogPartici
     [RelayCommand]
     public async Task BrowseForGameExecutablePath()
     {
-        var path = await this.OpenFilePickerForGameExecutable();
+        var openFileOptions = GameExecutablePickerOptionsFactory.Create();
+        var path = await this.PickPathByOpenFilePicker(openFileOptions);
         if (path is not null)
             GameExecutablePath = path;
     }

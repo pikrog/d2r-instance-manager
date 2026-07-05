@@ -63,7 +63,6 @@
 
   <ItemGroup>
     <Folder Include="Engine\CommandLine\" />
-    <Folder Include="Factories\" />
     <Folder Include="Themes\" />
   </ItemGroup>
 </Project>
