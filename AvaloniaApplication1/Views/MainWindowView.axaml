@@ -5,11 +5,12 @@
         xmlns:viewModels="using:AvaloniaApplication1.ViewModels"
         xmlns:services="using:AvaloniaApplication1.Services"
         xmlns:designViewModels="using:AvaloniaApplication1.Design.ViewModels"
+        xmlns:mainWindow="clr-namespace:AvaloniaApplication1.ViewModels.MainWindow"
         mc:Ignorable="d" 
         d:DesignWidth="900" d:DesignHeight="600"
         Width="900" Height="600"
         x:Class="AvaloniaApplication1.Views.MainWindowView"
-        x:DataType="viewModels:MainWindowViewModel"
+        x:DataType="mainWindow:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Title="AvaloniaApplication1"
         services:DialogService.Register="{Binding}">

@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using AvaloniaApplication1.Models;
 using AvaloniaApplication1.Services;
+using AvaloniaApplication1.ViewModels.Card;
+using AvaloniaApplication1.ViewModels.Page;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace AvaloniaApplication1.ViewModels;
+namespace AvaloniaApplication1.ViewModels.Account;
 
 public partial class AccountsPageViewModel : PageViewModel
 {

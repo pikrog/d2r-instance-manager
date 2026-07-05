@@ -7,10 +7,11 @@
              xmlns:designViewModels="clr-namespace:AvaloniaApplication1.Design.ViewModels"
              xmlns:dtos="clr-namespace:AvaloniaApplication1.Models"
              xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
+             xmlns:instance="clr-namespace:AvaloniaApplication1.ViewModels.Instance"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Name="Root"
              x:Class="AvaloniaApplication1.Views.InstancesPageView"
-             x:DataType="viewModels:InstancesPageViewModel"
+             x:DataType="instance:InstancesPageViewModel"
              services:DialogService.Register="{Binding}">
     <Design.DataContext>
         <designViewModels:InstancesPageDesignViewModel />

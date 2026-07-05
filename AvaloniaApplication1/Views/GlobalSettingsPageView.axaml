@@ -5,9 +5,10 @@
              xmlns:viewModels="clr-namespace:AvaloniaApplication1.ViewModels"
              xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
              xmlns:services="clr-namespace:AvaloniaApplication1.Services"
+             xmlns:globalSettings="clr-namespace:AvaloniaApplication1.ViewModels.GlobalSettings"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="AvaloniaApplication1.Views.GlobalSettingsPageView"
-             x:DataType="viewModels:GlobalSettingsPageViewModel"
+             x:DataType="globalSettings:GlobalSettingsPageViewModel"
              services:DialogService.Register="{Binding}">
     <ScrollViewer>
             <StackPanel Name="Panel" Margin="40">

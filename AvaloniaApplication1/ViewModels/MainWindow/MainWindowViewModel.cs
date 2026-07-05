@@ -1,27 +1,28 @@
 using AvaloniaApplication1.ViewModels.Dialog;
+using AvaloniaApplication1.ViewModels.Page;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace AvaloniaApplication1.ViewModels;
+namespace AvaloniaApplication1.ViewModels.MainWindow;
 
 public partial class MainWindowViewModel : ViewModelBase, IDialogParticipant
 {
     [ObservableProperty]
     public partial PageViewModel CurrentPage { get; set; }
 
-    public InstancesPageViewModel InstancesPageViewModel { get; }
+    public Instance.InstancesPageViewModel InstancesPageViewModel { get; }
 
-    public AccountsPageViewModel AccountsPageViewModel { get; }
+    public Account.AccountsPageViewModel AccountsPageViewModel { get; }
 
-    public RegionsPageViewModel RegionsPageViewModel { get; }
+    public Region.RegionsPageViewModel RegionsPageViewModel { get; }
     
-    public GlobalSettingsPageViewModel GlobalSettingsPageViewModel { get; }
+    public GlobalSettings.GlobalSettingsPageViewModel GlobalSettingsPageViewModel { get; }
 
     public MainWindowViewModel(
-        InstancesPageViewModel instancesPageViewModel,
-        AccountsPageViewModel accountsPageViewModel,
-        RegionsPageViewModel regionsPageViewModel,
-        GlobalSettingsPageViewModel globalSettingsPageViewModel)
+        Instance.InstancesPageViewModel instancesPageViewModel,
+        Account.AccountsPageViewModel accountsPageViewModel,
+        Region.RegionsPageViewModel regionsPageViewModel,
+        GlobalSettings.GlobalSettingsPageViewModel globalSettingsPageViewModel)
     {
         InstancesPageViewModel = instancesPageViewModel;
         AccountsPageViewModel = accountsPageViewModel;

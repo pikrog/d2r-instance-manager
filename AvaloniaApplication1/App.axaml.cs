@@ -11,7 +11,7 @@ using AvaloniaApplication1.Services;
 using AvaloniaApplication1.ViewModels;
 using AvaloniaApplication1.Views;
 using Microsoft.Extensions.DependencyInjection;
-using MainWindowViewModel = AvaloniaApplication1.ViewModels.MainWindowViewModel;
+using MainWindowViewModel = AvaloniaApplication1.ViewModels.MainWindow.MainWindowViewModel;
 
 namespace AvaloniaApplication1
 {

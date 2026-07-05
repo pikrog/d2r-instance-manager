@@ -6,11 +6,11 @@ using AvaloniaApplication1.Engine.Factories;
 using AvaloniaApplication1.Providers.GameExecutablePath;
 using AvaloniaApplication1.Services;
 using Microsoft.Extensions.DependencyInjection;
-using AccountsPageViewModel = AvaloniaApplication1.ViewModels.AccountsPageViewModel;
-using GlobalSettingsPageViewModel = AvaloniaApplication1.ViewModels.GlobalSettingsPageViewModel;
-using InstancesPageViewModel = AvaloniaApplication1.ViewModels.InstancesPageViewModel;
-using MainWindowViewModel = AvaloniaApplication1.ViewModels.MainWindowViewModel;
-using RegionsPageViewModel = AvaloniaApplication1.ViewModels.RegionsPageViewModel;
+using AccountsPageViewModel = AvaloniaApplication1.ViewModels.Account.AccountsPageViewModel;
+using GlobalSettingsPageViewModel = AvaloniaApplication1.ViewModels.GlobalSettings.GlobalSettingsPageViewModel;
+using InstancesPageViewModel = AvaloniaApplication1.ViewModels.Instance.InstancesPageViewModel;
+using MainWindowViewModel = AvaloniaApplication1.ViewModels.MainWindow.MainWindowViewModel;
+using RegionsPageViewModel = AvaloniaApplication1.ViewModels.Region.RegionsPageViewModel;
 
 namespace AvaloniaApplication1.Bootstrap;
 

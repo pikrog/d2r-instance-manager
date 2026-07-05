@@ -8,7 +8,7 @@ using AvaloniaApplication1.Models;
 using AvaloniaApplication1.ViewModels.Form;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace AvaloniaApplication1.ViewModels;
+namespace AvaloniaApplication1.ViewModels.Instance;
 
 public partial class EditInstanceFormViewModel : FormViewModelBase
 {

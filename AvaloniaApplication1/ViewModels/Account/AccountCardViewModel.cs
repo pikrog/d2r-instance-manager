@@ -1,7 +1,8 @@
 ﻿using System;
+using AvaloniaApplication1.ViewModels.Card;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace AvaloniaApplication1.ViewModels;
+namespace AvaloniaApplication1.ViewModels.Account;
 
 public partial class AccountCardViewModel(Guid? id = null, string username = "", string password = "") : CardViewModel
 {

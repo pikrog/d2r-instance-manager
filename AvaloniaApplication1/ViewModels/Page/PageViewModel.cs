@@ -1,4 +1,4 @@
-﻿namespace AvaloniaApplication1.ViewModels;
+﻿namespace AvaloniaApplication1.ViewModels.Page;
 
 public abstract class PageViewModel : ViewModelBase
 {

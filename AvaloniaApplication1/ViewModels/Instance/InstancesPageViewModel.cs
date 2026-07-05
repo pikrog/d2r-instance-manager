@@ -9,11 +9,12 @@ using AvaloniaApplication1.Resolvers;
 using AvaloniaApplication1.Services;
 using AvaloniaApplication1.Snapshots;
 using AvaloniaApplication1.ViewModels.Dialog;
+using AvaloniaApplication1.ViewModels.Page;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 
-namespace AvaloniaApplication1.ViewModels;
+namespace AvaloniaApplication1.ViewModels.Instance;
 
 public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
 {

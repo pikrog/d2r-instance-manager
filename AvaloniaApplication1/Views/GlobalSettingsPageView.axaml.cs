@@ -5,7 +5,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using AvaloniaApplication1.ViewModels;
-using GlobalSettingsPageViewModel = AvaloniaApplication1.ViewModels.GlobalSettingsPageViewModel;
+using GlobalSettingsPageViewModel = AvaloniaApplication1.ViewModels.GlobalSettings.GlobalSettingsPageViewModel;
 
 namespace AvaloniaApplication1.Views;
 

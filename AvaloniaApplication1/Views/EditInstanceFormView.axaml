@@ -6,10 +6,11 @@
              xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
              xmlns:designViewModels="clr-namespace:AvaloniaApplication1.Design.ViewModels"
              xmlns:dtos="clr-namespace:AvaloniaApplication1.Models"
+             xmlns:instance="clr-namespace:AvaloniaApplication1.ViewModels.Instance"
              mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="650"
              Width="450" Height="650"
              x:Class="AvaloniaApplication1.Views.EditInstanceFormView"
-             x:DataType="viewModels:EditInstanceFormDialogViewModel"
+             x:DataType="instance:EditInstanceFormDialogViewModel"
              WindowStartupLocation="CenterOwner">
     <Design.DataContext>
         <designViewModels:EditInstanceFormDesignViewModel/>
@@ -65,7 +66,7 @@
                     
                 <TextBlock x:Name="AuthenticationMethodLabel">Authentication method</TextBlock>
                 <ComboBox AutomationProperties.LabeledBy="{Binding #AuthenticationMethodLabel}"
-                          ItemsSource="{x:Static viewModels:EditInstanceFormViewModel.AuthenticationMethodOptions}"
+                          ItemsSource="{x:Static instance:EditInstanceFormViewModel.AuthenticationMethodOptions}"
                           SelectedItem="{Binding SelectedAuthenticationMethod}"
                           IsEditable="False" IsEnabled="{Binding IsOnlineMode}">
                     <ComboBox.ItemTemplate>

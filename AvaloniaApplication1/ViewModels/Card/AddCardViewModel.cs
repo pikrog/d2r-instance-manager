@@ -1,4 +1,4 @@
-﻿namespace AvaloniaApplication1.ViewModels;
+﻿namespace AvaloniaApplication1.ViewModels.Card;
 
 public sealed class AddCardViewModel : CardViewModel
 {

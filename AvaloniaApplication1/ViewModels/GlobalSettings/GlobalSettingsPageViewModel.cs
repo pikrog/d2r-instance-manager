@@ -3,10 +3,11 @@ using AvaloniaApplication1.Factories;
 using AvaloniaApplication1.Models;
 using AvaloniaApplication1.Services;
 using AvaloniaApplication1.ViewModels.Dialog;
+using AvaloniaApplication1.ViewModels.Page;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace AvaloniaApplication1.ViewModels;
+namespace AvaloniaApplication1.ViewModels.GlobalSettings;
 
 public partial class GlobalSettingsPageViewModel : PageViewModel, IDialogParticipant
 {

@@ -6,10 +6,12 @@
              xmlns:services="using:AvaloniaApplication1.Services"
              xmlns:designViewModels="using:AvaloniaApplication1.Design.ViewModels"
              xmlns:controls="using:AvaloniaApplication1.Controls"
+             xmlns:region="clr-namespace:AvaloniaApplication1.ViewModels.Region"
+             xmlns:card="clr-namespace:AvaloniaApplication1.ViewModels.Card"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Name="Root"
              x:Class="AvaloniaApplication1.Views.RegionsPageView"
-             x:DataType="viewModels:RegionsPageViewModel"
+             x:DataType="region:RegionsPageViewModel"
              services:DialogService.Register="{Binding}">
     <Design.DataContext>
         <designViewModels:RegionsPageDesignViewModel />
@@ -30,7 +32,7 @@
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.DataTemplates>
-                <DataTemplate x:DataType="viewModels:RegionCardViewModel">
+                <DataTemplate x:DataType="region:RegionCardViewModel">
                     <controls:EditableCard Classes="tile"
                                            VerticalAlignment="Top"
                                            Title="{Binding Name}" Subtitle="{Binding Address}"
@@ -57,7 +59,7 @@
                         </controls:EditableCard.EditContent>
                     </controls:EditableCard>
                 </DataTemplate>
-                <DataTemplate x:DataType="viewModels:AddCardViewModel">
+                <DataTemplate x:DataType="card:AddCardViewModel">
                     <controls:AddCard Classes="tile"
                                       VerticalAlignment="Top"
                                       Command="{Binding DataContext.NewCommand,ElementName=Root}"

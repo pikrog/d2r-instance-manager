@@ -10,7 +10,7 @@ using AvaloniaApplication1.ViewModels;
 using AvaloniaApplication1.ViewModels.Dialog;
 using AvaloniaApplication1.ViewModels.Form;
 using AvaloniaApplication1.Views;
-using EditInstanceFormViewModel = AvaloniaApplication1.ViewModels.EditInstanceFormViewModel;
+using EditInstanceFormViewModel = AvaloniaApplication1.ViewModels.Instance.EditInstanceFormViewModel;
 
 namespace AvaloniaApplication1.Services;
 
