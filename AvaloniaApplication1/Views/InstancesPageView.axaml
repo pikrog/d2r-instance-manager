@@ -19,10 +19,10 @@
 
     <UserControl.Styles>
         <Style Selector="ItemsControl.table > ContentPresenter:nth-child(2n)">
-            <Setter Property="Background" Value="{DynamicResource EvenRowBackgroundBrush}" />
+            <Setter Property="Background" Value="{DynamicResource EvenRowBackground}" />
         </Style>
         <Style Selector="ItemsControl.table > ContentPresenter:nth-child(2n+1)">
-            <Setter Property="Background" Value="{DynamicResource OddRowBackgroundBrush}" />
+            <Setter Property="Background" Value="{DynamicResource OddRowBackground}" />
         </Style>
         <!--<Style Selector="ItemsControl.table > ContentPresenter">
             <Setter Property="Transitions">
@@ -37,7 +37,7 @@
         </Style>
 
         <Style Selector="ItemsControl.table > ContentPresenter:pointerover">
-            <Setter Property="Background" Value="{DynamicResource HoverBackgroundBrush}" />
+            <Setter Property="Background" Value="{DynamicResource HoverBackground}" />
         </Style>
 
         <Style Selector="Button.table-action">
@@ -49,7 +49,7 @@
             <Setter Property="Margin" Value="0" />
             <Setter Property="Padding" Value="10 10" />
             <Setter Property="Width" Value="105" />
-            <Setter Property="Background" Value="{DynamicResource PrimaryBackgroundBrush}" />
+            <Setter Property="Background" Value="{DynamicResource PrimaryBackground}" />
             <!-- <Setter Property="HorizontalContentAlignment" Value="Center" /> -->
         </Style>
 

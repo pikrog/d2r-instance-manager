@@ -14,7 +14,7 @@
         <Setter Property="FontWeight" Value="Bold" />
     </Style>
 
-    <Style Selector="TextBlock.subh2">
+    <Style Selector="TextBlock.deemphasized">
         <Setter Property="Opacity" Value="0.7" />
     </Style>
 
@@ -45,7 +45,7 @@
     </Style>
 
     <Style Selector="Grid.hover-highlight">
-        <Setter Property="Background" Value="{DynamicResource HoverBackgroundBrush}" />
+        <Setter Property="Background" Value="{DynamicResource HoverBackground}" />
     </Style>
 
     <Style Selector="Grid.action-bar,StackPanel.action-bar">
@@ -53,7 +53,7 @@
     </Style>
 
     <Style Selector="Border.rounded">
-        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="CornerRadius" Value="{StaticResource CornerRadius}" />
     </Style>
 
     <Style Selector="Border.outlined">
@@ -62,7 +62,7 @@
     </Style>
 
     <Style Selector="Button">
-        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="CornerRadius" Value="{StaticResource CornerRadius}" />
     </Style>
 
     <Style Selector="RadioButton.nav-tab">
@@ -83,7 +83,7 @@
     </Style>
 
     <Style Selector="RadioButton.nav-tab:pointerover:not(:checked) /template/ Border#PART_Background">
-        <Setter Property="Background" Value="{DynamicResource HoverBackgroundBrush}" />
+        <Setter Property="Background" Value="{DynamicResource HoverBackground}" />
     </Style>
 
     <Style Selector="RadioButton.nav-tab:pressed /template/ Border#PART_Background">

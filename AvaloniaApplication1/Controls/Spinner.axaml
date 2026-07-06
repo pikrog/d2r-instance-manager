@@ -22,7 +22,7 @@
                 <Path Data="{StaticResource SpinnerGeometry}"
                       Width="24" Height="24"
                       StrokeThickness="1" StrokeLineCap="Round" StrokeDashArray="48,16"
-                      Stroke="{DynamicResource PrimaryTextBrush}" />
+                      Stroke="{DynamicResource PrimaryForeground}" />
             </ControlTemplate>
         </Setter>
     </Style>

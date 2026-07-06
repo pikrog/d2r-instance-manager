@@ -12,26 +12,30 @@
         <ResourceDictionary>
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Light">
-                    <SolidColorBrush x:Key="PrimaryBackgroundBrush">White</SolidColorBrush>
-                    <SolidColorBrush x:Key="PrimaryTextBrush">Black</SolidColorBrush>
-                    <SolidColorBrush x:Key="SectionUnderlineBrush">#DDDD</SolidColorBrush>
-                    <SolidColorBrush x:Key="HoverBackgroundBrush" Opacity="0.05" Color="#0B0BA0" />
-                    <SolidColorBrush x:Key="EvenRowBackgroundBrush">White</SolidColorBrush>
-                    <SolidColorBrush x:Key="OddRowBackgroundBrush">#F9F9F9</SolidColorBrush>
+                    <SolidColorBrush x:Key="PrimaryBackground">White</SolidColorBrush>
+                    <SolidColorBrush x:Key="PrimaryForeground">Black</SolidColorBrush>
+                    <SolidColorBrush x:Key="SectionUnderline">#DDDD</SolidColorBrush>
+                    <SolidColorBrush x:Key="HoverBackground" Opacity="0.05" Color="#0B0BA0" />
+                    <SolidColorBrush x:Key="EvenRowBackground">White</SolidColorBrush>
+                    <SolidColorBrush x:Key="OddRowBackground">#F9F9F9</SolidColorBrush>
                     <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Opacity="0.05" Color="#0B0BA0" />
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Dark">
-                    <SolidColorBrush x:Key="PrimaryBackgroundBrush">Black</SolidColorBrush>
-                    <SolidColorBrush x:Key="PrimaryTextBrush">White</SolidColorBrush>
-                    <SolidColorBrush x:Key="SectionUnderlineBrush">#4444</SolidColorBrush>
-                    <SolidColorBrush x:Key="HoverBackgroundBrush" Opacity="0.05" Color="White" />
-                    <SolidColorBrush x:Key="EvenRowBackgroundBrush">Black</SolidColorBrush>
-                    <SolidColorBrush x:Key="OddRowBackgroundBrush">#060606</SolidColorBrush>
+                    <SolidColorBrush x:Key="PrimaryBackground">Black</SolidColorBrush>
+                    <SolidColorBrush x:Key="PrimaryForeground">White</SolidColorBrush>
+                    <SolidColorBrush x:Key="SectionUnderline">#4444</SolidColorBrush>
+                    <SolidColorBrush x:Key="HoverBackground" Opacity="0.05" Color="White" />
+                    <SolidColorBrush x:Key="EvenRowBackground">Black</SolidColorBrush>
+                    <SolidColorBrush x:Key="OddRowBackground">#060606</SolidColorBrush>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
+
             <StreamGeometry x:Key="ErrorGeometry">M14,7 A7,7 0 0,0 0,7 M0,7 A7,7 0 1,0 14,7 M7,3l0,5 M7,9l0,2</StreamGeometry>
             <StreamGeometry x:Key="SpinnerGeometry">M12,2 A10,10 0 1 1 11.99,2</StreamGeometry>
+
             <x:Double x:Key="UnrevealedOpacity">0.25</x:Double>
+            <CornerRadius x:Key="CornerRadius">6</CornerRadius>
+
             <converters:ReferenceEqualsConverter x:Key="ReferenceEqualsConverter" />
             <converters:ReferenceNotEqualsConverter x:Key="ReferenceNotEqualsConverter" />
             <converters:ReferenceNotNullAndNotEqualsConverter x:Key="ReferenceNotNullAndNotEqualsConverter" />
@@ -44,9 +48,9 @@
 
     <Application.Styles>
         <FluentTheme />
-        
+
         <StyleInclude Source="Styles/AppDefault.axaml" />
-        
+
         <StyleInclude Source="/Controls/Section.axaml" />
         <StyleInclude Source="/Controls/HotkeyBox.axaml" />
         <StyleInclude Source="/Controls/Card.axaml" />
