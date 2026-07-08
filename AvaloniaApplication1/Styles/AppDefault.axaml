@@ -1,5 +1,16 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <StackPanel Orientation="Vertical" Margin="10" Spacing="8">
+            <Button>Regular</Button>
+            <Button Classes="neutral">Neutral</Button>
+            <Button Classes="danger">Danger</Button>
+            <Button Classes="action" HorizontalAlignment="Center">
+                <Image Source="{SvgImage /Assets/images/add.svg}"></Image>
+            </Button>
+        </StackPanel>
+    </Design.PreviewWith>
+    
     <Style Selector="TextBlock.h1">
         <Setter Property="FontSize" Value="18" />
         <Setter Property="FontWeight" Value="Bold" />
@@ -38,14 +49,36 @@
         </Setter>
     </Style>
 
+    <Style Selector="Button">
+        <Setter Property="CornerRadius" Value="{StaticResource CornerRadius}" />
+    </Style>
+    
     <Style Selector="Button.action">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Padding" Value="4" />
         <Setter Property="Height" Value="36" />
     </Style>
 
+    <Style Selector="Button.danger">
+        <Setter Property="Background" Value="{DynamicResource DangerBackground}"/>
+    </Style>
+
+    <Style Selector="Button.danger:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource DangerHoverBackground}"/>
+    </Style>
+
+    <Style Selector="Button.danger:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource DangerPressedBackground}"/>
+    </Style>
+
+    <Style Selector="Button.neutral">
+        <Setter Property="Background" Value="{DynamicResource PrimaryBackground}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Outline}" />
+        <Setter Property="BorderThickness" Value="1" />
+    </Style>
+
     <Style Selector="Grid.hover-highlight">
-        <Setter Property="Background" Value="{DynamicResource HoverBackground}" />
+        <Setter Property="Background" Value="{DynamicResource PrimaryHoverBackground}" />
     </Style>
 
     <Style Selector="Grid.action-bar,StackPanel.action-bar">
@@ -57,12 +90,8 @@
     </Style>
 
     <Style Selector="Border.outlined">
-        <Setter Property="BorderBrush" Value="#e5e7eb" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Outline}" />
         <Setter Property="BorderThickness" Value="1" />
-    </Style>
-
-    <Style Selector="Button">
-        <Setter Property="CornerRadius" Value="{StaticResource CornerRadius}" />
     </Style>
 
     <Style Selector="RadioButton.nav-tab">
@@ -83,7 +112,7 @@
     </Style>
 
     <Style Selector="RadioButton.nav-tab:pointerover:not(:checked) /template/ Border#PART_Background">
-        <Setter Property="Background" Value="{DynamicResource HoverBackground}" />
+        <Setter Property="Background" Value="{DynamicResource PrimaryHoverBackground}" />
     </Style>
 
     <Style Selector="RadioButton.nav-tab:pressed /template/ Border#PART_Background">

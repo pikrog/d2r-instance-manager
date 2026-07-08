@@ -14,17 +14,32 @@
                 <ResourceDictionary x:Key="Light">
                     <SolidColorBrush x:Key="PrimaryBackground">White</SolidColorBrush>
                     <SolidColorBrush x:Key="PrimaryForeground">Black</SolidColorBrush>
+                    <SolidColorBrush x:Key="PrimaryHoverBackground" Opacity="0.05" Color="#0B0BA0" />
+                    
+                    <SolidColorBrush x:Key="DangerBackground">#E87A70</SolidColorBrush>
+                    <SolidColorBrush x:Key="DangerHoverBackground">#E1645C</SolidColorBrush>
+                    <SolidColorBrush x:Key="DangerPressedBackground">#D94D49</SolidColorBrush>
+                    
+                    <SolidColorBrush x:Key="Outline">#e5e7eb</SolidColorBrush>
+                    
                     <SolidColorBrush x:Key="SectionUnderline">#DDDD</SolidColorBrush>
-                    <SolidColorBrush x:Key="HoverBackground" Opacity="0.05" Color="#0B0BA0" />
+                    
                     <SolidColorBrush x:Key="EvenRowBackground">White</SolidColorBrush>
                     <SolidColorBrush x:Key="OddRowBackground">#F9F9F9</SolidColorBrush>
-                    <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Opacity="0.05" Color="#0B0BA0" />
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Dark">
                     <SolidColorBrush x:Key="PrimaryBackground">Black</SolidColorBrush>
                     <SolidColorBrush x:Key="PrimaryForeground">White</SolidColorBrush>
+                    <SolidColorBrush x:Key="PrimaryHoverBackground" Opacity="0.05" Color="White" />
+                    
+                    <SolidColorBrush x:Key="DangerBackground">#D13438</SolidColorBrush>
+                    <SolidColorBrush x:Key="DangerHoverBackground">#E74856</SolidColorBrush>
+                    <SolidColorBrush x:Key="DangerPressedBackground">#C50F1F</SolidColorBrush>
+                    
+                    <SolidColorBrush x:Key="Outline">#e5e7eb</SolidColorBrush>
+                    
                     <SolidColorBrush x:Key="SectionUnderline">#4444</SolidColorBrush>
-                    <SolidColorBrush x:Key="HoverBackground" Opacity="0.05" Color="White" />
+                    
                     <SolidColorBrush x:Key="EvenRowBackground">Black</SolidColorBrush>
                     <SolidColorBrush x:Key="OddRowBackground">#060606</SolidColorBrush>
                 </ResourceDictionary>

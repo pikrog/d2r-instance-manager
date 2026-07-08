@@ -37,7 +37,7 @@
         </Style>
 
         <Style Selector="ItemsControl.table > ContentPresenter:pointerover">
-            <Setter Property="Background" Value="{DynamicResource HoverBackground}" />
+            <Setter Property="Background" Value="{DynamicResource PrimaryHoverBackground}" />
         </Style>
 
         <Style Selector="Button.table-action">
