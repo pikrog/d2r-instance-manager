@@ -7,7 +7,7 @@ namespace AvaloniaApplication1.Design.ViewModels;
 
 public sealed class RegionsPageDesignViewModel : AvaloniaApplication1.ViewModels.Region.RegionsPageViewModel
 {
-    public RegionsPageDesignViewModel() : base(DesignServices.RegionService)
+    public RegionsPageDesignViewModel() : base(DesignServices.RegionService, DesignServices.OverlayService)
     {
         OnEnter();
         EditCommand.Execute(Cards[2]);

@@ -1,3 +1,4 @@
+using AvaloniaApplication1.Services.Overlay;
 using AvaloniaApplication1.ViewModels.Common;
 using AvaloniaApplication1.ViewModels.Common.Dialog;
 using AvaloniaApplication1.ViewModels.Common.Page;
@@ -19,7 +20,10 @@ public partial class MainWindowViewModel : ViewModelBase, IDialogParticipant
     
     public GlobalSettings.GlobalSettingsPageViewModel GlobalSettingsPageViewModel { get; }
 
+    public OverlayHost OverlayHost { get; }
+
     public MainWindowViewModel(
+        OverlayHost overlayHost,
         Instance.InstancesPageViewModel instancesPageViewModel,
         Account.AccountsPageViewModel accountsPageViewModel,
         Region.RegionsPageViewModel regionsPageViewModel,
@@ -29,6 +33,7 @@ public partial class MainWindowViewModel : ViewModelBase, IDialogParticipant
         AccountsPageViewModel = accountsPageViewModel;
         RegionsPageViewModel = regionsPageViewModel;
         GlobalSettingsPageViewModel = globalSettingsPageViewModel;
+        OverlayHost = overlayHost;
 
         CurrentPage = InstancesPageViewModel;
         CurrentPage.OnEnter();

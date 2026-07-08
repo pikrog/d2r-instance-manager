@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using AvaloniaApplication1.Models;
 using AvaloniaApplication1.Services;
+using AvaloniaApplication1.Services.Overlay;
+using AvaloniaApplication1.Services.Overlay.Confirmation;
 using AvaloniaApplication1.ViewModels.Common.Card;
 using AvaloniaApplication1.ViewModels.Common.Dialog;
 using AvaloniaApplication1.ViewModels.Common.Page;
@@ -15,6 +17,8 @@ namespace AvaloniaApplication1.ViewModels.Region;
 public partial class RegionsPageViewModel : PageViewModel, IDialogParticipant
 {
     private readonly RegionService _regionService;
+    
+    private readonly OverlayService _overlayService;
 
     private readonly ObservableCollection<RegionCardViewModel> _regions = [];
 
@@ -28,9 +32,10 @@ public partial class RegionsPageViewModel : PageViewModel, IDialogParticipant
     [ObservableProperty]
     public partial RegionCardViewModel? EditedCard { get; set; }
     
-    public RegionsPageViewModel(RegionService regionService)
+    public RegionsPageViewModel(RegionService regionService, OverlayService overlayService)
     {
         _regionService = regionService;
+        _overlayService = overlayService;
 
         _cards = new CardCollection<RegionCardViewModel>(_regions);
     }
@@ -80,7 +85,7 @@ public partial class RegionsPageViewModel : PageViewModel, IDialogParticipant
     [RelayCommand(CanExecute = nameof(IsNotEditing))]
     private void Edit(RegionCardViewModel region)
     {
-        EndEdit();
+        //EndEdit();
         EditedCard = region;
         EditedCard.OpenForm();
     }
@@ -88,7 +93,11 @@ public partial class RegionsPageViewModel : PageViewModel, IDialogParticipant
     [RelayCommand(CanExecute = nameof(IsNotEditing))]
     private async Task Delete(RegionCardViewModel region)
     {
-        EndEdit();
+        //EndEdit();
+        var confirmationRequest = new ConfirmationRequest("Delete Region", $"Are you sure you want to delete region {region.Name}?", "Delete");
+        var result = await _overlayService.ShowAsync(confirmationRequest);
+        if (!result)
+            return;
         await _regionService.RemoveAsync(region.Id!.Value);
         Refresh(); // [optional] todo: OnRegionsChanged from Service with event type Removed
     }

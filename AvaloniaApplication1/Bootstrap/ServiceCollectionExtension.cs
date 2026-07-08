@@ -5,6 +5,7 @@ using AvaloniaApplication1.Engine.Coordination;
 using AvaloniaApplication1.Engine.Factories;
 using AvaloniaApplication1.Providers.GameExecutablePath;
 using AvaloniaApplication1.Services;
+using AvaloniaApplication1.Services.Overlay;
 using Microsoft.Extensions.DependencyInjection;
 using AccountsPageViewModel = AvaloniaApplication1.ViewModels.Account.AccountsPageViewModel;
 using GlobalSettingsPageViewModel = AvaloniaApplication1.ViewModels.GlobalSettings.GlobalSettingsPageViewModel;
@@ -42,13 +43,16 @@ public static class ServiceCollectionExtension
 
         public void AddApplicationServices()
         {
-            services.AddSingleton<GameInstanceManagerBootstrapper>();
-
+            
             services.AddSingleton<AccountService>();
             services.AddSingleton<RegionService>();
             services.AddSingleton<GameInstanceService>();
             services.AddSingleton<GlobalSettingsService>();
             services.AddSingleton<DisplayService>();
+            
+            services.AddSingleton<OverlayHost>();
+            services.AddSingleton<IOverlayHost>(sp => sp.GetRequiredService<OverlayHost>());
+            services.AddSingleton<OverlayService>();
             
             services.AddSingleton<IGameExecutablePathProvider, GameConfigStorePathProvider>();
             services.AddSingleton<IGameExecutablePathProvider, UninstallEntryPathProvider>();
@@ -60,6 +64,8 @@ public static class ServiceCollectionExtension
             services.AddTransient<AccountsPageViewModel>();
             services.AddTransient<InstancesPageViewModel>();
             services.AddTransient<GlobalSettingsPageViewModel>();
+
+            services.AddSingleton<GameInstanceManagerBootstrapper>();
         }
     }
 }

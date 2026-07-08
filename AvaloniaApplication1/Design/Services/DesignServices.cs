@@ -4,6 +4,7 @@ using AvaloniaApplication1.Bootstrap;
 using AvaloniaApplication1.Config;
 using AvaloniaApplication1.Design.Config;
 using AvaloniaApplication1.Design.Providers.GameExecutablePath;
+using AvaloniaApplication1.Design.ViewModels;
 using AvaloniaApplication1.Engine;
 using AvaloniaApplication1.Engine.CommandLine;
 using AvaloniaApplication1.Engine.Coordination;
@@ -14,6 +15,7 @@ using AvaloniaApplication1.Engine.Providers;
 using AvaloniaApplication1.Models;
 using AvaloniaApplication1.Providers.GameExecutablePath;
 using AvaloniaApplication1.Services;
+using AvaloniaApplication1.Services.Overlay;
 using AvaloniaApplication1.Snapshots;
 
 namespace AvaloniaApplication1.Design.Services;
@@ -27,6 +29,10 @@ public static class DesignServices
     private static readonly IConfigStore ConfigStore = new DummyConfigStore();
     
     private static readonly ConfigService ConfigService = new(ConfigContext, ConfigStore);
+
+    public static readonly OverlayHost OverlayHost = new();
+    
+    public static readonly OverlayService OverlayService = new(OverlayHost);
     
     public static AccountService AccountService { get; } = new(ConfigService);
     
@@ -57,7 +63,7 @@ public static class DesignServices
 
     private static readonly GameInstanceManagerBootstrapper ManagerBootstrapper =
         new(ConfigContext, GameInstanceManager);
-
+    
     public static GameInstanceService GameInstanceService { get; } =
         new(ConfigService, GameInstanceManager, AccountService, RegionService, DisplayService);
     
