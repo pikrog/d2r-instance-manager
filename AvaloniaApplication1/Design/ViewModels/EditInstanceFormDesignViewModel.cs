@@ -1,12 +1,13 @@
 ﻿using System;
 using Avalonia.Input;
-using AvaloniaApplication1.Models;
-using AvaloniaApplication1.ViewModels;
-using EditInstanceFormViewModel = AvaloniaApplication1.ViewModels.Instance.EditInstanceFormViewModel;
+using AvaloniaApplication1.Account.Models;
+using AvaloniaApplication1.Display;
+using AvaloniaApplication1.Instance.ViewModels;
+using AvaloniaApplication1.Region.Models;
 
 namespace AvaloniaApplication1.Design.ViewModels;
 
-public class EditInstanceFormDesignViewModel : AvaloniaApplication1.ViewModels.Instance.EditInstanceFormViewModel
+public class EditInstanceFormDesignViewModel : EditInstanceFormViewModel
 {
     public EditInstanceFormDesignViewModel() : base([
         new AccountOption(Guid.NewGuid(), "user1"),
@@ -29,7 +30,7 @@ public class EditInstanceFormDesignViewModel : AvaloniaApplication1.ViewModels.I
         SelectedAccount = Accounts[0];
         SelectedRegion = Regions[0];
         SelectedDisplay = Displays[0];
-        RecallHotKey = new HotKey(Key.F1, KeyModifiers.Control);
+        RecallHotKey = new HotKey.HotKey(Key.F1, KeyModifiers.Control);
         IsNoSound = true;
     }
 }

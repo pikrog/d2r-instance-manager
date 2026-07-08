@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using AvaloniaApplication1.Config;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AvaloniaApplication1.Bootstrap;

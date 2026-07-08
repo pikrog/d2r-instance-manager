@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using AvaloniaApplication1.Config;
 using AvaloniaApplication1.Engine;
-using AvaloniaApplication1.Engine.Models;
 
 namespace AvaloniaApplication1.Bootstrap;
 

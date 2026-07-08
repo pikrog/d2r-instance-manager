@@ -2,8 +2,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using AvaloniaApplication1.ViewModels;
-using AvaloniaApplication1.ViewModels.Common;
+using AvaloniaApplication1.Common;
 
 namespace AvaloniaApplication1;
 
@@ -25,22 +24,22 @@ public partial class ViewLocator : IDataTemplate
             .Replace("DesignViewModel", "ViewModel", StringComparison.Ordinal)
             .Replace("ViewModel", "View", StringComparison.Ordinal);
         
-        var lastDot = name.LastIndexOf('.');
+        /*var lastDot = name.LastIndexOf('.');
         var baseViewName = name[(lastDot + 1)..];
         
         const string viewsSubPath = ".Views";
         var baseNamespaceLength = name.IndexOf(viewsSubPath, StringComparison.Ordinal) + viewsSubPath.Length;
         var baseNamespace = name[..baseNamespaceLength];
-        var fullViewName = $"{baseNamespace}.{baseViewName}";
+        var fullViewName = $"{baseNamespace}.{baseViewName}";*/
             
-        var type = Type.GetType(fullViewName);
+        var type = Type.GetType(name);
 
         if (type != null)
         {
             return (Control)Activator.CreateInstance(type)!;
         }
 
-        return new TextBlock { Text = "Not Found: " + fullViewName };
+        return new TextBlock { Text = "Not Found: " + name };
     }
 
     public bool Match(object? data)

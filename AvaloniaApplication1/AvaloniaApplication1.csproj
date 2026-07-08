@@ -32,24 +32,61 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Views\EditInstanceFormView.axaml.cs">
-      <DependentUpon>EditProfileForm.axaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\InstancesPageView.axaml.cs">
-      <DependentUpon>InstancesPageView.axaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Languages\HotkeyBoxStrings.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>HotkeyBoxStrings.resx</DependentUpon>
     </Compile>
-    <Compile Update="Views\RegionsPageView.axaml.cs">
+    <Compile Update="Overlay\Confirmation\ConfirmationDialogView.axaml.cs">
+      <DependentUpon>ConfirmationDialogView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Account\Views\AccountsPageView.axaml.cs">
+      <DependentUpon>AccountsPageView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Region\Views\RegionsPageView.axaml.cs">
       <DependentUpon>RegionsPageView.axaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Controls\Card.axaml.cs">
+    <Compile Update="Region\Views\EditRegionFormView.axaml.cs">
+      <DependentUpon>EditRegionFormView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Instance\Views\EditInstanceFormView.axaml.cs">
+      <DependentUpon>EditInstanceFormView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Instance\Views\InstancesPageView.axaml.cs">
+      <DependentUpon>InstancesPageView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Logs\LogsPageView.axaml.cs">
+      <DependentUpon>LogsPageView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="GlobalSettings\GlobalSettingsPageView.axaml.cs">
+      <DependentUpon>GlobalSettingsPageView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="MainWindow\MainWindowView.axaml.cs">
+      <DependentUpon>MainWindowView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="InitialWindowView.axaml.cs">
+      <DependentUpon>InitialWindowView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Card\Views\AddCard.axaml.cs">
+      <DependentUpon>AddCard.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Card\Views\Card.axaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>Card.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Card\Views\EditableCard.axaml.cs">
+      <DependentUpon>EditableCard.axaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -63,6 +100,9 @@
 
   <ItemGroup>
     <Folder Include="Engine\CommandLine\" />
-    <Folder Include="Themes\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="Overlay\Confirmation\ConfirmationDialogView.axaml" />
   </ItemGroup>
 </Project>

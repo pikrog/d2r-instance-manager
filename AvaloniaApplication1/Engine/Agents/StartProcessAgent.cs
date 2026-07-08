@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AvaloniaApplication1.Engine.Lang;
-using AvaloniaApplication1.Engine.Models.Common;
+using AvaloniaApplication1.Engine.Common;
 using AvaloniaApplication1.Engine.Models.Events;
-using AvaloniaApplication1.Engine.Models.Platform.Process;
-using AvaloniaApplication1.Engine.Platform;
+using AvaloniaApplication1.Engine.Platform.Process;
 
 namespace AvaloniaApplication1.Engine.Agents;
 
-using ProcessResult = Result<Process, ProcessError>;
+using ProcessResult = Result<ProcessManager, ProcessError>;
 
 public class StartProcessAgent(ProcessStartInfo startInfo) : AgentBase<ProcessResult>
 {
     protected override async Task<ProcessResult> RunAgentTaskAsync(CancellationToken cancellationToken) =>
-        await Process.StartAsync(startInfo);
+        await ProcessManager.StartAsync(startInfo);
 
     protected override ErrorEvent CreateErrorForGenericException(Exception exception) =>
         new ProcessStartFailed(exception);

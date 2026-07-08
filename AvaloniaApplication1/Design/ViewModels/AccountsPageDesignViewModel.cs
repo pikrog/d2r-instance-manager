@@ -1,9 +1,9 @@
 using AvaloniaApplication1.Design.Services;
-using AccountsPageViewModel = AvaloniaApplication1.ViewModels.Account.AccountsPageViewModel;
+using AccountsPageViewModel = AvaloniaApplication1.Account.ViewModels.AccountsPageViewModel;
 
 namespace AvaloniaApplication1.Design.ViewModels;
 
-public class AccountsPageDesignViewModel : AvaloniaApplication1.ViewModels.Account.AccountsPageViewModel
+public class AccountsPageDesignViewModel : AccountsPageViewModel
 {
     public AccountsPageDesignViewModel() : base(DesignServices.AccountService)
     {

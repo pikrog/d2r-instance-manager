@@ -1,0 +1,35 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AvaloniaApplication1.Logs.LogsPageView">
+    <DockPanel>
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
+            <ComboBox>
+                <ComboBox.Items>
+                    <ComboBoxItem>Debug</ComboBoxItem>
+                    <ComboBoxItem>Error</ComboBoxItem>
+                    <ComboBoxItem>Warning</ComboBoxItem>
+                    <ComboBoxItem>Info</ComboBoxItem>
+                </ComboBox.Items>
+            </ComboBox>
+        </StackPanel>
+        <ListBox DockPanel.Dock="Left">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <CheckBox>Test</CheckBox>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.Items>
+                <ListBoxItem><CheckBox>Config</CheckBox></ListBoxItem>
+                <ListBoxItem><CheckBox>Config</CheckBox></ListBoxItem>
+            </ListBox.Items>
+        </ListBox>
+        <SelectableTextBlock>
+            
+        </SelectableTextBlock>
+    </DockPanel>
+</UserControl>

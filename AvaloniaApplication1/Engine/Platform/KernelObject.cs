@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Threading;
-using AvaloniaApplication1.Engine.Exceptions.Platform;
-using AvaloniaApplication1.Engine.Models.Platform.Process;
+using AvaloniaApplication1.Engine.Platform.Exceptions;
+using AvaloniaApplication1.Engine.Platform.Process;
 
 namespace AvaloniaApplication1.Engine.Platform;
 
@@ -26,7 +26,7 @@ public class KernelObject(ProcessIdentity processIdentity, IntPtr sourceHandle, 
     
     public CloseResult CloseSource()
     {
-        var processResult = Process.GetProcessById(ProcessIdentity.Id);
+        var processResult = ProcessManager.GetProcessById(ProcessIdentity.Id);
         if (!processResult.IsSuccess)
             return CloseResult.Failure;
         using var process = processResult.Value;
@@ -49,7 +49,7 @@ public class KernelObject(ProcessIdentity processIdentity, IntPtr sourceHandle, 
     
     public static IEnumerable<KernelObject> GetAll(Func<string, bool> typeFilter, Func<string, bool>? nameFilter = null, CancellationToken cancellationToken = default)
     {
-        Dictionary<uint, Process?> processes = [];
+        Dictionary<uint, ProcessManager?> processes = [];
         try
         {
             var allHandles = GetAllSystemHandles(cancellationToken);
@@ -60,7 +60,7 @@ public class KernelObject(ProcessIdentity processIdentity, IntPtr sourceHandle, 
                 var processId = checked((uint)handle.UniqueProcessId.ToInt64());
                 if (!processes.TryGetValue(processId, out var process))
                 {
-                    var processResult = Process.GetProcessById(processId);
+                    var processResult = ProcessManager.GetProcessById(processId);
                     if (processResult.IsSuccess)
                         processes[processId] = process = processResult.Value;
                     else
@@ -191,7 +191,7 @@ public class KernelObject(ProcessIdentity processIdentity, IntPtr sourceHandle, 
     
     private static SafeKernelObjectHandle? DuplicateHandle(IntPtr sourceProcessHandle, IntPtr sourceHandle, WinApi.AccessMask desiredAccess = 0, uint attributes = 0, WinApi.DuplicateOptions options = WinApi.DuplicateOptions.Default)
     {
-        var process = Process.GetCurrentProcess();
+        var process = ProcessManager.GetCurrentProcess();
         if (!process.IsSuccess)
             return null;
         var status = WinApi.NtDuplicateObject(sourceProcessHandle, sourceHandle, process.Value.Handle, out var duplicatedHandle, desiredAccess, attributes, options);

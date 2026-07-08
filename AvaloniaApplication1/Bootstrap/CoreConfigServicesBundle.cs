@@ -1,9 +1,10 @@
 ﻿using AvaloniaApplication1.Config;
+using AvaloniaApplication1.Config.Stores;
 
 namespace AvaloniaApplication1.Bootstrap;
 
 public record CoreConfigServicesBundle(
-    AppEnvironment AppEnvironment,
+    ConfigEnvironment ConfigEnvironment,
     IConfigStore ConfigStore,
     ConfigLoader ConfigLoader,
     AppConfig AppConfig

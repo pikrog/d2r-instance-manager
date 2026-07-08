@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using Avalonia.Input;
+using AvaloniaApplication1.Account.Models;
+using AvaloniaApplication1.Authentication.Models;
 using AvaloniaApplication1.Config;
-using AvaloniaApplication1.Engine.Platform;
-using AvaloniaApplication1.Models;
-using AvaloniaApplication1.Snapshots;
+using AvaloniaApplication1.Display;
+using AvaloniaApplication1.GlobalSettings;
+using AvaloniaApplication1.Instance.Models;
+using AvaloniaApplication1.Region.Models;
 
 namespace AvaloniaApplication1.Design.Config;
 
@@ -51,7 +54,7 @@ public class AppDesignConfig : AppConfig
                 new DisplaySelection.Primary(),
                 false,
                 false,
-                new HotKey(Key.F1, KeyModifiers.Control)),
+                new HotKey.HotKey(Key.F1, KeyModifiers.Control)),
             new GameInstanceSnapshot(Guid.NewGuid(),
                 "Battle Orders",
                 true,
@@ -61,7 +64,7 @@ public class AppDesignConfig : AppConfig
                 new DisplaySelection.Primary(),
                 true,
                 true,
-                new HotKey(Key.F2, KeyModifiers.Control)),
+                new HotKey.HotKey(Key.F2, KeyModifiers.Control)),
             new GameInstanceSnapshot(Guid.NewGuid(),
                 "Mule [EU]",
                 true,
@@ -71,7 +74,7 @@ public class AppDesignConfig : AppConfig
                 new DisplaySelection.Specific("FAKE_DISPLAY_ID_1"),
                 true,
                 true,
-                new HotKey(Key.F3, KeyModifiers.Control)),
+                new HotKey.HotKey(Key.F3, KeyModifiers.Control)),
             new GameInstanceSnapshot(Guid.NewGuid(),
                 "Mule [US]",
                 true,
@@ -81,7 +84,7 @@ public class AppDesignConfig : AppConfig
                 new DisplaySelection.Specific("FAKE_DISPLAY_ID_2"),
                 true,
                 true,
-                new HotKey(Key.F3, KeyModifiers.Control)),
+                new HotKey.HotKey(Key.F3, KeyModifiers.Control)),
         ];
 
         Displays = [];

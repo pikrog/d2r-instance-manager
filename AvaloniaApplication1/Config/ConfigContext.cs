@@ -1,164 +1,165 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using AvaloniaApplication1.Exceptions;
-using AvaloniaApplication1.Snapshots;
+using AvaloniaApplication1.Account.Models;
+using AvaloniaApplication1.Config.Exceptions;
+using AvaloniaApplication1.Display;
+using AvaloniaApplication1.GlobalSettings;
+using AvaloniaApplication1.Instance.Models;
+using AvaloniaApplication1.Region.Models;
 
 namespace AvaloniaApplication1.Config;
 
 // todo: add/update/remove integrity checks. uniqueness, etc.
 public class ConfigContext(AppConfig appConfig) : IConfigReader
 {
-    private readonly AppConfig _appConfig = appConfig;
-
     public AppConfig GetAppConfigCopy()
     {
         return new AppConfig
         {
-            GlobalSettings = _appConfig.GlobalSettings,
-            GameInstances = [.. _appConfig.GameInstances],
-            Regions = [.. _appConfig.Regions],
-            Accounts = [.. _appConfig.Accounts],
-            Displays = [.. _appConfig.Displays]
+            GlobalSettings = appConfig.GlobalSettings,
+            GameInstances = [.. appConfig.GameInstances],
+            Regions = [.. appConfig.Regions],
+            Accounts = [.. appConfig.Accounts],
+            Displays = [.. appConfig.Displays]
         };
     }
     
     #region GlobalSettings
     public GlobalSettingsSnapshot GetGlobalSettings()
     {
-        return _appConfig.GlobalSettings;
+        return appConfig.GlobalSettings;
     }
     
     public void UpdateGlobalSettings(GlobalSettingsSnapshot snapshot)
     {
-        _appConfig.GlobalSettings = snapshot;
+        appConfig.GlobalSettings = snapshot;
     }
     #endregion
     
     #region Instances
     public void AddInstance(GameInstanceSnapshot snapshot)
     {
-        _appConfig.GameInstances.Add(snapshot);
+        appConfig.GameInstances.Add(snapshot);
     }
     
     public void UpdateInstance(GameInstanceSnapshot snapshot)
     {
-        var index = _appConfig.GameInstances.FindIndex(i => i.Id == snapshot.Id);
+        var index = appConfig.GameInstances.FindIndex(i => i.Id == snapshot.Id);
         if (index == -1)
             throw new ConfigNotFoundException($"Instance with id {snapshot.Id} not found");
-        _appConfig.GameInstances[index] = snapshot;
+        appConfig.GameInstances[index] = snapshot;
     }
 
     public void RemoveInstance(Guid id)
     {
-        _appConfig.GameInstances.RemoveAll(i => i.Id == id);
+        appConfig.GameInstances.RemoveAll(i => i.Id == id);
     }
 
     public GameInstanceSnapshot GetInstance(Guid id)
     {
-        var instance = _appConfig.GameInstances.Find(i => i.Id == id);
+        var instance = appConfig.GameInstances.Find(i => i.Id == id);
         return instance ?? throw new ConfigNotFoundException($"Instance with id {id} not found");
     }
 
     public IReadOnlyList<GameInstanceSnapshot> GetAllInstances()
     {
-        return _appConfig.GameInstances.AsReadOnly();
+        return appConfig.GameInstances.AsReadOnly();
     }
 
     public bool InstanceExists(Guid id)
     {
-        return _appConfig.GameInstances.Exists(i => i.Id == id);
+        return appConfig.GameInstances.Exists(i => i.Id == id);
     }
     #endregion
     
     #region Regions
     public void AddRegion(RegionSnapshot snapshot)
     {
-        _appConfig.Regions.Add(snapshot);
+        appConfig.Regions.Add(snapshot);
     }
 
     public void UpdateRegion(RegionSnapshot snapshot)
     {
-        var index = _appConfig.Regions.FindIndex(i => i.Id == snapshot.Id);
+        var index = appConfig.Regions.FindIndex(i => i.Id == snapshot.Id);
         if (index == -1)
             throw new ConfigNotFoundException($"Region with id {snapshot.Id} not found");
-        _appConfig.Regions[index] = snapshot;
+        appConfig.Regions[index] = snapshot;
     }
     
     public void RemoveRegion(Guid id)
     {
-        _appConfig.Regions.RemoveAll(i => i.Id == id);
+        appConfig.Regions.RemoveAll(i => i.Id == id);
     }
 
     public RegionSnapshot GetRegion(Guid id)
     {
-        var region = _appConfig.Regions.Find(i => i.Id == id);
+        var region = appConfig.Regions.Find(i => i.Id == id);
         return region ?? throw new ConfigNotFoundException($"Region with id {id} not found");
     }
     
     public IReadOnlyList<RegionSnapshot> GetAllRegions()
     {
-        return _appConfig.Regions.AsReadOnly();
+        return appConfig.Regions.AsReadOnly();
     }
     
     public bool RegionExists(Guid id)
     {
-        return _appConfig.Regions.Exists(i => i.Id == id);
+        return appConfig.Regions.Exists(i => i.Id == id);
     }
     #endregion
     
     #region Accounts
     public void AddAccount(AccountSnapshot snapshot)
     {
-        _appConfig.Accounts.Add(snapshot);
+        appConfig.Accounts.Add(snapshot);
     }
 
     public void UpdateAccount(AccountSnapshot snapshot)
     {
-        var index = _appConfig.Accounts.FindIndex(i => i.Id == snapshot.Id);
+        var index = appConfig.Accounts.FindIndex(i => i.Id == snapshot.Id);
         if (index == -1)
             throw new ConfigNotFoundException($"Account with id {snapshot.Id} not found");
-        _appConfig.Accounts[index] = snapshot;
+        appConfig.Accounts[index] = snapshot;
     }
     
     public void RemoveAccount(Guid id)
     {
-        _appConfig.Accounts.RemoveAll(i => i.Id == id);
+        appConfig.Accounts.RemoveAll(i => i.Id == id);
     }
     
     public AccountSnapshot GetAccount(Guid id)
     {
-        var account = _appConfig.Accounts.Find(i => i.Id == id);
+        var account = appConfig.Accounts.Find(i => i.Id == id);
         return account ?? throw new ConfigNotFoundException($"Account with id {id} not found");
     }
     
     public IReadOnlyList<AccountSnapshot> GetAllAccounts()
     {
-        return _appConfig.Accounts.AsReadOnly();
+        return appConfig.Accounts.AsReadOnly();
     }
     
     public bool AccountExists(Guid id)
     {
-        return _appConfig.Accounts.Exists(i => i.Id == id);
+        return appConfig.Accounts.Exists(i => i.Id == id);
     }
     #endregion
     
     #region Displays
     public CachedDisplaySnapshot GetCachedDisplay(string id)
     {
-        var display = _appConfig.Displays.Find(i => i.Id == id);
+        var display = appConfig.Displays.Find(i => i.Id == id);
         return display ?? throw new ConfigNotFoundException($"Display with id {id} not found");
     }
     
     public void CacheDisplay(CachedDisplaySnapshot snapshot)
     {
-        var index = _appConfig.Displays.FindIndex(i => i.Id == snapshot.Id);
+        var index = appConfig.Displays.FindIndex(i => i.Id == snapshot.Id);
         if (index == -1)
         {
-            _appConfig.Displays.Add(snapshot);
+            appConfig.Displays.Add(snapshot);
             return;
         }
-        _appConfig.Displays[index] = snapshot;
+        appConfig.Displays[index] = snapshot;
     }
     #endregion
 }

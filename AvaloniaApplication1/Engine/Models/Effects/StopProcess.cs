@@ -1,8 +1,6 @@
-﻿using System;
-using AvaloniaApplication1.Engine.Models.Common;
-using AvaloniaApplication1.Engine.Models.Contexts.Helpers;
-using AvaloniaApplication1.Engine.Platform;
+﻿using AvaloniaApplication1.Engine.Helpers.ProcessStop;
+using AvaloniaApplication1.Engine.Platform.Process;
 
 namespace AvaloniaApplication1.Engine.Models.Effects;
 
-public sealed record StopProcess(Process Process, ProcessStopPolicies Policies) : Effect;
+public sealed record StopProcess(ProcessManager ProcessManager, ProcessStopPolicies Policies) : Effect;

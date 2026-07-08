@@ -1,5 +1,5 @@
-﻿using AvaloniaApplication1.Engine.Platform;
+﻿using AvaloniaApplication1.Engine.Platform.Process;
 
 namespace AvaloniaApplication1.Engine.Models.Events;
 
-public sealed record ProcessStarted(Process Process) : Event;
+public sealed record ProcessStarted(ProcessManager ProcessManager) : Event;

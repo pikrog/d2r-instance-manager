@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 using AvaloniaApplication1.Engine.Agents;
 using AvaloniaApplication1.Engine.Coordination;
 using AvaloniaApplication1.Engine.Factories;
-using AvaloniaApplication1.Engine.Helpers;
-using AvaloniaApplication1.Engine.Models.Common;
+using AvaloniaApplication1.Engine.Helpers.MultiboxUnlock;
+using AvaloniaApplication1.Engine.Helpers.ProcessStop;
 using AvaloniaApplication1.Engine.Models.Contexts.Launch;
 using AvaloniaApplication1.Engine.Models.Effects;
 using AvaloniaApplication1.Engine.Models.Events;
@@ -150,10 +150,10 @@ public class GameInstanceEngine : IAsyncDisposable
                 RunSessionAgent(new UnlockMultiboxAgent(new RetryingMultiboxUnlocker(e.RetryPolicy)));
                 break;
             case MonitorProcessExit e:
-                RunCleanupAgent(new MonitorProcessExitAgent(e.Process));
+                RunCleanupAgent(new MonitorProcessExitAgent(e.ProcessManager));
                 break;
             case StopProcess e:
-                RunCleanupAgent(new StopProcessAgent(e.Process, new RetryingProcessStopper(e.Policies)));
+                RunCleanupAgent(new StopProcessAgent(e.ProcessManager, new RetryingProcessStopper(e.Policies)));
                 break;
             case Cancel:
                 await _sessionCancellationTokenSource.CancelAsync();

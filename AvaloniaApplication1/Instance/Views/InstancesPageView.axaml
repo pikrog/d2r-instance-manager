@@ -1,0 +1,221 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:designViewModels="clr-namespace:AvaloniaApplication1.Design.ViewModels"
+             xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
+             xmlns:instance1="clr-namespace:AvaloniaApplication1.Instance.ViewModels"
+             xmlns:models="clr-namespace:AvaloniaApplication1.Instance.Models"
+             xmlns:dialog="clr-namespace:AvaloniaApplication1.Dialog"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Name="Root"
+             x:Class="AvaloniaApplication1.Instance.Views.InstancesPageView"
+             x:DataType="instance1:InstancesPageViewModel"
+             dialog:DialogService.Register="{Binding}">
+    <Design.DataContext>
+        <designViewModels:InstancesPageDesignViewModel />
+    </Design.DataContext>
+
+    <UserControl.Styles>
+        <Style Selector="ItemsControl.table > ContentPresenter:nth-child(2n)">
+            <Setter Property="Background" Value="{DynamicResource EvenRowBackground}" />
+        </Style>
+        <Style Selector="ItemsControl.table > ContentPresenter:nth-child(2n+1)">
+            <Setter Property="Background" Value="{DynamicResource OddRowBackground}" />
+        </Style>
+        <!--<Style Selector="ItemsControl.table > ContentPresenter">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Property="Background" Duration="0:0:0.2"></BrushTransition>
+                </Transitions>
+            </Setter>
+        </Style>-->
+
+        <Style Selector="ItemsControl.table > ContentPresenter:pointerover Grid.action-bar">
+            <Setter Property="Opacity" Value="1.0"></Setter>
+        </Style>
+
+        <Style Selector="ItemsControl.table > ContentPresenter:pointerover">
+            <Setter Property="Background" Value="{DynamicResource PrimaryHoverBackground}" />
+        </Style>
+
+        <Style Selector="Button.table-action">
+            <!--<Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="Width" Duration="0:0:0.2" />
+                </Transitions>
+            </Setter>-->
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="10 10" />
+            <Setter Property="Width" Value="105" />
+            <Setter Property="Background" Value="{DynamicResource PrimaryBackground}" />
+            <!-- <Setter Property="HorizontalContentAlignment" Value="Center" /> -->
+        </Style>
+
+        <!--<Style Selector="Button.table-action:pointerover:not(:pressed) /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource HoverBackgroundBrush}" />
+        </Style>-->
+
+        <!--<Style Selector="Button">
+            <Style Selector="^ TextBlock">
+                <Setter Property="IsVisible" Value="False"></Setter>
+            </Style>
+        </Style>
+        
+        <Style Selector="Button:pointerover">
+            <Setter Property="Width" Value="100" />
+            <Style Selector="^ TextBlock">
+                <Setter Property="IsVisible" Value="True"></Setter>
+            </Style>
+        </Style>-->
+
+        <Style Selector="Button.table-action StackPanel">
+            <Setter Property="Orientation" Value="Horizontal" />
+            <Setter Property="Spacing" Value="8" />
+        </Style>
+
+        <Style Selector="Button.table-action TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
+
+        <Style Selector="Button.table-action Image">
+            <Setter Property="Height" Value="20" />
+        </Style>
+    </UserControl.Styles>
+
+    <Border Classes="outlined hovering rounded" Margin="30">
+        <DockPanel>
+            <Border DockPanel.Dock="Top">
+                <WrapPanel Orientation="Horizontal">
+                    <Button Classes="table-action"
+                            Command="{Binding NewCommand}">
+                        <DockPanel>
+                            <Image Source="{SvgImage /Assets/images/add-square.svg}" />
+                            <TextBlock>New</TextBlock>
+                        </DockPanel>
+                    </Button>
+                    <!--<Button Classes="table-action">
+                        <DockPanel>
+                            <Image Source="{SvgImage /Assets/images/edit.svg}" />
+                            <TextBlock>Edit</TextBlock>
+                        </DockPanel>
+                    </Button>
+                    <Button Classes="table-action">
+                        <DockPanel>
+                            <Image Source="{SvgImage /Assets/images/delete.svg}" />
+                            <TextBlock>Delete</TextBlock>
+                        </DockPanel>
+                    </Button>
+                    <Button Classes="table-action">
+                        <DockPanel>
+                            <Image Source="{SvgImage /Assets/images/play.svg}" />
+                            <TextBlock>Launch</TextBlock>
+                        </DockPanel>
+                    </Button>
+                    <Button Classes="table-action">
+                        <DockPanel>
+                            <Image Source="{SvgImage /Assets/images/close.svg}" />
+                            <TextBlock>Stop</TextBlock>
+                        </DockPanel>
+                    </Button>
+                    <Button Classes="table-action">
+                        <DockPanel>
+                            <Image Source="{SvgImage /Assets/images/show.svg}" />
+                            <TextBlock>Show</TextBlock>
+                        </DockPanel>
+                    </Button>-->
+                </WrapPanel>
+            </Border>
+
+            <Grid>
+                <ScrollViewer HorizontalScrollBarVisibility="Auto">
+                    <ItemsControl Grid.IsSharedSizeScope="True"
+                                  Classes="table" FontSize="16"
+                                  ItemsSource="{Binding Instances}" ClipToBounds="False"
+                                  IsVisible="{Binding !IsTableEmpty}">
+
+                        <ItemsControl.DataTemplates>
+                            <DataTemplate x:DataType="models:GameInstanceTableRow">
+                                <Grid Margin="20 15" ColumnSpacing="20">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition SharedSizeGroup="A" Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition SharedSizeGroup="B" Width="Auto" />
+                                        <ColumnDefinition SharedSizeGroup="C" Width="Auto" />
+                                        <ColumnDefinition SharedSizeGroup="D" Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <CheckBox Grid.Column="0" />
+                                    <TextBlock Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center"
+                                               Text="{Binding Name}" />
+                                    <controls:Spinner Grid.Column="2"
+                                                      Opacity="{Binding Status, Converter={StaticResource GameInstanceStatusToSpinnerOpacityConverter}}" />
+                                    <Border Grid.Column="3"
+                                            CornerRadius="100"
+                                            BoxShadow="0 1 3 0 #80000000"
+                                            Width="140" Padding="5"
+                                            BorderThickness="0.5"
+                                            BorderBrush="{Binding Status, Converter={StaticResource GameInstanceStatusToBorderBrushConverter}}"
+                                            Background="{Binding Status, Converter={StaticResource GameInstanceStatusToBackgroundConverter}}"
+                                            Opacity="0.5"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Right">
+                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                   FontSize="12"
+                                                   Text="{Binding Status}" Opacity="2" />
+                                    </Border>
+                                    <!-- <TextBlock Grid.Column="4" HorizontalAlignment="Right" VerticalAlignment="Center" Text="test" Opacity="0.5"/> -->
+                                    <Grid Grid.Column="4" Classes="action-bar" ColumnDefinitions="*,*"
+                                          ColumnSpacing="36" HorizontalAlignment="Right">
+                                        <StackPanel Grid.Column="0" Orientation="Horizontal"
+                                                    IsVisible="{Binding !IsActive}">
+                                            <Button Classes="action"
+                                                    Command="{Binding DataContext.EditCommand, ElementName=Root}"
+                                                    CommandParameter="{Binding}">
+                                                <Image Source="{SvgImage /Assets/images/edit.svg}" />
+                                            </Button>
+                                            <Button Classes="action"
+                                                    Command="{Binding DataContext.DeleteCommand, ElementName=Root}"
+                                                    CommandParameter="{Binding}">
+                                                <Image Source="{SvgImage /Assets/images/delete.svg}" />
+                                            </Button>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal"
+                                                    IsVisible="{Binding !IsActive}"> 
+                                            <Button Classes="action"
+                                                    Command="{Binding DataContext.LaunchCommand, ElementName=Root}"
+                                                    CommandParameter="{Binding}">
+                                                <Image Source="{SvgImage /Assets/images/play.svg}" />
+                                            </Button>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal"
+                                                    IsVisible="{Binding IsActive}"> <!-- todo: set opacity instead of visibility to preserve layout -->
+                                            <Button Classes="action"
+                                                    Command="{Binding DataContext.ShowCommand, ElementName=Root}"
+                                                    CommandParameter="{Binding}">
+                                                <Image Source="{SvgImage /Assets/images/show.svg}" />
+                                            </Button>
+                                            <Button Classes="action"
+                                                    Command="{Binding DataContext.StopCommand, ElementName=Root}"
+                                                    CommandParameter="{Binding}">
+                                                <Image Source="{SvgImage /Assets/images/close.svg}" />
+                                            </Button>
+                                        </StackPanel>
+                                    </Grid>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.DataTemplates>
+                    </ItemsControl>
+                </ScrollViewer>
+
+                <TextBlock FontSize="20" Opacity="0.25"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           IsVisible="{Binding IsTableEmpty}">
+                    Press [New] to create a new instance
+                </TextBlock>
+            </Grid>
+        </DockPanel>
+    </Border>
+</UserControl>

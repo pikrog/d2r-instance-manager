@@ -1,4 +1,4 @@
-﻿using AvaloniaApplication1.Engine.Models.Common;
+﻿using AvaloniaApplication1.Engine.Common;
 
 namespace AvaloniaApplication1.Engine.Models.Effects;
 

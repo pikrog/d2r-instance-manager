@@ -1,17 +1,13 @@
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using AvaloniaApplication1.Bootstrap;
-using AvaloniaApplication1.Config;
-using AvaloniaApplication1.Services;
-using AvaloniaApplication1.ViewModels;
-using AvaloniaApplication1.Views;
 using Microsoft.Extensions.DependencyInjection;
-using MainWindowViewModel = AvaloniaApplication1.ViewModels.MainWindow.MainWindowViewModel;
+using MainWindowView = AvaloniaApplication1.MainWindow.MainWindowView;
+using MainWindowViewModel = AvaloniaApplication1.MainWindow.MainWindowViewModel;
 
 namespace AvaloniaApplication1
 {

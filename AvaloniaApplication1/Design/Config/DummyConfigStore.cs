@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using AvaloniaApplication1.Config;
+using AvaloniaApplication1.Config.Stores;
 
 namespace AvaloniaApplication1.Design.Config;
 

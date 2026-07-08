@@ -2,7 +2,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="AvaloniaApplication1.App"
              xmlns:local="using:AvaloniaApplication1"
-             xmlns:converters="using:AvaloniaApplication1.Converters"
+             xmlns:converters="clr-namespace:AvaloniaApplication1.Common.Converters"
+             xmlns:converters1="clr-namespace:AvaloniaApplication1.Instance.Views.Converters"
              RequestedThemeVariant="Default">
     <Application.DataTemplates>
         <local:ViewLocator />
@@ -54,9 +55,9 @@
             <converters:ReferenceEqualsConverter x:Key="ReferenceEqualsConverter" />
             <converters:ReferenceNotEqualsConverter x:Key="ReferenceNotEqualsConverter" />
             <converters:ReferenceNotNullAndNotEqualsConverter x:Key="ReferenceNotNullAndNotEqualsConverter" />
-            <converters:GameInstanceStatusToBorderBrushConverter x:Key="GameInstanceStatusToBorderBrushConverter" />
-            <converters:GameInstanceStatusToBackgroundConverter x:Key="GameInstanceStatusToBackgroundConverter" />
-            <converters:GameInstanceStatusToSpinnerOpacityConverter x:Key="GameInstanceStatusToSpinnerOpacityConverter" />
+            <converters1:GameInstanceStatusToBorderBrushConverter x:Key="GameInstanceStatusToBorderBrushConverter" />
+            <converters1:GameInstanceStatusToBackgroundConverter x:Key="GameInstanceStatusToBackgroundConverter" />
+            <converters1:GameInstanceStatusToSpinnerOpacityConverter x:Key="GameInstanceStatusToSpinnerOpacityConverter" />
             <converters:CollectionIsEmptyConverter x:Key="CollectionIsEmptyConverter" />
         </ResourceDictionary>
     </Application.Resources>
@@ -64,11 +65,11 @@
     <Application.Styles>
         <FluentTheme />
 
-        <StyleInclude Source="Styles/AppDefault.axaml" />
+        <StyleInclude Source="/Styles.axaml" />
 
         <StyleInclude Source="/Controls/Section.axaml" />
         <StyleInclude Source="/Controls/HotkeyBox.axaml" />
-        <StyleInclude Source="/Controls/Card.axaml" />
+        <StyleInclude Source="/Card/Views/Card.axaml" />
         <StyleInclude Source="/Controls/Spinner.axaml" />
     </Application.Styles>
 </Application>

@@ -1,0 +1,71 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:designViewModels="using:AvaloniaApplication1.Design.ViewModels"
+             xmlns:controls="using:AvaloniaApplication1.Controls"
+             xmlns:region11="clr-namespace:AvaloniaApplication1.Region.ViewModels"
+             xmlns:dialog="clr-namespace:AvaloniaApplication1.Dialog"
+             xmlns:views="clr-namespace:AvaloniaApplication1.Card.Views"
+             xmlns:card="clr-namespace:AvaloniaApplication1.Card.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Name="Root"
+             x:Class="AvaloniaApplication1.Region.Views.RegionsPageView"
+             x:DataType="region11:RegionsPageViewModel"
+             dialog:DialogService.Register="{Binding}">
+    <Design.DataContext>
+        <designViewModels:RegionsPageDesignViewModel />
+    </Design.DataContext>
+
+    <UserControl.Styles>
+        <Style Selector="views|EditableCard.tile,views|AddCard.tile">
+            <Setter Property="Width" Value="300" />
+            <Setter Property="MinHeight" Value="160" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <ItemsControl ItemsSource="{Binding Cards}" ClipToBounds="False" Margin="30">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel ItemSpacing="30" LineSpacing="30" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.DataTemplates>
+                <DataTemplate x:DataType="region11:RegionCardViewModel">
+                    <views:EditableCard Classes="tile"
+                                           VerticalAlignment="Top"
+                                           Title="{Binding Name}" Subtitle="{Binding Address}"
+                                           IsEdited="{Binding EditForm,Converter={x:Static ObjectConverters.IsNotNull}}"
+                                           EditCommand="{Binding DataContext.EditCommand,ElementName=Root}"
+                                           DeleteCommand="{Binding DataContext.DeleteCommand,ElementName=Root}"
+                                           AcceptCommand="{Binding DataContext.SaveCommand,ElementName=Root}"
+                                           DiscardCommand="{Binding DataContext.EndEditCommand,ElementName=Root}"
+                                           EditCommandParameter="{Binding}"
+                                           DeleteCommandParameter="{Binding}"
+                                           AcceptCommandParameter="{Binding EditForm}"
+                                           DiscardCommandParameter="{Binding EditForm}">
+                        <views:EditableCard.IsDimmed>
+                            <MultiBinding Converter="{StaticResource ReferenceNotNullAndNotEqualsConverter}">
+                                <Binding Path="DataContext.EditedCard" ElementName="Root" />
+                                <Binding />
+                            </MultiBinding>
+                        </views:EditableCard.IsDimmed>
+                        <views:EditableCard.EditContent>
+                            <StackPanel Orientation="Vertical" Spacing="14" DataContext="{Binding EditForm}">
+                                <controls:FormField Label="Name" Text="{Binding Name}" />
+                                <controls:FormField Label="Address" Text="{Binding Address}" />
+                            </StackPanel>
+                        </views:EditableCard.EditContent>
+                    </views:EditableCard>
+                </DataTemplate>
+                <DataTemplate x:DataType="card:AddCardViewModel">
+                    <views:AddCard Classes="tile"
+                                      VerticalAlignment="Top"
+                                      Command="{Binding DataContext.NewCommand,ElementName=Root}"
+                                      IsDimmed="{Binding DataContext.EditedCard,ElementName=Root,Converter={x:Static ObjectConverters.IsNotNull}}" />
+                </DataTemplate>
+            </ItemsControl.DataTemplates>
+        </ItemsControl>
+    </ScrollViewer>
+</UserControl>

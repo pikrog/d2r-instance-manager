@@ -48,10 +48,10 @@ public static class GameInstanceStateMachine
 
             case (State.Starting, ProcessStarted e):
                 return To(
-                    session with { Process = e.Process },
+                    session with { Process = e.ProcessManager },
                     State.WaitingForUnlock,
                     [
-                        new MonitorProcessExit(e.Process), 
+                        new MonitorProcessExit(e.ProcessManager), 
                         new UnlockMultibox(Require(session.Policies?.UnlockMultiboxRetryPolicy))]
                     );
             case (State.Starting, ProcessStartFailed):
@@ -107,11 +107,11 @@ public static class GameInstanceStateMachine
 
             case (State.Stopping, ProcessStarted e):
                 return To(
-                    session with { Process = e.Process }, 
+                    session with { Process = e.ProcessManager }, 
                     State.Stopping, 
                     [
-                        new MonitorProcessExit(e.Process), 
-                        new StopProcess(e.Process, Require(session.Policies?.ProcessStopPolicies))
+                        new MonitorProcessExit(e.ProcessManager), 
+                        new StopProcess(e.ProcessManager, Require(session.Policies?.ProcessStopPolicies))
                     ]);
             case (State.Stopping, LaunchLeaseGranted e):
                 return To(session, State.Stopping, [new ReleaseLaunchLease(e.Lease)]);

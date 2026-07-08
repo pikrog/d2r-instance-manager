@@ -1,18 +1,10 @@
 using AvaloniaApplication1.Design.Services;
-using AvaloniaApplication1.ViewModels.MainWindow;
+using MainWindowViewModel = AvaloniaApplication1.MainWindow.MainWindowViewModel;
 
 namespace AvaloniaApplication1.Design.ViewModels;
 
-public class MainWindowDesignViewModel : MainWindowViewModel
-{
-    public MainWindowDesignViewModel()
-        : base(
-            DesignServices.OverlayHost,
-            new InstancesPageDesignViewModel(),
-            new AccountsPageDesignViewModel(),
-            new RegionsPageDesignViewModel(),
-            new GlobalSettingsPageDesignViewModel())
-    {
-        
-    }
-}
+public class MainWindowDesignViewModel() : MainWindowViewModel(DesignServices.OverlayHost,
+    new InstancesPageDesignViewModel(),
+    new AccountsPageDesignViewModel(),
+    new RegionsPageDesignViewModel(),
+    new GlobalSettingsPageDesignViewModel());

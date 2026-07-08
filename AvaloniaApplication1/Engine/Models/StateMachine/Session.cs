@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Immutable;
-using System.Threading;
-using System.Threading.Tasks;
 using AvaloniaApplication1.Engine.Coordination;
-using AvaloniaApplication1.Engine.Models.Common;
 using AvaloniaApplication1.Engine.Models.Contexts.Launch;
 using AvaloniaApplication1.Engine.Models.Events;
-using AvaloniaApplication1.Engine.Models.Platform.Process;
-using AvaloniaApplication1.Engine.Models.Results;
-using AvaloniaApplication1.Engine.Platform;
+using AvaloniaApplication1.Engine.Platform.Process;
 
 namespace AvaloniaApplication1.Engine.Models.StateMachine;
 
@@ -18,7 +13,7 @@ public sealed record Session : IDisposable
     public LaunchLease? Lease { get; init; }
     public EnginePolicies? Policies { get; init; }
     public ProcessStartInfo? ProcessStartInfo { get; init; }
-    public Process? Process { get; init; }
+    public ProcessManager? Process { get; init; }
     public uint? ExitCode { get; init; }
     public CleanupState CleanupState { get; init; } = new();
     public ImmutableArray<ErrorEvent> ErrorEvents { get; init; } = [];

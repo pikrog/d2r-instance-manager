@@ -1,5 +1,4 @@
-﻿using AvaloniaApplication1.Engine.Models.Platform.Process;
-using AvaloniaApplication1.Engine.Models.Results;
+﻿using AvaloniaApplication1.Engine.Helpers.ProcessStop;
 
 namespace AvaloniaApplication1.Engine.Models.Events;
 

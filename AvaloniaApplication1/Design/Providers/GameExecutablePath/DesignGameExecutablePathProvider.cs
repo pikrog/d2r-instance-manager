@@ -1,4 +1,4 @@
-﻿using AvaloniaApplication1.Providers.GameExecutablePath;
+﻿using AvaloniaApplication1.GameExecutable.Providers;
 
 namespace AvaloniaApplication1.Design.Providers.GameExecutablePath;
 

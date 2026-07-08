@@ -1,5 +1,5 @@
-﻿using AvaloniaApplication1.Engine.Platform;
+﻿using AvaloniaApplication1.Engine.Platform.Process;
 
 namespace AvaloniaApplication1.Engine.Models.Effects;
 
-public sealed record MonitorProcessExit(Process Process) : Effect;
+public sealed record MonitorProcessExit(ProcessManager ProcessManager) : Effect;
