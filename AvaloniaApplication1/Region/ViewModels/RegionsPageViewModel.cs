@@ -6,7 +6,7 @@ using AvaloniaApplication1.Card;
 using AvaloniaApplication1.Card.ViewModels;
 using AvaloniaApplication1.Dialog;
 using AvaloniaApplication1.Overlay;
-using AvaloniaApplication1.Overlay.Confirmation;
+using AvaloniaApplication1.Overlay.Dialog.ConfirmDelete.Region;
 using AvaloniaApplication1.Page;
 using AvaloniaApplication1.Region.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -94,7 +94,7 @@ public partial class RegionsPageViewModel : PageViewModel, IDialogParticipant
     private async Task Delete(RegionCardViewModel region)
     {
         //EndEdit();
-        var confirmationRequest = new ConfirmationRequest("Delete Region", $"Are you sure you want to delete region {region.Name}?", "Delete");
+        var confirmationRequest = new ConfirmDeleteRegionDialogViewModel(region.Name, 0);
         var result = await _overlayService.ShowAsync(confirmationRequest);
         if (!result)
             return;

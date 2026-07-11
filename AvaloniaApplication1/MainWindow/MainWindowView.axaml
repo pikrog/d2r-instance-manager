@@ -4,13 +4,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:designViewModels="using:AvaloniaApplication1.Design.ViewModels"
         xmlns:dialog="clr-namespace:AvaloniaApplication1.Dialog"
-        xmlns:mainWindow1="clr-namespace:AvaloniaApplication1.MainWindow"
-        xmlns:confirmation="clr-namespace:AvaloniaApplication1.Overlay.Confirmation"
+        xmlns:mainWindow="clr-namespace:AvaloniaApplication1.MainWindow"
         mc:Ignorable="d" 
         d:DesignWidth="900" d:DesignHeight="600"
         Width="900" Height="600"
         x:Class="AvaloniaApplication1.MainWindow.MainWindowView"
-        x:DataType="mainWindow1:MainWindowViewModel"
+        x:DataType="mainWindow:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Title="AvaloniaApplication1"
         dialog:DialogService.Register="{Binding}">
@@ -95,11 +94,6 @@
         
         <Border DataContext="{Binding OverlayHost}" IsVisible="{Binding IsOverlayVisible}"
                 Background="#80000000">
-            <Border.DataTemplates>
-                <DataTemplate DataType="confirmation:ConfirmationDialogViewModel">
-                    <confirmation:ConfirmationDialogView/>
-                </DataTemplate>
-            </Border.DataTemplates>
             <ContentControl Content="{Binding OverlayContent}" />
         </Border>
     </Grid>

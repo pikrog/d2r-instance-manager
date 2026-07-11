@@ -37,7 +37,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>HotkeyBoxStrings.resx</DependentUpon>
     </Compile>
-    <Compile Update="Overlay\Confirmation\ConfirmationDialogView.axaml.cs">
+    <Compile Update="Overlay\Confirmation\MessageDialogView.axaml.cs">
       <DependentUpon>ConfirmationDialogView.axaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
@@ -89,6 +89,14 @@
       <DependentUpon>EditableCard.axaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Overlay\Message\ConfirmDelete\Region\ConfirmDeleteRegionDialogView.axaml.cs">
+      <DependentUpon>ConfirmDeleteRegionDialogView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Controls\Dialog.axaml.cs">
+      <DependentUpon>Message.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -100,9 +108,9 @@
 
   <ItemGroup>
     <Folder Include="Engine\CommandLine\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <AdditionalFiles Include="Overlay\Confirmation\ConfirmationDialogView.axaml" />
+    <Folder Include="Overlay\Dialog\ConfirmDelete\Account\" />
+    <Folder Include="Overlay\Dialog\ConfirmDelete\Instance\" />
+    <Folder Include="Overlay\Dialog\Quit\" />
+    <Folder Include="Overlay\Dialog\SaveChanges\" />
   </ItemGroup>
 </Project>

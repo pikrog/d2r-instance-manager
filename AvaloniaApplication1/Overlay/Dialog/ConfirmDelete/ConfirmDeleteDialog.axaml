@@ -1,0 +1,26 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AvaloniaApplication1.Overlay.Dialog.ConfirmDelete.ConfirmDeleteDialog"
+             x:Name="Root">
+    <controls:Dialog Body="{Binding #Root.Body}">
+        <controls:Dialog.Header>
+            <TextBlock Classes="h1" TextWrapping="Wrap" Text="{Binding #Root.Title}" />
+        </controls:Dialog.Header>
+
+        <controls:Dialog.Footer>
+            <StackPanel DockPanel.Dock="Bottom" Spacing="8"
+                        Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Classes="neutral" IsCancel="True" Command="{Binding #Root.Actions.CancelCommand}">
+                    Cancel
+                </Button>
+                <Button Classes="danger" IsDefault="True" Command="{Binding #Root.Actions.DeleteCommand}">
+                    <TextBlock Text="Delete" />
+                </Button>
+            </StackPanel>
+        </controls:Dialog.Footer>
+    </controls:Dialog>
+</UserControl>

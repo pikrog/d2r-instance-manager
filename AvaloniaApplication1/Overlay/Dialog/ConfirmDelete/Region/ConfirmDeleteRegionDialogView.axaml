@@ -1,0 +1,35 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:designViewModels="clr-namespace:AvaloniaApplication1.Design.ViewModels"
+             xmlns:local="clr-namespace:AvaloniaApplication1.Overlay.Dialog.ConfirmDelete.Region"
+             xmlns:confirmDelete="clr-namespace:AvaloniaApplication1.Overlay.Dialog.ConfirmDelete"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AvaloniaApplication1.Overlay.Dialog.ConfirmDelete.Region.ConfirmDeleteRegionDialogView"
+             x:DataType="local:ConfirmDeleteRegionDialogViewModel">
+    <Design.DataContext>
+        <designViewModels:ConfirmDeleteRegionDialogDesignViewModel/>
+    </Design.DataContext>
+    
+    <confirmDelete:ConfirmDeleteDialog Actions="{Binding}">
+        <confirmDelete:ConfirmDeleteDialog.Title>
+            Delete region
+        </confirmDelete:ConfirmDeleteDialog.Title>
+        
+        <confirmDelete:ConfirmDeleteDialog.Body>
+            <StackPanel Spacing="12">
+                <TextBlock TextWrapping="Wrap" LineSpacing="4" xml:space="default">
+                    <Run>Are you sure and want to delete region</Run>
+                    <Run FontWeight="Bold" Text="{Binding RegionName}" /><Run>?</Run>
+                </TextBlock>
+                <TextBlock IsVisible="{Binding IsUsedByInstances}">
+                    <Run FontFamily="Segoe UI Emoji">⚠</Run>
+                    <Run>This region is used in</Run>
+                    ️<Run FontWeight="Bold" Text="{Binding InstanceCount}" /> 
+                    <Run>instances.</Run>
+                </TextBlock>
+            </StackPanel>
+        </confirmDelete:ConfirmDeleteDialog.Body>
+    </confirmDelete:ConfirmDeleteDialog>
+</UserControl>
