@@ -42,8 +42,8 @@ public partial class RegionsPageViewModel : PageViewModel, IDialogParticipant
     
     public void Refresh()
     {
-        var regions = _regionService.GetAllSnapshots()
-            .ToList(); // todo: Get Snapshot Projection for UI? RegionTableRow
+        var regions = _regionService.GetSummaries()
+            .ToList();
         
         var i = 0;
         for (; i < Math.Min(regions.Count, _regions.Count); i++)
@@ -52,10 +52,11 @@ public partial class RegionsPageViewModel : PageViewModel, IDialogParticipant
             regionCard.Id = regions[i].Id;
             regionCard.Name = regions[i].Name;
             regionCard.Address = regions[i].Address;
+            regionCard.InstancesCount = regions[i].InstanceCount;
         }
 
         for(; i < regions.Count; i++)
-            _regions.Add(new RegionCardViewModel(regions[i].Id, regions[i].Name, regions[i].Address));
+            _regions.Add(new RegionCardViewModel(regions[i].Id, regions[i].Name, regions[i].Address, regions[i].InstanceCount));
 
         for (; i < _regions.Count; )
             _regions.RemoveAt(i);
@@ -94,7 +95,7 @@ public partial class RegionsPageViewModel : PageViewModel, IDialogParticipant
     private async Task Delete(RegionCardViewModel region)
     {
         //EndEdit();
-        var confirmationRequest = new ConfirmDeleteRegionDialogViewModel(region.Name, 0);
+        var confirmationRequest = new ConfirmDeleteRegionDialogViewModel(region.Name, region.InstancesCount);
         var result = await _overlayService.ShowAsync(confirmationRequest);
         if (!result)
             return;

@@ -4,18 +4,31 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace AvaloniaApplication1.Region.ViewModels;
 
-public partial class RegionCardViewModel(Guid? id = null, string name = "", string address = "") : CardViewModel
+public partial class RegionCardViewModel : CardViewModel
 {
+    public RegionCardViewModel(Guid? id, string name, string address, int instancesCount)
+    {
+        Id = id;
+        Name = name;
+        Address = address;
+        InstancesCount = instancesCount;
+    }
+
+    public RegionCardViewModel() { }
+
     [ObservableProperty]
     public partial EditRegionFormViewModel? EditForm { get; private set; }
     
-    public Guid? Id { get; set; } = id;
+    public Guid? Id { get; set; }
     
     [ObservableProperty]
-    public partial string Name { get; set; } = name;
+    public partial string Name { get; set; }
     
     [ObservableProperty]
-    public partial string Address { get; set; } = address;
+    public partial string Address { get; set; }
+
+    [ObservableProperty] 
+    public partial int InstancesCount { get; set; }
 
     public void OpenForm()
     {

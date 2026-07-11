@@ -36,7 +36,18 @@ public class RegionService(ConfigService configService)
     public IReadOnlyList<RegionSnapshot> GetAllSnapshots() => configService.Config.GetAllRegions();
     
     public IReadOnlyList<RegionOption> GetOptions() => 
-        configService.Config.GetAllRegions().Select(r => new RegionOption(r.Id, r.Name)).ToList();
+        GetAllSnapshots().Select(r => new RegionOption(r.Id, r.Name)).ToList();
+
+    public IReadOnlyList<RegionSummary> GetSummaries()
+    {
+        var instanceCounts = configService.Config.GetAllInstances()
+            .Where(i => i.RegionId.HasValue)
+            .GroupBy(i => i.RegionId!.Value)
+            .ToDictionary(g => g.Key, g => g.Count());
+        return GetAllSnapshots()
+            .Select(r => new RegionSummary(r.Id, r.Name, r.Address, instanceCounts.GetValueOrDefault(r.Id, 0)))
+            .ToList();
+    }
 
     public bool Exists(Guid id) => configService.Config.RegionExists(id);
 }
