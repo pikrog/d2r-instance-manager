@@ -11,7 +11,8 @@ public class InstancesPageDesignViewModel : InstancesPageViewModel
     public InstancesPageDesignViewModel() : base(DesignServices.GameInstanceService,
         DesignServices.AccountService,
         DesignServices.RegionService,
-        DesignServices.DisplayService)
+        DesignServices.DisplayService,
+        DesignServices.OverlayService)
     {
         Instances.Clear();
         

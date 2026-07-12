@@ -5,7 +5,7 @@ namespace AvaloniaApplication1.Design.ViewModels;
 
 public class AccountsPageDesignViewModel : AccountsPageViewModel
 {
-    public AccountsPageDesignViewModel() : base(DesignServices.AccountService)
+    public AccountsPageDesignViewModel() : base(DesignServices.AccountService, DesignServices.OverlayService)
     {
         Refresh();
     }

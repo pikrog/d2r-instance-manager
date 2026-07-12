@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AvaloniaApplication1.Account.Models;
 using AvaloniaApplication1.Card;
 using AvaloniaApplication1.Card.ViewModels;
+using AvaloniaApplication1.Overlay;
 using AvaloniaApplication1.Page;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -14,6 +15,8 @@ namespace AvaloniaApplication1.Account.ViewModels;
 public partial class AccountsPageViewModel : PageViewModel
 {
     private readonly AccountService _accountService;
+    
+    private readonly OverlayService _overlayService;
 
     private readonly ObservableCollection<AccountCardViewModel> _accounts = [];
     
@@ -27,9 +30,10 @@ public partial class AccountsPageViewModel : PageViewModel
     [ObservableProperty]
     public partial AccountCardViewModel? EditedCard { get; set; }
 
-    public AccountsPageViewModel(AccountService accountService)
+    public AccountsPageViewModel(AccountService accountService, OverlayService overlayService)
     {
         _accountService = accountService;
+        _overlayService = overlayService;
         
         _cards = new CardCollection<AccountCardViewModel>(_accounts);
     }
@@ -90,7 +94,14 @@ public partial class AccountsPageViewModel : PageViewModel
     [RelayCommand(CanExecute = nameof(IsNotEditing))]
     private async Task Delete(AccountCardViewModel account)
     {
-        EndEdit();
+        var confirmationViewModel = new DeleteAccountDialogViewModel(
+            account.DisplayName,
+            account.Username,
+            account.InstanceCount
+            );
+        var result = await _overlayService.ShowAsync(confirmationViewModel);
+        if (!result)
+            return;
         await _accountService.RemoveAsync(account.Id!.Value);
         Refresh();
     }

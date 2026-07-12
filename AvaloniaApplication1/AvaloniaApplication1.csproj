@@ -97,6 +97,14 @@
       <DependentUpon>Message.axaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Account\Views\DeleteAccountDialogView.axaml.cs">
+      <DependentUpon>DeleteAccountDialogView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Instance\Views\DeleteInstanceDialogView.axaml.cs">
+      <DependentUpon>DeleteInstanceDialogView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Region\Views\DeleteRegionDialogView.axaml.cs">
       <DependentUpon>DeleteRegionDialogView.axaml</DependentUpon>
       <SubType>Code</SubType>

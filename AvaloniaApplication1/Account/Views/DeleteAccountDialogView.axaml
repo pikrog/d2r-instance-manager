@@ -1,0 +1,41 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:designViewModels="clr-namespace:AvaloniaApplication1.Design.ViewModels"
+             xmlns:delete="clr-namespace:AvaloniaApplication1.Overlay.Dialog.Delete"
+             xmlns:local="clr-namespace:AvaloniaApplication1.Account.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AvaloniaApplication1.Account.Views.DeleteAccountDialogView"
+             x:DataType="local:DeleteAccountDialogViewModel">
+    <Design.DataContext>
+        <designViewModels:DeleteAccountDialogDesignViewModel/>
+    </Design.DataContext>
+    
+    <delete:DeleteDialog Actions="{Binding}">
+        <delete:DeleteDialog.Title>
+            Delete account
+        </delete:DeleteDialog.Title>
+        
+        <delete:DeleteDialog.Body>
+            <StackPanel Spacing="12">
+                <TextBlock TextWrapping="Wrap" LineSpacing="4" xml:space="default" IsVisible="{Binding HasDisplayName}">
+                    <Run>Are you sure and want to delete account named</Run>
+                    <Run FontWeight="Bold" Text="{Binding DisplayName}" />
+                    <Run>identified by login</Run>
+                    <Run FontWeight="Bold" Text="{Binding Username}" /><Run>?</Run>
+                </TextBlock>
+                <TextBlock TextWrapping="Wrap" LineSpacing="4" xml:space="default" IsVisible="{Binding !HasDisplayName}">
+                    <Run>Are you sure and want to delete account identified by login</Run>
+                    <Run FontWeight="Bold" Text="{Binding Username}" /><Run>?</Run>
+                </TextBlock>
+                <TextBlock IsVisible="{Binding IsUsedByInstances}">
+                    <Run FontFamily="Segoe UI Emoji">⚠</Run>
+                    <Run>This account is used in</Run>
+                    ️<Run FontWeight="Bold" Text="{Binding InstanceCount}" /> 
+                    <Run>instances.</Run>
+                </TextBlock>
+            </StackPanel>
+        </delete:DeleteDialog.Body>
+    </delete:DeleteDialog>
+</UserControl>

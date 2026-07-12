@@ -1,0 +1,29 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:designViewModels="clr-namespace:AvaloniaApplication1.Design.ViewModels"
+             xmlns:delete="clr-namespace:AvaloniaApplication1.Overlay.Dialog.Delete"
+             xmlns:local="clr-namespace:AvaloniaApplication1.Instance.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AvaloniaApplication1.Instance.Views.DeleteInstanceDialogView"
+             x:DataType="local:DeleteInstanceDialogViewModel">
+    <Design.DataContext>
+        <designViewModels:DeleteInstanceDialogDesignViewModel/>
+    </Design.DataContext>
+    
+    <delete:DeleteDialog Actions="{Binding}">
+        <delete:DeleteDialog.Title>
+            Delete instance
+        </delete:DeleteDialog.Title>
+        
+        <delete:DeleteDialog.Body>
+            <StackPanel Spacing="12">
+                <TextBlock TextWrapping="Wrap" LineSpacing="4" xml:space="default">
+                    <Run>Are you sure and want to delete instance named</Run>
+                    <Run FontWeight="Bold" Text="{Binding InstanceName}" /><Run>?</Run>
+                </TextBlock>
+            </StackPanel>
+        </delete:DeleteDialog.Body>
+    </delete:DeleteDialog>
+</UserControl>

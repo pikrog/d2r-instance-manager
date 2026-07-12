@@ -8,6 +8,7 @@ using AvaloniaApplication1.Account;
 using AvaloniaApplication1.Dialog;
 using AvaloniaApplication1.Display;
 using AvaloniaApplication1.Instance.Models;
+using AvaloniaApplication1.Overlay;
 using AvaloniaApplication1.Page;
 using AvaloniaApplication1.Region;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -25,6 +26,8 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
     private readonly RegionService _regionService;
 
     private readonly DisplayService _displayService;
+    
+    private readonly OverlayService _overlayService;
 
     public ObservableCollection<GameInstanceTableRow> Instances { get; } = [];
     
@@ -42,12 +45,14 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
     public InstancesPageViewModel(GameInstanceService gameInstanceService,
         AccountService accountService,
         RegionService regionService,
-        DisplayService displayService)
+        DisplayService displayService,
+        OverlayService overlayService)
     {
         _gameInstanceService = gameInstanceService;
         _accountService = accountService;
         _regionService = regionService;
         _displayService = displayService;
+        _overlayService = overlayService;
 
         _gameInstanceService.InstanceStateChanged += OnInstanceStateChanged;
     }
@@ -151,6 +156,10 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
     [RelayCommand]
     private async Task Delete(GameInstanceTableRow instance)
     {
+        var confirmationViewModel = new DeleteInstanceDialogViewModel(instance.Name);
+        var result = await _overlayService.ShowAsync(confirmationViewModel);
+        if (!result)
+            return;
         await _gameInstanceService.RemoveAsync(instance.Id);
         Refresh();
     }
