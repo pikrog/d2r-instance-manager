@@ -17,51 +17,8 @@ using AvaloniaApplication1.Region;
 
 namespace AvaloniaApplication1.Instance;
 
-public class GameInstanceService(ConfigService configService, GameInstanceManager gameInstanceManager, AccountService accountService, RegionService regionService, DisplayService displayService)
+public class GameInstanceService(ConfigService configService, GameInstanceManager gameInstanceManager)
 {
-    public class GameInstanceValidationRules // todo: implement
-    {
-        
-    }
-
-    public class GameInstanceDraftValidator(AccountService accountService, RegionService regionService)
-    {
-        private readonly AccountService _accountService = accountService;
-        private readonly RegionService _regionService = regionService;
-        
-        public void Validate(GameInstanceDraft draft)
-        {
-            if (draft.IsOnlineMode)
-            {
-                if (draft.AccountId is null)
-                    throw new ArgumentException("Account id is required when using online mode");
-            }
-        }
-    }
-    
-    private void Validate(GameInstanceDraft draft) // todo: move to validator
-    {
-        if (draft.IsOnlineMode)
-        {
-            if (draft.AccountId is null)
-                throw new ArgumentException("Account id is required when using online mode");
-
-            if (!accountService.Exists(draft.AccountId.Value))
-                throw new ArgumentException(
-                    $"Account with id {draft.AccountId} does not exist"); // todo: replace with a more specific exception
-
-            if (draft.RegionId is null)
-                throw new ArgumentException("Region id is required when using online mode");
-
-            if (!regionService.Exists(draft.RegionId.Value))
-                throw new ArgumentException($"Region with id {draft.RegionId} does not exist"); // todo: replace with a more specific exception
-        }
-        
-        // todo: name uniqueness check -> in ConfigLoader
-        if (string.IsNullOrWhiteSpace(draft.Name))
-            throw new ArgumentException("Name is required");
-    }
-
     public event Action<Guid>? InstanceStateChanged
     {
         add => gameInstanceManager.InstanceStateChanged += value;
@@ -81,7 +38,8 @@ public class GameInstanceService(ConfigService configService, GameInstanceManage
 
     public async Task SaveAsync(GameInstanceDraft draft)
     {
-        Validate(draft);
+        // todo:
+        // Validate(draft);
 
         var id = draft.Id ?? Guid.NewGuid();
         var snapshot = new GameInstanceSnapshot(
@@ -118,11 +76,7 @@ public class GameInstanceService(ConfigService configService, GameInstanceManage
     {
         return gameInstanceManager.GetRuntimeSnapshot(id);
     }
-
-    public GlobalSettingsSnapshot GetSettingsSnapshot()
-    {
-        return configService.Config.GetGlobalSettings();
-    }
+    
 
     public GameInstanceTableRow GetTableRow(Guid id)
     {
@@ -146,16 +100,22 @@ public class GameInstanceService(ConfigService configService, GameInstanceManage
             }).ToList();
     }
 
+    private string? ResolveDisplayId(DisplaySelection display)
+    {
+        var isFallbackAllowed = configService.Config.GetGlobalSettings().FallbackToPrimaryDisplayIfInvalid;
+        return DisplayResolver.ResolveDisplayId(display, isFallbackAllowed);
+    }
+
     public async Task LaunchAsync(Guid id)
     {
-        var settings = GetSettingsSnapshot();
+        var settings = configService.Config.GetGlobalSettings();
         
         var snapshot = GetInstanceConfigSnapshot(id);
         AuthenticationContext authenticationContext = new OfflineAuthenticationContext();
         if (snapshot.IsOnlineMode)
         {
-            var account = accountService.GetSnapshot(snapshot.AccountId!.Value);
-            var region = regionService.GetSnapshot(snapshot.RegionId!.Value);
+            var account = configService.Config.GetAccount(snapshot.AccountId!.Value);
+            var region = configService.Config.GetRegion(snapshot.RegionId!.Value);
             
             authenticationContext = snapshot.AuthenticationMethod switch
             {
@@ -166,7 +126,7 @@ public class GameInstanceService(ConfigService configService, GameInstanceManage
             };
         }
 
-        var displayId = displayService.ResolveDisplayId(snapshot.Display);
+        var displayId = ResolveDisplayId(snapshot.Display);
         if (displayId is null)
             throw new InvalidOperationException("Failed to resolve display id"); // todo: return Result<Unit, Error>
         

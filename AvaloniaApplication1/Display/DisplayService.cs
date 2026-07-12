@@ -43,17 +43,4 @@ public class DisplayService(ConfigService configService)
             }
         );
     }
-
-    private bool IsFallbackAllowed => configService.Config.GetGlobalSettings().FallbackToPrimaryDisplayIfInvalid;
-
-    public string? ResolveDisplayId(DisplaySelection selection) =>
-        selection switch
-        {
-            DisplaySelection.Primary => Engine.Platform.DisplayInfo.GetPrimary().Id,
-            DisplaySelection.Specific specific => 
-                Engine.Platform.DisplayInfo.Exists(specific.Id) 
-                    ? specific.Id 
-                    : IsFallbackAllowed ? Engine.Platform.DisplayInfo.GetPrimary().Id : null,
-            _ => throw new InvalidOperationException($"Unexpected display selection: {selection.GetType().Name}")
-        };
 }
