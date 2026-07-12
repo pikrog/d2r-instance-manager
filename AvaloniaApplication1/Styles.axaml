@@ -11,6 +11,10 @@
         </StackPanel>
     </Design.PreviewWith>
     
+    <Style Selector="TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}"/>
+    </Style>
+    
     <Style Selector="TextBlock.h1">
         <Setter Property="FontSize" Value="18" />
         <Setter Property="FontWeight" Value="Bold" />
@@ -25,8 +29,8 @@
         <Setter Property="FontWeight" Value="Bold" />
     </Style>
 
-    <Style Selector="TextBlock.deemphasized">
-        <Setter Property="Opacity" Value="0.7" />
+    <Style Selector="TextBlock.secondary">
+        <Setter Property="Foreground" Value="{DynamicResource SecondaryForeground}" />
     </Style>
 
     <Style Selector="Border.hovering">
