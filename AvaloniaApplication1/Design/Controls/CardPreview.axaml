@@ -12,7 +12,7 @@
                 <Setter Property="MinHeight" Value="120"/>
             </Style>
         </StackPanel.Styles>
-        <views:EditableCard Title="Card 1" Subtitle="Description 1" />
+        <views:EditableCard Title="Card 1" Icon="{SvgImage /Assets/images/user.svg}" Subtitle="Description 1" />
         <views:EditableCard Title="Card 2" Subtitle="Description 2" IsDimmed="True"/>
         <views:EditableCard Title="Card 3" Subtitle="Description 3" IsEdited="True">
             <views:EditableCard.EditContent>

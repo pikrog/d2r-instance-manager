@@ -4,6 +4,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Data;
+using Avalonia.Media;
 
 namespace AvaloniaApplication1.Card.Views;
 
@@ -24,6 +25,9 @@ public partial class EditableCard : UserControl
     public static readonly StyledProperty<object?> EditContentProperty =
         AvaloniaProperty.Register<EditableCard, object?>(nameof(EditContent));
 
+    public static readonly StyledProperty<IImage?> IconProperty =
+        AvaloniaProperty.Register<EditableCard, IImage?>(nameof(Icon));
+    
     public static readonly StyledProperty<string> TitleProperty =
         AvaloniaProperty.Register<EditableCard, string>(nameof(Title));
 
@@ -82,6 +86,12 @@ public partial class EditableCard : UserControl
     {
         get => GetValue(TitleProperty);
         set => SetValue(TitleProperty, value);
+    }
+    
+    public IImage? Icon
+    {
+        get => GetValue(IconProperty);
+        set => SetValue(IconProperty, value);
     }
 
     public string Subtitle

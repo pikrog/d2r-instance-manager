@@ -36,8 +36,11 @@
                 </StackPanel>
                 
                 <StackPanel Orientation="Vertical" Spacing="10" Margin="12 12 12 24">
-                    <TextBlock Classes="h2" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding #Root.Title}" />
-                    <TextBlock Classes="deemphasized" VerticalAlignment="Center" TextWrapping="Wrap"
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <!-- <Image Source="{Binding #Root.Icon}" Width="24" Height="24" /> -->
+                        <TextBlock Classes="h2" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding #Root.Title}" />
+                    </StackPanel>
+                    
                     <TextBlock Classes="secondary" VerticalAlignment="Center" TextWrapping="Wrap"
                                Text="{Binding #Root.Subtitle}" />
                     
