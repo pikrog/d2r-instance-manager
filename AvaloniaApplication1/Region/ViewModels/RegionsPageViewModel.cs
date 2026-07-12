@@ -42,6 +42,7 @@ public partial class RegionsPageViewModel : PageViewModel, IDialogParticipant
     public void Refresh()
     {
         var regions = _regionService.GetSummaries()
+            .Select(summary => new RegionCardViewModel(summary.Id, summary.Name, summary.Address, summary.InstanceCount))
             .ToList();
         
         var i = 0;
@@ -55,7 +56,7 @@ public partial class RegionsPageViewModel : PageViewModel, IDialogParticipant
         }
 
         for(; i < regions.Count; i++)
-            _regions.Add(new RegionCardViewModel(regions[i].Id, regions[i].Name, regions[i].Address, regions[i].InstanceCount));
+            _regions.Add(regions[i]);
 
         for (; i < _regions.Count; )
             _regions.RemoveAt(i);

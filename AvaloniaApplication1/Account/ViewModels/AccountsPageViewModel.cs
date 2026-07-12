@@ -34,9 +34,11 @@ public partial class AccountsPageViewModel : PageViewModel
         _cards = new CardCollection<AccountCardViewModel>(_accounts);
     }
     
-    public void Refresh()
+    public void Refresh() // todo: event-driven updates? 1st: OnAccountsChanged from Service with event type Added/Updated/Removed
     {
-        var accounts = _accountService.GetAllSnapshots().ToList();
+        var accounts = _accountService.GetSummaries()
+            .Select(s => new AccountCardViewModel(s.Id, s.DisplayName, s.Username, s.Password, s.InstanceCount))
+            .ToList();
         
         var i = 0;
         for (; i < Math.Min(accounts.Count, _accounts.Count); i++)
@@ -48,7 +50,7 @@ public partial class AccountsPageViewModel : PageViewModel
         }
         
         for(; i < accounts.Count; i++)
-            _accounts.Add(new AccountCardViewModel(accounts[i].Id, accounts[i].Username, accounts[i].Password));
+            _accounts.Add(accounts[i]);
         
         for (; i < _accounts.Count; )
             _accounts.RemoveAt(i);
