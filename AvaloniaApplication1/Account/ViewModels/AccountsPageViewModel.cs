@@ -86,7 +86,6 @@ public partial class AccountsPageViewModel : PageViewModel
     [RelayCommand(CanExecute = nameof(IsNotEditing))]
     private void Edit(AccountCardViewModel account)
     {
-        EndEdit();
         EditedCard = account;
         EditedCard.OpenForm();
     }
