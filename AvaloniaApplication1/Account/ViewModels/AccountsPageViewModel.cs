@@ -43,10 +43,12 @@ public partial class AccountsPageViewModel : PageViewModel
         var i = 0;
         for (; i < Math.Min(accounts.Count, _accounts.Count); i++)
         {
-            var accountCard = _accounts[i];
-            accountCard.Username = accounts[i].Username;
-            accountCard.Password = accounts[i].Password;
-            accountCard.Id = accounts[i].Id;
+            var savedCard = _accounts[i];
+            savedCard.Id = accounts[i].Id;
+            savedCard.DisplayName = accounts[i].DisplayName;
+            savedCard.Username = accounts[i].Username;
+            savedCard.Password = accounts[i].Password;
+            savedCard.InstanceCount = accounts[i].InstanceCount;
         }
         
         for(; i < accounts.Count; i++)
@@ -70,7 +72,7 @@ public partial class AccountsPageViewModel : PageViewModel
         if (!form.Validate())
             return;
         
-        var draft = new AccountDraft(form.Id, form.Username, form.Password);
+        var draft = new AccountDraft(form.Id, form.DisplayName, form.Username, form.Password);
         await _accountService.SaveAsync(draft);
         
         EndEdit();

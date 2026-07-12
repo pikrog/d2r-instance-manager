@@ -20,7 +20,8 @@ public class AccountService(ConfigService configService)
         // Validate(draft);
 
         var id = draft.Id ?? Guid.NewGuid();
-        var snapshot = new AccountSnapshot(id, draft.Username, draft.Password);
+        var displayName = string.IsNullOrWhiteSpace(draft.DisplayName) ? null : draft.DisplayName;
+        var snapshot = new AccountSnapshot(id, displayName, draft.Username, draft.Password);
         
         if (draft.Id is null)
             await AddAsync(snapshot);
@@ -35,7 +36,26 @@ public class AccountService(ConfigService configService)
     public IReadOnlyList<AccountSnapshot> GetAllSnapshots() => configService.Config.GetAllAccounts();
     
     public IReadOnlyList<AccountOption> GetOptions() => 
-        GetAllSnapshots().Select(a => new AccountOption(a.Id, a.Username)).ToList();
+        GetAllSnapshots().Select(a => new AccountOption(a.Id, a.DisplayName, a.Username)).ToList();
+
+    public IReadOnlyList<AccountSummary> GetSummaries()
+    {
+        var instanceCounts = configService.Config.GetAllInstances()
+            .Where(i => i.AccountId.HasValue)
+            .GroupBy(i => i.AccountId!.Value)
+            .ToDictionary(g => g.Key, g => g.Count());
+        return GetAllSnapshots()
+            .Select(a => 
+                new AccountSummary(
+                    a.Id,
+                    a.DisplayName,
+                    a.Username, 
+                    a.Password,
+                    instanceCounts.GetValueOrDefault(a.Id, 0)
+                    )
+            )
+            .ToList();
+    }
 
     public bool Exists(Guid id) => configService.Config.AccountExists(id);
 }

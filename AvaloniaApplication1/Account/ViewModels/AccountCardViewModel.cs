@@ -4,24 +4,46 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace AvaloniaApplication1.Account.ViewModels;
 
-public partial class AccountCardViewModel(Guid? id = null, string username = "", string password = "") : CardViewModel
+public partial class AccountCardViewModel : CardViewModel
 {
+    public AccountCardViewModel(Guid? id, string? displayName, string username, string password, int instanceCount)
+    {
+        Id = id;
+        DisplayName = displayName;
+        Username = username;
+        Password = password;
+        InstanceCount = instanceCount;
+    }
+
+    public AccountCardViewModel()
+    {
+        Username = string.Empty;
+        Password = string.Empty;
+    }
+
     [ObservableProperty]
     public partial EditAccountFormViewModel? EditForm { get; private set; }
     
-    public Guid? Id { get; set; } = id;
+    public Guid? Id { get; set; }
     
     [ObservableProperty]
-    public partial string Username { get; set; } = username;
+    public partial string? DisplayName { get; set; }
     
     [ObservableProperty]
-    public partial string Password { get; set; } = password;
+    public partial string Username { get; set; }
+    
+    [ObservableProperty]
+    public partial string Password { get; set; }
+    
+    [ObservableProperty]
+    public partial int InstanceCount { get; set; }
 
     public void OpenForm()
     {
         EditForm = new EditAccountFormViewModel
         {
             Id = Id,
+            DisplayName = DisplayName,
             Username = Username,
             Password = Password
         };

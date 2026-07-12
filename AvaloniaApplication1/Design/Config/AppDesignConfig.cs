@@ -21,12 +21,15 @@ public class AppDesignConfig : AppConfig
         [
             new AccountSnapshot(Guid.NewGuid(),
                 "User 1",
+                "user1@mail.com",
                 "*"),
             new AccountSnapshot(Guid.NewGuid(),
-                "User 2",
+                null,
+                "user2@mail.com",
                 "*"),
             new AccountSnapshot(Guid.NewGuid(),
                 "User 3",
+                "user3@mail.com",
                 "*"),
         ];
 

@@ -2,4 +2,4 @@
 
 namespace AvaloniaApplication1.Account.Models;
 
-public record AccountOption(Guid Id, string Username);
+public record AccountOption(Guid Id, string? DisplayName, string Username);

@@ -17,15 +17,9 @@
 
     <UserControl.Styles>
         <Style Selector="views|EditableCard.tile,views|AddCard.tile">
-            <!-- <Setter Property="MinWidth" Value="200"/> -->
-            <!-- <Setter Property="MaxWidth" Value="400"/> -->
             <Setter Property="Width" Value="300" />
             <Setter Property="MinHeight" Value="160" />
-            <!-- <Setter Property="Height" Value="260"/> -->
         </Style>
-        <!--<Style Selector="controls|EditableCard.tile:editing">
-            <Setter Property="Height" Value="200"/>
-        </Style>-->
     </UserControl.Styles>
 
     <ScrollViewer>
@@ -37,7 +31,7 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.DataTemplates>
                 <DataTemplate x:DataType="account11:AccountCardViewModel">
-                    <views:EditableCard Classes="tile" Title="Unnamed account"
+                    <views:EditableCard Classes="tile"
                                            VerticalAlignment="Top"
                                            Subtitle="{Binding Username}"
                                            IsEdited="{Binding EditForm,Converter={x:Static ObjectConverters.IsNotNull}}"
@@ -49,6 +43,9 @@
                                            DeleteCommandParameter="{Binding}"
                                            AcceptCommandParameter="{Binding EditForm}"
                                            DiscardCommandParameter="{Binding EditForm}">
+                        <views:EditableCard.Title>
+                            <Binding Path="DisplayName" TargetNullValue="Unnamed account"/>
+                        </views:EditableCard.Title>
                         <views:EditableCard.IsDimmed>
                             <MultiBinding Converter="{StaticResource ReferenceNotNullAndNotEqualsConverter}"
                                           ConverterParameter="dimmed">
@@ -58,7 +55,7 @@
                         </views:EditableCard.IsDimmed>
                         <views:EditableCard.EditContent>
                             <StackPanel Orientation="Vertical" Spacing="14" DataContext="{Binding EditForm}">
-                                <controls:FormField Label="Display name" />
+                                <controls:FormField Label="Display name" Text="{Binding DisplayName}"/>
                                 <controls:FormField Label="Username" Text="{Binding Username}" />
                                 <controls:FormField Label="Password" Text="{Binding Password}" PasswordChar="•" />
                             </StackPanel>
