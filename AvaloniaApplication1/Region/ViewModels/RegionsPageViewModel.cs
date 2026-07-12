@@ -6,7 +6,6 @@ using AvaloniaApplication1.Card;
 using AvaloniaApplication1.Card.ViewModels;
 using AvaloniaApplication1.Dialog;
 using AvaloniaApplication1.Overlay;
-using AvaloniaApplication1.Overlay.Dialog.ConfirmDelete.Region;
 using AvaloniaApplication1.Page;
 using AvaloniaApplication1.Region.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -48,11 +47,11 @@ public partial class RegionsPageViewModel : PageViewModel, IDialogParticipant
         var i = 0;
         for (; i < Math.Min(regions.Count, _regions.Count); i++)
         {
-            var regionCard = _regions[i];
-            regionCard.Id = regions[i].Id;
-            regionCard.Name = regions[i].Name;
-            regionCard.Address = regions[i].Address;
-            regionCard.InstancesCount = regions[i].InstanceCount;
+            var savedCard = _regions[i];
+            savedCard.Id = regions[i].Id;
+            savedCard.Name = regions[i].Name;
+            savedCard.Address = regions[i].Address;
+            savedCard.InstanceCount = regions[i].InstanceCount;
         }
 
         for(; i < regions.Count; i++)
@@ -86,7 +85,6 @@ public partial class RegionsPageViewModel : PageViewModel, IDialogParticipant
     [RelayCommand(CanExecute = nameof(IsNotEditing))]
     private void Edit(RegionCardViewModel region)
     {
-        //EndEdit();
         EditedCard = region;
         EditedCard.OpenForm();
     }
@@ -94,9 +92,8 @@ public partial class RegionsPageViewModel : PageViewModel, IDialogParticipant
     [RelayCommand(CanExecute = nameof(IsNotEditing))]
     private async Task Delete(RegionCardViewModel region)
     {
-        //EndEdit();
-        var confirmationRequest = new ConfirmDeleteRegionDialogViewModel(region.Name, region.InstancesCount);
-        var result = await _overlayService.ShowAsync(confirmationRequest);
+        var confirmationViewModel = new DeleteRegionDialogViewModel(region.Name, region.InstanceCount);
+        var result = await _overlayService.ShowAsync(confirmationViewModel);
         if (!result)
             return;
         await _regionService.RemoveAsync(region.Id!.Value);

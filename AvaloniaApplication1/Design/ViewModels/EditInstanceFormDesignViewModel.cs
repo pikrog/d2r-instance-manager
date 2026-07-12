@@ -10,9 +10,9 @@ namespace AvaloniaApplication1.Design.ViewModels;
 public class EditInstanceFormDesignViewModel : EditInstanceFormViewModel
 {
     public EditInstanceFormDesignViewModel() : base([
-        new AccountOption(Guid.NewGuid(), "user1"),
-        new AccountOption(Guid.NewGuid(), "user2"), 
-        new AccountOption(Guid.NewGuid(), "user3")
+        new AccountOption(Guid.NewGuid(), "User 1", "user1@mail.com"),
+        new AccountOption(Guid.NewGuid(), null, "user2@mail.com"), 
+        new AccountOption(Guid.NewGuid(), "User 3", "user3@mail.com")
     ],
     [
         new RegionOption(Guid.NewGuid(), "Europe"),
