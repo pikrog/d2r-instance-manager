@@ -1,8 +1,8 @@
 ﻿using System.Windows.Input;
 
-namespace AvaloniaApplication1.Overlay.Dialog.ConfirmDelete;
+namespace AvaloniaApplication1.Overlay.Dialog.Delete;
 
-public interface IConfirmDeleteActions
+public interface IDeleteDialogActions
 {
     ICommand DeleteCommand { get; }
     ICommand CancelCommand { get; }

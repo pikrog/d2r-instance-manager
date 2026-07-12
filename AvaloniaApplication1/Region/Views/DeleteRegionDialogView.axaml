@@ -3,21 +3,21 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:designViewModels="clr-namespace:AvaloniaApplication1.Design.ViewModels"
-             xmlns:local="clr-namespace:AvaloniaApplication1.Overlay.Dialog.ConfirmDelete.Region"
-             xmlns:confirmDelete="clr-namespace:AvaloniaApplication1.Overlay.Dialog.ConfirmDelete"
+             xmlns:delete="clr-namespace:AvaloniaApplication1.Overlay.Dialog.Delete"
+             xmlns:local="clr-namespace:AvaloniaApplication1.Region.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="AvaloniaApplication1.Overlay.Dialog.ConfirmDelete.Region.ConfirmDeleteRegionDialogView"
-             x:DataType="local:ConfirmDeleteRegionDialogViewModel">
+             x:Class="AvaloniaApplication1.Region.Views.DeleteRegionDialogView"
+             x:DataType="local:DeleteRegionDialogViewModel">
     <Design.DataContext>
-        <designViewModels:ConfirmDeleteRegionDialogDesignViewModel/>
+        <designViewModels:DeleteRegionDialogDesignViewModel/>
     </Design.DataContext>
     
-    <confirmDelete:ConfirmDeleteDialog Actions="{Binding}">
-        <confirmDelete:ConfirmDeleteDialog.Title>
+    <delete:DeleteDialog Actions="{Binding}">
+        <delete:DeleteDialog.Title>
             Delete region
-        </confirmDelete:ConfirmDeleteDialog.Title>
+        </delete:DeleteDialog.Title>
         
-        <confirmDelete:ConfirmDeleteDialog.Body>
+        <delete:DeleteDialog.Body>
             <StackPanel Spacing="12">
                 <TextBlock TextWrapping="Wrap" LineSpacing="4" xml:space="default">
                     <Run>Are you sure and want to delete region</Run>
@@ -30,6 +30,6 @@
                     <Run>instances.</Run>
                 </TextBlock>
             </StackPanel>
-        </confirmDelete:ConfirmDeleteDialog.Body>
-    </confirmDelete:ConfirmDeleteDialog>
+        </delete:DeleteDialog.Body>
+    </delete:DeleteDialog>
 </UserControl>

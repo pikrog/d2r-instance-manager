@@ -97,6 +97,10 @@
       <DependentUpon>Message.axaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Region\Views\DeleteRegionDialogView.axaml.cs">
+      <DependentUpon>DeleteRegionDialogView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -108,8 +112,6 @@
 
   <ItemGroup>
     <Folder Include="Engine\CommandLine\" />
-    <Folder Include="Overlay\Dialog\ConfirmDelete\Account\" />
-    <Folder Include="Overlay\Dialog\ConfirmDelete\Instance\" />
     <Folder Include="Overlay\Dialog\Quit\" />
     <Folder Include="Overlay\Dialog\SaveChanges\" />
   </ItemGroup>

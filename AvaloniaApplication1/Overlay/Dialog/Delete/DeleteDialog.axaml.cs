@@ -1,18 +1,18 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 
-namespace AvaloniaApplication1.Overlay.Dialog.ConfirmDelete;
+namespace AvaloniaApplication1.Overlay.Dialog.Delete;
 
-public partial class ConfirmDeleteDialog : UserControl
+public partial class DeleteDialog : UserControl
 {
     public static readonly StyledProperty<Control?> BodyProperty = 
-        Controls.Dialog.BodyProperty.AddOwner<ConfirmDeleteDialog>();
+        Controls.Dialog.BodyProperty.AddOwner<DeleteDialog>();
     
     public static readonly StyledProperty<string?> TitleProperty =
-        AvaloniaProperty.Register<ConfirmDeleteDialog, string?>(nameof(Title));
+        AvaloniaProperty.Register<DeleteDialog, string?>(nameof(Title));
     
-    public static readonly StyledProperty<IConfirmDeleteActions?> ActionsProperty =
-        AvaloniaProperty.Register<ConfirmDeleteDialog, IConfirmDeleteActions?>(nameof(Actions));
+    public static readonly StyledProperty<IDeleteDialogActions?> ActionsProperty =
+        AvaloniaProperty.Register<DeleteDialog, IDeleteDialogActions?>(nameof(Actions));
 
     public string? Title
     {
@@ -26,13 +26,13 @@ public partial class ConfirmDeleteDialog : UserControl
         set => SetValue(BodyProperty, value);
     }
 
-    public IConfirmDeleteActions? Actions
+    public IDeleteDialogActions? Actions
     {
         get => GetValue(ActionsProperty);
         set => SetValue(ActionsProperty, value);
     }
     
-    public ConfirmDeleteDialog()
+    public DeleteDialog()
     {
         InitializeComponent();
     }

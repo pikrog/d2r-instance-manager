@@ -3,9 +3,9 @@ using System.Windows.Input;
 using AvaloniaApplication1.Common;
 using CommunityToolkit.Mvvm.Input;
 
-namespace AvaloniaApplication1.Overlay.Dialog.ConfirmDelete;
+namespace AvaloniaApplication1.Overlay.Dialog.Delete;
 
-public abstract partial class ConfirmDeleteViewModelBase : ViewModelBase, IOverlayContent<bool>, IConfirmDeleteActions
+public abstract partial class DeleteDialogViewModelBase : ViewModelBase, IOverlayContent<bool>, IDeleteDialogActions
 {
     public Task<bool> Result => _result.Task;
     

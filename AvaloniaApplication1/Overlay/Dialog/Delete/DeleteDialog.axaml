@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="AvaloniaApplication1.Overlay.Dialog.ConfirmDelete.ConfirmDeleteDialog"
+             x:Class="AvaloniaApplication1.Overlay.Dialog.Delete.DeleteDialog"
              x:Name="Root">
     <controls:Dialog Body="{Binding #Root.Body}">
         <controls:Dialog.Header>
