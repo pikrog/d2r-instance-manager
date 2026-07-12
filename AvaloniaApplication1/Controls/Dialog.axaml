@@ -6,7 +6,7 @@
              x:Class="AvaloniaApplication1.Controls.Dialog"
              x:Name="Root">
     <Border Classes="hovering rounded outlined" 
-            Padding="12" MinWidth="300" MinHeight="150"
+            Margin="12" Padding="12" MinWidth="300" MinHeight="150"
             HorizontalAlignment="Center" VerticalAlignment="Center" Background="{DynamicResource PrimaryBackground}">
         <DockPanel>
             <ContentControl DockPanel.Dock="Bottom" Margin="0 24 0 0"  HorizontalAlignment="Right" Content="{Binding #Root.Footer}"/>
