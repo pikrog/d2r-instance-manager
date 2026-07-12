@@ -6,15 +6,19 @@ namespace AvaloniaApplication1.Region.ViewModels;
 
 public partial class RegionCardViewModel : CardViewModel
 {
-    public RegionCardViewModel(Guid? id, string name, string address, int instancesCount)
+    public RegionCardViewModel(Guid? id, string name, string address, int instanceCount)
     {
         Id = id;
         Name = name;
         Address = address;
-        InstancesCount = instancesCount;
+        InstanceCount = instanceCount;
     }
 
-    public RegionCardViewModel() { }
+    public RegionCardViewModel()
+    {
+        Name = string.Empty;
+        Address = string.Empty;
+    }
 
     [ObservableProperty]
     public partial EditRegionFormViewModel? EditForm { get; private set; }
@@ -28,7 +32,7 @@ public partial class RegionCardViewModel : CardViewModel
     public partial string Address { get; set; }
 
     [ObservableProperty] 
-    public partial int InstancesCount { get; set; }
+    public partial int InstanceCount { get; set; }
 
     public void OpenForm()
     {
