@@ -11,11 +11,11 @@ public abstract partial class DeleteDialogViewModelBase : ViewModelBase, IOverla
     
     private readonly TaskCompletionSource<bool> _result = new();
     
-    private void Confirm() => _result.SetResult(true);
+    private void Delete() => _result.SetResult(true);
     
     private void Cancel() => _result.SetResult(false);
 
-    public ICommand DeleteCommand => new RelayCommand(Confirm);
+    public ICommand DeleteCommand => new RelayCommand(Delete);
     
     public ICommand CancelCommand => new RelayCommand(Cancel);
 }
