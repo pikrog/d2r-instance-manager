@@ -6,6 +6,7 @@ using AvaloniaApplication1.Card;
 using AvaloniaApplication1.Card.ViewModels;
 using AvaloniaApplication1.Dialog;
 using AvaloniaApplication1.Overlay;
+using AvaloniaApplication1.Overlay.Dialog.DiscardChanges;
 using AvaloniaApplication1.Page;
 using AvaloniaApplication1.Region.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -110,6 +111,24 @@ public partial class RegionsPageViewModel : PageViewModel, IDialogParticipant
         EditedCard = null;
     }
 
-    public override void OnEnter() => Refresh();
-    public override bool OnLeave() => true;
+    public override Task OnEnterAsync()
+    {
+        Refresh();
+        return Task.CompletedTask;
+    }
+    
+    public override async Task<bool> CanLeaveAsync()
+    {
+        if (EditedCard is null)
+            return true;
+
+        var confirmationViewModel = new DiscardChangesDialogViewModel();
+        return await _overlayService.ShowAsync(confirmationViewModel);
+    }
+
+    public override Task OnLeaveAsync()
+    {
+        EndEdit();
+        return Task.CompletedTask;
+    }
 }

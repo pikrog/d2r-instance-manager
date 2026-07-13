@@ -1,0 +1,35 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
+             xmlns:local="clr-namespace:AvaloniaApplication1.Overlay.Dialog.DiscardChanges"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AvaloniaApplication1.Overlay.Dialog.DiscardChanges.DiscardChangesDialogView"
+             x:DataType="local:DiscardChangesDialogViewModel"
+             x:Name="Root">
+    <controls:Dialog>
+        <controls:Dialog.Header>
+            <TextBlock Classes="h1" TextWrapping="Wrap">Leave page</TextBlock>
+        </controls:Dialog.Header>
+        
+        <controls:Dialog.Body>
+            <StackPanel Orientation="Vertical" Spacing="12"> <!--todo: paragraph spacing resource-->
+                <TextBlock TextWrapping="Wrap">Are you sure and want to navigate to another page?</TextBlock>
+                <TextBlock TextWrapping="Wrap">Any unsaved changes will be lost.</TextBlock>
+            </StackPanel>
+        </controls:Dialog.Body>
+
+        <controls:Dialog.Footer> <!--todo: button strip spacing-->
+            <StackPanel DockPanel.Dock="Bottom" Spacing="8"
+                        Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Classes="neutral" IsCancel="True" Command="{Binding CancelCommand}">
+                    Cancel
+                </Button>
+                <Button Classes="danger" IsDefault="True" Command="{Binding DiscardChangesCommand}">
+                    Discard changes
+                </Button>
+            </StackPanel>
+        </controls:Dialog.Footer>
+    </controls:Dialog>
+</UserControl>

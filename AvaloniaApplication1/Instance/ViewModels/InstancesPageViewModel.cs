@@ -182,7 +182,9 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         _gameInstanceService.Show(instance.Id);
     }
 
-    public override void OnEnter() => Refresh();
-
-    public override bool OnLeave() => true;
+    public override Task OnEnterAsync()
+    {
+        Refresh();
+        return Task.CompletedTask;
+    }
 }

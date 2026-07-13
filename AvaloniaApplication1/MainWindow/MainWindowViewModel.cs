@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using AvaloniaApplication1.Common;
 using AvaloniaApplication1.Dialog;
 using AvaloniaApplication1.Instance.ViewModels;
@@ -48,11 +49,14 @@ public partial class MainWindowViewModel : ViewModelBase, IDialogParticipant
     }
 
     [RelayCommand]
-    private void SetPage(PageViewModel page)
+    private async Task SetPage(PageViewModel page)
     {
-        if (!CurrentPage.OnLeave())
+        if (CurrentPage == page)
             return;
+        if (!await CurrentPage.CanLeaveAsync())
+            return;
+        await CurrentPage.OnLeaveAsync();
         CurrentPage = page;
-        CurrentPage.OnEnter();
+        await CurrentPage.OnEnterAsync();
     }
 }

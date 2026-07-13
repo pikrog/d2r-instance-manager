@@ -73,7 +73,11 @@ public partial class GlobalSettingsPageViewModel : PageViewModel, IDialogPartici
             GameExecutablePath = path;
     }
 
-    public override void OnEnter() => Refresh();
-
-    public override bool OnLeave() => true;
+    public override Task OnEnterAsync()
+    {
+        Refresh();
+        return Task.CompletedTask;
+    }
+    
+    public override async Task OnLeaveAsync() => await SaveAsync(); // todo: publish save request to some serialization service
 }

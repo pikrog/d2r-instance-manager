@@ -39,7 +39,7 @@
                             </StackPanel>
                         </Border>
                         <ScrollViewer>
-                            <StackPanel Orientation="Vertical" Margin="10 20">
+                            <StackPanel Orientation="Vertical" Margin="10 20"> <!--todo: check tab only if the associated page is active-->
                                 <RadioButton Classes="nav-tab" Command="{Binding SetPageCommand}" 
                                              CommandParameter="{Binding InstancesPageViewModel}" 
                                              IsChecked="True">

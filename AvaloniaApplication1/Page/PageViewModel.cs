@@ -1,10 +1,13 @@
-﻿using AvaloniaApplication1.Common;
+﻿using System.Threading.Tasks;
+using AvaloniaApplication1.Common;
 
 namespace AvaloniaApplication1.Page;
 
 public abstract class PageViewModel : ViewModelBase
 {
-    public abstract void OnEnter();
+    public virtual Task OnEnterAsync() => Task.CompletedTask;
 
-    public abstract bool OnLeave();
+    public virtual Task OnLeaveAsync() => Task.CompletedTask;
+    
+    public virtual Task<bool> CanLeaveAsync() => Task.FromResult(true);
 }
