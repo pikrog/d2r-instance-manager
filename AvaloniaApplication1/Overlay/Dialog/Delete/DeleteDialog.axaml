@@ -18,7 +18,7 @@
                     Cancel
                 </Button>
                 <Button Classes="danger" IsDefault="True" Command="{Binding #Root.Actions.DeleteCommand}">
-                    <TextBlock Text="Delete" />
+                    Delete
                 </Button>
             </StackPanel>
         </controls:Dialog.Footer>
