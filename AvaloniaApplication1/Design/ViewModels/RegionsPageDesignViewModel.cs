@@ -7,7 +7,7 @@ public sealed class RegionsPageDesignViewModel : RegionsPageViewModel
 {
     public RegionsPageDesignViewModel() : base(DesignServices.RegionService, DesignServices.OverlayService)
     {
-        OnEnter();
+        Refresh();
         EditCommand.Execute(Cards[2]);
     }
 }
