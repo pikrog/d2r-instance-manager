@@ -40,7 +40,11 @@ public partial class MainWindowViewModel : ViewModelBase, IDialogParticipant
         OverlayHost = overlayHost;
 
         CurrentPage = InstancesPageViewModel;
-        CurrentPage.OnEnter();
+    }
+
+    public async Task SetupAsync()
+    {
+        await CurrentPage.OnEnterAsync();
     }
 
     [RelayCommand]

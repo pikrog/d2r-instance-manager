@@ -31,13 +31,15 @@ namespace AvaloniaApplication1
                 await Dispatcher.UIThread.InvokeAsync(() => initialWindow.ProgressBar.Opacity = 1);
                 
                 Services = await AppBootstrapper.BootstrapAsync();
-                //await Task.Delay(1000);
+                
+                var mainWindowViewModel = Services.GetRequiredService<MainWindowViewModel>();
+                await mainWindowViewModel.SetupAsync();
                 
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
                     desktop.MainWindow = new MainWindowView
                     {
-                        DataContext = Services.GetRequiredService<MainWindowViewModel>(),
+                        DataContext = mainWindowViewModel
                     };
                     desktop.MainWindow.Show();
                     initialWindow.Close();
