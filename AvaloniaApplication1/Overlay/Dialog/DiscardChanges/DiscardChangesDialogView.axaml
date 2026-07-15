@@ -10,19 +10,18 @@
              x:Name="Root">
     <controls:Dialog>
         <controls:Dialog.Header>
-            <TextBlock Classes="h1" TextWrapping="Wrap">Discard Changes?</TextBlock>
+            <TextBlock Classes="h1">Discard Changes?</TextBlock>
         </controls:Dialog.Header>
         
         <controls:Dialog.Body>
-            <StackPanel Orientation="Vertical" Spacing="12"> <!--todo: paragraph spacing resource-->
-                <TextBlock TextWrapping="Wrap">You have unsaved changes.</TextBlock>
-                <TextBlock TextWrapping="Wrap">If you leave this page, your changes will be lost.</TextBlock>
+            <StackPanel Classes="dialog-text">
+                <TextBlock Classes="paragraph">You have unsaved changes.</TextBlock>
+                <TextBlock Classes="paragraph">If you leave this page, your changes will be lost.</TextBlock>
             </StackPanel>
         </controls:Dialog.Body>
 
-        <controls:Dialog.Footer> <!--todo: button strip spacing-->
-            <StackPanel DockPanel.Dock="Bottom" Spacing="8"
-                        Orientation="Horizontal" HorizontalAlignment="Right">
+        <controls:Dialog.Footer>
+            <StackPanel Classes="dialog-actions">
                 <Button Classes="neutral" IsCancel="True" Command="{Binding CancelCommand}">
                     Stay
                 </Button>

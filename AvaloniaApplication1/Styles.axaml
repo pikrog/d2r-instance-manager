@@ -15,6 +15,21 @@
         <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}"/>
     </Style>
     
+    <Style Selector="TextBlock.paragraph">
+        <Setter Property="LineSpacing" Value="4" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+    
+    <Style Selector="StackPanel.dialog-text">
+        <Setter Property="Spacing" Value="12" />
+    </Style>
+    
+    <Style Selector="StackPanel.dialog-actions">
+        <Setter Property="Orientation" Value="Horizontal" />
+        <Setter Property="Spacing" Value="8" />
+        <Setter Property="HorizontalAlignment" Value="Right" />
+    </Style>
+    
     <Style Selector="TextBlock.h1">
         <Setter Property="FontSize" Value="18" />
         <Setter Property="FontWeight" Value="Bold" />

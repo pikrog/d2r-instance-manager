@@ -18,8 +18,8 @@
         </delete:DeleteDialog.Title>
         
         <delete:DeleteDialog.Body>
-            <StackPanel Spacing="12">
-                <TextBlock TextWrapping="Wrap" LineSpacing="4" xml:space="default">
+            <StackPanel Classes="dialog-text">
+                <TextBlock Classes="paragraph">
                     <Run>Are you sure you want to delete the instance </Run>
                     <Run FontWeight="Bold" Text="{Binding InstanceName}" /><Run>?</Run>
                 </TextBlock>
