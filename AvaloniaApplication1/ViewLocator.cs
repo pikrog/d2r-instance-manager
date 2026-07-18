@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
+using Avalonia.Media;
 using AvaloniaApplication1.Common;
 
 namespace AvaloniaApplication1;
@@ -19,34 +21,29 @@ public partial class ViewLocator : IDataTemplate
         if (param is null)
             return null;
 
-        var name = param.GetType().FullName!
-            .Replace("Design.", "", StringComparison.Ordinal)
-            .Replace("DesignViewModel", "ViewModel", StringComparison.Ordinal)
-            .Replace("ViewModel", "View", StringComparison.Ordinal);
-        
-        /*var lastDot = name.LastIndexOf('.');
-        var baseViewName = name[(lastDot + 1)..];
-        
-        const string viewsSubPath = ".Views";
-        var baseNamespaceLength = name.IndexOf(viewsSubPath, StringComparison.Ordinal) + viewsSubPath.Length;
-        var baseNamespace = name[..baseNamespaceLength];
-        var fullViewName = $"{baseNamespace}.{baseViewName}";*/
-            
-        var type = Type.GetType(name);
+        var viewModelType = param.GetType();
 
-        if (type != null)
+        while (viewModelType is not null 
+               && viewModelType.IsAssignableTo(typeof(ViewModelBase))
+               && viewModelType != typeof(ViewModelBase))
         {
-            return (Control)Activator.CreateInstance(type)!;
+            var viewName = viewModelType.FullName!.Replace("ViewModel", "View", StringComparison.Ordinal);
+            
+            var viewType = Type.GetType(viewName);
+
+            if (viewType is not null)
+            {
+                return (Control)Activator.CreateInstance(viewType)!;
+            }
+            
+            viewModelType = viewModelType.BaseType;
         }
 
-        return new TextBlock { Text = "Not Found: " + name };
+        return new TextBlock { Text = $"View not found for {param.GetType().FullName}", TextWrapping = TextWrapping.Wrap};
     }
 
     public bool Match(object? data)
     {
         return data is ViewModelBase;
     }
-
-    /*[GeneratedRegex(@"Views\.(.+\.).+View")]
-    private static partial Regex ViewsSubPathRegex { get; }*/
 }
