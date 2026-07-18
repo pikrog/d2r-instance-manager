@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using AvaloniaApplication1.Design.Services;
 using AvaloniaApplication1.Instance.Models;
 using AvaloniaApplication1.Instance.ViewModels;
@@ -14,6 +15,11 @@ public class InstancesPageDesignViewModel : InstancesPageViewModel
         DesignServices.DisplayService,
         DesignServices.OverlayService)
     {
+        AddDesignInstances();
+    }
+
+    private void AddDesignInstances()
+    {
         Instances.Clear();
         
         Instances.AddRange([
@@ -23,5 +29,11 @@ public class InstancesPageDesignViewModel : InstancesPageViewModel
             new GameInstanceTableRow(Guid.NewGuid(), "Mule [EU]", GameInstanceStatus.QueuedForStart, false),
             new GameInstanceTableRow(Guid.NewGuid(), "Mule [US]", GameInstanceStatus.Inactive, false),
         ]);
+    }
+
+    public override Task OnEnterAsync()
+    {
+        AddDesignInstances();
+        return Task.CompletedTask;
     }
 }
