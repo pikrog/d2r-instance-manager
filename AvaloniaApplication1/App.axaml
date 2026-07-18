@@ -19,6 +19,8 @@
                     
                     <SolidColorBrush x:Key="SecondaryForeground">#666666</SolidColorBrush>
                     
+                    <SolidColorBrush x:Key="AccentSecondaryBackground">LightBlue</SolidColorBrush>
+                    
                     <SolidColorBrush x:Key="DangerBackground">#E87A70</SolidColorBrush>
                     <SolidColorBrush x:Key="DangerHoverBackground">#E1645C</SolidColorBrush>
                     <SolidColorBrush x:Key="DangerPressedBackground">#D94D49</SolidColorBrush>
@@ -36,6 +38,8 @@
                     <SolidColorBrush x:Key="PrimaryHoverBackground" Opacity="0.05" Color="White" />
                     
                     <SolidColorBrush x:Key="SecondaryForeground">#999999</SolidColorBrush>
+                    
+                    <SolidColorBrush x:Key="AccentSecondaryBackground">DarkBlue</SolidColorBrush>
                     
                     <SolidColorBrush x:Key="DangerBackground">#D13438</SolidColorBrush>
                     <SolidColorBrush x:Key="DangerHoverBackground">#E74856</SolidColorBrush>
@@ -75,5 +79,6 @@
         <StyleInclude Source="/Controls/HotkeyBox.axaml" />
         <StyleInclude Source="/Card/Views/Card.axaml" />
         <StyleInclude Source="/Controls/Spinner.axaml" />
+        <StyleInclude Source="/Controls/NavTab.axaml" />
     </Application.Styles>
 </Application>

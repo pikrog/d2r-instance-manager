@@ -5,6 +5,7 @@
         xmlns:designViewModels="using:AvaloniaApplication1.Design.ViewModels"
         xmlns:dialog="clr-namespace:AvaloniaApplication1.Dialog"
         xmlns:mainWindow="clr-namespace:AvaloniaApplication1.MainWindow"
+        xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
         mc:Ignorable="d" 
         d:DesignWidth="900" d:DesignHeight="600"
         Width="900" Height="600"
@@ -39,46 +40,54 @@
                             </StackPanel>
                         </Border>
                         <ScrollViewer>
-                            <StackPanel Orientation="Vertical" Margin="10 20"> <!--todo: check tab only if the associated page is active-->
-                                <RadioButton Classes="nav-tab" Command="{Binding SetPageCommand}" 
-                                             CommandParameter="{Binding InstancesPageViewModel}" 
-                                             IsChecked="True">
-                                    <StackPanel Orientation="Vertical" Spacing="6">
-                                        <Image Source="{SvgImage /Assets/images/play.svg}" Width="24"/>
-                                        <TextBlock HorizontalAlignment="Center">Instances</TextBlock>
-                                    </StackPanel>
-                                </RadioButton>
-                                <RadioButton Classes="nav-tab" Command="{Binding SetPageCommand}" 
-                                             CommandParameter="{Binding AccountsPageViewModel}">
-                                    <StackPanel Orientation="Vertical" Spacing="6">
-                                        <Image Source="{SvgImage /Assets/images/user.svg}" Width="24"/>
-                                        <TextBlock HorizontalAlignment="Center">Accounts</TextBlock>
-                                    </StackPanel>
-                                </RadioButton>
-                                <RadioButton Classes="nav-tab" Command="{Binding SetPageCommand}" CommandParameter="{Binding RegionsPageViewModel}">
-                                    <StackPanel Orientation="Vertical" Spacing="6">
-                                        <Image Source="{SvgImage /Assets/images/globe.svg}" Width="24"/>
-                                        <TextBlock HorizontalAlignment="Center">Regions</TextBlock>
-                                    </StackPanel>
-                                </RadioButton>
-                                <!--<RadioButton Classes="nav-tab" Command="{Binding SetPageCommand}">
-                                    <StackPanel Orientation="Vertical" Spacing="6">
-                                        <Image Source="{SvgImage /Assets/images/globe.svg}" Width="32"/>
-                                        <TextBlock HorizontalAlignment="Center">Game config files</TextBlock>
-                                    </StackPanel>
-                                </RadioButton>-->
-                                <RadioButton Classes="nav-tab"> <!--Command="{Binding SetPageCommand}"-->
-                                    <StackPanel Orientation="Vertical" Spacing="6">
-                                        <Image Source="{SvgImage /Assets/images/book.svg}" Width="24"/>
-                                        <TextBlock HorizontalAlignment="Center">Logs</TextBlock>
-                                    </StackPanel>
-                                </RadioButton>
-                                <RadioButton Classes="nav-tab" Command="{Binding SetPageCommand}" CommandParameter="{Binding GlobalSettingsPageViewModel}">
-                                    <StackPanel Orientation="Vertical" Spacing="6">
-                                        <Image Source="{SvgImage /Assets/images/settings.svg}" Width="24"/>
-                                        <TextBlock HorizontalAlignment="Center">Global settings</TextBlock>
-                                    </StackPanel>
-                                </RadioButton>
+                            <StackPanel Orientation="Vertical" Margin="10 20">
+                                <controls:NavTab Icon="{SvgImage /Assets/images/play.svg}"
+                                                 Command="{Binding SetPageCommand}"
+                                                 CommandParameter="{Binding InstancesPageViewModel}">
+                                    <controls:NavTab.IsActive>
+                                        <MultiBinding Converter="{StaticResource ReferenceEqualsConverter}">
+                                            <Binding Path="CurrentPage" />
+                                            <Binding Path="InstancesPageViewModel" />
+                                        </MultiBinding>
+                                    </controls:NavTab.IsActive>
+                                    Instances
+                                </controls:NavTab>
+                                <controls:NavTab Icon="{SvgImage /Assets/images/user.svg}"
+                                                 Command="{Binding SetPageCommand}" 
+                                                 CommandParameter="{Binding AccountsPageViewModel}">
+                                    <controls:NavTab.IsActive>
+                                        <MultiBinding Converter="{StaticResource ReferenceEqualsConverter}">
+                                            <Binding Path="CurrentPage" />
+                                            <Binding Path="AccountsPageViewModel" />
+                                        </MultiBinding>
+                                    </controls:NavTab.IsActive>
+                                    Accounts
+                                </controls:NavTab>
+                                <controls:NavTab Icon="{SvgImage /Assets/images/globe.svg}" 
+                                                 Command="{Binding SetPageCommand}" 
+                                                 CommandParameter="{Binding RegionsPageViewModel}">
+                                    <controls:NavTab.IsActive>
+                                        <MultiBinding Converter="{StaticResource ReferenceEqualsConverter}">
+                                            <Binding Path="CurrentPage" />
+                                            <Binding Path="RegionsPageViewModel" />
+                                        </MultiBinding>
+                                    </controls:NavTab.IsActive>
+                                    Regions
+                                </controls:NavTab>
+                                <controls:NavTab Icon="{SvgImage /Assets/images/book.svg}"> <!--todo: implement logs-->
+                                    Logs
+                                </controls:NavTab>
+                                <controls:NavTab Icon="{SvgImage /Assets/images/settings.svg}" 
+                                                 Command="{Binding SetPageCommand}" 
+                                                 CommandParameter="{Binding GlobalSettingsPageViewModel}">
+                                    <controls:NavTab.IsActive>
+                                        <MultiBinding Converter="{StaticResource ReferenceEqualsConverter}">
+                                            <Binding Path="CurrentPage" />
+                                            <Binding Path="GlobalSettingsPageViewModel" />
+                                        </MultiBinding>
+                                    </controls:NavTab.IsActive>
+                                    Global settings
+                                </controls:NavTab>
                             </StackPanel>
                         </ScrollViewer>
                     </DockPanel>

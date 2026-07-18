@@ -1,0 +1,42 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:AvaloniaApplication1.Controls">
+    <Design.PreviewWith>
+        <StackPanel Margin="10" Width="120" Height="240">
+        <controls:NavTab Icon="{SvgImage /Assets/images/user.svg}" IsActive="True">Accounts</controls:NavTab>
+        <controls:NavTab Icon="{SvgImage /Assets/images/globe.svg}">Regions</controls:NavTab>
+        </StackPanel>
+    </Design.PreviewWith>
+
+    <Style Selector="controls|NavTab">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border Name="PART_Background" Classes="rounded" Padding="2,16" Background="Transparent">
+                    <StackPanel Spacing="6">
+                        <Image Classes="icon" HorizontalAlignment="Center" Source="{TemplateBinding Icon}" />
+                        <ContentPresenter HorizontalAlignment="Center" Content="{TemplateBinding Content}" />
+                    </StackPanel>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+    
+    <Style Selector="controls|NavTab Image.icon">
+        <Setter Property="Height" Value="24" />
+    </Style>
+    
+    <Style Selector="controls|NavTab:active /template/ Border#PART_Background">
+        <Setter Property="Background" Value="{DynamicResource AccentSecondaryBackground}" />
+        <Setter Property="BoxShadow" Value="inset 0 1 3 0 #80000000" />
+    </Style>
+
+    <Style Selector="controls|NavTab:pointerover:not(:active) /template/ Border#PART_Background">
+        <Setter Property="Background" Value="{DynamicResource PrimaryHoverBackground}" />
+    </Style>
+
+    <Style Selector="controls|NavTab:pressed /template/ Border#PART_Background">
+        <Setter Property="Background" Value="{DynamicResource ButtonBackgroundPressed}" />
+        <Setter Property="BoxShadow" Value="inset 0 1 3 0 #80000000" />
+    </Style>
+    
+</Styles>
