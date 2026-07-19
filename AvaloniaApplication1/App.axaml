@@ -63,9 +63,6 @@
             <converters:ReferenceEqualsConverter x:Key="ReferenceEqualsConverter" />
             <converters:ReferenceNotEqualsConverter x:Key="ReferenceNotEqualsConverter" />
             <converters:ReferenceNotNullAndNotEqualsConverter x:Key="ReferenceNotNullAndNotEqualsConverter" />
-            <converters1:GameInstanceStatusToBorderBrushConverter x:Key="GameInstanceStatusToBorderBrushConverter" />
-            <converters1:GameInstanceStatusToBackgroundConverter x:Key="GameInstanceStatusToBackgroundConverter" />
-            <converters1:GameInstanceStatusToSpinnerOpacityConverter x:Key="GameInstanceStatusToSpinnerOpacityConverter" />
             <converters:CollectionIsEmptyConverter x:Key="CollectionIsEmptyConverter" />
         </ResourceDictionary>
     </Application.Resources>

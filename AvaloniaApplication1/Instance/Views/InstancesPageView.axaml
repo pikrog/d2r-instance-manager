@@ -7,6 +7,7 @@
              xmlns:instance1="clr-namespace:AvaloniaApplication1.Instance.ViewModels"
              xmlns:models="clr-namespace:AvaloniaApplication1.Instance.Models"
              xmlns:dialog="clr-namespace:AvaloniaApplication1.Dialog"
+             xmlns:converters="clr-namespace:AvaloniaApplication1.Instance.Views.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Name="Root"
              x:Class="AvaloniaApplication1.Instance.Views.InstancesPageView"
@@ -15,6 +16,12 @@
     <Design.DataContext>
         <designViewModels:InstancesPageDesignViewModel />
     </Design.DataContext>
+    
+    <UserControl.Resources>
+        <converters:GameInstanceStatusToBorderBrushConverter x:Key="GameInstanceStatusToBorderBrushConverter" />
+        <converters:GameInstanceStatusToBackgroundConverter x:Key="GameInstanceStatusToBackgroundConverter" />
+        <converters:GameInstanceStatusToSpinnerOpacityConverter x:Key="GameInstanceStatusToSpinnerOpacityConverter" />
+    </UserControl.Resources>
 
     <UserControl.Styles>
         <Style Selector="ItemsControl.table > ContentPresenter:nth-child(2n)">
