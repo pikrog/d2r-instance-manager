@@ -22,10 +22,10 @@
 
         <controls:Dialog.Footer>
             <StackPanel Classes="dialog-actions">
-                <Button Classes="neutral" IsCancel="True" Command="{Binding CancelCommand}">
+                <Button Classes="dialog-action neutral" IsCancel="True" Command="{Binding CancelCommand}">
                     Stay
                 </Button>
-                <Button Classes="danger" IsDefault="True" Command="{Binding DiscardChangesCommand}">
+                <Button Classes="dialog-action danger" IsDefault="True" Command="{Binding DiscardChangesCommand}">
                     Discard changes
                 </Button>
             </StackPanel>

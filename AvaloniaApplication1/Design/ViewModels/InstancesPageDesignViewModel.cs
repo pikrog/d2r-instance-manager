@@ -4,6 +4,7 @@ using AvaloniaApplication1.Design.Services;
 using AvaloniaApplication1.Instance.Models;
 using AvaloniaApplication1.Instance.ViewModels;
 using DynamicData;
+using GameInstanceItemViewModel = AvaloniaApplication1.Instance.ViewModels.GameInstanceItemViewModel;
 
 namespace AvaloniaApplication1.Design.ViewModels;
 
@@ -23,11 +24,11 @@ public class InstancesPageDesignViewModel : InstancesPageViewModel
         Instances.Clear();
         
         Instances.AddRange([
-            new GameInstanceTableRow(Guid.NewGuid(), "Main", GameInstanceStatus.Running, true),
-            new GameInstanceTableRow(Guid.NewGuid(), "Battle Orders", GameInstanceStatus.Starting, true),
-            new GameInstanceTableRow(Guid.NewGuid(), "Enchant", GameInstanceStatus.Failed, false),
-            new GameInstanceTableRow(Guid.NewGuid(), "Mule [EU]", GameInstanceStatus.QueuedForStart, false),
-            new GameInstanceTableRow(Guid.NewGuid(), "Mule [US]", GameInstanceStatus.Inactive, false),
+            new GameInstanceItemViewModel(Guid.NewGuid(), "Main", GameInstanceStatus.Running, true),
+            new GameInstanceItemViewModel(Guid.NewGuid(), "Battle Orders", GameInstanceStatus.Starting, true),
+            new GameInstanceItemViewModel(Guid.NewGuid(), "Enchant", GameInstanceStatus.Failed, false),
+            new GameInstanceItemViewModel(Guid.NewGuid(), "Mule [EU]", GameInstanceStatus.QueuedForStart, false),
+            new GameInstanceItemViewModel(Guid.NewGuid(), "Mule [US]", GameInstanceStatus.Inactive, false),
         ]);
     }
 

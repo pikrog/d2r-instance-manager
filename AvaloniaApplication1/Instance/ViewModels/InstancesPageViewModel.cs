@@ -29,16 +29,7 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
     
     private readonly OverlayService _overlayService;
 
-    public ObservableCollection<GameInstanceTableRow> Instances { get; } = [];
-    
-    [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(EditCommand), nameof(DeleteCommand), nameof(LaunchCommand))]
-    public partial GameInstanceTableRow? SelectedInstance { get; set; }
-
-    public ObservableCollection<GameInstanceTableRow> SelectedInstances { get; set; } = [];
-
-    [MemberNotNullWhen(true, nameof(SelectedInstance))] // todo? remove
-    public bool IsInstanceSelected => SelectedInstance is not null;
+    public ObservableCollection<GameInstanceItemViewModel> Instances { get; } = [];
 
     public bool IsTableEmpty => Instances.Count == 0;
 
@@ -59,27 +50,31 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
 
     private void OnInstanceStateChanged(Guid id)
     {
-        Dispatcher.UIThread.Post(() => RefreshRow(id));
+        Dispatcher.UIThread.Post(() => RefreshItem(id));
     }
 
-    private void RefreshRow(Guid id)
+    private void RefreshItem(Guid id)
     {
-        var (targetRowId, targetRow) = Instances.Index().SingleOrDefault(r => r.Item.Id == id);
-        if (targetRow is null)
+        var (_, item) = Instances.Index().SingleOrDefault(r => r.Item.Id == id);
+        if (item is null)
         {
             Refresh();
             return;
         }
         
-        var newRow = _gameInstanceService.GetTableRow(id);
-        Instances[targetRowId] = newRow;
+        var summary = _gameInstanceService.GetSummary(id);
+        item.Id = summary.Id;
+        item.Name = summary.Name;
+        item.Status = summary.Status;
+        item.IsActive = summary.IsActive;
     }
 
     private void Refresh()
     {
         Instances.Clear();
-        var table = _gameInstanceService.GetTable();
-        Instances.AddRange(table);
+        var instances = _gameInstanceService.GetSummaries()
+            .Select(s => new GameInstanceItemViewModel(s.Id, s.Name, s.Status, s.IsActive));
+        Instances.AddRange(instances);
     }
 
     private async Task<EditInstanceFormViewModel> CreateForm(GameInstanceSnapshot? snapshot = null)
@@ -147,14 +142,14 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
     }
     
     [RelayCommand]
-    private async Task Edit(GameInstanceTableRow instance)
+    private async Task Edit(GameInstanceItemViewModel instance)
     {
         var snapshot = _gameInstanceService.GetInstanceConfigSnapshot(instance.Id);
         await CoreEdit(snapshot);
     }
     
     [RelayCommand]
-    private async Task Delete(GameInstanceTableRow instance)
+    private async Task Delete(GameInstanceItemViewModel instance)
     {
         var confirmationViewModel = new DeleteInstanceDialogViewModel(instance.Name);
         var result = await _overlayService.ShowAsync(confirmationViewModel);
@@ -165,19 +160,19 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
     }
 
     [RelayCommand]
-    private async Task Launch(GameInstanceTableRow instance)
+    private async Task Launch(GameInstanceItemViewModel instance)
     {
         await _gameInstanceService.LaunchAsync(instance.Id);
     }
 
     [RelayCommand]
-    private async Task Stop(GameInstanceTableRow instance)
+    private async Task Stop(GameInstanceItemViewModel instance)
     {
         await _gameInstanceService.StopAsync(instance.Id);
     }
 
     [RelayCommand]
-    private void Show(GameInstanceTableRow instance)
+    private void Show(GameInstanceItemViewModel instance)
     {
         _gameInstanceService.Show(instance.Id);
     }

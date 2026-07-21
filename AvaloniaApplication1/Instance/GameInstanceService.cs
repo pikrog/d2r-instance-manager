@@ -78,15 +78,15 @@ public class GameInstanceService(ConfigService configService, GameInstanceManage
     }
     
 
-    public GameInstanceTableRow GetTableRow(Guid id)
+    public GameInstanceSummary GetSummary(Guid id)
     {
         var configSnapshot = GetInstanceConfigSnapshot(id);
         var runtimeSnapshot = GetInstanceRuntimeSnapshot(id);
         var status = GameInstanceStatusMapper.Map(runtimeSnapshot);
-        return new GameInstanceTableRow(id, configSnapshot.Name, status, runtimeSnapshot.IsActive);
+        return new GameInstanceSummary(id, configSnapshot.Name, status, runtimeSnapshot.IsActive);
     }
 
-    public IReadOnlyList<GameInstanceTableRow> GetTable()
+    public IReadOnlyList<GameInstanceSummary> GetSummaries()
     {
         var instances = gameInstanceManager.GetAllRuntimeStates().ToDictionary(i => i.Id);
         return configService.Config.GetAllInstances().Select(i =>
@@ -96,7 +96,7 @@ public class GameInstanceService(ConfigService configService, GameInstanceManage
                     ? GameInstanceStatusMapper.Map(runtimeSnapshot) 
                     : GameInstanceStatus.Unknown; // todo: throw or ignore?
                 var isActive = runtimeSnapshot?.IsActive ?? false; // ?
-                return new GameInstanceTableRow(i.Id, i.Name, status, isActive);
+                return new GameInstanceSummary(i.Id, i.Name, status, isActive);
             }).ToList();
     }
 

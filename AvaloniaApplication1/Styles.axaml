@@ -72,28 +72,128 @@
         <Setter Property="CornerRadius" Value="{StaticResource CornerRadius}" />
     </Style>
     
-    <Style Selector="Button.action">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Padding" Value="4" />
-        <Setter Property="Height" Value="36" />
+    <Style Selector="Button.dialog-action">
+        <Setter Property="BorderThickness" Value="0.5" />
     </Style>
 
     <Style Selector="Button.danger">
-        <Setter Property="Background" Value="{DynamicResource DangerBackground}"/>
+        <Setter Property="Background" Value="{DynamicResource DangerBackground}" />
+        <Setter Property="Foreground" Value="{DynamicResource DangerContent}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource DangerOutline}" />
     </Style>
 
     <Style Selector="Button.danger:pointerover /template/ ContentPresenter#PART_ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource DangerHoverBackground}"/>
+        <Setter Property="Foreground" Value="{DynamicResource DangerContent}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource DangerOutline}" />
     </Style>
 
     <Style Selector="Button.danger:pressed /template/ ContentPresenter#PART_ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource DangerPressedBackground}"/>
+        <Setter Property="Foreground" Value="{DynamicResource DangerContent}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource DangerOutline}" />
+    </Style>
+
+    <Style Selector="Button.success">
+        <Setter Property="Background" Value="{DynamicResource SuccessBackground}" />
+        <Setter Property="Foreground" Value="{DynamicResource SuccessContent}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource SuccessOutline}" />
+    </Style>
+
+    <Style Selector="Button.success:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource SuccessHoverBackground}"/>
+        <Setter Property="Foreground" Value="{DynamicResource SuccessContent}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource SuccessOutline}" />
+    </Style>
+
+    <Style Selector="Button.success:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource SuccessPressedBackground}"/>
+        <Setter Property="Foreground" Value="{DynamicResource SuccessContent}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource SuccessOutline}" />
     </Style>
 
     <Style Selector="Button.neutral">
+        <!-- <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}" /> -->
         <Setter Property="Background" Value="{DynamicResource PrimaryBackground}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource Outline}" />
-        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="{DynamicResource PrimaryOutline}" />
+    </Style>
+
+    <Style Selector="Button.neutral:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <!-- <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}" /> -->
+        <!-- <Setter Property="Background" Value="{DynamicResource PrimaryHoverBackground}"/> -->
+        <Setter Property="BorderBrush" Value="{DynamicResource PrimaryOutline}" />
+    </Style>
+
+    <Style Selector="Button.neutral:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <!-- <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}" /> -->
+        <!-- <Setter Property="Background" Value="{DynamicResource ButtonBackgroundPressed}"/> -->
+        <Setter Property="BorderBrush" Value="{DynamicResource PrimaryOutline}" />
+    </Style>
+    
+    <Style Selector="Button.action">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="Height" Value="36" />
+        <Setter Property="BorderThickness" Value="0" />
+    </Style>
+    
+    <Style Selector="Svg.inherit-foreground">
+        <Setter Property="CurrentColor"
+                Value="{Binding Foreground,
+                    RelativeSource={RelativeSource FindAncestor,AncestorType=Button},
+                    Converter={StaticResource BrushToColorConverter}}" />
+    </Style>
+    
+    <Style Selector="Border.danger">
+        <Setter Property="Background" Value="{DynamicResource DangerBackground}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource DangerOutline}" />
+    </Style>
+    
+    <Style Selector="Border.danger TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource DangerContent}" />
+    </Style>
+    
+    <Style Selector="Border.warning">
+        <Setter Property="Background" Value="{DynamicResource WarningBackground}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource WarningOutline}" />
+    </Style>
+    
+    <Style Selector="Border.warning TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource WarningContent}" />
+    </Style>
+    
+    <Style Selector="Border.success">
+        <Setter Property="Background" Value="{DynamicResource SuccessBackground}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource SuccessOutline}" />
+    </Style>
+    
+    <Style Selector="Border.success TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource SuccessContent}" />
+    </Style>
+    
+    <Style Selector="Border.info">
+        <Setter Property="Background" Value="{DynamicResource InfoBackground}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource InfoOutline}" />
+    </Style>
+    
+    <Style Selector="Border.info TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource InfoContent}" />
+    </Style>
+    
+    <Style Selector="Svg.danger">
+        <Setter Property="CurrentColor" Value="{DynamicResource DangerContentColor}" />
+    </Style>
+    
+    <Style Selector="Svg.warning">
+        <Setter Property="CurrentColor" Value="{DynamicResource WarningContentColor}" />
+    </Style>
+
+    <Style Selector="Svg.success">
+        <Setter Property="CurrentColor" Value="{DynamicResource SuccessContentColor}" />
+    </Style>
+    
+    <Style Selector="Svg.info">
+        <Setter Property="CurrentColor" Value="{DynamicResource InfoContentColor}" />
     </Style>
 
     <Style Selector="Grid.hover-highlight">
@@ -109,7 +209,7 @@
     </Style>
 
     <Style Selector="Border.outlined">
-        <Setter Property="BorderBrush" Value="{DynamicResource Outline}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource PrimaryOutline}" />
         <Setter Property="BorderThickness" Value="1" />
     </Style>
 

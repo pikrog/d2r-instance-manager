@@ -13,10 +13,10 @@
 
         <controls:Dialog.Footer>
             <StackPanel Classes="dialog-actions">
-                <Button Classes="neutral" IsCancel="True" Command="{Binding #Root.Actions.CancelCommand}">
+                <Button Classes="dialog-action neutral" IsCancel="True" Command="{Binding #Root.Actions.CancelCommand}">
                     Cancel
                 </Button>
-                <Button Classes="danger" IsDefault="True" Command="{Binding #Root.Actions.DeleteCommand}">
+                <Button Classes="dialog-action danger" IsDefault="True" Command="{Binding #Root.Actions.DeleteCommand}">
                     Delete
                 </Button>
             </StackPanel>
