@@ -1,5 +1,6 @@
 <Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:AvaloniaApplication1.Controls">
     <Design.PreviewWith>
         <StackPanel Orientation="Vertical" Margin="10" Spacing="8">
             <Button>Regular</Button>
@@ -144,6 +145,15 @@
                     Converter={StaticResource BrushToColorConverter}}" />
     </Style>
     
+    <Style Selector="controls|RevealableContent:not(:revealed) Button.action">
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}" />
+    </Style>
+    
+    <Style Selector="controls|RevealableContent:revealed Button.action:disabled">
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}" />
+        <Setter Property="Opacity" Value="{DynamicResource UnrevealedOpacity}" />
+    </Style>
+    
     <Style Selector="Border.danger">
         <Setter Property="Background" Value="{DynamicResource DangerBackground}" />
         <Setter Property="BorderBrush" Value="{DynamicResource DangerOutline}" />
@@ -200,9 +210,9 @@
         <Setter Property="Background" Value="{DynamicResource PrimaryHoverBackground}" />
     </Style>
 
-    <Style Selector="Grid.action-bar,StackPanel.action-bar">
+    <!--<Style Selector="Grid.action-bar,StackPanel.action-bar">
         <Setter Property="Opacity" Value="{DynamicResource UnrevealedOpacity}"></Setter>
-    </Style>
+    </Style>-->
 
     <Style Selector="Border.rounded">
         <Setter Property="CornerRadius" Value="{StaticResource CornerRadius}" />

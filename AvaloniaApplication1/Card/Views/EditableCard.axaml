@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:views="clr-namespace:AvaloniaApplication1.Card.Views"
+             xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
              mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="200"
              x:Class="AvaloniaApplication1.Card.Views.EditableCard"
              x:Name="Root"
@@ -12,28 +13,28 @@
             <Setter Property="Background" Value="Transparent" />
         </Style>
         
-        <Style Selector="views|Card:pointerover StackPanel.action-bar">
-            <Setter Property="Opacity" Value="1"/>
+        <Style Selector="views|Card:pointerover controls|RevealableContent">
+            <Setter Property="IsRevealed" Value="True" />
         </Style>
     </UserControl.Styles>
 
     <views:Card IsDimmed="{Binding #Root.IsDimmed}" Padding="10" Background="{DynamicResource PrimaryBackground}">
         <Grid>
             <DockPanel IsVisible="{Binding !#Root.IsEdited}">
-                <StackPanel DockPanel.Dock="Bottom"
-                            Classes="action-bar"
-                            Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Classes="action rounded"
-                            Command="{Binding #Root.EditCommand}"
-                            CommandParameter="{Binding #Root.EditCommandParameter}">
-                        <Image Source="{SvgImage /Assets/images/edit.svg}" />
-                    </Button>
-                    <Button Classes="action rounded"
-                            Command="{Binding #Root.DeleteCommand}"
-                            CommandParameter="{Binding #Root.DeleteCommandParameter}">
-                        <Image Source="{SvgImage /Assets/images/delete.svg}" />
-                    </Button>
-                </StackPanel>
+                <controls:RevealableContent DockPanel.Dock="Bottom">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Classes="action rounded"
+                                Command="{Binding #Root.EditCommand}"
+                                CommandParameter="{Binding #Root.EditCommandParameter}">
+                            <Image Source="{SvgImage /Assets/images/edit.svg}" />
+                        </Button>
+                        <Button Classes="action rounded"
+                                Command="{Binding #Root.DeleteCommand}"
+                                CommandParameter="{Binding #Root.DeleteCommandParameter}">
+                            <Image Source="{SvgImage /Assets/images/delete.svg}" />
+                        </Button>
+                    </StackPanel>
+                </controls:RevealableContent>
                 
                 <StackPanel Orientation="Vertical" Spacing="10" Margin="12 12 12 24">
                     <StackPanel Orientation="Horizontal" Spacing="8">

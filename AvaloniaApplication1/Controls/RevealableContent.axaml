@@ -1,0 +1,46 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:AvaloniaApplication1.Controls">
+    <Design.PreviewWith>
+        <StackPanel Margin="10" Spacing="8">
+            <Border Classes="outlined hovering rounded" Padding="5">
+                <controls:RevealableContent>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Classes="action danger">
+                            <Svg Classes="inherit-foreground" Path="/Assets/images/delete.svg" />
+                        </Button>
+                        <Button Classes="action success">
+                            <Svg Classes="inherit-foreground" Path="/Assets/images/play.svg" />
+                        </Button>
+                    </StackPanel>
+                </controls:RevealableContent>
+            </Border>
+
+            <Border Classes="outlined hovering rounded" Padding="5">
+                <controls:RevealableContent IsRevealed="True">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Classes="action danger">
+                            <Svg Classes="inherit-foreground" Path="/Assets/images/delete.svg" />
+                        </Button>
+                        <Button Classes="action success">
+                            <Svg Classes="inherit-foreground" Path="/Assets/images/play.svg" />
+                        </Button>
+                    </StackPanel>
+                </controls:RevealableContent>
+            </Border>
+        </StackPanel>
+    </Design.PreviewWith>
+
+    <Style Selector="controls|RevealableContent">
+        <Setter Property="Opacity" Value="{StaticResource UnrevealedOpacity}" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <ContentPresenter Content="{TemplateBinding Content}" />
+            </ControlTemplate>
+        </Setter>
+    </Style>
+
+    <Style Selector="controls|RevealableContent:revealed">
+        <Setter Property="Opacity" Value="1" />
+    </Style>
+</Styles>

@@ -98,6 +98,7 @@
 
         <StyleInclude Source="/Styles.axaml" />
 
+        <StyleInclude Source="/Controls/RevealableContent.axaml" />
         <StyleInclude Source="/Controls/Section.axaml" />
         <StyleInclude Source="/Controls/HotkeyBox.axaml" />
         <StyleInclude Source="/Card/Views/Card.axaml" />

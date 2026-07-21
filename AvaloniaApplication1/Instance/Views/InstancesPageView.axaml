@@ -24,19 +24,9 @@
         <Style Selector="ItemsControl.table > ContentPresenter:nth-child(2n+1)">
             <Setter Property="Background" Value="{DynamicResource OddRowBackground}" />
         </Style>
-
-        <!--temp-->
-        <!--<Style Selector="ItemsControl.table > ContentPresenter Button">
-            <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}" />
-        </Style>-->
-        <!--temp-->
         
-        <Style Selector="ItemsControl.table > ContentPresenter:pointerover Grid.action-bar">
-            <Setter Property="Opacity" Value="1.0"></Setter>
-        </Style>
-        
-        <Style Selector="ItemsControl.table > ContentPresenter:pointerover Button:disabled">
-            <Setter Property="Opacity" Value="{StaticResource UnrevealedOpacity}" />
+        <Style Selector="ItemsControl.table > ContentPresenter:pointerover controls|RevealableContent">
+            <Setter Property="IsRevealed" Value="True" />
         </Style>
         
         <Style Selector="Button.action:disabled /template/ ContentPresenter#PART_ContentPresenter">
@@ -121,39 +111,41 @@
                                                    FontSize="12"
                                                    Text="{Binding Status}" />
                                     </Border>
-                                    <Grid Grid.Column="4" Classes="action-bar" ColumnDefinitions="36,36,36,36,36" HorizontalAlignment="Right">
-                                         <Button Grid.Column="0" Classes="action"
-                                                 Command="{Binding DataContext.EditCommand, ElementName=Root}"
-                                                 CommandParameter="{Binding}"
-                                                 IsEnabled="{Binding !IsActive}">
-                                             <Svg Classes="inherit-foreground" Path="/Assets/images/edit.svg" />
-                                         </Button>
-                                         <Button Grid.Column="1" Classes="action danger"
-                                                 Command="{Binding DataContext.DeleteCommand, ElementName=Root}"
-                                                 CommandParameter="{Binding}"
-                                                 IsEnabled="{Binding !IsActive}">
-                                             <Svg Classes="inherit-foreground" Path="/Assets/images/delete.svg" />
-                                         </Button>
-                                         <Button Grid.Column="3" Classes="action"
-                                                 Command="{Binding DataContext.ShowCommand, ElementName=Root}"
-                                                 CommandParameter="{Binding}"
-                                                 IsEnabled="{Binding IsActive}">
-                                             <Svg Classes="inherit-foreground" Path="/Assets/images/show.svg" />
-                                         </Button>
-                                         <Button Grid.Column="4" Classes="action danger"
-                                                 Command="{Binding DataContext.StopCommand, ElementName=Root}"
-                                                 CommandParameter="{Binding}"
-                                                 IsVisible="{Binding IsActive}"
-                                                 IsEnabled="{Binding CanBeStopped}">
-                                             <Svg Classes="inherit-foreground" Path="/Assets/images/close.svg" />
-                                         </Button>
-                                         <Button Grid.Column="4" Classes="action success"
-                                                 Command="{Binding DataContext.LaunchCommand, ElementName=Root}"
-                                                 CommandParameter="{Binding}"
-                                                 IsVisible="{Binding !IsActive}">
-                                             <Svg Classes="inherit-foreground" Path="/Assets/images/play.svg"  />
-                                         </Button>
-                                    </Grid>
+                                    <controls:RevealableContent Grid.Column="4">
+                                        <Grid ColumnDefinitions="36,36,36,36,36" HorizontalAlignment="Right">
+                                             <Button Grid.Column="0" Classes="action"
+                                                     Command="{Binding DataContext.EditCommand, ElementName=Root}"
+                                                     CommandParameter="{Binding}"
+                                                     IsEnabled="{Binding !IsActive}">
+                                                 <Svg Classes="inherit-foreground" Path="/Assets/images/edit.svg" />
+                                             </Button>
+                                             <Button Grid.Column="1" Classes="action danger"
+                                                     Command="{Binding DataContext.DeleteCommand, ElementName=Root}"
+                                                     CommandParameter="{Binding}"
+                                                     IsEnabled="{Binding !IsActive}">
+                                                 <Svg Classes="inherit-foreground" Path="/Assets/images/delete.svg" />
+                                             </Button>
+                                             <Button Grid.Column="3" Classes="action"
+                                                     Command="{Binding DataContext.ShowCommand, ElementName=Root}"
+                                                     CommandParameter="{Binding}"
+                                                     IsEnabled="{Binding IsActive}">
+                                                 <Svg Classes="inherit-foreground" Path="/Assets/images/show.svg" />
+                                             </Button>
+                                             <Button Grid.Column="4" Classes="action danger"
+                                                     Command="{Binding DataContext.StopCommand, ElementName=Root}"
+                                                     CommandParameter="{Binding}"
+                                                     IsVisible="{Binding IsActive}"
+                                                     IsEnabled="{Binding CanBeStopped}">
+                                                 <Svg Classes="inherit-foreground" Path="/Assets/images/close.svg" />
+                                             </Button>
+                                             <Button Grid.Column="4" Classes="action success"
+                                                     Command="{Binding DataContext.LaunchCommand, ElementName=Root}"
+                                                     CommandParameter="{Binding}"
+                                                     IsVisible="{Binding !IsActive}">
+                                                 <Svg Classes="inherit-foreground" Path="/Assets/images/play.svg"  />
+                                             </Button>
+                                        </Grid>
+                                    </controls:RevealableContent>
                                 </Grid> 
                             </DataTemplate>
                         </ItemsControl.DataTemplates>
