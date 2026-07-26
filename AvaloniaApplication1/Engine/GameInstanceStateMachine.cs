@@ -64,10 +64,7 @@ public static class GameInstanceStateMachine
                 return To(
                     session,
                     State.Stopping,
-                    [
-                        //new ReleaseLaunchLease(Require(session.Lease)), // do NOT release the lease, extend the critical section neyond to the Stopping state
-                        new Cancel()
-                    ]);
+                    [new Cancel()]);
 
             case (State.WaitingForUnlock, MultiboxUnlocked):
                 return To(
@@ -81,7 +78,6 @@ public static class GameInstanceStateMachine
                     session,
                     State.Stopping,
                     [
-                        //new ReleaseLaunchLease(Require(session.Lease)), // do NOT release the lease, extend the critical section beyond to the Stopping state
                         new StopProcess(Require(session.Process), Require(session.Policies?.ProcessStopPolicies)),
                         new Cancel()
                     ]);
