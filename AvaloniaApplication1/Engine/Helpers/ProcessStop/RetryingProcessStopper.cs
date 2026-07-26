@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AvaloniaApplication1.Engine.Common;
+using AvaloniaApplication1.Engine.Helpers.ProcessStop.Error;
 using AvaloniaApplication1.Engine.Platform;
 using AvaloniaApplication1.Engine.Platform.Process;
 
@@ -24,7 +25,11 @@ public class RetryingProcessStopper(ProcessStopPolicies policies)
             
             var hasExitedCheck = processManager.CheckIfExited();
             if (!hasExitedCheck.IsSuccess)
-                return StopResult.Failure(ProcessStopError.ProcessError(hasExitedCheck.Error));
+            {
+                var error = new ProcessStopOperationError(hasExitedCheck.Error);
+                return StopResult.Failure(error);
+            }
+
             var hasExited = hasExitedCheck.Value;
             if (hasExited)
                 return StopResult.Success(ProcessStopMode.Unknown);
@@ -47,7 +52,11 @@ public class RetryingProcessStopper(ProcessStopPolicies policies)
 
         var killResult = processManager.Kill(policies.ForcefulExitCode);
         if (!killResult.IsSuccess)
-            return StopResult.Failure(ProcessStopError.ProcessError(killResult.Error));
+        {
+            var error = new ProcessStopOperationError(killResult.Error);
+            return StopResult.Failure(error);
+        }
+
         var killRequestState = killResult.Value;
         
         using var killTimeoutCts = CancellationTokenSource.CreateLinkedTokenSource(token);
@@ -62,7 +71,7 @@ public class RetryingProcessStopper(ProcessStopPolicies policies)
         }
         catch (OperationCanceledException) when (!token.IsCancellationRequested)
         {
-            return StopResult.Failure(ProcessStopError.Timeout());
+            return StopResult.Failure(new ProcessStopTimeout());
         }
     }
 }

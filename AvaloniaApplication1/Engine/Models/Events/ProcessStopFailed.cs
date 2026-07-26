@@ -1,5 +1,5 @@
 ﻿using System;
-using AvaloniaApplication1.Engine.Helpers.ProcessStop;
+using AvaloniaApplication1.Engine.Helpers.ProcessStop.Error;
 
 namespace AvaloniaApplication1.Engine.Models.Events;
 
