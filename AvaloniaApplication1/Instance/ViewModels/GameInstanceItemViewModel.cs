@@ -38,16 +38,15 @@ public partial class GameInstanceItemViewModel(Guid id, string name, GameInstanc
         {
             GameInstanceStatus.Inactive => SemanticType.Neutral,
             GameInstanceStatus.Authenticating => SemanticType.Info,
-            GameInstanceStatus.QueuedForStart => SemanticType.Info,
+            GameInstanceStatus.Queued => SemanticType.Info,
             GameInstanceStatus.Starting => SemanticType.Info,
-            GameInstanceStatus.Unlocking => SemanticType.Info,
             GameInstanceStatus.Running => SemanticType.Success,
             GameInstanceStatus.Stopping => SemanticType.Info,
             GameInstanceStatus.Exited => SemanticType.Neutral,
-            GameInstanceStatus.ExitedPrematurely => SemanticType.Danger,
             GameInstanceStatus.Terminated => SemanticType.Danger,
             GameInstanceStatus.Timeout => SemanticType.Danger,
             GameInstanceStatus.Failed => SemanticType.Danger,
+            GameInstanceStatus.Crashed => SemanticType.Danger,
             GameInstanceStatus.Unknown => SemanticType.Danger,
             _ => throw new InvalidOperationException($"Unknown status {Status}")
         };

@@ -29,6 +29,7 @@ public class InstancesPageDesignViewModel : InstancesPageViewModel
             new GameInstanceItemViewModel(Guid.NewGuid(), "Enchant", GameInstanceStatus.Failed, false),
             new GameInstanceItemViewModel(Guid.NewGuid(), "Mule [EU]", GameInstanceStatus.QueuedForStart, false),
             new GameInstanceItemViewModel(Guid.NewGuid(), "Mule [US]", GameInstanceStatus.Inactive, false),
+            new GameInstanceItemViewModel(Guid.NewGuid(), "Mule [EU]", GameInstanceStatus.Queued, false),
         ]);
     }
 

@@ -1,4 +1,8 @@
 ﻿using System;
+using AvaloniaApplication1.Engine.Common;
+using AvaloniaApplication1.Engine.Helpers.MultiboxUnlock;
+using AvaloniaApplication1.Engine.Helpers.ProcessStop.Error;
+using AvaloniaApplication1.Engine.Models.Events;
 using AvaloniaApplication1.Engine.Models.StateMachine;
 using AvaloniaApplication1.Instance.Models;
 
@@ -6,65 +10,37 @@ namespace AvaloniaApplication1.Instance;
 
 public static class GameInstanceStatusMapper
 {
-    public static GameInstanceStatus Map(RuntimeSnapshot snapshot)
-    {
-        return snapshot.State switch
+    public static GameInstanceStatus Map(RuntimeSnapshot snapshot) =>
+        snapshot.State switch
         {
-            /*case State.Inactive:
-                if (snapshot.Errors.Length > 0)
-                {
-                    if(snapshot.Errors[0] is UnknownError)
-                        status = GameInstanceStatus.Failed;
-                }
-                else
-                {
-                    // todo:
-                    // if was running but is now inactive
-                    // status = GameInstanceStatus.Stopped;
-                    // else
-                    //     status = GameInstanceStatus.Inactive;
-                    status = GameInstanceStatus.Inactive;
-                }
-                break;
-            case State.WaitingForStart:
-                status = GameInstanceStatus.QueuedForLaunch;
-                break;
-            case State.WaitingForUnlock:
-                status = GameInstanceStatus.Unlocking;
-                break;
-            case State.Starting:
-                status = GameInstanceStatus.Launching;
-                break;
-            case State.Authenticating:
-                status = GameInstanceStatus.Authenticating;
-                break;
-            case State.Stopping:
-                status = GameInstanceStatus.Stopping;
-                break;
-            case State.Running:
-                status = GameInstanceStatus.Running;
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(); // todo: InvalidOperationException or ArgumentOutOfRangeException?*/
             State.Inactive => ResolveInactiveStatus(snapshot),
             State.Authenticating => GameInstanceStatus.Authenticating,
-            State.WaitingForStart => GameInstanceStatus.QueuedForStart,
-            State.Starting => GameInstanceStatus.Starting,
-            State.WaitingForUnlock => GameInstanceStatus.Unlocking,
+            State.WaitingForStart => GameInstanceStatus.Queued,
+            State.Starting or State.WaitingForUnlock => GameInstanceStatus.Starting,
             State.Running => GameInstanceStatus.Running,
             State.Stopping => GameInstanceStatus.Stopping,
             _ => throw new InvalidOperationException($"Unknown state {snapshot.State}")
         };
 
-        //throw new NotImplementedException();
-    }
-    
     private static GameInstanceStatus ResolveInactiveStatus(RuntimeSnapshot snapshot)
     {
-        return snapshot.Errors.Length > 0 
-            ? GameInstanceStatus.Failed 
-            : snapshot.Process is not null
-                ? GameInstanceStatus.Exited
-                : GameInstanceStatus.Inactive;
+        if (snapshot.Errors.Length > 0)
+        {
+            if (snapshot.Errors[0] is MultiboxUnlockFailed { IsKnown: true, Error: RetryingMultiboxUnlockError.Timeout } 
+                || snapshot.Errors[0] is ProcessStopFailed { IsKnown: true, Error: ProcessStopTimeout })
+                return GameInstanceStatus.Timeout;
+            return GameInstanceStatus.Failed;
+        }
+
+        if (snapshot.Process is null)
+            return GameInstanceStatus.Inactive;
+
+        return snapshot.ProcessExitResult switch
+        {
+            null => GameInstanceStatus.Unknown,
+            ProcessExitResult.Terminated => GameInstanceStatus.Terminated,
+            ProcessExitResult.Failure => GameInstanceStatus.Crashed,
+            _ => GameInstanceStatus.Exited
+        };
     }
 }

@@ -6,18 +6,17 @@ public enum GameInstanceStatus
     
     Authenticating,
     
-    QueuedForStart,
+    Queued,
     Starting,
-    Unlocking,
     Running,
 
     Stopping,
 
     Exited,
-    ExitedPrematurely,
     Terminated,
     Timeout,
     Failed,
+    Crashed,
 
     Unknown,
 }
