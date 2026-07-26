@@ -8,7 +8,7 @@ namespace AvaloniaApplication1.Engine.Agents;
 
 using ExitCodeResult = Result<uint?, ProcessError>;
 
-public class MonitorProcessExitAgent(ProcessManager processManager) : AgentBase<ExitCodeResult>
+public class MonitorProcessExitAgent(ProcessManager processManager, uint forcefulExitCode) : AgentBase<ExitCodeResult>
 {
     protected override async Task<ExitCodeResult> RunAgentTaskAsync(CancellationToken cancellationToken)
     {
@@ -16,6 +16,17 @@ public class MonitorProcessExitAgent(ProcessManager processManager) : AgentBase<
         return processManager.ExitCode;
     }
 
-    protected override Event MapAgentResultToEvent(ExitCodeResult result) =>
-        result.IsSuccess ? new ProcessExited(result.Value) : new ProcessExited(Error: result.Error);
+
+    protected override Event MapAgentResultToEvent(ExitCodeResult result)
+    {
+        if (!result.IsSuccess)
+            return new ProcessExited(ProcessExitResult.Unknown, result.Error);
+
+        if (result.Value == forcefulExitCode)
+            return new ProcessExited(ProcessExitResult.Terminated);
+
+        return result.Value == 0 
+            ? new ProcessExited(ProcessExitResult.Success) 
+            : new ProcessExited(ProcessExitResult.Failure);
+    }
 }

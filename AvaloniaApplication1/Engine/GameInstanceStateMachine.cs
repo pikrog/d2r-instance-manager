@@ -51,7 +51,7 @@ public static class GameInstanceStateMachine
                     session with { Process = e.ProcessManager },
                     State.WaitingForUnlock,
                     [
-                        new MonitorProcessExit(e.ProcessManager), 
+                        new MonitorProcessExit(e.ProcessManager, Require(session.Policies).ProcessStopPolicies.ForcefulExitCode),
                         new UnlockMultibox(Require(session.Policies?.UnlockMultiboxRetryPolicy))]
                     );
             case (State.Starting, ProcessStartFailed):
@@ -83,7 +83,7 @@ public static class GameInstanceStateMachine
                     ]);
             case (State.WaitingForUnlock, ProcessExited e):
                 return To(
-                    (session with { ExitCode = e.ExitCode }).CompleteCleanup(CleanupItem.Process),
+                    (session with { ProcessExitResult = e.Result }).CompleteCleanup(CleanupItem.Process), 
                     State.Stopping,
                     [new Cancel(), new ReleaseLaunchLease(Require(session.Lease))]
                     );
@@ -99,21 +99,24 @@ public static class GameInstanceStateMachine
                         new Cancel()
                     ]);
             case (State.Running, ProcessExited e):
-                return To((session with { ExitCode = e.ExitCode }).CompleteCleanup(CleanupItem.Process), State.Stopping);
+                return To(
+                    (session with { ProcessExitResult = e.Result }).CompleteCleanup(CleanupItem.Process), 
+                    State.Stopping
+                    );
 
             case (State.Stopping, ProcessStarted e):
                 return To(
                     session with { Process = e.ProcessManager }, 
                     State.Stopping, 
                     [
-                        new MonitorProcessExit(e.ProcessManager), 
+                        new MonitorProcessExit(e.ProcessManager, Require(session.Policies).ProcessStopPolicies.ForcefulExitCode), 
                         new StopProcess(e.ProcessManager, Require(session.Policies?.ProcessStopPolicies))
                     ]);
             case (State.Stopping, LaunchLeaseGranted e):
                 return To(session, State.Stopping, [new ReleaseLaunchLease(e.Lease)]);
             case (State.Stopping, ProcessExited e):
                 return To(
-                    (session with { ExitCode = e.ExitCode }).CompleteCleanup(CleanupItem.Process), 
+                    (session with { ProcessExitResult = e.Result }).CompleteCleanup(CleanupItem.Process), 
                     State.Stopping, 
                     [new ReleaseLaunchLease(Require(session.Lease))]
                     );

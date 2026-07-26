@@ -2,4 +2,4 @@
 
 namespace AvaloniaApplication1.Engine.Models.Effects;
 
-public sealed record MonitorProcessExit(ProcessManager ProcessManager) : Effect;
+public sealed record MonitorProcessExit(ProcessManager ProcessManager, uint ForcefulExitCode) : Effect;

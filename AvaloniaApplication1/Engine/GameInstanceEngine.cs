@@ -150,7 +150,7 @@ public class GameInstanceEngine : IAsyncDisposable
                 RunSessionAgent(new UnlockMultiboxAgent(new RetryingMultiboxUnlocker(e.RetryPolicy)));
                 break;
             case MonitorProcessExit e:
-                RunCleanupAgent(new MonitorProcessExitAgent(e.ProcessManager));
+                RunCleanupAgent(new MonitorProcessExitAgent(e.ProcessManager, e.ForcefulExitCode));
                 break;
             case StopProcess e:
                 RunCleanupAgent(new StopProcessAgent(e.ProcessManager, new RetryingProcessStopper(e.Policies)));
@@ -195,7 +195,8 @@ public class GameInstanceEngine : IAsyncDisposable
         }
     }
 
-    private RuntimeSnapshot Snap() => new(Id, _session.State, _session.Process, _session.ErrorEvents);
+    private RuntimeSnapshot Snap() =>
+        new(Id, _session.State, _session.Process, _session.ProcessExitResult, _session.ErrorEvents);
 
     public async ValueTask DisposeAsync()
     {

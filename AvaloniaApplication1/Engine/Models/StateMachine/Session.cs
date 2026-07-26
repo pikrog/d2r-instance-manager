@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Immutable;
+using AvaloniaApplication1.Engine.Common;
 using AvaloniaApplication1.Engine.Coordination;
 using AvaloniaApplication1.Engine.Models.Contexts.Launch;
 using AvaloniaApplication1.Engine.Models.Events;
@@ -14,7 +15,7 @@ public sealed record Session : IDisposable
     public EnginePolicies? Policies { get; init; }
     public ProcessStartInfo? ProcessStartInfo { get; init; }
     public ProcessManager? Process { get; init; }
-    public uint? ExitCode { get; init; }
+    public ProcessExitResult? ProcessExitResult { get; init; }
     public CleanupState CleanupState { get; init; } = new();
     public ImmutableArray<ErrorEvent> ErrorEvents { get; init; } = [];
 
