@@ -89,7 +89,7 @@ public static class GameInstanceStateMachine
                 return To(
                     (session with { ExitCode = e.ExitCode }).CompleteCleanup(CleanupItem.Process),
                     State.Stopping,
-                    [new ReleaseLaunchLease(Require(session.Lease))]
+                    [new Cancel(), new ReleaseLaunchLease(Require(session.Lease))]
                     );
 
             case (State.Running, LaunchLeaseReleased):
