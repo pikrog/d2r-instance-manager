@@ -6,7 +6,7 @@
             <Button>Regular</Button>
             <Button Classes="neutral">Neutral</Button>
             <Button Classes="danger">Danger</Button>
-            <Button Classes="action" HorizontalAlignment="Center">
+            <Button Classes="icon" HorizontalAlignment="Center">
                 <Image Source="{SvgImage /Assets/images/add.svg}"></Image>
             </Button>
         </StackPanel>
@@ -19,6 +19,10 @@
     <Style Selector="TextBlock.paragraph">
         <Setter Property="LineSpacing" Value="4" />
         <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+    
+    <Style Selector="StackPanel.tooltip-text">
+        <Setter Property="Spacing" Value="8" />
     </Style>
     
     <Style Selector="StackPanel.dialog-text">
@@ -131,63 +135,145 @@
         <Setter Property="BorderBrush" Value="{DynamicResource PrimaryOutline}" />
     </Style>
     
-    <Style Selector="Button.action">
+    <Style Selector="Button.icon">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Padding" Value="4" />
-        <Setter Property="Height" Value="36" />
+        <Setter Property="Height" Value="30" />
         <Setter Property="BorderThickness" Value="0" />
+    </Style>
+    
+    <Style Selector="Button.icon:disabled /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+    
+    <Style Selector="Button.link">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource InfoContent}" /> <!--replace with LinkForeground?-->
+        <Setter Property="Padding" Value="0" />
+    </Style>
+    
+    <Style Selector="Button.link:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+    
+    <Style Selector="Button.link:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+    
+    <Style Selector="Button.link:pointerover TextBlock">
+        <Setter Property="TextDecorations" Value="Underline" />
+    </Style>
+    
+    <Style Selector="TextBlock.link">
+        <Setter Property="Foreground" Value="{DynamicResource InfoContent}" /> <!--LinkForeground?-->
+        <Setter Property="TextDecorations" Value="Underline" />
+    </Style>
+    
+    <Style Selector="Run.link">
+        <Setter Property="Foreground" Value="{DynamicResource InfoContent}" /> <!--LinkForeground?-->
+        <Setter Property="TextDecorations" Value="Underline" />
     </Style>
     
     <Style Selector="Svg.inherit-foreground">
         <Setter Property="CurrentColor"
                 Value="{Binding Foreground,
-                    RelativeSource={RelativeSource FindAncestor,AncestorType=Button},
+                    RelativeSource={RelativeSource FindAncestor,AncestorType=ContentControl},
                     Converter={StaticResource BrushToColorConverter}}" />
     </Style>
     
-    <Style Selector="controls|RevealableContent:not(:revealed) Button.action">
+    <Style Selector="controls|RevealableContent:not(:revealed) Button.icon">
         <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}" />
     </Style>
     
-    <Style Selector="controls|RevealableContent:revealed Button.action:disabled">
+    <Style Selector="controls|RevealableContent:revealed Button.icon:disabled">
         <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}" />
         <Setter Property="Opacity" Value="{DynamicResource UnrevealedOpacity}" />
     </Style>
     
-    <Style Selector="Border.danger">
+    <Style Selector="Border.chip">
+        <Setter Property="BorderThickness" Value="0.67" />
+        <Setter Property="CornerRadius" Value="100" />
+        <Setter Property="Padding" Value="4" />
+    </Style>
+    
+    <Style Selector="Border.chip.neutral">
+        <Setter Property="Background" Value="{DynamicResource PrimaryBackground}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource PrimaryOutline}" />
+    </Style>
+    
+    <Style Selector="Border.chip.danger">
         <Setter Property="Background" Value="{DynamicResource DangerBackground}" />
         <Setter Property="BorderBrush" Value="{DynamicResource DangerOutline}" />
     </Style>
     
-    <Style Selector="Border.danger TextBlock">
+    <Style Selector="Border.chip.danger TextBlock">
         <Setter Property="Foreground" Value="{DynamicResource DangerContent}" />
     </Style>
     
-    <Style Selector="Border.warning">
+    <Style Selector="Border.chip.warning">
         <Setter Property="Background" Value="{DynamicResource WarningBackground}" />
         <Setter Property="BorderBrush" Value="{DynamicResource WarningOutline}" />
     </Style>
     
-    <Style Selector="Border.warning TextBlock">
+    <Style Selector="Border.chip.warning TextBlock">
         <Setter Property="Foreground" Value="{DynamicResource WarningContent}" />
     </Style>
     
-    <Style Selector="Border.success">
+    <Style Selector="Border.chip.success">
         <Setter Property="Background" Value="{DynamicResource SuccessBackground}" />
         <Setter Property="BorderBrush" Value="{DynamicResource SuccessOutline}" />
     </Style>
     
-    <Style Selector="Border.success TextBlock">
+    <Style Selector="Border.chip.success TextBlock">
         <Setter Property="Foreground" Value="{DynamicResource SuccessContent}" />
     </Style>
     
-    <Style Selector="Border.info">
+    <Style Selector="Border.chip.info">
         <Setter Property="Background" Value="{DynamicResource InfoBackground}" />
         <Setter Property="BorderBrush" Value="{DynamicResource InfoOutline}" />
     </Style>
     
-    <Style Selector="Border.info TextBlock">
+    <Style Selector="Border.chip.info TextBlock">
         <Setter Property="Foreground" Value="{DynamicResource InfoContent}" />
+    </Style>
+    
+    <Style Selector="ContentControl.icon">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Height" Value="27" /> <!--todo: resource: icon height?-->
+        <Setter Property="Padding" Value="4" /> <!--todo: resource: icon padding?-->
+        <Setter Property="CornerRadius" Value="{StaticResource CornerRadius}" />
+    </Style>
+    
+    <Style Selector="ContentControl.icon.danger">
+        <Setter Property="Foreground" Value="{DynamicResource DangerContent}" />
+    </Style>
+    
+    <Style Selector="ContentControl.icon.warning">
+        <Setter Property="Foreground" Value="{DynamicResource WarningContent}" />
+    </Style>
+    
+    <Style Selector="ContentControl.icon.success">
+        <Setter Property="Foreground" Value="{DynamicResource SuccessContent}" />
+    </Style>
+    
+    <Style Selector="ContentControl.icon.info">
+        <Setter Property="Foreground" Value="{DynamicResource InfoContent}" />
+    </Style>
+    
+    <Style Selector="ContentControl.hoverable.danger:pointerover">
+        <Setter Property="Background" Value="{DynamicResource DangerBackground}" />
+    </Style>
+    
+    <Style Selector="ContentControl.hoverable.warning:pointerover">
+        <Setter Property="Background" Value="{DynamicResource WarningBackground}" />
+    </Style>
+    
+    <Style Selector="ContentControl.hoverable.success:pointerover">
+        <Setter Property="Background" Value="{DynamicResource SuccessBackground}" />
+    </Style>
+    
+    <Style Selector="ContentControl.hoverable.info:pointerover">
+        <Setter Property="Background" Value="{DynamicResource InfoBackground}" />
     </Style>
     
     <Style Selector="Svg.danger">
@@ -205,14 +291,6 @@
     <Style Selector="Svg.info">
         <Setter Property="CurrentColor" Value="{DynamicResource InfoContentColor}" />
     </Style>
-
-    <Style Selector="Grid.hover-highlight">
-        <Setter Property="Background" Value="{DynamicResource PrimaryHoverBackground}" />
-    </Style>
-
-    <!--<Style Selector="Grid.action-bar,StackPanel.action-bar">
-        <Setter Property="Opacity" Value="{DynamicResource UnrevealedOpacity}"></Setter>
-    </Style>-->
 
     <Style Selector="Border.rounded">
         <Setter Property="CornerRadius" Value="{StaticResource CornerRadius}" />

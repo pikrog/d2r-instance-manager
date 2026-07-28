@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AvaloniaApplication1.Account;
 using AvaloniaApplication1.Authentication.Models;
 using AvaloniaApplication1.Config;
 using AvaloniaApplication1.Display;
@@ -11,13 +10,14 @@ using AvaloniaApplication1.Engine.Common;
 using AvaloniaApplication1.Engine.Helpers.ProcessStop;
 using AvaloniaApplication1.Engine.Models.Contexts.Launch;
 using AvaloniaApplication1.Engine.Models.StateMachine;
-using AvaloniaApplication1.GlobalSettings;
 using AvaloniaApplication1.Instance.Models;
-using AvaloniaApplication1.Region;
 
 namespace AvaloniaApplication1.Instance;
 
-public class GameInstanceService(ConfigService configService, GameInstanceManager gameInstanceManager)
+public class GameInstanceService(
+    ConfigService configService,
+    GameInstanceConfigValidator validator,
+    GameInstanceManager gameInstanceManager)
 {
     public event Action<Guid>? InstanceStateChanged
     {
@@ -76,14 +76,19 @@ public class GameInstanceService(ConfigService configService, GameInstanceManage
     {
         return gameInstanceManager.GetRuntimeSnapshot(id);
     }
-    
+
+    private GameInstanceSummary CreateSummary(GameInstanceSnapshot snapshot, RuntimeSnapshot runtimeSnapshot)
+    {
+        var status = GameInstanceStatusMapper.Map(runtimeSnapshot);
+        var issues = validator.Validate(snapshot);
+        return new GameInstanceSummary(snapshot.Id, snapshot.Name, status, runtimeSnapshot.IsActive, issues);
+    }
 
     public GameInstanceSummary GetSummary(Guid id)
     {
         var configSnapshot = GetInstanceConfigSnapshot(id);
         var runtimeSnapshot = GetInstanceRuntimeSnapshot(id);
-        var status = GameInstanceStatusMapper.Map(runtimeSnapshot);
-        return new GameInstanceSummary(id, configSnapshot.Name, status, runtimeSnapshot.IsActive);
+        return CreateSummary(configSnapshot, runtimeSnapshot);
     }
 
     public IReadOnlyList<GameInstanceSummary> GetSummaries()
@@ -91,12 +96,8 @@ public class GameInstanceService(ConfigService configService, GameInstanceManage
         var instances = gameInstanceManager.GetAllRuntimeStates().ToDictionary(i => i.Id);
         return configService.Config.GetAllInstances().Select(i =>
             {
-                instances.TryGetValue(i.Id, out var runtimeSnapshot);
-                var status = runtimeSnapshot is not null  
-                    ? GameInstanceStatusMapper.Map(runtimeSnapshot) 
-                    : GameInstanceStatus.Unknown; // todo: throw or ignore?
-                var isActive = runtimeSnapshot?.IsActive ?? false; // ?
-                return new GameInstanceSummary(i.Id, i.Name, status, isActive);
+                var runtimeSnapshot = instances[i.Id];
+                return CreateSummary(i, runtimeSnapshot);
             }).ToList();
     }
 

@@ -109,6 +109,7 @@
       <DependentUpon>DeleteRegionDialogView.axaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Remove="Common\Converters\CollectionIsNotEmptyConverter.cs" />
   </ItemGroup>
 
   <ItemGroup>

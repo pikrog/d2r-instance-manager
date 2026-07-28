@@ -1,16 +1,18 @@
 using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using AvaloniaApplication1.Account;
 using AvaloniaApplication1.Dialog;
 using AvaloniaApplication1.Display;
+using AvaloniaApplication1.GlobalSettings;
+using AvaloniaApplication1.GlobalSettings.Issues;
 using AvaloniaApplication1.Instance.Models;
 using AvaloniaApplication1.Overlay;
 using AvaloniaApplication1.Page;
 using AvaloniaApplication1.Region;
+using AvaloniaApplication1.Selectable;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
@@ -27,23 +29,34 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
 
     private readonly DisplayService _displayService;
     
+    private readonly GlobalSettingsValidator _globalSettingsValidator;
+    
     private readonly OverlayService _overlayService;
 
     public ObservableCollection<GameInstanceItemViewModel> Instances { get; } = [];
 
     public bool IsTableEmpty => Instances.Count == 0;
-
+    
+    public SelectedItemsCollection<GameInstanceItemViewModel> SelectedInstances { get; }
+    
+    [ObservableProperty]
+    public partial GlobalSettingsIssue? FirstGlobalSettingsIssue { get; set; }
+    
     public InstancesPageViewModel(GameInstanceService gameInstanceService,
         AccountService accountService,
         RegionService regionService,
         DisplayService displayService,
+        GlobalSettingsValidator globalSettingsValidator,
         OverlayService overlayService)
     {
         _gameInstanceService = gameInstanceService;
         _accountService = accountService;
         _regionService = regionService;
         _displayService = displayService;
+        _globalSettingsValidator = globalSettingsValidator;
         _overlayService = overlayService;
+
+        SelectedInstances = new SelectedItemsCollection<GameInstanceItemViewModel>(Instances);
 
         _gameInstanceService.InstanceStateChanged += OnInstanceStateChanged;
     }
@@ -58,7 +71,7 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         var (_, item) = Instances.Index().SingleOrDefault(r => r.Item.Id == id);
         if (item is null)
         {
-            Refresh();
+            RefreshInstances();
             return;
         }
         
@@ -67,14 +80,28 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         item.Name = summary.Name;
         item.Status = summary.Status;
         item.IsActive = summary.IsActive;
+        item.Issues.Clear();
+        item.Issues.AddRange(summary.Issues);
+    }
+
+    private void RefreshInstances()
+    {
+        Instances.Clear();
+        var instances = _gameInstanceService.GetSummaries()
+            .Select(s => new GameInstanceItemViewModel(s.Id, s.Name, s.Status, s.IsActive, s.Issues));
+        Instances.AddRange(instances);
+    }
+
+    private void RefreshGlobalSettingsIssues()
+    {
+        var globalSettingsIssues = _globalSettingsValidator.Validate();
+        FirstGlobalSettingsIssue = globalSettingsIssues.FirstOrDefault(i => i.RequiresAttention);
     }
 
     private void Refresh()
     {
-        Instances.Clear();
-        var instances = _gameInstanceService.GetSummaries()
-            .Select(s => new GameInstanceItemViewModel(s.Id, s.Name, s.Status, s.IsActive));
-        Instances.AddRange(instances);
+        RefreshInstances();
+        RefreshGlobalSettingsIssues();
     }
 
     private async Task<EditInstanceFormViewModel> CreateForm(GameInstanceSnapshot? snapshot = null)
@@ -132,7 +159,7 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
             return;
         var draft = CreateDraft(form);
         await _gameInstanceService.SaveAsync(draft);
-        Refresh();
+        RefreshInstances();
     }
     
     [RelayCommand]
@@ -156,7 +183,7 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         if (!result)
             return;
         await _gameInstanceService.RemoveAsync(instance.Id);
-        Refresh();
+        RefreshInstances();
     }
 
     [RelayCommand]

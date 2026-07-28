@@ -47,6 +47,8 @@ public static class ServiceCollectionExtension
 
         public void AddApplicationServices()
         {
+            services.AddSingleton<GameInstanceConfigValidator>();
+            services.AddSingleton<GlobalSettingsValidator>();
             
             services.AddSingleton<AccountService>();
             services.AddSingleton<RegionService>();

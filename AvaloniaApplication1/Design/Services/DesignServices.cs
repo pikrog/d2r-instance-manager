@@ -61,8 +61,12 @@ public static class DesignServices
 
     private static readonly GameInstanceManagerBootstrapper ManagerBootstrapper =
         new(ConfigContext, GameInstanceManager);
+
+    private static readonly GameInstanceConfigValidator GameInstanceConfigValidator = new(ConfigService);
+
+    public static readonly GlobalSettingsValidator GlobalSettingsValidator = new(ConfigService);
     
-    public static GameInstanceService GameInstanceService { get; } = new(ConfigService, GameInstanceManager);
+    public static GameInstanceService GameInstanceService { get; } = new(ConfigService, GameInstanceConfigValidator, GameInstanceManager);
     
     static DesignServices()
     {

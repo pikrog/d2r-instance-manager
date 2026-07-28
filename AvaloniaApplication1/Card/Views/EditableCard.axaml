@@ -23,12 +23,12 @@
             <DockPanel IsVisible="{Binding !#Root.IsEdited}">
                 <controls:RevealableContent DockPanel.Dock="Bottom">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button Classes="action rounded"
+                        <Button Classes="icon rounded"
                                 Command="{Binding #Root.EditCommand}"
                                 CommandParameter="{Binding #Root.EditCommandParameter}">
                             <Image Source="{SvgImage /Assets/images/edit.svg}" />
                         </Button>
-                        <Button Classes="action rounded"
+                        <Button Classes="icon rounded"
                                 Command="{Binding #Root.DeleteCommand}"
                                 CommandParameter="{Binding #Root.DeleteCommandParameter}">
                             <Image Source="{SvgImage /Assets/images/delete.svg}" />
@@ -55,13 +55,13 @@
                 <StackPanel DockPanel.Dock="Bottom"
                             Opacity="0.6"
                             Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                    <Button Classes="action rounded"
+                    <Button Classes="icon rounded"
                             Command="{Binding #Root.AcceptCommand}"
                             CommandParameter="{Binding #Root.AcceptCommandParameter}"
                             IsDefault="True">
                         <Image Source="{SvgImage /Assets/images/accept.svg}" />
                     </Button>
-                    <Button Classes="action rounded"
+                    <Button Classes="icon rounded"
                             Command="{Binding #Root.DiscardCommand}"
                             CommandParameter="{Binding #Root.DiscardCommandParameter}"
                             IsCancel="True">

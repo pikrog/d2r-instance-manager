@@ -30,10 +30,10 @@
                     <TextBox Grid.Column="0" Classes="h1" 
                              AutomationProperties.LabeledBy="{Binding #GameExecutablePathLabel}"
                              Text="{Binding GameExecutablePath}"/>
-                    <Button Grid.Column="1" Classes="action" Command="{Binding BrowseForGameExecutablePathCommand}">
+                    <Button Grid.Column="1" Classes="icon" Command="{Binding BrowseForGameExecutablePathCommand}">
                         <Image Source="{SvgImage /Assets/images/browse.svg}"/>
                     </Button>
-                    <Button Grid.Column="2" Classes="action" Command="{Binding AutoDetectGameExecutablePathCommand}">
+                    <Button Grid.Column="2" Classes="icon" Command="{Binding AutoDetectGameExecutablePathCommand}">
                         <Image Source="{SvgImage /Assets/images/auto.svg}"/>
                     </Button>
                 </Grid>

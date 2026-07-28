@@ -6,10 +6,10 @@
             <Border Classes="outlined hovering rounded" Padding="5">
                 <controls:RevealableContent>
                     <StackPanel Orientation="Horizontal">
-                        <Button Classes="action danger">
+                        <Button Classes="icon danger">
                             <Svg Classes="inherit-foreground" Path="/Assets/images/delete.svg" />
                         </Button>
-                        <Button Classes="action success">
+                        <Button Classes="icon success">
                             <Svg Classes="inherit-foreground" Path="/Assets/images/play.svg" />
                         </Button>
                     </StackPanel>
@@ -19,10 +19,10 @@
             <Border Classes="outlined hovering rounded" Padding="5">
                 <controls:RevealableContent IsRevealed="True">
                     <StackPanel Orientation="Horizontal">
-                        <Button Classes="action danger">
+                        <Button Classes="icon danger">
                             <Svg Classes="inherit-foreground" Path="/Assets/images/delete.svg" />
                         </Button>
-                        <Button Classes="action success">
+                        <Button Classes="icon success">
                             <Svg Classes="inherit-foreground" Path="/Assets/images/play.svg" />
                         </Button>
                     </StackPanel>
