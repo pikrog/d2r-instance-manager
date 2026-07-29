@@ -77,6 +77,10 @@
         <Setter Property="CornerRadius" Value="{StaticResource CornerRadius}" />
     </Style>
     
+    <Style Selector="Button:disabled">
+        <Setter Property="Foreground" Value="{DynamicResource DisabledForeground}" />
+    </Style>
+    
     <Style Selector="Button.dialog-action">
         <Setter Property="BorderThickness" Value="0.5" />
     </Style>
@@ -89,14 +93,18 @@
 
     <Style Selector="Button.danger:pointerover /template/ ContentPresenter#PART_ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource DangerHoverBackground}"/>
-        <Setter Property="Foreground" Value="{DynamicResource DangerContent}" />
+        <Setter Property="Foreground" Value="{DynamicResource DangerContent}" /> 
         <Setter Property="BorderBrush" Value="{DynamicResource DangerOutline}" />
     </Style>
 
     <Style Selector="Button.danger:pressed /template/ ContentPresenter#PART_ContentPresenter">
         <Setter Property="Background" Value="{DynamicResource DangerPressedBackground}"/>
-        <Setter Property="Foreground" Value="{DynamicResource DangerContent}" />
+        <Setter Property="Foreground" Value="{DynamicResource DangerContent}" /> 
         <Setter Property="BorderBrush" Value="{DynamicResource DangerOutline}" />
+    </Style>
+    
+    <Style Selector="Button.danger:disabled">
+        <Setter Property="Foreground" Value="{DynamicResource DisabledForeground}" />
     </Style>
 
     <Style Selector="Button.success">
@@ -116,6 +124,10 @@
         <Setter Property="Foreground" Value="{DynamicResource SuccessContent}" />
         <Setter Property="BorderBrush" Value="{DynamicResource SuccessOutline}" />
     </Style>
+    
+    <Style Selector="Button.success:disabled">
+        <Setter Property="Foreground" Value="{DynamicResource DisabledForeground}" />
+    </Style>
 
     <Style Selector="Button.neutral">
         <!-- <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}" /> -->
@@ -133,6 +145,10 @@
         <!-- <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}" /> -->
         <!-- <Setter Property="Background" Value="{DynamicResource ButtonBackgroundPressed}"/> -->
         <Setter Property="BorderBrush" Value="{DynamicResource PrimaryOutline}" />
+    </Style>
+    
+    <Style Selector="Button.neutral:disabled">
+        <Setter Property="Foreground" Value="{DynamicResource DisabledForeground}" />
     </Style>
     
     <Style Selector="Button.icon">
@@ -179,15 +195,6 @@
                 Value="{Binding Foreground,
                     RelativeSource={RelativeSource FindAncestor,AncestorType=ContentControl},
                     Converter={StaticResource BrushToColorConverter}}" />
-    </Style>
-    
-    <Style Selector="controls|RevealableContent:not(:revealed) Button.icon">
-        <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}" />
-    </Style>
-    
-    <Style Selector="controls|RevealableContent:revealed Button.icon:disabled">
-        <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}" />
-        <Setter Property="Opacity" Value="{DynamicResource UnrevealedOpacity}" />
     </Style>
     
     <Style Selector="Border.chip">
@@ -325,5 +332,9 @@
     <Style Selector="RadioButton.nav-tab:pressed /template/ Border#PART_Background">
         <Setter Property="Background" Value="#505050" />
         <Setter Property="BoxShadow" Value="inset 0 1 3 0 #80000000" />
+    </Style>
+    
+    <Style Selector="controls|RevealableContent:not(:revealed) Button.icon">
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}" />
     </Style>
 </Styles>

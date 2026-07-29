@@ -10,7 +10,7 @@ public class BrushToColorConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        return value is SolidColorBrush brush 
+        return value is ISolidColorBrush brush 
             ? brush.Color 
             : AvaloniaProperty.UnsetValue;
     }

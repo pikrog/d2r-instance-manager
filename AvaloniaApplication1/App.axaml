@@ -20,6 +20,8 @@
                     
                     <SolidColorBrush x:Key="AccentSecondaryBackground">LightBlue</SolidColorBrush>
                     
+                    <SolidColorBrush x:Key="DisabledForeground">#40000000</SolidColorBrush>
+
                     <SolidColorBrush x:Key="DangerBackground">#FDF0EE</SolidColorBrush>
                     <SolidColorBrush x:Key="DangerHoverBackground">#F9DAD6</SolidColorBrush>
                     <SolidColorBrush x:Key="DangerPressedBackground">#F4C0BA</SolidColorBrush>
