@@ -33,7 +33,7 @@ public partial class GameInstanceItemViewModel : SelectableViewModelBase
             or GameInstanceStatus.Starting
             or GameInstanceStatus.Stopping;
 
-    public bool CanBeStopped => Status is not GameInstanceStatus.Stopping;
+    public bool CanBeStopped => IsActive && Status is not GameInstanceStatus.Stopping;
 
     public SemanticType StatusSemanticType =>
         Status switch

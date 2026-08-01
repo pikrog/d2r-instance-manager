@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
@@ -15,6 +16,10 @@ public sealed class SelectedItemsCollection<T> : ObservableObject where T : Sele
     public int Count => _selectedItems.Count;
     
     public bool Any => Count > 0;
+    
+    public event EventHandler<NotifyCollectionChangedEventArgs>? CollectionChanged;
+    
+    public event EventHandler<ItemPropertyChangedEventArgs<T>>? ItemPropertyChanged;
 
     public SelectedItemsCollection(ObservableCollection<T> allItems)
     {
@@ -24,17 +29,19 @@ public sealed class SelectedItemsCollection<T> : ObservableObject where T : Sele
         _selectedItems = new ObservableCollection<T>(allItems.Where(i => i.IsSelected));
         Items = new ReadOnlyObservableCollection<T>(_selectedItems);
 
-        allItems.CollectionChanged += OnOriginalItemsCollectionChanged;
+        allItems.CollectionChanged += OnAllItemsCollectionChanged;
         _selectedItems.CollectionChanged += OnSelectedItemsCollectionChanged;
     }
 
     private void OnSelectedItemsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
+        CollectionChanged?.Invoke(this, e);
+        
         OnPropertyChanged(nameof(Count));
         OnPropertyChanged(nameof(Any));
     }
 
-    private void OnOriginalItemsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    private void OnAllItemsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         if (e.Action == NotifyCollectionChangedAction.Reset)
         {
@@ -68,10 +75,14 @@ public sealed class SelectedItemsCollection<T> : ObservableObject where T : Sele
 
     private void OnItemPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
+        var item = (T)sender!;
+        
+        var itemPropertyChangedEventArgs = new ItemPropertyChangedEventArgs<T>(item, e.PropertyName);
+        ItemPropertyChanged?.Invoke(this, itemPropertyChangedEventArgs);
+        
         if (e.PropertyName != nameof(SelectableViewModelBase.IsSelected))
             return;
         
-        var item = (T)sender!;
         if (item.IsSelected)
         {
             if (!_selectedItems.Contains(item))

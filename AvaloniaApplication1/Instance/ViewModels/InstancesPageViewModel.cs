@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Threading;
@@ -41,7 +42,7 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
     
     [ObservableProperty]
     public partial GlobalSettingsIssue? FirstGlobalSettingsIssue { get; set; }
-    
+
     public InstancesPageViewModel(GameInstanceService gameInstanceService,
         AccountService accountService,
         RegionService regionService,
@@ -57,8 +58,26 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         _overlayService = overlayService;
 
         SelectedInstances = new SelectedItemsCollection<GameInstanceItemViewModel>(Instances);
-
+        
         _gameInstanceService.InstanceStateChanged += OnInstanceStateChanged;
+        SelectedInstances.CollectionChanged += OnSelectedInstancesChanged;
+        SelectedInstances.ItemPropertyChanged += OnSelectedInstancePropertyChanged;
+    }
+
+    private void NotifyCanExecuteChangedForSelectedCommands()
+    {
+        LaunchSelectedCommand.NotifyCanExecuteChanged();
+        StopSelectedCommand.NotifyCanExecuteChanged();
+    }
+
+    private void OnSelectedInstancesChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        NotifyCanExecuteChangedForSelectedCommands();
+    }
+
+    private void OnSelectedInstancePropertyChanged(object? sender, ItemPropertyChangedEventArgs<GameInstanceItemViewModel> e)
+    {
+        NotifyCanExecuteChangedForSelectedCommands();
     }
 
     private void OnInstanceStateChanged(Guid id)
@@ -171,6 +190,9 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
     [RelayCommand]
     private async Task Edit(GameInstanceItemViewModel instance)
     {
+        if (instance.IsActive)
+            return;
+        
         var snapshot = _gameInstanceService.GetInstanceConfigSnapshot(instance.Id);
         await CoreEdit(snapshot);
     }
@@ -178,6 +200,9 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
     [RelayCommand]
     private async Task Delete(GameInstanceItemViewModel instance)
     {
+        if (instance.IsActive)
+            return;
+        
         var confirmationViewModel = new DeleteInstanceDialogViewModel(instance.Name);
         var result = await _overlayService.ShowAsync(confirmationViewModel);
         if (!result)
@@ -185,23 +210,66 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         await _gameInstanceService.RemoveAsync(instance.Id);
         RefreshInstances();
     }
+    
+    private static bool CanLaunch(GameInstanceItemViewModel instance) => 
+        instance is { RequiresAttention: false, IsActive: false };
 
     [RelayCommand]
     private async Task Launch(GameInstanceItemViewModel instance)
     {
+        if (!CanLaunch(instance))
+            return;
+        
         await _gameInstanceService.LaunchAsync(instance.Id);
     }
+    
+    private static bool CanStop(GameInstanceItemViewModel instance) => instance.CanBeStopped;
 
     [RelayCommand]
     private async Task Stop(GameInstanceItemViewModel instance)
     {
+        if (!CanStop(instance))
+            return;
+        
         await _gameInstanceService.StopAsync(instance.Id);
     }
 
     [RelayCommand]
     private void Show(GameInstanceItemViewModel instance)
     {
+        if (!instance.IsActive)
+            return;
+        
         _gameInstanceService.Show(instance.Id);
+    }
+    
+    private bool CanLaunchSelected => SelectedInstances.Items.Any(CanLaunch);
+    
+    [RelayCommand(CanExecute = nameof(CanLaunchSelected))]
+    private async Task LaunchSelected()
+    {
+        var launchTasks = SelectedInstances.Items
+            .Where(CanLaunch)
+            .Select(i => _gameInstanceService.LaunchAsync(i.Id));
+        await Task.WhenAll(launchTasks);
+    }
+    
+    private bool CanStopSelected => SelectedInstances.Items.Any(CanStop);
+
+    [RelayCommand(CanExecute = nameof(CanStopSelected))]
+    private async Task StopSelected()
+    {
+        var stopTasks = SelectedInstances.Items
+            .Where(CanStop)
+            .Select(i => _gameInstanceService.StopAsync(i.Id));
+        await Task.WhenAll(stopTasks);
+    }
+    
+    [RelayCommand]
+    private void ClearSelection()
+    {
+        foreach (var instance in Instances)
+            instance.IsSelected = false;
     }
 
     public override Task OnEnterAsync()

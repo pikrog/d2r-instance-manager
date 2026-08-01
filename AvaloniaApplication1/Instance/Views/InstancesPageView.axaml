@@ -98,9 +98,6 @@
             <Setter Property="Width" Value="105" />
             <Setter Property="Background" Value="{DynamicResource PrimaryBackground}" />
             <Setter Property="CornerRadius" Value="0" />
-            <!--<Setter Property="BorderBrush" >
-                <SolidColorBrush>Transparent</SolidColorBrush>
-            </Setter>-->
             <Setter Property="BorderThickness" Value="0" />
         </Style>
 
@@ -121,7 +118,7 @@
 
     <Border Classes="outlined hovering rounded" Margin="30">
         <Border Classes="rounded" ClipToBounds="True">
-            <DockPanel>
+            <DockPanel Grid.IsSharedSizeScope="True">
                 <Border DockPanel.Dock="Top"
                         BoxShadow="0 2 4 0 #1F000000"
                         ZIndex="1">
@@ -143,36 +140,34 @@
                     <StackPanel>
                         <Border Padding="20 15"
                                 IsVisible="{Binding SelectedInstances.Any}">
-                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="20">
-                                <CheckBox IsChecked="True"/>
-                                <!-- <Button Grid.Column="0" Classes="icon" Padding="0"> -->
-                                <!--     <Svg Path="/Assets/images/close.svg" /> -->
-                                <!-- </Button> -->
+                            <Grid ColumnSpacing="20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition SharedSizeGroup="A" Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Button Grid.Column="0" Classes="icon" 
+                                        HorizontalAlignment="Stretch"
+                                        Command="{Binding ClearSelectionCommand}">
+                                    <Svg Path="/Assets/images/arrow-left.svg" Width="20" />
+                                </Button>
                                 <TextBlock Grid.Column="1" VerticalAlignment="Center">
                                     <Run Text="{Binding SelectedInstances.Count}"/>
                                     instances selected
                                 </TextBlock>
                                 <StackPanel Grid.Column="2" Orientation="Horizontal">
-                                    <Button Classes="icon danger">
+                                    <Button Classes="icon danger" Command="{Binding StopSelectedCommand}">
                                         <Svg Classes="inherit-foreground" Path="/Assets/images/close.svg" />
-                                        <!--<DockPanel>
-                                            <Svg Classes="inherit-foreground" Path="/Assets/images/close.svg" />
-                                            <TextBlock>Close</TextBlock>
-                                        </DockPanel>-->
                                     </Button>
-                                    <Button Classes="icon success">
+                                    <Button Classes="icon success" Command="{Binding LaunchSelectedCommand}">
                                         <Svg Classes="inherit-foreground" Path="/Assets/images/play.svg" />
-                                        <!--<DockPanel>
-                                            <Svg Classes="inherit-foreground" Path="/Assets/images/play.svg" />
-                                            <TextBlock>Launch</TextBlock>
-                                        </DockPanel>-->
                                     </Button>
                                 </StackPanel>
                             </Grid>
                         </Border>
                         <Border Background="{DynamicResource DangerBackground}" Padding="10"
                                 IsVisible="{Binding FirstGlobalSettingsIssue, Converter={x:Static ObjectConverters.IsNotNull}}">
-                            <Grid ColumnDefinitions="Auto, *" ColumnSpacing="16"> <!--class icon-row, resource: bar-height? bar item height? bar icon height-->
+                            <Grid ColumnDefinitions="Auto, *" ColumnSpacing="16">
                                 <Svg Grid.Column="0" Classes="icon inherit-foreground danger" Height="24" Path="/Assets/images/error.svg" />
                                 <ContentControl Grid.Column="1" Content="{Binding FirstGlobalSettingsIssue}" />
                             </Grid>
@@ -182,7 +177,7 @@
                     
                 <Grid>
                     <ScrollViewer HorizontalScrollBarVisibility="Auto">
-                        <ItemsControl Grid.IsSharedSizeScope="True"
+                        <ItemsControl 
                                       Classes="table" FontSize="16"
                                       ItemsSource="{Binding Instances}" ClipToBounds="False"
                                       IsVisible="{Binding !IsTableEmpty}">
@@ -198,7 +193,8 @@
                                             <ColumnDefinition SharedSizeGroup="D" Width="180" />
                                         </Grid.ColumnDefinitions>
 
-                                        <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected}" />
+                                        <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected}" 
+                                                  HorizontalAlignment="Center" Padding="0"/>
                                         <TextBlock Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center"
                                                    Text="{Binding Name}" />
                                             
