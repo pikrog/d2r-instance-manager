@@ -6,11 +6,11 @@ using AvaloniaApplication1.Instance.Models.Issues;
 
 namespace AvaloniaApplication1.Instance;
 
-public class GameInstanceConfigValidator(ConfigService configService)
+public class InstanceConfigValidator(ConfigService configService)
 {
-    public IReadOnlyList<GameInstanceIssue> Validate(GameInstanceSnapshot snapshot)
+    public IReadOnlyList<InstanceIssue> Validate(InstanceSnapshot snapshot)
     {
-        var issues = new List<GameInstanceIssue>();
+        var issues = new List<InstanceIssue>();
         
         // todo: persistence validation
 

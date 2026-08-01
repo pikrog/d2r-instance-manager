@@ -8,7 +8,7 @@ using AvaloniaApplication1.Engine.Models.StateMachine;
 
 namespace AvaloniaApplication1.Engine;
 
-public static class GameInstanceStateMachine
+public static class InstanceStateMachine
 {
     public static TransitionResult Apply(Session session, Event @event)
     {

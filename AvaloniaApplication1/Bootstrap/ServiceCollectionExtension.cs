@@ -41,18 +41,18 @@ public static class ServiceCollectionExtension
             services.AddSingleton<IArgumentStringBuilder, ArgumentStringBuilder>();
             services.AddSingleton<ArgumentsFactory>();
             services.AddSingleton<ProcessStartInfoFactory>();
-            services.AddSingleton<GameInstanceEngineFactory>();
-            services.AddSingleton<GameInstanceManager>();
+            services.AddSingleton<InstanceEngineFactory>();
+            services.AddSingleton<InstanceManager>();
         }
 
         public void AddApplicationServices()
         {
-            services.AddSingleton<GameInstanceConfigValidator>();
+            services.AddSingleton<InstanceConfigValidator>();
             services.AddSingleton<GlobalSettingsValidator>();
             
             services.AddSingleton<AccountService>();
             services.AddSingleton<RegionService>();
-            services.AddSingleton<GameInstanceService>();
+            services.AddSingleton<InstanceService>();
             services.AddSingleton<GlobalSettingsService>();
             services.AddSingleton<DisplayService>();
             
@@ -71,7 +71,7 @@ public static class ServiceCollectionExtension
             services.AddTransient<InstancesPageViewModel>();
             services.AddTransient<GlobalSettingsPageViewModel>();
 
-            services.AddSingleton<GameInstanceManagerBootstrapper>();
+            services.AddSingleton<InstanceManagerBootstrapper>();
         }
     }
 }

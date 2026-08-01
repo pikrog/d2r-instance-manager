@@ -33,7 +33,7 @@ public static class AppBootstrapper
 
     public static void BootstrapRuntime(IServiceProvider provider)
     {
-        provider.GetRequiredService<GameInstanceManagerBootstrapper>().Bootstrap();
+        provider.GetRequiredService<InstanceManagerBootstrapper>().Bootstrap();
     }
 
     private static ServiceProviderOptions CreateDefaultServiceProviderOptions()

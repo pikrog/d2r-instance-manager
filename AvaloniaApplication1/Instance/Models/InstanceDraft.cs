@@ -4,9 +4,8 @@ using AvaloniaApplication1.Display;
 
 namespace AvaloniaApplication1.Instance.Models;
 
-public record GameInstanceSnapshot
-(
-    Guid Id,
+public record InstanceDraft(
+    Guid? Id,
     string Name,
     bool IsOnlineMode,
     Guid? AccountId,
@@ -16,4 +15,4 @@ public record GameInstanceSnapshot
     bool IsNoSound,
     bool IsWindowedMode,
     HotKey.HotKey RecallHotKey
-);
+    );

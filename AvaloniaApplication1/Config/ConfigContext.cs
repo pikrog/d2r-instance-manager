@@ -17,7 +17,7 @@ public class ConfigContext(AppConfig appConfig) : IConfigReader
         return new AppConfig
         {
             GlobalSettings = appConfig.GlobalSettings,
-            GameInstances = [.. appConfig.GameInstances],
+            Instances = [.. appConfig.Instances],
             Regions = [.. appConfig.Regions],
             Accounts = [.. appConfig.Accounts],
             Displays = [.. appConfig.Displays]
@@ -37,38 +37,38 @@ public class ConfigContext(AppConfig appConfig) : IConfigReader
     #endregion
     
     #region Instances
-    public void AddInstance(GameInstanceSnapshot snapshot)
+    public void AddInstance(InstanceSnapshot snapshot)
     {
-        appConfig.GameInstances.Add(snapshot);
+        appConfig.Instances.Add(snapshot);
     }
     
-    public void UpdateInstance(GameInstanceSnapshot snapshot)
+    public void UpdateInstance(InstanceSnapshot snapshot)
     {
-        var index = appConfig.GameInstances.FindIndex(i => i.Id == snapshot.Id);
+        var index = appConfig.Instances.FindIndex(i => i.Id == snapshot.Id);
         if (index == -1)
             throw new ConfigNotFoundException($"Instance with id {snapshot.Id} not found");
-        appConfig.GameInstances[index] = snapshot;
+        appConfig.Instances[index] = snapshot;
     }
 
     public void RemoveInstance(Guid id)
     {
-        appConfig.GameInstances.RemoveAll(i => i.Id == id);
+        appConfig.Instances.RemoveAll(i => i.Id == id);
     }
 
-    public GameInstanceSnapshot GetInstance(Guid id)
+    public InstanceSnapshot GetInstance(Guid id)
     {
-        var instance = appConfig.GameInstances.Find(i => i.Id == id);
+        var instance = appConfig.Instances.Find(i => i.Id == id);
         return instance ?? throw new ConfigNotFoundException($"Instance with id {id} not found");
     }
 
-    public IReadOnlyList<GameInstanceSnapshot> GetAllInstances()
+    public IReadOnlyList<InstanceSnapshot> GetAllInstances()
     {
-        return appConfig.GameInstances.AsReadOnly();
+        return appConfig.Instances.AsReadOnly();
     }
 
     public bool InstanceExists(Guid id)
     {
-        return appConfig.GameInstances.Exists(i => i.Id == id);
+        return appConfig.Instances.Exists(i => i.Id == id);
     }
     #endregion
     

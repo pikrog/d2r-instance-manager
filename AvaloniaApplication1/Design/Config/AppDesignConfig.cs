@@ -46,9 +46,9 @@ public class AppDesignConfig : AppConfig
                 "kr.actual.battle.net"),
         ];
 
-        GameInstances =
+        Instances =
         [
-            new GameInstanceSnapshot(Guid.NewGuid(),
+            new InstanceSnapshot(Guid.NewGuid(),
                 "Nova",
                 true,
                 Accounts[0].Id,
@@ -58,7 +58,7 @@ public class AppDesignConfig : AppConfig
                 false,
                 false,
                 new HotKey.HotKey(Key.F1, KeyModifiers.Control)),
-            new GameInstanceSnapshot(Guid.NewGuid(),
+            new InstanceSnapshot(Guid.NewGuid(),
                 "Battle Orders",
                 true,
                 Accounts[1].Id,
@@ -68,7 +68,7 @@ public class AppDesignConfig : AppConfig
                 true,
                 true,
                 new HotKey.HotKey(Key.F2, KeyModifiers.Control)),
-            new GameInstanceSnapshot(Guid.NewGuid(),
+            new InstanceSnapshot(Guid.NewGuid(),
                 "Mule [EU]",
                 true,
                 Accounts[2].Id,
@@ -78,7 +78,7 @@ public class AppDesignConfig : AppConfig
                 true,
                 true,
                 new HotKey.HotKey(Key.F3, KeyModifiers.Control)),
-            new GameInstanceSnapshot(Guid.NewGuid(),
+            new InstanceSnapshot(Guid.NewGuid(),
                 "Mule [US]",
                 true,
                 Accounts[2].Id,

@@ -4,12 +4,12 @@ using AvaloniaApplication1.Engine;
 
 namespace AvaloniaApplication1.Bootstrap;
 
-public class GameInstanceManagerBootstrapper(ConfigContext configContext, GameInstanceManager gameInstanceManager)
+public class InstanceManagerBootstrapper(ConfigContext configContext, InstanceManager instanceManager)
 {
     public void Bootstrap()
     {
         var instanceIds = configContext.GetAllInstances().Select(i => i.Id).ToList();
         foreach (var id in instanceIds)
-            gameInstanceManager.Register(id);
+            instanceManager.Register(id);
     }
 }

@@ -11,7 +11,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace AvaloniaApplication1.Instance.ViewModels;
 
-public partial class GameInstanceItemViewModel : SelectableViewModelBase
+public partial class InstanceItemViewModel : SelectableViewModelBase
 {
     // todo: runtime errors
     public Guid Id { get; set; }
@@ -21,35 +21,35 @@ public partial class GameInstanceItemViewModel : SelectableViewModelBase
     
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(StatusSemanticType), nameof(IsInProgress), nameof(CanBeStopped))]
-    public partial GameInstanceStatus Status { get; set; }
+    public partial InstanceStatus Status { get; set; }
     
     [ObservableProperty]
     public partial bool IsActive { get; set; }
     
-    public ObservableCollection<GameInstanceIssue> Issues { get; }
+    public ObservableCollection<InstanceIssue> Issues { get; }
 
     public bool IsInProgress =>
-        Status is GameInstanceStatus.Authenticating
-            or GameInstanceStatus.Starting
-            or GameInstanceStatus.Stopping;
+        Status is InstanceStatus.Authenticating
+            or InstanceStatus.Starting
+            or InstanceStatus.Stopping;
 
-    public bool CanBeStopped => IsActive && Status is not GameInstanceStatus.Stopping;
+    public bool CanBeStopped => IsActive && Status is not InstanceStatus.Stopping;
 
     public SemanticType StatusSemanticType =>
         Status switch
         {
-            GameInstanceStatus.Inactive => SemanticType.Neutral,
-            GameInstanceStatus.Authenticating => SemanticType.Info,
-            GameInstanceStatus.Queued => SemanticType.Info,
-            GameInstanceStatus.Starting => SemanticType.Info,
-            GameInstanceStatus.Running => SemanticType.Success,
-            GameInstanceStatus.Stopping => SemanticType.Info,
-            GameInstanceStatus.Exited => SemanticType.Neutral,
-            GameInstanceStatus.Terminated => SemanticType.Danger,
-            GameInstanceStatus.Timeout => SemanticType.Danger,
-            GameInstanceStatus.Failed => SemanticType.Danger,
-            GameInstanceStatus.Crashed => SemanticType.Danger,
-            GameInstanceStatus.Unknown => SemanticType.Danger,
+            InstanceStatus.Inactive => SemanticType.Neutral,
+            InstanceStatus.Authenticating => SemanticType.Info,
+            InstanceStatus.Queued => SemanticType.Info,
+            InstanceStatus.Starting => SemanticType.Info,
+            InstanceStatus.Running => SemanticType.Success,
+            InstanceStatus.Stopping => SemanticType.Info,
+            InstanceStatus.Exited => SemanticType.Neutral,
+            InstanceStatus.Terminated => SemanticType.Danger,
+            InstanceStatus.Timeout => SemanticType.Danger,
+            InstanceStatus.Failed => SemanticType.Danger,
+            InstanceStatus.Crashed => SemanticType.Danger,
+            InstanceStatus.Unknown => SemanticType.Danger,
             _ => throw new InvalidOperationException($"Unknown status {Status}")
         };
 
@@ -57,13 +57,13 @@ public partial class GameInstanceItemViewModel : SelectableViewModelBase
     
     public bool RequiresAttention => Issues.Any(i => i.RequiresAttention);
     
-    public GameInstanceItemViewModel(Guid id, string name, GameInstanceStatus status, bool isActive, IReadOnlyList<GameInstanceIssue> issues)
+    public InstanceItemViewModel(Guid id, string name, InstanceStatus status, bool isActive, IReadOnlyList<InstanceIssue> issues)
     {
         Id = id;
         Name = name;
         Status = status;
         IsActive = isActive;
-        Issues = new ObservableCollection<GameInstanceIssue>(issues);
+        Issues = new ObservableCollection<InstanceIssue>(issues);
 
         Issues.CollectionChanged += OnIssuesChanged;
     }

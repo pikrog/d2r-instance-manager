@@ -16,7 +16,7 @@ using AvaloniaApplication1.Engine.Models.StateMachine;
 
 namespace AvaloniaApplication1.Engine;
 
-public class GameInstanceEngine : IAsyncDisposable
+public class InstanceEngine : IAsyncDisposable
 {
     public Guid Id { get; }
     
@@ -50,7 +50,7 @@ public class GameInstanceEngine : IAsyncDisposable
         }
     }
 
-    public GameInstanceEngine(Guid id, LaunchCoordinator launchCoordinator, ProcessStartInfoFactory processStartInfoFactory)
+    public InstanceEngine(Guid id, LaunchCoordinator launchCoordinator, ProcessStartInfoFactory processStartInfoFactory)
     {
         Id = id;
         
@@ -117,7 +117,7 @@ public class GameInstanceEngine : IAsyncDisposable
     private async Task HandleEvent(Event @event)
     {
         var previousState = _session.State;
-        var result = GameInstanceStateMachine.Apply(_session, @event);
+        var result = InstanceStateMachine.Apply(_session, @event);
 
         Debug.WriteLine($"[{Id}] <state> ({@event.GetType().Name}) {previousState}->{result.Session.State}");
         _session = result.Session;

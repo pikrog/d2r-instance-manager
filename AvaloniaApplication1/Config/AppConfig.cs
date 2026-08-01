@@ -12,6 +12,6 @@ public class AppConfig
     public required GlobalSettingsSnapshot GlobalSettings { get; set; }
     public required List<AccountSnapshot> Accounts { get; set; }
     public required List<RegionSnapshot> Regions { get; set; }
-    public required List<GameInstanceSnapshot> GameInstances { get; set; }
+    public required List<InstanceSnapshot> Instances { get; set; }
     public required List<CachedDisplaySnapshot> Displays { get; set; }
 }

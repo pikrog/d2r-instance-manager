@@ -5,7 +5,7 @@ using AvaloniaApplication1.Region;
 
 namespace AvaloniaApplication1.Instance;
 
-public class GameInstanceValidation(AccountService accountService, RegionService regionService)
+public class InstanceValidation(AccountService accountService, RegionService regionService)
 {
     public class GameInstanceValidationRules // todo: implement
     {
@@ -17,7 +17,7 @@ public class GameInstanceValidation(AccountService accountService, RegionService
         private readonly AccountService _accountService = accountService;
         private readonly RegionService _regionService = regionService;
         
-        public void Validate(GameInstanceDraft draft)
+        public void Validate(InstanceDraft draft)
         {
             if (draft.IsOnlineMode)
             {
@@ -27,7 +27,7 @@ public class GameInstanceValidation(AccountService accountService, RegionService
         }
     }
     
-    private void Validate(GameInstanceDraft draft) // todo: move to validator
+    private void Validate(InstanceDraft draft) // todo: move to validator
     {
         if (draft.IsOnlineMode)
         {

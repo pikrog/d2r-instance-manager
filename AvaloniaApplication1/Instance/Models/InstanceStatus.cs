@@ -1,6 +1,6 @@
 ﻿namespace AvaloniaApplication1.Instance.Models;
 
-public enum GameInstanceStatus
+public enum InstanceStatus
 {
     Inactive,
     

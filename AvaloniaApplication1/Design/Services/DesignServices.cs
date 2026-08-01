@@ -55,18 +55,18 @@ public static class DesignServices
     
     private static readonly ProcessStartInfoFactory ProcessStartInfoFactory = new(ArgumentsFactory);
 
-    private static readonly GameInstanceEngineFactory GameInstanceEngineFactory = new(LaunchCoordinator, ProcessStartInfoFactory);
+    private static readonly InstanceEngineFactory InstanceEngineFactory = new(LaunchCoordinator, ProcessStartInfoFactory);
     
-    private static readonly GameInstanceManager GameInstanceManager = new(GameInstanceEngineFactory);
+    private static readonly InstanceManager InstanceManager = new(InstanceEngineFactory);
 
-    private static readonly GameInstanceManagerBootstrapper ManagerBootstrapper =
-        new(ConfigContext, GameInstanceManager);
+    private static readonly InstanceManagerBootstrapper ManagerBootstrapper =
+        new(ConfigContext, InstanceManager);
 
-    private static readonly GameInstanceConfigValidator GameInstanceConfigValidator = new(ConfigService);
+    private static readonly InstanceConfigValidator InstanceConfigValidator = new(ConfigService);
 
     public static readonly GlobalSettingsValidator GlobalSettingsValidator = new(ConfigService);
     
-    public static GameInstanceService GameInstanceService { get; } = new(ConfigService, GameInstanceConfigValidator, GameInstanceManager);
+    public static InstanceService InstanceService { get; } = new(ConfigService, InstanceConfigValidator, InstanceManager);
     
     static DesignServices()
     {

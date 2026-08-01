@@ -12,7 +12,7 @@ namespace AvaloniaApplication1.Design.ViewModels;
 
 public class InstancesPageDesignViewModel : InstancesPageViewModel
 {
-    public InstancesPageDesignViewModel() : base(DesignServices.GameInstanceService,
+    public InstancesPageDesignViewModel() : base(DesignServices.InstanceService,
         DesignServices.AccountService,
         DesignServices.RegionService,
         DesignServices.DisplayService,
@@ -27,12 +27,12 @@ public class InstancesPageDesignViewModel : InstancesPageViewModel
     {
         Instances.Clear();
         Instances.AddRange([
-            new GameInstanceItemViewModel(Guid.NewGuid(), "Main", GameInstanceStatus.Running, true, []),
-            new GameInstanceItemViewModel(Guid.NewGuid(), "Battle Orders", GameInstanceStatus.Starting, true, []),
-            new GameInstanceItemViewModel(Guid.NewGuid(), "Enchant", GameInstanceStatus.Failed, false, []),
-            new GameInstanceItemViewModel(Guid.NewGuid(), "Mule [EU]", GameInstanceStatus.Queued, true, []),
-            new GameInstanceItemViewModel(Guid.NewGuid(), "Mule [US]", GameInstanceStatus.Inactive, false, [new MissingDisplay(new CachedDisplaySnapshot("fake", "LG", 1440, 800), true)]),
-            new GameInstanceItemViewModel(Guid.NewGuid(), "Mule [Asia]", GameInstanceStatus.Inactive, false, [new DeletedAccount()]),
+            new InstanceItemViewModel(Guid.NewGuid(), "Main", InstanceStatus.Running, true, []),
+            new InstanceItemViewModel(Guid.NewGuid(), "Battle Orders", InstanceStatus.Starting, true, []),
+            new InstanceItemViewModel(Guid.NewGuid(), "Enchant", InstanceStatus.Failed, false, []),
+            new InstanceItemViewModel(Guid.NewGuid(), "Mule [EU]", InstanceStatus.Queued, true, []),
+            new InstanceItemViewModel(Guid.NewGuid(), "Mule [US]", InstanceStatus.Inactive, false, [new MissingDisplay(new CachedDisplaySnapshot("fake", "LG", 1440, 800), true)]),
+            new InstanceItemViewModel(Guid.NewGuid(), "Mule [Asia]", InstanceStatus.Inactive, false, [new DeletedAccount()]),
         ]);
         
         /*GlobalSettingsIssues.Clear();

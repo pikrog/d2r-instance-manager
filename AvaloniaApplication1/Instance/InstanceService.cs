@@ -14,35 +14,35 @@ using AvaloniaApplication1.Instance.Models;
 
 namespace AvaloniaApplication1.Instance;
 
-public class GameInstanceService(
+public class InstanceService(
     ConfigService configService,
-    GameInstanceConfigValidator validator,
-    GameInstanceManager gameInstanceManager)
+    InstanceConfigValidator validator,
+    InstanceManager instanceManager)
 {
     public event Action<Guid>? InstanceStateChanged
     {
-        add => gameInstanceManager.InstanceStateChanged += value;
-        remove => gameInstanceManager.InstanceStateChanged -= value;
+        add => instanceManager.InstanceStateChanged += value;
+        remove => instanceManager.InstanceStateChanged -= value;
     }
 
-    private async Task AddAsync(GameInstanceSnapshot snapshot)
+    private async Task AddAsync(InstanceSnapshot snapshot)
     {
         await configService.ChangeAsync(context => context.AddInstance(snapshot));
-        gameInstanceManager.Register(snapshot.Id);
+        instanceManager.Register(snapshot.Id);
     }
 
-    private async Task UpdateAsync(GameInstanceSnapshot snapshot)
+    private async Task UpdateAsync(InstanceSnapshot snapshot)
     {
         await configService.ChangeAsync(context => context.UpdateInstance(snapshot));
     }
 
-    public async Task SaveAsync(GameInstanceDraft draft)
+    public async Task SaveAsync(InstanceDraft draft)
     {
         // todo:
         // Validate(draft);
 
         var id = draft.Id ?? Guid.NewGuid();
-        var snapshot = new GameInstanceSnapshot(
+        var snapshot = new InstanceSnapshot(
             id,
             draft.Name,
             draft.IsOnlineMode,
@@ -64,36 +64,36 @@ public class GameInstanceService(
     public async Task RemoveAsync(Guid id)
     {
         await configService.ChangeAsync(context => context.RemoveInstance(id));
-        gameInstanceManager.Remove(id);
+        instanceManager.Remove(id);
     }
 
-    public GameInstanceSnapshot GetInstanceConfigSnapshot(Guid id)
+    public InstanceSnapshot GetInstanceConfigSnapshot(Guid id)
     {
         return configService.Config.GetInstance(id);
     }
 
     public RuntimeSnapshot GetInstanceRuntimeSnapshot(Guid id)
     {
-        return gameInstanceManager.GetRuntimeSnapshot(id);
+        return instanceManager.GetRuntimeSnapshot(id);
     }
 
-    private GameInstanceSummary CreateSummary(GameInstanceSnapshot snapshot, RuntimeSnapshot runtimeSnapshot)
+    private InstanceSummary CreateSummary(InstanceSnapshot snapshot, RuntimeSnapshot runtimeSnapshot)
     {
-        var status = GameInstanceStatusMapper.Map(runtimeSnapshot);
+        var status = InstanceStatusMapper.Map(runtimeSnapshot);
         var issues = validator.Validate(snapshot);
-        return new GameInstanceSummary(snapshot.Id, snapshot.Name, status, runtimeSnapshot.IsActive, issues);
+        return new InstanceSummary(snapshot.Id, snapshot.Name, status, runtimeSnapshot.IsActive, issues);
     }
 
-    public GameInstanceSummary GetSummary(Guid id)
+    public InstanceSummary GetSummary(Guid id)
     {
         var configSnapshot = GetInstanceConfigSnapshot(id);
         var runtimeSnapshot = GetInstanceRuntimeSnapshot(id);
         return CreateSummary(configSnapshot, runtimeSnapshot);
     }
 
-    public IReadOnlyList<GameInstanceSummary> GetSummaries()
+    public IReadOnlyList<InstanceSummary> GetSummaries()
     {
-        var instances = gameInstanceManager.GetAllRuntimeStates().ToDictionary(i => i.Id);
+        var instances = instanceManager.GetAllRuntimeStates().ToDictionary(i => i.Id);
         return configService.Config.GetAllInstances().Select(i =>
             {
                 var runtimeSnapshot = instances[i.Id];
@@ -162,10 +162,10 @@ public class GameInstanceService(
         
         var engineLaunchContext = new EngineLaunchContext(instanceLaunchContext, enginePolicies);
         
-        await gameInstanceManager.LaunchAsync(snapshot.Id, engineLaunchContext);
+        await instanceManager.LaunchAsync(snapshot.Id, engineLaunchContext);
     }
 
-    public async Task StopAsync(Guid id) => await gameInstanceManager.StopAsync(id);
+    public async Task StopAsync(Guid id) => await instanceManager.StopAsync(id);
 
-    public void Show(Guid id) => gameInstanceManager.Show(id);
+    public void Show(Guid id) => instanceManager.Show(id);
 }

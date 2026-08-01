@@ -1,6 +1,6 @@
 ﻿namespace AvaloniaApplication1.Instance.Models.Issues;
 
-public abstract record GameInstanceIssue
+public abstract record InstanceIssue
 {
     public abstract bool RequiresAttention { get; }
 }

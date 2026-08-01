@@ -183,7 +183,7 @@
                                       IsVisible="{Binding !IsTableEmpty}">
 
                             <ItemsControl.DataTemplates>
-                                <DataTemplate x:DataType="viewModels:GameInstanceItemViewModel">
+                                <DataTemplate x:DataType="viewModels:InstanceItemViewModel">
                                     <Grid Margin="20 15" ColumnSpacing="20">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition SharedSizeGroup="A" Width="Auto" />

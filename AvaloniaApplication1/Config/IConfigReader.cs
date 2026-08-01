@@ -14,8 +14,8 @@ public interface IConfigReader
     
     GlobalSettingsSnapshot GetGlobalSettings();
 
-    GameInstanceSnapshot GetInstance(Guid id);
-    IReadOnlyList<GameInstanceSnapshot> GetAllInstances();
+    InstanceSnapshot GetInstance(Guid id);
+    IReadOnlyList<InstanceSnapshot> GetAllInstances();
     bool InstanceExists(Guid id);
     
     RegionSnapshot GetRegion(Guid id);

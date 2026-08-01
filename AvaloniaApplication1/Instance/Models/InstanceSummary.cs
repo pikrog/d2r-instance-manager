@@ -4,4 +4,4 @@ using AvaloniaApplication1.Instance.Models.Issues;
 
 namespace AvaloniaApplication1.Instance.Models;
 
-public record GameInstanceSummary(Guid Id, string Name, GameInstanceStatus Status, bool IsActive, IReadOnlyList<GameInstanceIssue> Issues);
+public record InstanceSummary(Guid Id, string Name, InstanceStatus Status, bool IsActive, IReadOnlyList<InstanceIssue> Issues);

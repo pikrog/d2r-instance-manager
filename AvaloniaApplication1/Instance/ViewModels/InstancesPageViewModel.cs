@@ -22,7 +22,7 @@ namespace AvaloniaApplication1.Instance.ViewModels;
 
 public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
 {
-    private readonly GameInstanceService _gameInstanceService;
+    private readonly InstanceService _instanceService;
 
     private readonly AccountService _accountService;
     
@@ -34,32 +34,32 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
     
     private readonly OverlayService _overlayService;
 
-    public ObservableCollection<GameInstanceItemViewModel> Instances { get; } = [];
+    public ObservableCollection<InstanceItemViewModel> Instances { get; } = [];
 
     public bool IsTableEmpty => Instances.Count == 0;
     
-    public SelectedItemsCollection<GameInstanceItemViewModel> SelectedInstances { get; }
+    public SelectedItemsCollection<InstanceItemViewModel> SelectedInstances { get; }
     
     [ObservableProperty]
     public partial GlobalSettingsIssue? FirstGlobalSettingsIssue { get; set; }
 
-    public InstancesPageViewModel(GameInstanceService gameInstanceService,
+    public InstancesPageViewModel(InstanceService instanceService,
         AccountService accountService,
         RegionService regionService,
         DisplayService displayService,
         GlobalSettingsValidator globalSettingsValidator,
         OverlayService overlayService)
     {
-        _gameInstanceService = gameInstanceService;
+        _instanceService = instanceService;
         _accountService = accountService;
         _regionService = regionService;
         _displayService = displayService;
         _globalSettingsValidator = globalSettingsValidator;
         _overlayService = overlayService;
 
-        SelectedInstances = new SelectedItemsCollection<GameInstanceItemViewModel>(Instances);
+        SelectedInstances = new SelectedItemsCollection<InstanceItemViewModel>(Instances);
         
-        _gameInstanceService.InstanceStateChanged += OnInstanceStateChanged;
+        _instanceService.InstanceStateChanged += OnInstanceStateChanged;
         SelectedInstances.CollectionChanged += OnSelectedInstancesChanged;
         SelectedInstances.ItemPropertyChanged += OnSelectedInstancePropertyChanged;
     }
@@ -75,7 +75,7 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         NotifyCanExecuteChangedForSelectedCommands();
     }
 
-    private void OnSelectedInstancePropertyChanged(object? sender, ItemPropertyChangedEventArgs<GameInstanceItemViewModel> e)
+    private void OnSelectedInstancePropertyChanged(object? sender, ItemPropertyChangedEventArgs<InstanceItemViewModel> e)
     {
         NotifyCanExecuteChangedForSelectedCommands();
     }
@@ -94,7 +94,7 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
             return;
         }
         
-        var summary = _gameInstanceService.GetSummary(id);
+        var summary = _instanceService.GetSummary(id);
         item.Id = summary.Id;
         item.Name = summary.Name;
         item.Status = summary.Status;
@@ -106,8 +106,8 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
     private void RefreshInstances()
     {
         Instances.Clear();
-        var instances = _gameInstanceService.GetSummaries()
-            .Select(s => new GameInstanceItemViewModel(s.Id, s.Name, s.Status, s.IsActive, s.Issues));
+        var instances = _instanceService.GetSummaries()
+            .Select(s => new InstanceItemViewModel(s.Id, s.Name, s.Status, s.IsActive, s.Issues));
         Instances.AddRange(instances);
     }
 
@@ -123,7 +123,7 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         RefreshGlobalSettingsIssues();
     }
 
-    private async Task<EditInstanceFormViewModel> CreateForm(GameInstanceSnapshot? snapshot = null)
+    private async Task<EditInstanceFormViewModel> CreateForm(InstanceSnapshot? snapshot = null)
     {
         var accountOptions = _accountService.GetOptions();
         var regionOptions = _regionService.GetOptions();
@@ -154,9 +154,9 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         return form;
     }
 
-    private GameInstanceDraft CreateDraft(EditInstanceFormViewModel form)
+    private InstanceDraft CreateDraft(EditInstanceFormViewModel form)
     {
-        return new GameInstanceDraft(
+        return new InstanceDraft(
             form.Id,
             form.Name,
             form.IsOnlineMode,
@@ -170,14 +170,14 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         );
     }
     
-    private async Task CoreEdit(GameInstanceSnapshot? snapshot = null)
+    private async Task CoreEdit(InstanceSnapshot? snapshot = null)
     {
         var form = await CreateForm(snapshot);
         var okPressed = await this.OpenForm(form);
         if (!okPressed)
             return;
         var draft = CreateDraft(form);
-        await _gameInstanceService.SaveAsync(draft);
+        await _instanceService.SaveAsync(draft);
         RefreshInstances();
     }
     
@@ -188,17 +188,17 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
     }
     
     [RelayCommand]
-    private async Task Edit(GameInstanceItemViewModel instance)
+    private async Task Edit(InstanceItemViewModel instance)
     {
         if (instance.IsActive)
             return;
         
-        var snapshot = _gameInstanceService.GetInstanceConfigSnapshot(instance.Id);
+        var snapshot = _instanceService.GetInstanceConfigSnapshot(instance.Id);
         await CoreEdit(snapshot);
     }
     
     [RelayCommand]
-    private async Task Delete(GameInstanceItemViewModel instance)
+    private async Task Delete(InstanceItemViewModel instance)
     {
         if (instance.IsActive)
             return;
@@ -207,40 +207,40 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         var result = await _overlayService.ShowAsync(confirmationViewModel);
         if (!result)
             return;
-        await _gameInstanceService.RemoveAsync(instance.Id);
+        await _instanceService.RemoveAsync(instance.Id);
         RefreshInstances();
     }
     
-    private static bool CanLaunch(GameInstanceItemViewModel instance) => 
+    private static bool CanLaunch(InstanceItemViewModel instance) => 
         instance is { RequiresAttention: false, IsActive: false };
 
     [RelayCommand]
-    private async Task Launch(GameInstanceItemViewModel instance)
+    private async Task Launch(InstanceItemViewModel instance)
     {
         if (!CanLaunch(instance))
             return;
         
-        await _gameInstanceService.LaunchAsync(instance.Id);
+        await _instanceService.LaunchAsync(instance.Id);
     }
     
-    private static bool CanStop(GameInstanceItemViewModel instance) => instance.CanBeStopped;
+    private static bool CanStop(InstanceItemViewModel instance) => instance.CanBeStopped;
 
     [RelayCommand]
-    private async Task Stop(GameInstanceItemViewModel instance)
+    private async Task Stop(InstanceItemViewModel instance)
     {
         if (!CanStop(instance))
             return;
         
-        await _gameInstanceService.StopAsync(instance.Id);
+        await _instanceService.StopAsync(instance.Id);
     }
 
     [RelayCommand]
-    private void Show(GameInstanceItemViewModel instance)
+    private void Show(InstanceItemViewModel instance)
     {
         if (!instance.IsActive)
             return;
         
-        _gameInstanceService.Show(instance.Id);
+        _instanceService.Show(instance.Id);
     }
     
     private bool CanLaunchSelected => SelectedInstances.Items.Any(CanLaunch);
@@ -250,7 +250,7 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
     {
         var launchTasks = SelectedInstances.Items
             .Where(CanLaunch)
-            .Select(i => _gameInstanceService.LaunchAsync(i.Id));
+            .Select(i => _instanceService.LaunchAsync(i.Id));
         await Task.WhenAll(launchTasks);
     }
     
@@ -261,7 +261,7 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
     {
         var stopTasks = SelectedInstances.Items
             .Where(CanStop)
-            .Select(i => _gameInstanceService.StopAsync(i.Id));
+            .Select(i => _instanceService.StopAsync(i.Id));
         await Task.WhenAll(stopTasks);
     }
     

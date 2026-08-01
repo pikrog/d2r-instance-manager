@@ -26,7 +26,7 @@ public class ConfigLoader(IConfigStore configStore)
                     ConfigConstants.AsiaRegionName,
                     ConfigConstants.AsiaRegionAddress)
             ],
-            GameInstances = [],
+            Instances = [],
             Displays = [],
         };
     }

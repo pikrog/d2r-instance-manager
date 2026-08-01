@@ -9,16 +9,16 @@ using AvaloniaApplication1.Engine.Models.StateMachine;
 
 namespace AvaloniaApplication1.Engine;
 
-public class GameInstanceManager(GameInstanceEngineFactory engineFactory)
+public class InstanceManager(InstanceEngineFactory engineFactory)
 {
     public event Action<Guid>? InstanceStateChanged;
     
-    private readonly Dictionary<Guid, GameInstanceEngine> _instances = [];
+    private readonly Dictionary<Guid, InstanceEngine> _instances = [];
     
     public void Register(Guid id)
     {
         if (_instances.TryGetValue(id, out _))
-            throw new GameInstanceAlreadyExistsException(id);
+            throw new InstanceAlreadyExistsException(id);
         
         var instance = engineFactory.Create(id);
         instance.StateChanged += OnInstanceStateChanged;
@@ -35,10 +35,10 @@ public class GameInstanceManager(GameInstanceEngineFactory engineFactory)
         _instances.Remove(id);
     }
 
-    private GameInstanceEngine Get(Guid id)
+    private InstanceEngine Get(Guid id)
     {
         _instances.TryGetValue(id, out var instance);
-        return instance ?? throw new GameInstanceNotFoundException(id);
+        return instance ?? throw new InstanceNotFoundException(id);
     }
 
     public RuntimeSnapshot GetRuntimeSnapshot(Guid id)
