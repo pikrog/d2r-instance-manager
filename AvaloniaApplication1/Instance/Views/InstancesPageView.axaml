@@ -9,6 +9,8 @@
              xmlns:semantic="clr-namespace:AvaloniaApplication1.Semantic"
              xmlns:instanceIssues="clr-namespace:AvaloniaApplication1.Instance.Models.Issues"
              xmlns:settingsIssues="clr-namespace:AvaloniaApplication1.GlobalSettings.Issues"
+             xmlns:views="clr-namespace:AvaloniaApplication1.Instance.Views"
+             xmlns:instance="clr-namespace:AvaloniaApplication1.Instance"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Name="Root"
              x:Class="AvaloniaApplication1.Instance.Views.InstancesPageView"
@@ -18,9 +20,13 @@
         <designViewModels:InstancesPageDesignViewModel />
     </Design.DataContext>
     
+    <UserControl.Resources>
+        <instance:InstanceIssuesSemanticConverter x:Key="InstanceIssuesSemanticConverter" />
+    </UserControl.Resources>
+    
     <UserControl.DataTemplates>
         <DataTemplate x:DataType="instanceIssues:MissingDisplay">
-            <WrapPanel>
+            <Panel>
                 <TextBlock IsVisible="{Binding !IsFallbackAllowed}">
                     <Run>The selected display</Run>
                     <Span FontWeight="Bold">
@@ -29,7 +35,7 @@
                     </Span>
                     <Run>is not connected.</Run>
                 </TextBlock>
-                <TextBlock IsVisible="{Binding IsFallbackAllowed}">
+                <TextBlock IsVisible="{Binding IsFallbackAllowed}" TextWrapping="Wrap">
                     <Run>The selected display</Run>
                     <Span FontWeight="Bold">
                         <Run>"</Run><Run Text="{Binding Display.Description}" />
@@ -37,7 +43,7 @@
                     </Span>
                     <Run>is not connected. Will use the primary display.</Run>
                 </TextBlock>
-            </WrapPanel>
+            </Panel>
         </DataTemplate>
         <DataTemplate x:DataType="instanceIssues:DeletedAccount">
             <TextBlock>The instance refers to a deleted account.</TextBlock>
@@ -135,8 +141,7 @@
                 
                 <Border DockPanel.Dock="Bottom"
                         BoxShadow="0 -2 4 0 #1F000000"
-                        ZIndex="1"
-                        >
+                        ZIndex="1">
                     <StackPanel>
                         <Border Padding="20 15"
                                 IsVisible="{Binding SelectedInstances.Any}">
@@ -168,7 +173,7 @@
                         <Border Background="{DynamicResource DangerBackground}" Padding="10"
                                 IsVisible="{Binding FirstGlobalSettingsIssue, Converter={x:Static ObjectConverters.IsNotNull}}">
                             <Grid ColumnDefinitions="Auto, *" ColumnSpacing="16">
-                                <Svg Grid.Column="0" Classes="icon inherit-foreground danger" Height="24" Path="/Assets/images/error.svg" />
+                                <Svg Grid.Column="0" Classes="icon inherit-foreground danger" Height="24" Path="/Assets/images/deny.svg" />
                                 <ContentControl Grid.Column="1" Content="{Binding FirstGlobalSettingsIssue}" />
                             </Grid>
                         </Border>
@@ -177,16 +182,14 @@
                     
                 <Grid>
                     <ScrollViewer HorizontalScrollBarVisibility="Auto">
-                        <ItemsControl 
-                                      Classes="table" FontSize="16"
+                        <ItemsControl Classes="table" FontSize="16"
                                       ItemsSource="{Binding Instances}" ClipToBounds="False"
                                       IsVisible="{Binding !IsTableEmpty}">
-
                             <ItemsControl.DataTemplates>
                                 <DataTemplate x:DataType="viewModels:InstanceItemViewModel">
                                     <Grid Margin="20 15" ColumnSpacing="20">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition SharedSizeGroup="A" Width="Auto" />
+                                            <ColumnDefinition SharedSizeGroup="A" Width="30" />
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition SharedSizeGroup="B" Width="Auto" />
                                             <ColumnDefinition SharedSizeGroup="C" Width="Auto" />
@@ -195,57 +198,47 @@
 
                                         <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected}" 
                                                   HorizontalAlignment="Center" Padding="0"/>
+                                        
                                         <TextBlock Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center"
                                                    Text="{Binding Name}" />
                                             
                                         <controls:Spinner Grid.Column="2"
                                                           Opacity="{Binding IsInProgress, Converter={StaticResource BoolToOpacityConverter}}" />
                                             
-                                        <ContentControl Grid.Column="2" Classes="icon hoverable warning" VerticalAlignment="Center">
+                                        <ContentControl Grid.Column="2" 
+                                                        Classes="icon hoverable"
+                                                        semantic:SemanticClass.Type="{Binding Path=.,Converter={StaticResource InstanceIssuesSemanticConverter}}"
+                                                        VerticalAlignment="Center">
                                             <ContentControl.IsVisible>
                                                 <MultiBinding Converter="{x:Static BoolConverters.And}">
                                                     <Binding Path="!IsActive" />
                                                     <Binding Path="HasIssues" /> 
-                                                    <Binding Path="!RequiresAttention" />
                                                 </MultiBinding>
                                             </ContentControl.IsVisible>
                                                 
                                             <ToolTip.Tip>
                                                 <ToolTip>
-                                                    <StackPanel Classes="tooltip-text">
-                                                        <ItemsControl ItemsSource="{Binding Issues}" />
-                                                        <Button Classes="link" HorizontalAlignment="Right" 
-                                                                Command="{Binding DataContext.EditCommand, ElementName=Root}"
-                                                                CommandParameter="{Binding}">
-                                                            <TextBlock>Fix now</TextBlock>
-                                                        </Button>
-                                                    </StackPanel>
+                                                    <ItemsControl ItemsSource="{Binding Issues}">
+                                                        <ItemsControl.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <StackPanel Spacing="8" />
+                                                            </ItemsPanelTemplate>
+                                                        </ItemsControl.ItemsPanel>
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate x:DataType="instanceIssues:InstanceIssue">
+                                                                <views:InstanceIssueRowView />
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
                                                 </ToolTip>
                                             </ToolTip.Tip>
-                                                
-                                            <Svg Classes="inherit-foreground" Path="/Assets/images/warning.svg" />
-                                        </ContentControl>
                                             
-                                        <ContentControl Grid.Column="2" Classes="icon hoverable danger" VerticalAlignment="Center">
-                                            <ContentControl.IsVisible>
-                                                <MultiBinding Converter="{x:Static BoolConverters.And}">
-                                                    <Binding Path="!IsActive" />
-                                                    <Binding Path="RequiresAttention" />
-                                                </MultiBinding>
-                                            </ContentControl.IsVisible>
-                                                
-                                            <ToolTip.Tip>
-                                                <ToolTip>
-                                                    <StackPanel Classes="tooltip-text">
-                                                        <ItemsControl ItemsSource="{Binding Issues}" />
-                                                        <Button Classes="link" HorizontalAlignment="Right">Fix now</Button>
-                                                    </StackPanel>
-                                                </ToolTip>
-                                            </ToolTip.Tip>
-                                                
-                                            <Svg Classes="inherit-foreground" Path="/Assets/images/error.svg" />
-                                        </ContentControl>
-                                            
+                                            <Panel>
+                                                <Svg Classes="inherit-foreground" Path="/Assets/images/warning.svg" IsVisible="{Binding !RequiresAttention}"/>
+                                                <Svg Classes="inherit-foreground" Path="/Assets/images/deny.svg" IsVisible="{Binding RequiresAttention}"/>
+                                            </Panel>
+                                        </ContentControl>                                        
+                                        
                                         <Border Grid.Column="3"
                                                 semantic:SemanticClass.Type="{Binding StatusSemanticType}"
                                                 Classes="chip"
@@ -255,6 +248,7 @@
                                                        FontSize="12"
                                                        Text="{Binding Status}" />
                                         </Border>
+                                        
                                         <controls:RevealableContent Grid.Column="4">
                                             <Grid ColumnDefinitions="30,30,30,30,30" HorizontalAlignment="Right">
                                                 <Button Grid.Column="0" Classes="icon"

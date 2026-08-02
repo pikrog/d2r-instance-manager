@@ -1,0 +1,26 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:issues="clr-namespace:AvaloniaApplication1.Instance.Models.Issues"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="100"
+             x:Class="AvaloniaApplication1.Instance.Views.InstanceIssueRowView"
+             x:DataType="issues:InstanceIssue">
+    <Design.DataContext>
+        <issues:MissingRegion />
+    </Design.DataContext>
+    
+    <UserControl.Styles>
+        <Style Selector="ContentPresenter TextBlock">
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+    </UserControl.Styles>
+    
+    <Grid ColumnDefinitions="Auto, *" ColumnSpacing="8">
+        <Panel Grid.Column="0" Height="14" VerticalAlignment="Top">
+            <Svg Classes="warning" Path="/Assets/images/warning.svg" IsVisible="{Binding !RequiresAttention}" />
+            <Svg Classes="danger" Path="/Assets/images/error.svg" IsVisible="{Binding RequiresAttention}" />
+        </Panel>
+        <ContentControl Grid.Column="1" Content="{Binding}" VerticalAlignment="Center"/>
+    </Grid>
+</UserControl>
