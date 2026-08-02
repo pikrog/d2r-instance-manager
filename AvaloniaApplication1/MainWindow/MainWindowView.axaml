@@ -35,7 +35,7 @@
                         </DockPanel.Styles>
                         <Border DockPanel.Dock="Top" Height="140">
                             <StackPanel Orientation="Vertical" Spacing="6" VerticalAlignment="Center">
-                                <Image Height="75" Source="/Assets/images/barb-bo.bmp" Margin="5" RenderOptions.BitmapInterpolationMode="HighQuality"/>
+                                <Image Height="75" Source="/Assets/images/logo.png"  RenderOptions.BitmapInterpolationMode="HighQuality" />
                                 <TextBlock HorizontalAlignment="Center" FontWeight="Bold" FontSize="15">D2R Instance Manager</TextBlock>
                             </StackPanel>
                         </Border>
