@@ -1,4 +1,4 @@
-﻿namespace AvaloniaApplication1.Engine.Common;
+﻿namespace AvaloniaApplication1.Common;
 
 public readonly struct Unit
 {
