@@ -82,7 +82,7 @@
     </Style>
     
     <Style Selector="Button.dialog-action">
-        <Setter Property="BorderThickness" Value="0.5" />
+        <Setter Property="BorderThickness" Value="{StaticResource MaximallyThin}" />
     </Style>
 
     <Style Selector="Button.danger">
@@ -198,7 +198,7 @@
     </Style>
     
     <Style Selector="Border.chip">
-        <Setter Property="BorderThickness" Value="0.67" />
+        <Setter Property="BorderThickness" Value="{StaticResource MaximallyThin}" />
         <Setter Property="CornerRadius" Value="100" />
         <Setter Property="Padding" Value="4" />
     </Style>
