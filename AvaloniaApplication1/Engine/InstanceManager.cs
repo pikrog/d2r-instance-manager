@@ -61,7 +61,14 @@ public class InstanceManager(InstanceEngineFactory engineFactory)
         var instance = Get(id);
         await instance.StopAsync();
     }
-    
+
+    public IReadOnlyList<ShutdownTask> RequestGracefulShutdownAll() =>
+        _instances.Values.Select(e =>
+        {
+            var trackProgress = IsActive(e);
+            return new ShutdownTask(e.GracefulShutdownAsync(), trackProgress);
+        }).ToList();
+
     public void Show(Guid id)
     {
         var snapshot = GetRuntimeSnapshot(id);

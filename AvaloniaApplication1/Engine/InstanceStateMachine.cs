@@ -23,6 +23,8 @@ public static class InstanceStateMachine
         {
             case (State.Inactive, LaunchRequested e):
                 return StartNewSession(e);
+            case (State.Inactive, ShutdownRequested):
+                return To(session, State.Shutdown);
 
             case (State.Authenticating, Authenticated):
                 return To(
@@ -34,6 +36,8 @@ public static class InstanceStateMachine
                 return To(session, State.Stopping);
             case (State.Authenticating, StopRequested):
                 return To(session, State.Stopping, [new Cancel()]);
+            case (State.Authenticating, ShutdownRequested):
+                return To(session with { IsShuttingDown = true }, State.Stopping, [new Cancel()]);
 
             case (State.WaitingForStart, LaunchLeaseGranted e):
                 return To(
@@ -45,6 +49,8 @@ public static class InstanceStateMachine
                 return To(session.CompleteCleanup(CleanupItem.LaunchLease), State.Stopping);
             case (State.WaitingForStart, StopRequested):
                 return To(session, State.Stopping, [new Cancel()]);
+            case (State.WaitingForStart, ShutdownRequested):
+                return To(session with { IsShuttingDown = true }, State.Stopping, [new Cancel()]);
 
             case (State.Starting, ProcessStarted e):
                 return To(
@@ -65,6 +71,8 @@ public static class InstanceStateMachine
                     session,
                     State.Stopping,
                     [new Cancel()]);
+            case (State.Starting, ShutdownRequested):
+                return To(session with { IsShuttingDown = true }, State.Stopping, [new Cancel()]);
 
             case (State.WaitingForUnlock, MultiboxUnlocked):
                 return To(
@@ -81,9 +89,17 @@ public static class InstanceStateMachine
                         new StopProcess(Require(session.Process), Require(session.Policies?.ProcessStopPolicies)),
                         new Cancel()
                     ]);
+            case (State.WaitingForUnlock, ShutdownRequested):
+                return To(
+                    session with { IsShuttingDown = true },
+                    State.Stopping,
+                    [
+                        new StopProcess(Require(session.Process), Require(session.Policies?.ProcessStopPolicies)),
+                        new Cancel()
+                    ]);
             case (State.WaitingForUnlock, ProcessExited e):
                 return To(
-                    (session with { ProcessExitResult = e.Result }).CompleteCleanup(CleanupItem.Process), 
+                    (session with { ProcessExitResult = e.Result }).CompleteCleanup(CleanupItem.Process),
                     State.Stopping,
                     [new Cancel(), new ReleaseLaunchLease(Require(session.Lease))]
                     );
@@ -92,32 +108,42 @@ public static class InstanceStateMachine
                 return To(session.CompleteCleanup(CleanupItem.LaunchLease), State.Running);
             case (State.Running, StopRequested):
                 return To(
-                    session, 
-                    State.Stopping, 
+                    session,
+                    State.Stopping,
+                    [
+                        new StopProcess(Require(session.Process), Require(session.Policies?.ProcessStopPolicies)),
+                        new Cancel()
+                    ]);
+            case (State.Running, ShutdownRequested):
+                return To(
+                    session with { IsShuttingDown = true },
+                    State.Stopping,
                     [
                         new StopProcess(Require(session.Process), Require(session.Policies?.ProcessStopPolicies)),
                         new Cancel()
                     ]);
             case (State.Running, ProcessExited e):
                 return To(
-                    (session with { ProcessExitResult = e.Result }).CompleteCleanup(CleanupItem.Process), 
+                    (session with { ProcessExitResult = e.Result }).CompleteCleanup(CleanupItem.Process),
                     State.Stopping
                     );
 
+            case (State.Stopping, ShutdownRequested):
+                return To(session with { IsShuttingDown = true }, State.Stopping);
             case (State.Stopping, ProcessStarted e):
                 return To(
-                    session with { Process = e.ProcessManager }, 
-                    State.Stopping, 
+                    session with { Process = e.ProcessManager },
+                    State.Stopping,
                     [
-                        new MonitorProcessExit(e.ProcessManager, Require(session.Policies).ProcessStopPolicies.ForcefulExitCode), 
+                        new MonitorProcessExit(e.ProcessManager, Require(session.Policies).ProcessStopPolicies.ForcefulExitCode),
                         new StopProcess(e.ProcessManager, Require(session.Policies?.ProcessStopPolicies))
                     ]);
             case (State.Stopping, LaunchLeaseGranted e):
                 return To(session, State.Stopping, [new ReleaseLaunchLease(e.Lease)]);
             case (State.Stopping, ProcessExited e):
                 return To(
-                    (session with { ProcessExitResult = e.Result }).CompleteCleanup(CleanupItem.Process), 
-                    State.Stopping, 
+                    (session with { ProcessExitResult = e.Result }).CompleteCleanup(CleanupItem.Process),
+                    State.Stopping,
                     [new ReleaseLaunchLease(Require(session.Lease))]
                     );
             case (State.Stopping, ProcessStartFailed):
@@ -161,7 +187,9 @@ public static class InstanceStateMachine
 
     private static TransitionResult CompleteCleanupIfNeeded(TransitionResult result) =>
         result.Session is { State: State.Stopping, CleanupState.IsCleanupComplete: true }
-            ? new TransitionResult(result.Session with { State = State.Inactive }, [..result.Effects, new Reset()])
+            ? new TransitionResult(
+                result.Session with { State = result.Session.IsShuttingDown ? State.Shutdown : State.Inactive },
+                [..result.Effects, new Reset()])
             : result;
 
     private static TransitionResult To(Session session, State state) =>

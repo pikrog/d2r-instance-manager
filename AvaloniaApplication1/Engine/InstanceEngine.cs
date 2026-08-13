@@ -80,9 +80,17 @@ public class InstanceEngine : IAsyncDisposable
         await PublishAsync(@event);
     }
 
+    public async Task GracefulShutdownAsync()
+    {
+        await PublishAsync(new ShutdownRequested());
+        await _loopTask;
+        _sessionCancellationTokenSource.Dispose();
+        _engineCancellationTokenSource.Dispose();
+    }
+
     public async Task ShutdownAsync()
     {
-        await _engineCancellationTokenSource.CancelAsync(); 
+        await _engineCancellationTokenSource.CancelAsync();
         await _loopTask;
         await _sessionCancellationTokenSource.CancelAsync();
         await Task.WhenAll(_sessionTasks);
@@ -103,6 +111,8 @@ public class InstanceEngine : IAsyncDisposable
                 {
                     await HandleEvent(@event);
                     RuntimeSnapshot = Snap();
+                    if (_session.State == State.Shutdown)
+                        return;
                 }
             }
         }

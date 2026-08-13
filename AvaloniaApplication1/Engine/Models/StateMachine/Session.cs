@@ -11,6 +11,7 @@ namespace AvaloniaApplication1.Engine.Models.StateMachine;
 public sealed record Session : IDisposable
 {
     public State State { get; init; } = State.Inactive;
+    public bool IsShuttingDown { get; init; }
     public LaunchLease? Lease { get; init; }
     public EnginePolicies? Policies { get; init; }
     public ProcessStartInfo? ProcessStartInfo { get; init; }

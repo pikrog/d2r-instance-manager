@@ -19,6 +19,7 @@ public static class InstanceStatusMapper
             State.Starting or State.WaitingForUnlock => InstanceStatus.Starting,
             State.Running => InstanceStatus.Running,
             State.Stopping => InstanceStatus.Stopping,
+            State.Shutdown => InstanceStatus.Inactive,
             _ => throw new InvalidOperationException($"Unknown state {snapshot.State}")
         };
 

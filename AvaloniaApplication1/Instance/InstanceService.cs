@@ -167,5 +167,7 @@ public class InstanceService(
 
     public async Task StopAsync(Guid id) => await instanceManager.StopAsync(id);
 
+    public IReadOnlyList<ShutdownTask> RequestGracefulShutdownAll() => instanceManager.RequestGracefulShutdownAll();
+
     public void Show(Guid id) => instanceManager.Show(id);
 }

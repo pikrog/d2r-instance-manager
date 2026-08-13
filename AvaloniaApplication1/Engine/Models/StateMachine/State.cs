@@ -9,4 +9,5 @@ public enum State
     WaitingForUnlock,
     Running,
     Stopping,
+    Shutdown,
 }
