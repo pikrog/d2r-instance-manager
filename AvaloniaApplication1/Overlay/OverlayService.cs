@@ -11,8 +11,13 @@ public class OverlayService(IOverlayHost host)
             throw new InvalidOperationException("Overlay is already shown");
         
         host.OverlayContent = content;
-        var result = await content.Result;
-        host.OverlayContent = null;
-        return result;
+        try
+        {
+            return await content.Result;
+        }
+        finally
+        {
+            host.OverlayContent = null;
+        }
     }
 }
