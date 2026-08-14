@@ -103,12 +103,10 @@ public class InstanceEngine : IAsyncDisposable
 
     public async Task ShutdownAsync()
     {
-        await _sessionCancellationTokenSource.CancelAsync();
-        await Task.WhenAll(_sessionTasks);
-        
         await _engineCancellationTokenSource.CancelAsync();
         await _loopTask;
-        
+        await _sessionCancellationTokenSource.CancelAsync();
+        await Task.WhenAll(_sessionTasks);
         _session.Dispose();
         _sessionCancellationTokenSource.Dispose();
         _engineCancellationTokenSource.Dispose();
