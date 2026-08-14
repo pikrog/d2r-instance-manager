@@ -2,4 +2,7 @@
 
 namespace AvaloniaApplication1.Engine.Models.Messages;
 
-public abstract record Message;
+public interface ICompletableMessage
+{
+    TaskCompletionSource Completion { get; }
+}

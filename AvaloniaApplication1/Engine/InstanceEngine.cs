@@ -62,24 +62,35 @@ public class InstanceEngine : IAsyncDisposable
         
         _loopTask = Loop();
     }
+    
+    private ValueTask WriteChannelAsync(Message message) => 
+        _channel.Writer.WriteAsync(message, _engineCancellationTokenSource.Token);
 
-    private async Task PublishAsync(Event @event)
+    private ValueTask PublishAsync(Event @event)
     {
         var message = new EventMessage(@event);
-        await _channel.Writer.WriteAsync(message, _engineCancellationTokenSource.Token);
+        return WriteChannelAsync(message);
+    }
+
+    private async Task PublishCompletableAsync(Event @event)
+    {
+        var completion = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        var message = new CompletableEventMessage(@event, completion);
+        await WriteChannelAsync(message);
+        await completion.Task;
     }
     
-    public async Task LaunchAsync(EngineLaunchContext context)
+    public Task LaunchAsync(EngineLaunchContext context)
     {
         var processStartInfo = _processStartInfoFactory.Create(context.InstanceLaunchContext);
         var @event = new LaunchRequested(context.InstanceLaunchContext.AuthenticationContext, processStartInfo, context.Policies);
-        await PublishAsync(@event);
+        return PublishCompletableAsync(@event);
     }
     
-    public async Task StopAsync()
+    public Task StopAsync()
     {
         var @event = new StopRequested();
-        await PublishAsync(@event);
+        return PublishCompletableAsync(@event);
     }
 
     public async Task GracefulShutdownAsync()
@@ -92,57 +103,85 @@ public class InstanceEngine : IAsyncDisposable
 
     public async Task ShutdownAsync()
     {
-        await _engineCancellationTokenSource.CancelAsync();
-        await _loopTask;
         await _sessionCancellationTokenSource.CancelAsync();
         await Task.WhenAll(_sessionTasks);
+        
+        await _engineCancellationTokenSource.CancelAsync();
+        await _loopTask;
+        
         _session.Dispose();
         _sessionCancellationTokenSource.Dispose();
         _engineCancellationTokenSource.Dispose();
     }
 
-    public Task FlushAsync()
+    public async Task FlushAsync()
     {
-        var completionSource = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
-        var message = new FlushRequested(completionSource);
-        _channel.Writer.TryWrite(message);
-        return completionSource.Task;
+        var completion = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        var message = new FlushRequested(completion);
+        await WriteChannelAsync(message);
+        await completion.Task;
+    }
+
+    private async Task HandleMessage(Message message)
+    {
+        try
+        {
+            switch (message)
+            {
+                case EventMessage eventMessage:
+                    await HandleEvent(eventMessage.Event);
+                    break;
+                case FlushRequested:
+                    break;
+                default:
+                    throw new InvalidOperationException($"Unexpected message: {message.GetType().Name}");
+            }
+
+            RuntimeSnapshot = Snap();
+            
+            if (message is ICompletableMessage completableMessage)
+                completableMessage.Completion.SetResult();
+        }
+        catch (Exception e)
+        {
+            if (message is ICompletableMessage completableMessage)
+                completableMessage.Completion.SetException(e);
+
+            throw;
+        }
     }
 
     private async Task Loop()
     {
-        var engineCancellationToken = _engineCancellationTokenSource.Token;
         try
         {
-            while (await _channel.Reader.WaitToReadAsync(engineCancellationToken).ConfigureAwait(false))
+            await foreach (var message in _channel.Reader.ReadAllAsync(_engineCancellationTokenSource.Token))
             {
-                await foreach (var message in _channel.Reader.ReadAllAsync(engineCancellationToken)
-                                   .ConfigureAwait(false))
-                {
-                    switch (message)
-                    {
-                        case EventMessage eventMessage:
-                            await HandleEvent(eventMessage.Event);
-                            RuntimeSnapshot = Snap();
-                            break;
-                        case FlushRequested flush:
-                            RuntimeSnapshot = Snap();
-                            flush.Completion.SetResult();
-                            break;
-                        default:
-                            throw new InvalidOperationException($"Unexpected message: {message.GetType().Name}");
-                    }
-                    
-                    if (_session.State == State.Shutdown)
-                        return;
-                }
+                await HandleMessage(message);
+                if (_session.State == State.Shutdown)
+                    return;
             }
         }
-        catch (OperationCanceledException) { }
+        catch (OperationCanceledException)
+        {
+        }
         catch (Exception e)
         {
             _session = _session.AddErrorEvent(new UnexpectedError(e, nameof(Loop))) with { State = State.Inactive };
             RuntimeSnapshot = Snap();
+        }
+        finally
+        {
+            _channel.Writer.TryComplete();
+
+            // Deliberately uncancellable: drain all pending messages after engine cancellation.
+            // ReSharper disable MethodSupportsCancellation
+            await foreach (var message in _channel.Reader.ReadAllAsync())
+            {
+                if (message is ICompletableMessage completableMessage)
+                    completableMessage.Completion.SetCanceled();
+            }
+            // ReSharper restore MethodSupportsCancellation
         }
     }
     

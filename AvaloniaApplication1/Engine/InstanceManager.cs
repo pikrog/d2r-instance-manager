@@ -61,14 +61,12 @@ public class InstanceManager(InstanceEngineFactory engineFactory)
     {
         var instance = Get(id);
         await instance.LaunchAsync(context);
-        await instance.FlushAsync();
     }
 
     public async Task StopAsync(Guid id)
     {
         var instance = Get(id);
         await instance.StopAsync();
-        await instance.FlushAsync();
     }
 
     public async Task<IReadOnlyList<ShutdownRequest>> RequestGracefulShutdownAllAsync()
