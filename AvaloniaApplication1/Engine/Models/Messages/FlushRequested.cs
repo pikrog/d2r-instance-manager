@@ -2,4 +2,4 @@
 
 namespace AvaloniaApplication1.Engine.Models.Messages;
 
-public sealed record FlushRequested(TaskCompletionSource Completion) : Message;
+public sealed record FlushRequested(TaskCompletionSource Completion) : Message, ICompletableMessage;
