@@ -12,6 +12,7 @@ using AvaloniaApplication1.Engine.Helpers.ProcessStop;
 using AvaloniaApplication1.Engine.Models.Contexts.Launch;
 using AvaloniaApplication1.Engine.Models.Effects;
 using AvaloniaApplication1.Engine.Models.Events;
+using AvaloniaApplication1.Engine.Models.Messages;
 using AvaloniaApplication1.Engine.Models.StateMachine;
 
 namespace AvaloniaApplication1.Engine;
@@ -20,7 +21,7 @@ public class InstanceEngine : IAsyncDisposable
 {
     public Guid Id { get; }
     
-    private readonly Channel<Event> _eventChannel = Channel.CreateUnbounded<Event>();
+    private readonly Channel<Message> _channel = Channel.CreateUnbounded<Message>();
     
     private Session _session = new();
     
@@ -64,7 +65,8 @@ public class InstanceEngine : IAsyncDisposable
 
     private async Task PublishAsync(Event @event)
     {
-        await _eventChannel.Writer.WriteAsync(@event, _engineCancellationTokenSource.Token);
+        var message = new EventMessage(@event);
+        await _channel.Writer.WriteAsync(message, _engineCancellationTokenSource.Token);
     }
     
     public async Task LaunchAsync(EngineLaunchContext context)
@@ -99,18 +101,38 @@ public class InstanceEngine : IAsyncDisposable
         _engineCancellationTokenSource.Dispose();
     }
 
+    public Task FlushAsync()
+    {
+        var completionSource = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        var message = new FlushRequested(completionSource);
+        _channel.Writer.TryWrite(message);
+        return completionSource.Task;
+    }
+
     private async Task Loop()
     {
         var engineCancellationToken = _engineCancellationTokenSource.Token;
         try
         {
-            while (await _eventChannel.Reader.WaitToReadAsync(engineCancellationToken).ConfigureAwait(false))
+            while (await _channel.Reader.WaitToReadAsync(engineCancellationToken).ConfigureAwait(false))
             {
-                await foreach (var @event in _eventChannel.Reader.ReadAllAsync(engineCancellationToken)
+                await foreach (var message in _channel.Reader.ReadAllAsync(engineCancellationToken)
                                    .ConfigureAwait(false))
                 {
-                    await HandleEvent(@event);
-                    RuntimeSnapshot = Snap();
+                    switch (message)
+                    {
+                        case EventMessage eventMessage:
+                            await HandleEvent(eventMessage.Event);
+                            RuntimeSnapshot = Snap();
+                            break;
+                        case FlushRequested flush:
+                            RuntimeSnapshot = Snap();
+                            flush.Completion.SetResult();
+                            break;
+                        default:
+                            throw new InvalidOperationException($"Unexpected message: {message.GetType().Name}");
+                    }
+                    
                     if (_session.State == State.Shutdown)
                         return;
                 }

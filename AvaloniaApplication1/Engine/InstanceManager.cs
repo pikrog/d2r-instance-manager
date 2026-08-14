@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AvaloniaApplication1.Engine.Exceptions;
 using AvaloniaApplication1.Engine.Factories;
+using AvaloniaApplication1.Engine.Models;
 using AvaloniaApplication1.Engine.Models.Contexts.Launch;
 using AvaloniaApplication1.Engine.Models.StateMachine;
 
@@ -49,26 +50,39 @@ public class InstanceManager(InstanceEngineFactory engineFactory)
     
     public IReadOnlyList<RuntimeSnapshot> GetAllRuntimeStates() =>
         _instances.Select(p => p.Value.RuntimeSnapshot).ToList().AsReadOnly();
+    
+    public async Task<int> GetActiveCountAsync()
+    {
+        await FlushAll();
+        return _instances.Values.Count(e => e.RuntimeSnapshot.IsActive);
+    }
 
     public async Task LaunchAsync(Guid id, EngineLaunchContext context)
     {
         var instance = Get(id);
         await instance.LaunchAsync(context);
+        await instance.FlushAsync();
     }
 
     public async Task StopAsync(Guid id)
     {
         var instance = Get(id);
         await instance.StopAsync();
+        await instance.FlushAsync();
     }
 
-    public IReadOnlyList<ShutdownTask> RequestGracefulShutdownAll() =>
-        _instances.Values.Select(e =>
+    public async Task<IReadOnlyList<ShutdownRequest>> RequestGracefulShutdownAllAsync()
+    {
+        await FlushAll();
+        return _instances.Values.Select(e =>
         {
-            var trackProgress = IsActive(e);
-            return new ShutdownTask(e.GracefulShutdownAsync(), trackProgress);
+            var trackProgress = e.RuntimeSnapshot.IsActive;
+            return new ShutdownRequest(e.GracefulShutdownAsync(), trackProgress);
         }).ToList();
+    }
 
+    private Task FlushAll() => Task.WhenAll(_instances.Values.Select(e => e.FlushAsync()));
+    
     public void Show(Guid id)
     {
         var snapshot = GetRuntimeSnapshot(id);

@@ -8,6 +8,7 @@ using AvaloniaApplication1.Display;
 using AvaloniaApplication1.Engine;
 using AvaloniaApplication1.Engine.Common;
 using AvaloniaApplication1.Engine.Helpers.ProcessStop;
+using AvaloniaApplication1.Engine.Models;
 using AvaloniaApplication1.Engine.Models.Contexts.Launch;
 using AvaloniaApplication1.Engine.Models.StateMachine;
 using AvaloniaApplication1.Instance.Models;
@@ -101,6 +102,8 @@ public class InstanceService(
             }).ToList();
     }
 
+    public Task<int> GetActiveCountAsync() => instanceManager.GetActiveCountAsync();
+
     private string? ResolveDisplayId(DisplaySelection display)
     {
         var isFallbackAllowed = configService.Config.GetGlobalSettings().FallbackToPrimaryDisplayIfInvalid;
@@ -167,7 +170,8 @@ public class InstanceService(
 
     public async Task StopAsync(Guid id) => await instanceManager.StopAsync(id);
 
-    public IReadOnlyList<ShutdownTask> RequestGracefulShutdownAll() => instanceManager.RequestGracefulShutdownAll();
+    public Task<IReadOnlyList<ShutdownRequest>> RequestGracefulShutdownAllAsync() => 
+        instanceManager.RequestGracefulShutdownAllAsync();
 
     public void Show(Guid id) => instanceManager.Show(id);
 }
