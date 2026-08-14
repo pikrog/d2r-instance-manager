@@ -110,6 +110,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Remove="Common\Converters\CollectionIsNotEmptyConverter.cs" />
+    <Compile Update="Overlay\Dialog\StopInstances\StopInstancesDialogView.axaml.cs">
+      <DependentUpon>StopInstancesDialogView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -121,7 +125,5 @@
 
   <ItemGroup>
     <Folder Include="Engine\CommandLine\" />
-    <Folder Include="Overlay\Dialog\Quit\" />
-    <Folder Include="Overlay\Dialog\SaveChanges\" />
   </ItemGroup>
 </Project>

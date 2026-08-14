@@ -7,4 +7,6 @@ public class MainWindowDesignViewModel() : MainWindowViewModel(DesignServices.Ov
     new InstancesPageDesignViewModel(),
     new AccountsPageDesignViewModel(),
     new RegionsPageDesignViewModel(),
-    new GlobalSettingsPageDesignViewModel());
+    new GlobalSettingsPageDesignViewModel(),
+    DesignServices.OverlayService,
+    DesignServices.InstanceService);

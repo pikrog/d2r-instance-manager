@@ -1,0 +1,51 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
+             xmlns:local="clr-namespace:AvaloniaApplication1.Overlay.Dialog.ShutdownProgress"
+             xmlns:viewModels="clr-namespace:AvaloniaApplication1.Design.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AvaloniaApplication1.Overlay.Dialog.ShutdownProgress.ShutdownProgressDialogView"
+             x:DataType="local:ShutdownProgressDialogViewModel">
+    <Design.DataContext>
+        <viewModels:ShutdownProgressDialogDesignViewModel />
+    </Design.DataContext>
+    
+    <controls:Dialog>
+        <controls:Dialog.Header>
+            <Grid ColumnDefinitions="Auto,*">
+                <TextBlock Grid.Column="0" Classes="h1">Shutting down</TextBlock>
+                <controls:Spinner Grid.Column="1" HorizontalAlignment="Right" />
+            </Grid>
+        </controls:Dialog.Header>
+        
+        <controls:Dialog.Body>
+            <!--<StackPanel Classes="dialog-text">
+                <TextBlock Classes="paragraph">You have 
+                    <Run Text="{Binding InstanceCount}" />
+                    instances running.</TextBlock>
+                <TextBlock Classes="paragraph">Do you want to stop them before exiting or leave them running?</TextBlock>
+            </StackPanel>-->
+            <StackPanel Classes="dialog-text">
+                <TextBlock>Stopping instances...</TextBlock>
+                <StackPanel>
+                    <TextBlock HorizontalAlignment="Right">
+                        <Run Text="{Binding CompletedCount}" />
+                        of
+                        <Run Text="{Binding TrackedShutdownTaskCount}" />
+                    </TextBlock>
+                    <ProgressBar Value="{Binding CompletedCount}" Maximum="{Binding TrackedShutdownTaskCount}" />
+                </StackPanel>
+            </StackPanel>
+        </controls:Dialog.Body>
+
+        <controls:Dialog.Footer>
+            <StackPanel Classes="dialog-actions">
+                <Button Classes="dialog-action danger" IsDefault="True" Command="{Binding  ExitNowCommand}">
+                    Exit now
+                </Button>
+            </StackPanel>
+        </controls:Dialog.Footer>
+    </controls:Dialog>
+</UserControl>

@@ -1,7 +1,11 @@
 using System.Threading.Tasks;
 using AvaloniaApplication1.Common;
 using AvaloniaApplication1.Dialog;
+using AvaloniaApplication1.Instance;
 using AvaloniaApplication1.Instance.ViewModels;
+using AvaloniaApplication1.Overlay;
+using AvaloniaApplication1.Overlay.Dialog.ShutdownProgress;
+using AvaloniaApplication1.Overlay.Dialog.StopInstances;
 using AvaloniaApplication1.Page;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -26,19 +30,27 @@ public partial class MainWindowViewModel : ViewModelBase, IDialogParticipant
     public GlobalSettingsPageViewModel GlobalSettingsPageViewModel { get; }
 
     public OverlayHost OverlayHost { get; }
+    
+    public OverlayService OverlayService { get; }
+    
+    public InstanceService InstanceService { get; }
 
     public MainWindowViewModel(
         OverlayHost overlayHost,
         InstancesPageViewModel instancesPageViewModel,
         AccountsPageViewModel accountsPageViewModel,
         RegionsPageViewModel regionsPageViewModel,
-        GlobalSettingsPageViewModel globalSettingsPageViewModel)
+        GlobalSettingsPageViewModel globalSettingsPageViewModel,
+        OverlayService overlayService,
+        InstanceService instanceService)
     {
         InstancesPageViewModel = instancesPageViewModel;
         AccountsPageViewModel = accountsPageViewModel;
         RegionsPageViewModel = regionsPageViewModel;
         GlobalSettingsPageViewModel = globalSettingsPageViewModel;
         OverlayHost = overlayHost;
+        OverlayService = overlayService;
+        InstanceService = instanceService;
 
         CurrentPage = InstancesPageViewModel;
     }
@@ -58,5 +70,34 @@ public partial class MainWindowViewModel : ViewModelBase, IDialogParticipant
         await CurrentPage.OnLeaveAsync();
         CurrentPage = page;
         await CurrentPage.OnEnterAsync();
+    }
+    
+    public async Task<bool> TryExitAsync()
+    {
+        if (!await CurrentPage.CanLeaveAsync())
+            return false;
+
+        var activeInstanceCount = await InstanceService.GetActiveCountAsync();
+        if (activeInstanceCount == 0)
+        {
+            await CurrentPage.OnLeaveAsync();
+            return true;
+        }
+        
+        var stopInstancesDialog = new StopInstancesDialogViewModel(activeInstanceCount);
+        var result = await OverlayService.ShowAsync(stopInstancesDialog);
+        if (result == StopInstancesAction.Cancel)
+            return false;
+        
+        await CurrentPage.OnLeaveAsync();
+
+        if (result != StopInstancesAction.StopInstances)
+            return true;
+        
+        var shutdownTasks = await InstanceService.RequestGracefulShutdownAllAsync();
+        var shutdownProgressDialog = new ShutdownProgressDialogViewModel(shutdownTasks);
+        await OverlayService.ShowAsync(shutdownProgressDialog);
+
+        return true;
     }
 }

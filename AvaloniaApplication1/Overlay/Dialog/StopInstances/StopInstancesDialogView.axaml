@@ -1,0 +1,39 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
+             xmlns:local="clr-namespace:AvaloniaApplication1.Overlay.Dialog.StopInstances"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AvaloniaApplication1.Overlay.Dialog.StopInstances.StopInstancesDialogView"             
+             x:DataType="local:StopInstancesDialogViewModel"
+             x:Name="Root">
+    <controls:Dialog>
+        <controls:Dialog.Header>
+            <TextBlock Classes="h1">Stop instances?</TextBlock>
+        </controls:Dialog.Header>
+        
+        <controls:Dialog.Body>
+            <StackPanel Classes="dialog-text">
+                <TextBlock Classes="paragraph">You have 
+                    <Run Text="{Binding InstanceCount}" />
+                    instances running.</TextBlock>
+                <TextBlock Classes="paragraph">Do you want to stop them before exiting or leave them running?</TextBlock>
+            </StackPanel>
+        </controls:Dialog.Body>
+
+        <controls:Dialog.Footer>
+            <StackPanel Classes="dialog-actions">
+                <Button Classes="dialog-action neutral" IsCancel="True" Command="{Binding CancelCommand}">
+                    Don't exit
+                </Button>
+                <Button Classes="dialog-action warning" Command="{Binding LeaveInstancesCommand}">
+                    Leave instances
+                </Button>                
+                <Button Classes="dialog-action danger" IsDefault="True" Command="{Binding  StopInstancesCommand}">
+                    Stop instances
+                </Button>
+            </StackPanel>
+        </controls:Dialog.Footer>
+    </controls:Dialog>
+</UserControl>
