@@ -253,34 +253,29 @@
                                             <Grid ColumnDefinitions="30,30,30,30,30" HorizontalAlignment="Right">
                                                 <Button Grid.Column="0" Classes="icon"
                                                         Command="{Binding DataContext.EditCommand, ElementName=Root}"
-                                                        CommandParameter="{Binding}"
-                                                        IsEnabled="{Binding !IsActive}">
+                                                        CommandParameter="{Binding}">
                                                     <Svg Classes="inherit-foreground" Path="/Assets/images/edit.svg" />
                                                 </Button>
                                                 <Button Grid.Column="1" Classes="icon danger"
                                                         Command="{Binding DataContext.DeleteCommand, ElementName=Root}"
-                                                        CommandParameter="{Binding}"
-                                                        IsEnabled="{Binding !IsActive}">
+                                                        CommandParameter="{Binding}">
                                                     <Svg Classes="inherit-foreground" Path="/Assets/images/delete.svg" />
                                                 </Button>
                                                 <Button Grid.Column="3" Classes="icon"
                                                         Command="{Binding DataContext.ShowCommand, ElementName=Root}"
-                                                        CommandParameter="{Binding}"
-                                                        IsEnabled="{Binding IsActive}">
+                                                        CommandParameter="{Binding}">
                                                     <Svg Classes="inherit-foreground" Path="/Assets/images/show.svg" />
                                                 </Button>
                                                 <Button Grid.Column="4" Classes="icon danger"
                                                         Command="{Binding DataContext.StopCommand, ElementName=Root}"
                                                         CommandParameter="{Binding}"
-                                                        IsVisible="{Binding IsActive}"
-                                                        IsEnabled="{Binding CanBeStopped}">
+                                                        IsVisible="{Binding IsActive}">
                                                     <Svg Classes="inherit-foreground" Path="/Assets/images/close.svg" />
                                                 </Button>
                                                 <Button Grid.Column="4" Classes="icon success"
                                                         Command="{Binding DataContext.LaunchCommand, ElementName=Root}"
                                                         CommandParameter="{Binding}"
-                                                        IsVisible="{Binding !IsActive}"
-                                                        IsEnabled="{Binding !RequiresAttention}">
+                                                        IsVisible="{Binding !IsActive}">
                                                     <Svg Classes="inherit-foreground" Path="/Assets/images/play.svg"  />
                                                 </Button>
                                             </Grid>

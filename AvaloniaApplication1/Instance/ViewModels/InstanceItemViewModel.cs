@@ -20,10 +20,11 @@ public partial class InstanceItemViewModel : SelectableViewModelBase
     public partial string Name { get; set; }
     
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(StatusSemanticType), nameof(IsInProgress), nameof(CanBeStopped))]
+    [NotifyPropertyChangedFor(nameof(StatusSemanticType), nameof(IsInProgress), nameof(CanStop))]
     public partial InstanceStatus Status { get; set; }
     
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(CanLaunch), nameof(CanStop), nameof(CanEdit), nameof(CanDelete), nameof(CanShow))]
     public partial bool IsActive { get; set; }
     
     public ObservableCollection<InstanceIssue> Issues { get; }
@@ -32,8 +33,7 @@ public partial class InstanceItemViewModel : SelectableViewModelBase
         Status is InstanceStatus.Authenticating
             or InstanceStatus.Starting
             or InstanceStatus.Stopping;
-
-    public bool CanBeStopped => IsActive && Status is not InstanceStatus.Stopping;
+    
 
     public SemanticType StatusSemanticType =>
         Status switch
@@ -57,6 +57,20 @@ public partial class InstanceItemViewModel : SelectableViewModelBase
     
     public bool RequiresAttention => Issues.Any(i => i.RequiresAttention);
     
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(CanEdit), nameof(CanDelete))]
+    public partial bool IsLaunchPending { get; set; }
+    
+    public bool CanLaunch => !RequiresAttention && !IsActive; 
+    
+    public bool CanStop => IsActive && Status is not InstanceStatus.Stopping;
+    
+    public bool CanEdit => !IsActive && !IsLaunchPending;
+    
+    public bool CanDelete => !IsActive && !IsLaunchPending;
+    
+    public bool CanShow => IsActive;
+    
     public InstanceItemViewModel(Guid id, string name, InstanceStatus status, bool isActive, IReadOnlyList<InstanceIssue> issues)
     {
         Id = id;
@@ -67,10 +81,12 @@ public partial class InstanceItemViewModel : SelectableViewModelBase
 
         Issues.CollectionChanged += OnIssuesChanged;
     }
-
+    
     private void OnIssuesChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         OnPropertyChanged(nameof(HasIssues));
         OnPropertyChanged(nameof(RequiresAttention));
+        
+        OnPropertyChanged(nameof(CanLaunch));
     }
 }

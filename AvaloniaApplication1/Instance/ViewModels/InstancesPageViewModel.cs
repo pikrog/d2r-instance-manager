@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Threading;
@@ -61,28 +62,41 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         
         _instanceService.InstanceStateChanged += OnInstanceStateChanged;
         SelectedInstances.CollectionChanged += OnSelectedInstancesChanged;
-        SelectedInstances.ItemPropertyChanged += OnSelectedInstancePropertyChanged;
     }
-
-    private void NotifyCanExecuteChangedForSelectedCommands()
+    
+    private void OnSelectedInstancesChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         LaunchSelectedCommand.NotifyCanExecuteChanged();
         StopSelectedCommand.NotifyCanExecuteChanged();
     }
 
-    private void OnSelectedInstancesChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        NotifyCanExecuteChangedForSelectedCommands();
-    }
-
-    private void OnSelectedInstancePropertyChanged(object? sender, ItemPropertyChangedEventArgs<InstanceItemViewModel> e)
-    {
-        NotifyCanExecuteChangedForSelectedCommands();
-    }
-
     private void OnInstanceStateChanged(Guid id)
     {
         Dispatcher.UIThread.Post(() => RefreshItem(id));
+    }
+
+    private void OnInstancePropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        switch (e.PropertyName)
+        {
+            case nameof(InstanceItemViewModel.CanLaunch):
+                LaunchCommand.NotifyCanExecuteChanged();
+                LaunchSelectedCommand.NotifyCanExecuteChanged();
+                break;
+            case nameof(InstanceItemViewModel.CanStop):
+                StopCommand.NotifyCanExecuteChanged();
+                StopSelectedCommand.NotifyCanExecuteChanged();
+                break;
+            case nameof(InstanceItemViewModel.CanEdit):
+                EditCommand.NotifyCanExecuteChanged();
+                break;
+            case nameof(InstanceItemViewModel.CanDelete):
+                DeleteCommand.NotifyCanExecuteChanged();
+                break;
+            case nameof(InstanceItemViewModel.CanShow):
+                ShowCommand.NotifyCanExecuteChanged();
+                break;
+        }
     }
 
     private void RefreshItem(Guid id)
@@ -105,10 +119,16 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
 
     private void RefreshInstances()
     {
+        foreach (var instance in Instances)
+            instance.PropertyChanged -= OnInstancePropertyChanged;
+        
         Instances.Clear();
         var instances = _instanceService.GetSummaries()
             .Select(s => new InstanceItemViewModel(s.Id, s.Name, s.Status, s.IsActive, s.Issues));
         Instances.AddRange(instances);
+        
+        foreach (var instance in Instances)
+            instance.PropertyChanged += OnInstancePropertyChanged;
     }
 
     private void RefreshGlobalSettingsIssues()
@@ -186,21 +206,25 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
     {
         await CoreEdit();
     }
+
+    private bool CanEdit(InstanceItemViewModel instance) => instance.CanEdit;
     
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanEdit))]
     private async Task Edit(InstanceItemViewModel instance)
     {
-        if (instance.IsActive)
+        if (!CanEdit(instance))
             return;
         
         var snapshot = _instanceService.GetInstanceConfigSnapshot(instance.Id);
         await CoreEdit(snapshot);
     }
     
-    [RelayCommand]
+    private bool CanDelete(InstanceItemViewModel instance) => instance.CanDelete;
+    
+    [RelayCommand(CanExecute = nameof(CanDelete))]
     private async Task Delete(InstanceItemViewModel instance)
     {
-        if (instance.IsActive)
+        if (!CanDelete(instance))
             return;
         
         var confirmationViewModel = new DeleteInstanceDialogViewModel(instance.Name);
@@ -211,21 +235,28 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         RefreshInstances();
     }
     
-    private static bool CanLaunch(InstanceItemViewModel instance) => 
-        instance is { RequiresAttention: false, IsActive: false };
+    private static bool CanLaunch(InstanceItemViewModel instance) => instance.CanLaunch;
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanLaunch))]
     private async Task Launch(InstanceItemViewModel instance)
     {
         if (!CanLaunch(instance))
             return;
         
-        await _instanceService.LaunchAsync(instance.Id);
+        instance.IsLaunchPending = true;
+        try
+        {
+            await _instanceService.LaunchAsync(instance.Id);
+        }
+        finally
+        {
+            instance.IsLaunchPending = false;
+        }
     }
     
-    private static bool CanStop(InstanceItemViewModel instance) => instance.CanBeStopped;
+    private static bool CanStop(InstanceItemViewModel instance) => instance.CanStop;
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanStop))]
     private async Task Stop(InstanceItemViewModel instance)
     {
         if (!CanStop(instance))
@@ -233,11 +264,13 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         
         await _instanceService.StopAsync(instance.Id);
     }
-
-    [RelayCommand]
+    
+    private static bool CanShow(InstanceItemViewModel instance) => instance.CanShow;
+    
+    [RelayCommand(CanExecute = nameof(CanShow))]
     private void Show(InstanceItemViewModel instance)
     {
-        if (!instance.IsActive)
+        if (!CanShow(instance))
             return;
         
         _instanceService.Show(instance.Id);
