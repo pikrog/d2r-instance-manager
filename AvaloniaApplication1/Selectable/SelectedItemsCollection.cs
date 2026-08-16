@@ -7,8 +7,10 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace AvaloniaApplication1.Selectable;
 
-public sealed class SelectedItemsCollection<T> : ObservableObject where T : SelectableViewModelBase
+public sealed class SelectedItemsCollection<T> : ObservableObject, INotifyCollectionChanged where T : SelectableViewModelBase
 {
+    private readonly ReadOnlyObservableCollection<T> _allItems;
+    
     private readonly ObservableCollection<T> _selectedItems;
 
     public ReadOnlyObservableCollection<T> Items { get; }
@@ -17,19 +19,21 @@ public sealed class SelectedItemsCollection<T> : ObservableObject where T : Sele
     
     public bool Any => Count > 0;
     
-    public event EventHandler<NotifyCollectionChangedEventArgs>? CollectionChanged;
+    public event NotifyCollectionChangedEventHandler? CollectionChanged;
     
     public event EventHandler<ItemPropertyChangedEventArgs<T>>? ItemPropertyChanged;
 
-    public SelectedItemsCollection(ObservableCollection<T> allItems)
+    public SelectedItemsCollection(ReadOnlyObservableCollection<T> allItems)
     {
+        _allItems = allItems;
+        
         foreach (var item in allItems)
             item.PropertyChanged += OnItemPropertyChanged;
         
         _selectedItems = new ObservableCollection<T>(allItems.Where(i => i.IsSelected));
         Items = new ReadOnlyObservableCollection<T>(_selectedItems);
 
-        allItems.CollectionChanged += OnAllItemsCollectionChanged;
+        ((INotifyCollectionChanged)allItems).CollectionChanged += OnAllItemsCollectionChanged;
         _selectedItems.CollectionChanged += OnSelectedItemsCollectionChanged;
     }
 
@@ -47,10 +51,28 @@ public sealed class SelectedItemsCollection<T> : ObservableObject where T : Sele
         {
             foreach (var item in _selectedItems)
                 item.PropertyChanged -= OnItemPropertyChanged;
+            
             _selectedItems.Clear();
-            foreach (var item in (ObservableCollection<T>)sender!)
+            
+            foreach (var item in (ReadOnlyObservableCollection<T>)sender!)
                 item.PropertyChanged += OnItemPropertyChanged;
+            
+            foreach (var item in _allItems.Where(i => i.IsSelected))
+                _selectedItems.Add(item);
+            
             return;
+        }
+        
+        if (e.Action == NotifyCollectionChangedAction.Move)
+            return;
+        
+        if (e.OldItems is not null)
+        {
+            foreach (T item in e.OldItems)
+            {
+                item.PropertyChanged -= OnItemPropertyChanged;
+                _selectedItems.Remove(item);
+            }
         }
         
         if (e.NewItems is not null)
@@ -60,15 +82,6 @@ public sealed class SelectedItemsCollection<T> : ObservableObject where T : Sele
                 if (item.IsSelected)
                     _selectedItems.Add(item);
                 item.PropertyChanged += OnItemPropertyChanged;
-            }
-        }
-
-        if (e.OldItems is not null)
-        {
-            foreach (T item in e.OldItems)
-            {
-                item.PropertyChanged -= OnItemPropertyChanged;
-                _selectedItems.Remove(item);
             }
         }
     }
