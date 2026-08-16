@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -35,7 +36,11 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
     
     private readonly OverlayService _overlayService;
 
-    public ObservableCollection<InstanceItemViewModel> Instances { get; } = [];
+    private readonly ObservableCollection<InstanceItemViewModel> _instances = [];
+    
+    private readonly Dictionary<Guid, InstanceItemViewModel> _instancesById = new();
+    
+    public ReadOnlyObservableCollection<InstanceItemViewModel> Instances { get; }
 
     public bool IsTableEmpty => Instances.Count == 0;
     
@@ -57,14 +62,16 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         _displayService = displayService;
         _globalSettingsValidator = globalSettingsValidator;
         _overlayService = overlayService;
-
+        
+        Instances = new ReadOnlyObservableCollection<InstanceItemViewModel>(_instances);
+        
         SelectedInstances = new SelectedItemsCollection<InstanceItemViewModel>(Instances);
         
         _instanceService.InstanceStateChanged += OnInstanceStateChanged;
-        SelectedInstances.CollectionChanged += OnSelectedInstancesChanged;
+        SelectedInstances.CollectionChanged += OnSelectedInstancesCollectionChanged;
     }
     
-    private void OnSelectedInstancesChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    private void OnSelectedInstancesCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         LaunchSelectedCommand.NotifyCanExecuteChanged();
         StopSelectedCommand.NotifyCanExecuteChanged();
@@ -99,16 +106,33 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         }
     }
 
-    private void RefreshItem(Guid id)
+    private static InstanceItemViewModel CreateItem(InstanceSummary summary) =>
+        new(summary.Id, summary.Name, summary.Status, summary.IsActive, summary.Issues);
+
+    private void AddInstance(InstanceSummary summary)
     {
-        var (_, item) = Instances.Index().SingleOrDefault(r => r.Item.Id == id);
-        if (item is null)
-        {
-            RefreshInstances();
-            return;
-        }
+        var item = CreateItem(summary);
+        item.PropertyChanged += OnInstancePropertyChanged;
+        _instances.Add(item);
+        _instancesById[summary.Id] = item;
         
-        var summary = _instanceService.GetSummary(id);
+        OnPropertyChanged(nameof(IsTableEmpty));
+    }
+
+    private void RemoveInstance(Guid id)
+    {
+        if (!_instancesById.TryGetValue(id, out var item))
+            return;
+        
+        item.PropertyChanged -= OnInstancePropertyChanged;
+        _instances.Remove(item);
+        _instancesById.Remove(id);
+        
+        OnPropertyChanged(nameof(IsTableEmpty));
+    }
+
+    private static void ApplySummary(InstanceItemViewModel item, InstanceSummary summary)
+    {
         item.Id = summary.Id;
         item.Name = summary.Name;
         item.Status = summary.Status;
@@ -116,19 +140,41 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         item.Issues.Clear();
         item.Issues.AddRange(summary.Issues);
     }
+    
+    private void RefreshItem(Guid id)
+    {
+        var summary = _instanceService.GetSummary(id);
+
+        if (_instancesById.TryGetValue(id, out var item))
+        {
+            ApplySummary(item, summary);
+            return;
+        }
+
+        AddInstance(summary);
+    }
 
     private void RefreshInstances()
     {
-        foreach (var instance in Instances)
-            instance.PropertyChanged -= OnInstancePropertyChanged;
+        var summaries = _instanceService.GetSummaries();
+
+        var summariesById = summaries.ToDictionary(s => s.Id);
+
+        foreach (var instance in _instances.ToArray())
+        {
+            if (summariesById.TryGetValue(instance.Id, out var summary))
+            {
+                ApplySummary(instance, summary);
+                summariesById.Remove(instance.Id);
+            }
+            else
+            {
+                RemoveInstance(instance.Id);
+            }
+        }
         
-        Instances.Clear();
-        var instances = _instanceService.GetSummaries()
-            .Select(s => new InstanceItemViewModel(s.Id, s.Name, s.Status, s.IsActive, s.Issues));
-        Instances.AddRange(instances);
-        
-        foreach (var instance in Instances)
-            instance.PropertyChanged += OnInstancePropertyChanged;
+        foreach (var summary in summaries.Where(s => summariesById.ContainsKey(s.Id)))
+            AddInstance(summary);
     }
 
     private void RefreshGlobalSettingsIssues()
