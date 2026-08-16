@@ -92,7 +92,7 @@ public class InstanceService(
         return CreateSummary(configSnapshot, runtimeSnapshot);
     }
 
-    public IReadOnlyList<InstanceSummary> GetSummaries()
+    public virtual IReadOnlyList<InstanceSummary> GetSummaries()
     {
         var instances = instanceManager.GetAllRuntimeStates().ToDictionary(i => i.Id);
         return configService.Config.GetAllInstances().Select(i =>

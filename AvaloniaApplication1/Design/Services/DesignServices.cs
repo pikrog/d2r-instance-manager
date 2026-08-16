@@ -66,7 +66,7 @@ public static class DesignServices
 
     public static readonly GlobalSettingsValidator GlobalSettingsValidator = new(ConfigService);
     
-    public static InstanceService InstanceService { get; } = new(ConfigService, InstanceConfigValidator, InstanceManager);
+    public static InstanceService InstanceService { get; } = new InstanceDesignService(ConfigService, InstanceConfigValidator, InstanceManager);
     
     static DesignServices()
     {
