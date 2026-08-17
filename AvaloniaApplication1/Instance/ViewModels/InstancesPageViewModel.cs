@@ -47,6 +47,7 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
     public SelectedItemsCollection<InstanceItemViewModel> SelectedInstances { get; }
     
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(LaunchCommand), nameof(LaunchSelectedCommand))]
     public partial GlobalSettingsIssue? FirstGlobalSettingsIssue { get; set; }
 
     public InstancesPageViewModel(InstanceService instanceService,
@@ -281,7 +282,7 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         RefreshInstances();
     }
     
-    private static bool CanLaunch(InstanceItemViewModel instance) => instance.CanLaunch;
+    private bool CanLaunch(InstanceItemViewModel instance) => instance.CanLaunch && FirstGlobalSettingsIssue is null;
 
     [RelayCommand(CanExecute = nameof(CanLaunch))]
     private async Task Launch(InstanceItemViewModel instance)
