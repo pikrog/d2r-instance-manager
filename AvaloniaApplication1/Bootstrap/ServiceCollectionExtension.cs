@@ -58,6 +58,7 @@ public static class ServiceCollectionExtension
             
             services.AddSingleton<OverlayHost>();
             services.AddSingleton<IOverlayHost>(sp => sp.GetRequiredService<OverlayHost>());
+            services.AddSingleton<IOverlayController>(sp => sp.GetRequiredService<OverlayHost>());
             services.AddSingleton<OverlayService>();
             
             services.AddSingleton<IGameExecutablePathProvider, GameConfigStorePathProvider>();

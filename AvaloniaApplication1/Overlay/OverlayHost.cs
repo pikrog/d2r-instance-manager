@@ -2,7 +2,7 @@
 
 namespace AvaloniaApplication1.Overlay;
 
-public partial class OverlayHost : ObservableObject, IOverlayHost
+public partial class OverlayHost : ObservableObject, IOverlayHost, IOverlayController
 {
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsOverlayVisible))]

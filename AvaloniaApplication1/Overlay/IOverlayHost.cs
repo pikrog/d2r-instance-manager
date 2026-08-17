@@ -1,6 +1,9 @@
-﻿namespace AvaloniaApplication1.Overlay;
+﻿using System.ComponentModel;
 
-public interface IOverlayHost
+namespace AvaloniaApplication1.Overlay;
+
+public interface IOverlayHost : INotifyPropertyChanged
 {
-    IOverlayContent? OverlayContent { get; set; }
+    IOverlayContent? OverlayContent { get; }
+    bool IsOverlayVisible { get; }
 }

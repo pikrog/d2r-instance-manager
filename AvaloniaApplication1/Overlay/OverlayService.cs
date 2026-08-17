@@ -3,21 +3,21 @@ using System.Threading.Tasks;
 
 namespace AvaloniaApplication1.Overlay;
 
-public class OverlayService(IOverlayHost host)
+public class OverlayService(IOverlayController controller)
 {
     public async Task<TResult> ShowAsync<TResult>(IOverlayContent<TResult> content)
     {
-        if (host.OverlayContent is not null)
+        if (controller.OverlayContent is not null)
             throw new InvalidOperationException("Overlay is already shown");
         
-        host.OverlayContent = content;
+        controller.OverlayContent = content;
         try
         {
             return await content.Result;
         }
         finally
         {
-            host.OverlayContent = null;
+            controller.OverlayContent = null;
         }
     }
 }

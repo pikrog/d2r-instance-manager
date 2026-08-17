@@ -29,18 +29,18 @@ public partial class MainWindowViewModel : ViewModelBase, IDialogParticipant
     
     public GlobalSettingsPageViewModel GlobalSettingsPageViewModel { get; }
 
-    public OverlayHost OverlayHost { get; }
+    public IOverlayHost OverlayHost { get; }
     
     public OverlayService OverlayService { get; }
     
     public InstanceService InstanceService { get; }
 
     public MainWindowViewModel(
-        OverlayHost overlayHost,
         InstancesPageViewModel instancesPageViewModel,
         AccountsPageViewModel accountsPageViewModel,
         RegionsPageViewModel regionsPageViewModel,
         GlobalSettingsPageViewModel globalSettingsPageViewModel,
+        IOverlayHost overlayHost,
         OverlayService overlayService,
         InstanceService instanceService)
     {
