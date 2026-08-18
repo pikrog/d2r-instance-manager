@@ -6,6 +6,10 @@
         xmlns:dialog="clr-namespace:AvaloniaApplication1.Dialog"
         xmlns:mainWindow="clr-namespace:AvaloniaApplication1.MainWindow"
         xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
+        xmlns:account="clr-namespace:AvaloniaApplication1.Account.ViewModels"
+        xmlns:instance="clr-namespace:AvaloniaApplication1.Instance.ViewModels"
+        xmlns:region="clr-namespace:AvaloniaApplication1.Region.ViewModels"
+        xmlns:settings="clr-namespace:AvaloniaApplication1.GlobalSettings"
         mc:Ignorable="d" 
         d:DesignWidth="900" d:DesignHeight="600"
         Width="900" Height="600"
@@ -43,35 +47,26 @@
                             <StackPanel Orientation="Vertical" Margin="10 20">
                                 <controls:NavTab Icon="{SvgImage /Assets/images/play.svg}"
                                                  Command="{Binding SetPageCommand}"
-                                                 CommandParameter="{Binding InstancesPageViewModel}">
-                                    <controls:NavTab.IsActive>
-                                        <MultiBinding Converter="{StaticResource ReferenceEqualsConverter}">
-                                            <Binding Path="CurrentPage" />
-                                            <Binding Path="InstancesPageViewModel" />
-                                        </MultiBinding>
-                                    </controls:NavTab.IsActive>
+                                                 CommandParameter="{x:Type instance:InstancesPageViewModel}"
+                                                 IsActive="{Binding PageHost.CurrentPage,
+                                                            Converter={StaticResource IsPageTypeConverter}, 
+                                                            ConverterParameter={x:Type instance:InstancesPageViewModel}}">
                                     Instances
                                 </controls:NavTab>
                                 <controls:NavTab Icon="{SvgImage /Assets/images/user.svg}"
                                                  Command="{Binding SetPageCommand}" 
-                                                 CommandParameter="{Binding AccountsPageViewModel}">
-                                    <controls:NavTab.IsActive>
-                                        <MultiBinding Converter="{StaticResource ReferenceEqualsConverter}">
-                                            <Binding Path="CurrentPage" />
-                                            <Binding Path="AccountsPageViewModel" />
-                                        </MultiBinding>
-                                    </controls:NavTab.IsActive>
+                                                 CommandParameter="{x:Type account:AccountsPageViewModel}"
+                                                 IsActive="{Binding PageHost.CurrentPage,
+                                                            Converter={StaticResource IsPageTypeConverter}, 
+                                                            ConverterParameter={x:Type account:AccountsPageViewModel}}">
                                     Accounts
                                 </controls:NavTab>
                                 <controls:NavTab Icon="{SvgImage /Assets/images/globe.svg}" 
                                                  Command="{Binding SetPageCommand}" 
-                                                 CommandParameter="{Binding RegionsPageViewModel}">
-                                    <controls:NavTab.IsActive>
-                                        <MultiBinding Converter="{StaticResource ReferenceEqualsConverter}">
-                                            <Binding Path="CurrentPage" />
-                                            <Binding Path="RegionsPageViewModel" />
-                                        </MultiBinding>
-                                    </controls:NavTab.IsActive>
+                                                 CommandParameter="{x:Type region:RegionsPageViewModel}"
+                                                 IsActive="{Binding PageHost.CurrentPage,
+                                                            Converter={StaticResource IsPageTypeConverter}, 
+                                                            ConverterParameter={x:Type region:RegionsPageViewModel}}">
                                     Regions
                                 </controls:NavTab>
                                 <controls:NavTab Icon="{SvgImage /Assets/images/book.svg}"> <!--todo: implement logs-->
@@ -79,13 +74,10 @@
                                 </controls:NavTab>
                                 <controls:NavTab Icon="{SvgImage /Assets/images/settings.svg}" 
                                                  Command="{Binding SetPageCommand}" 
-                                                 CommandParameter="{Binding GlobalSettingsPageViewModel}">
-                                    <controls:NavTab.IsActive>
-                                        <MultiBinding Converter="{StaticResource ReferenceEqualsConverter}">
-                                            <Binding Path="CurrentPage" />
-                                            <Binding Path="GlobalSettingsPageViewModel" />
-                                        </MultiBinding>
-                                    </controls:NavTab.IsActive>
+                                                 CommandParameter="{x:Type settings:GlobalSettingsPageViewModel}"
+                                                 IsActive="{Binding PageHost.CurrentPage,
+                                                            Converter={StaticResource IsPageTypeConverter}, 
+                                                            ConverterParameter={x:Type settings:GlobalSettingsPageViewModel}}">
                                     Global settings
                                 </controls:NavTab>
                             </StackPanel>
@@ -93,7 +85,7 @@
                     </DockPanel>
             </Border>
             
-            <ContentControl Content="{Binding CurrentPage}"/>
+            <ContentControl Content="{Binding PageHost.CurrentPage}"/>
             <!--<TransitioningContentControl Content="{Binding CurrentPage}">
                 <TransitioningContentControl.PageTransition>
                     <PageSlide Duration="0:0:0.25"></PageSlide>

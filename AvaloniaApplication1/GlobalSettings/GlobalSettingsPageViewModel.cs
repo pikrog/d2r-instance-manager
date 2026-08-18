@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using AvaloniaApplication1.Dialog;
 using AvaloniaApplication1.GameExecutable;
-using AvaloniaApplication1.Page;
+using AvaloniaApplication1.Navigation;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 

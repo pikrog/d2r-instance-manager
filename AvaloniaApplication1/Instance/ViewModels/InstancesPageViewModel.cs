@@ -12,8 +12,8 @@ using AvaloniaApplication1.Display;
 using AvaloniaApplication1.GlobalSettings;
 using AvaloniaApplication1.GlobalSettings.Issues;
 using AvaloniaApplication1.Instance.Models;
+using AvaloniaApplication1.Navigation;
 using AvaloniaApplication1.Overlay;
-using AvaloniaApplication1.Page;
 using AvaloniaApplication1.Region;
 using AvaloniaApplication1.Selectable;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -35,6 +35,8 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
     private readonly GlobalSettingsValidator _globalSettingsValidator;
     
     private readonly OverlayService _overlayService;
+    
+    private readonly NavigationService _navigationService;
 
     private readonly ObservableCollection<InstanceItemViewModel> _instances = [];
     
@@ -55,7 +57,8 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         RegionService regionService,
         DisplayService displayService,
         GlobalSettingsValidator globalSettingsValidator,
-        OverlayService overlayService)
+        OverlayService overlayService,
+        NavigationService navigationService)
     {
         _instanceService = instanceService;
         _accountService = accountService;
@@ -63,6 +66,7 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         _displayService = displayService;
         _globalSettingsValidator = globalSettingsValidator;
         _overlayService = overlayService;
+        _navigationService = navigationService;
         
         Instances = new ReadOnlyObservableCollection<InstanceItemViewModel>(_instances);
         
@@ -351,6 +355,10 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         foreach (var instance in Instances)
             instance.IsSelected = false;
     }
+
+    [RelayCommand]
+    private async Task NavigateToGlobalSettings() =>
+        await _navigationService.NavigateAsync<GlobalSettingsPageViewModel>();
 
     public override Task OnEnterAsync()
     {

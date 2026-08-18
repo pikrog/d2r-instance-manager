@@ -13,6 +13,7 @@ using AvaloniaApplication1.GameExecutable;
 using AvaloniaApplication1.GameExecutable.Providers;
 using AvaloniaApplication1.GlobalSettings;
 using AvaloniaApplication1.Instance;
+using AvaloniaApplication1.Navigation;
 using AvaloniaApplication1.Overlay;
 using AvaloniaApplication1.Region;
 
@@ -66,7 +67,13 @@ public static class DesignServices
 
     public static readonly GlobalSettingsValidator GlobalSettingsValidator = new(ConfigService);
     
+    public static readonly PageHost PageHost = new();
+    
     public static InstanceService InstanceService { get; } = new InstanceDesignService(ConfigService, InstanceConfigValidator, InstanceManager);
+    
+    private static readonly PageDesignProvider PageProvider = new();
+    
+    public static readonly NavigationService NavigationService = new(PageHost, PageProvider);
     
     static DesignServices()
     {

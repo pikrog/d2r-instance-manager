@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using AvaloniaApplication1.Common;
 
-namespace AvaloniaApplication1.Page;
+namespace AvaloniaApplication1.Navigation;
 
 public abstract class PageViewModel : ViewModelBase
 {

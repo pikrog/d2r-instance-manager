@@ -90,6 +90,7 @@
             <converters:ReferenceEqualsConverter x:Key="ReferenceEqualsConverter" />
             <converters:ReferenceNotEqualsConverter x:Key="ReferenceNotEqualsConverter" />
             <converters:ReferenceNotNullAndNotEqualsConverter x:Key="ReferenceNotNullAndNotEqualsConverter" />
+            <converters:IsPageTypeConverter x:Key="IsPageTypeConverter" />
             <converters:CollectionIsEmptyConverter x:Key="CollectionIsEmptyConverter" />
             <converters:BoolToOpacityConverter x:Key="BoolToOpacityConverter" />
             <converters:BrushToColorConverter x:Key="BrushToColorConverter" />

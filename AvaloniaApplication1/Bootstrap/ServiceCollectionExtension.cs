@@ -12,6 +12,7 @@ using AvaloniaApplication1.GlobalSettings;
 using AvaloniaApplication1.Instance;
 using AvaloniaApplication1.Instance.ViewModels;
 using AvaloniaApplication1.MainWindow;
+using AvaloniaApplication1.Navigation;
 using AvaloniaApplication1.Overlay;
 using AvaloniaApplication1.Region;
 using AvaloniaApplication1.Region.ViewModels;
@@ -56,21 +57,28 @@ public static class ServiceCollectionExtension
             services.AddSingleton<GlobalSettingsService>();
             services.AddSingleton<DisplayService>();
             
-            services.AddSingleton<OverlayHost>();
-            services.AddSingleton<IOverlayHost>(sp => sp.GetRequiredService<OverlayHost>());
-            services.AddSingleton<IOverlayController>(sp => sp.GetRequiredService<OverlayHost>());
-            services.AddSingleton<OverlayService>();
-            
             services.AddSingleton<IGameExecutablePathProvider, GameConfigStorePathProvider>();
             services.AddSingleton<IGameExecutablePathProvider, UninstallEntryPathProvider>();
             services.AddSingleton<IGameExecutablePathProvider, ProgramFilesPathProvider>();
             services.AddSingleton<GameExecutablePathLocator>();
             
-            services.AddTransient<MainWindowViewModel>();
-            services.AddTransient<RegionsPageViewModel>();
-            services.AddTransient<AccountsPageViewModel>();
+            services.AddSingleton<OverlayHost>();
+            services.AddSingleton<IOverlayHost>(sp => sp.GetRequiredService<OverlayHost>());
+            services.AddSingleton<IOverlayController>(sp => sp.GetRequiredService<OverlayHost>());
+            services.AddSingleton<OverlayService>();
+
             services.AddTransient<InstancesPageViewModel>();
+            services.AddTransient<AccountsPageViewModel>();
+            services.AddTransient<RegionsPageViewModel>();
             services.AddTransient<GlobalSettingsPageViewModel>();
+            
+            services.AddSingleton<PageHost>();
+            services.AddSingleton<IPageHost>(sp => sp.GetRequiredService<PageHost>());
+            services.AddSingleton<IPageController>(sp => sp.GetRequiredService<PageHost>());
+            services.AddSingleton<IPageProvider, PageProvider>();
+            services.AddSingleton<NavigationService>();
+            
+            services.AddTransient<MainWindowViewModel>();
 
             services.AddSingleton<InstanceManagerBootstrapper>();
         }

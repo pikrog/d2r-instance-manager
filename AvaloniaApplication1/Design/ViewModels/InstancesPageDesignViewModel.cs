@@ -11,7 +11,8 @@ public sealed class InstancesPageDesignViewModel : InstancesPageViewModel
         DesignServices.RegionService,
         DesignServices.DisplayService,
         DesignServices.GlobalSettingsValidator,
-        DesignServices.OverlayService)
+        DesignServices.OverlayService,
+        DesignServices.NavigationService)
     {
         FirstGlobalSettingsIssue = new MissingExecutablePath();
 

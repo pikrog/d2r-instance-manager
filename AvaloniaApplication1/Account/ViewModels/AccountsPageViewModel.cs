@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using AvaloniaApplication1.Account.Models;
 using AvaloniaApplication1.Card;
 using AvaloniaApplication1.Card.ViewModels;
+using AvaloniaApplication1.Navigation;
 using AvaloniaApplication1.Overlay;
 using AvaloniaApplication1.Overlay.Dialog.DiscardChanges;
-using AvaloniaApplication1.Page;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
