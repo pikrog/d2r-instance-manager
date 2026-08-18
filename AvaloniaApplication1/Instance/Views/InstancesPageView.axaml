@@ -59,25 +59,20 @@
         </DataTemplate>
         
         <DataTemplate x:DataType="settingsIssues:MissingExecutablePath">
-            <TextBlock VerticalAlignment="Center" TextWrapping="Wrap">The game executable is missing. Configure the game path in
-                <Run Classes="link">Global Settings</Run> 
-                to launch instances.
+            <TextBlock VerticalAlignment="Center" TextWrapping="Wrap">
+                The game executable is missing. Configure the game path in Global Settings to launch instances.
             </TextBlock>
         </DataTemplate>
         <DataTemplate x:DataType="settingsIssues:ExecutableFileNotFound">
             <TextBlock VerticalAlignment="Center" TextWrapping="Wrap">The game executable file
                 "<Run FontWeight="Bold" Text="{Binding Path}"/>"
-                was not found. Fix the game path in
-                <Run Classes="link">Global Settings</Run> 
-                to launch instances.
+                was not found. Fix the game path in Global Settings to launch instances.
             </TextBlock>
         </DataTemplate>
         <DataTemplate x:DataType="settingsIssues:InvalidExecutableFileFormat">
             <TextBlock VerticalAlignment="Center" TextWrapping="Wrap">The game executable file
                 "<Run FontWeight="Bold" Text="{Binding Path}"/>"
-                is not a valid 64-bit executable binary. Fix the game path in
-                <Run Classes="link">Global Settings</Run> 
-                to launch instances.
+                is not a valid 64-bit executable binary. Fix the game path in Global Settings to launch instances.
             </TextBlock>
         </DataTemplate>
     </UserControl.DataTemplates>
@@ -172,9 +167,12 @@
                         </Border>
                         <Border Background="{DynamicResource DangerBackground}" Padding="10"
                                 IsVisible="{Binding FirstGlobalSettingsIssue, Converter={x:Static ObjectConverters.IsNotNull}}">
-                            <Grid ColumnDefinitions="Auto, *" ColumnSpacing="16">
+                            <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="16">
                                 <Svg Grid.Column="0" Classes="icon inherit-foreground danger" Height="24" Path="/Assets/images/deny.svg" />
                                 <ContentControl Grid.Column="1" Content="{Binding FirstGlobalSettingsIssue}" />
+                                <Button Grid.Column="2" Classes="icon" Command="{Binding NavigateToGlobalSettingsCommand}">
+                                    <Svg Path="/Assets/images/fix.svg" />
+                                </Button>
                             </Grid>
                         </Border>
                     </StackPanel>

@@ -184,34 +184,6 @@
         <Setter Property="Background" Value="Transparent" />
     </Style>
     
-    <Style Selector="Button.link">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{DynamicResource InfoContent}" /> <!--replace with LinkForeground?-->
-        <Setter Property="Padding" Value="0" />
-    </Style>
-    
-    <Style Selector="Button.link:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-        <Setter Property="Background" Value="Transparent" />
-    </Style>
-    
-    <Style Selector="Button.link:pressed /template/ ContentPresenter#PART_ContentPresenter">
-        <Setter Property="Background" Value="Transparent" />
-    </Style>
-    
-    <Style Selector="Button.link:pointerover TextBlock">
-        <Setter Property="TextDecorations" Value="Underline" />
-    </Style>
-    
-    <Style Selector="TextBlock.link">
-        <Setter Property="Foreground" Value="{DynamicResource InfoContent}" /> <!--LinkForeground?-->
-        <Setter Property="TextDecorations" Value="Underline" />
-    </Style>
-    
-    <Style Selector="Run.link">
-        <Setter Property="Foreground" Value="{DynamicResource InfoContent}" /> <!--LinkForeground?-->
-        <Setter Property="TextDecorations" Value="Underline" />
-    </Style>
-    
     <Style Selector="Svg.inherit-foreground">
         <Setter Property="CurrentColor"
                 Value="{Binding Foreground,
@@ -359,13 +331,4 @@
     <Style Selector="controls|RevealableContent:not(:revealed) Button.icon">
         <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}" />
     </Style>
-    
-    <!--<Style Selector="TextBlock.link">
-        <Setter Property="Foreground" Value="{DynamicResource InfoContent}"></Setter>
-        <Setter Property="TextDecorations" Value="Underline" />
-    </Style>
-    
-    <Style Selector="TextBlock.link:pointerover">
-        <Setter Property="Cursor" Value="Hand" />
-    </Style>-->
 </Styles>
