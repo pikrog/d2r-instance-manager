@@ -266,7 +266,7 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         if (!CanEdit(instance))
             return;
         
-        var snapshot = _instanceService.GetInstanceConfigSnapshot(instance.Id);
+        var snapshot = _instanceService.GetConfigSnapshot(instance.Id);
         await CoreEdit(snapshot);
     }
     

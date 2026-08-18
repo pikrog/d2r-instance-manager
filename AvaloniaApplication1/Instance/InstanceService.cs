@@ -68,12 +68,12 @@ public class InstanceService(
         instanceManager.Remove(id);
     }
 
-    public InstanceSnapshot GetInstanceConfigSnapshot(Guid id)
+    public InstanceSnapshot GetConfigSnapshot(Guid id)
     {
         return configService.Config.GetInstance(id);
     }
 
-    public RuntimeSnapshot GetInstanceRuntimeSnapshot(Guid id)
+    public RuntimeSnapshot GetRuntimeSnapshot(Guid id)
     {
         return instanceManager.GetRuntimeSnapshot(id);
     }
@@ -87,8 +87,8 @@ public class InstanceService(
 
     public InstanceSummary GetSummary(Guid id)
     {
-        var configSnapshot = GetInstanceConfigSnapshot(id);
-        var runtimeSnapshot = GetInstanceRuntimeSnapshot(id);
+        var configSnapshot = GetConfigSnapshot(id);
+        var runtimeSnapshot = GetRuntimeSnapshot(id);
         return CreateSummary(configSnapshot, runtimeSnapshot);
     }
 
@@ -114,7 +114,7 @@ public class InstanceService(
     {
         var settings = configService.Config.GetGlobalSettings();
         
-        var snapshot = GetInstanceConfigSnapshot(id);
+        var snapshot = GetConfigSnapshot(id);
         AuthenticationContext authenticationContext = new OfflineAuthenticationContext();
         if (snapshot.IsOnlineMode)
         {
