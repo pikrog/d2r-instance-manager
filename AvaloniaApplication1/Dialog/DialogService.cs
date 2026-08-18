@@ -37,7 +37,7 @@ public class DialogService
 
         if (e.GetNewValue<IDialogParticipant>() is { } newParticipant)
         {
-            RegistrationMapper.Add(newParticipant, visual);
+            RegistrationMapper[newParticipant] = visual;
         }
     }
 
