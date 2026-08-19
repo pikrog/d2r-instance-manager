@@ -81,6 +81,7 @@ public static class ServiceCollectionExtension
             services.AddTransient<MainWindowViewModel>();
 
             services.AddSingleton<InstanceManagerBootstrapper>();
+            services.AddSingleton<AppRuntimeBootstrapper>();
         }
     }
 }

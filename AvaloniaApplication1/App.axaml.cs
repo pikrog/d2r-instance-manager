@@ -37,6 +37,7 @@ namespace AvaloniaApplication1
                 await Dispatcher.UIThread.InvokeAsync(() => initialWindow.ProgressBar.Opacity = 1);
                 
                 Services = await AppBootstrapper.BootstrapAsync();
+                Services.GetRequiredService<AppRuntimeBootstrapper>().Bootstrap();
                 
                 var mainWindowViewModel = Services.GetRequiredService<MainWindowViewModel>();
                 await mainWindowViewModel.SetupAsync();
