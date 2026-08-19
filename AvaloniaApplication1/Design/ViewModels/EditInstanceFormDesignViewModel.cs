@@ -2,6 +2,7 @@
 using Avalonia.Input;
 using AvaloniaApplication1.Account.Models;
 using AvaloniaApplication1.Display;
+using AvaloniaApplication1.HotKey;
 using AvaloniaApplication1.Instance.ViewModels;
 using AvaloniaApplication1.Region.Models;
 
@@ -30,7 +31,7 @@ public class EditInstanceFormDesignViewModel : EditInstanceFormViewModel
         SelectedAccount = Accounts[0];
         SelectedRegion = Regions[0];
         SelectedDisplay = Displays[0];
-        RecallHotKey = new HotKey.HotKey(Key.F1, KeyModifiers.Control);
+        ShowCommandHotKey = new KeyCombination(Key.F1, KeyModifiers.Control);
         IsNoSound = true;
     }
 }

@@ -2,4 +2,4 @@
 
 namespace AvaloniaApplication1.HotKey;
 
-public record HotKey(Key Key, KeyModifiers KeyModifiers);
+public record KeyCombination(Key Key, KeyModifiers KeyModifiers);

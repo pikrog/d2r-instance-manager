@@ -2,7 +2,7 @@
 
 public record GlobalSettingsDraft(
     string GameExecutablePath, 
-    bool CenterMouseCursorInRecalledWindow,
+    bool CenterMouseCursorInShownWindow,
     bool FallbackToPrimaryDisplayIfInvalid,
     bool CloseInstancesOnAppExit
 );

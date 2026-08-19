@@ -8,6 +8,7 @@ using AvaloniaApplication1.Authentication.Models;
 using AvaloniaApplication1.Common;
 using AvaloniaApplication1.Display;
 using AvaloniaApplication1.Form.ViewModels;
+using AvaloniaApplication1.HotKey;
 using AvaloniaApplication1.Region.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -57,14 +58,14 @@ public partial class EditInstanceFormViewModel : FormViewModelBase
     [Required]
     public partial DisplayOption SelectedDisplay { get; set; }
 
-    public HotKey.HotKey RecallHotKey
+    public KeyCombination ShowCommandHotKey
     {
-        get => new(RecallHotKeyGesture.Key, RecallHotKeyGesture.KeyModifiers);
-        set => RecallHotKeyGesture = new KeyGesture(value.Key, value.KeyModifiers);
+        get => new(ShowCommandHotKeyGesture.Key, ShowCommandHotKeyGesture.KeyModifiers);
+        set => ShowCommandHotKeyGesture = new KeyGesture(value.Key, value.KeyModifiers);
     }
 
     [ObservableProperty]
-    public partial KeyGesture RecallHotKeyGesture { get; set; } = new(Key.None);
+    public partial KeyGesture ShowCommandHotKeyGesture { get; set; } = new(Key.None);
 
     [ObservableProperty]
     public partial bool IsNoSound { get; set; }

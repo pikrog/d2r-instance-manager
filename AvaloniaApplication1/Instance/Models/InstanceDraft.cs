@@ -1,6 +1,7 @@
 ﻿using System;
 using AvaloniaApplication1.Authentication.Models;
 using AvaloniaApplication1.Display;
+using AvaloniaApplication1.HotKey;
 
 namespace AvaloniaApplication1.Instance.Models;
 
@@ -14,5 +15,5 @@ public record InstanceDraft(
     DisplaySelection Display,
     bool IsNoSound,
     bool IsWindowedMode,
-    HotKey.HotKey RecallHotKey
+    KeyCombination ShowCommandHotKey
     );

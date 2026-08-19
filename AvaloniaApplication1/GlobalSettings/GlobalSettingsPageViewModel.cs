@@ -21,7 +21,7 @@ public partial class GlobalSettingsPageViewModel : PageViewModel, IDialogPartici
     public partial bool FallbackToPrimaryDisplayIfInvalid { get; set; }
     
     [ObservableProperty]
-    public partial bool CenterMouseCursorInRecalledWindow { get; set; }
+    public partial bool CenterMouseCursorInShownWindow { get; set; }
     
     [ObservableProperty]
     public partial bool CloseInstancesOnAppExit { get; set; }
@@ -40,7 +40,7 @@ public partial class GlobalSettingsPageViewModel : PageViewModel, IDialogPartici
         var settings = _globalSettingsService.GetSnapshot(); // todo: Get Snapshot Projection for UI?
         GameExecutablePath = settings.GameExecutablePath;
         FallbackToPrimaryDisplayIfInvalid = settings.FallbackToPrimaryDisplayIfInvalid;
-        CenterMouseCursorInRecalledWindow = settings.CenterMouseCursorInRecalledWindow;
+        CenterMouseCursorInShownWindow = settings.CenterMouseCursorInShownWindow;
         CloseInstancesOnAppExit = settings.CloseInstancesOnAppExit;
     }
 
@@ -48,7 +48,7 @@ public partial class GlobalSettingsPageViewModel : PageViewModel, IDialogPartici
     {
         var draft = new GlobalSettingsDraft(
             GameExecutablePath,
-            CenterMouseCursorInRecalledWindow,
+            CenterMouseCursorInShownWindow,
             FallbackToPrimaryDisplayIfInvalid,
             CloseInstancesOnAppExit
         );

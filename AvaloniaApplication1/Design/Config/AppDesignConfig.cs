@@ -6,6 +6,7 @@ using AvaloniaApplication1.Authentication.Models;
 using AvaloniaApplication1.Config;
 using AvaloniaApplication1.Display;
 using AvaloniaApplication1.GlobalSettings;
+using AvaloniaApplication1.HotKey;
 using AvaloniaApplication1.Instance.Models;
 using AvaloniaApplication1.Region.Models;
 
@@ -57,7 +58,7 @@ public class AppDesignConfig : AppConfig
                 new DisplaySelection.Primary(),
                 false,
                 false,
-                new HotKey.HotKey(Key.F1, KeyModifiers.Control)),
+                new KeyCombination(Key.F1, KeyModifiers.Control)),
             new InstanceSnapshot(Guid.NewGuid(),
                 "Battle Orders",
                 true,
@@ -67,7 +68,7 @@ public class AppDesignConfig : AppConfig
                 new DisplaySelection.Primary(),
                 true,
                 true,
-                new HotKey.HotKey(Key.F2, KeyModifiers.Control)),
+                new KeyCombination(Key.F2, KeyModifiers.Control)),
             new InstanceSnapshot(Guid.NewGuid(),
                 "Mule [EU]",
                 true,
@@ -77,7 +78,7 @@ public class AppDesignConfig : AppConfig
                 new DisplaySelection.Specific("FAKE_DISPLAY_ID_1"),
                 true,
                 true,
-                new HotKey.HotKey(Key.F3, KeyModifiers.Control)),
+                new KeyCombination(Key.F3, KeyModifiers.Control)),
             new InstanceSnapshot(Guid.NewGuid(),
                 "Mule [US]",
                 true,
@@ -87,7 +88,7 @@ public class AppDesignConfig : AppConfig
                 new DisplaySelection.Specific("FAKE_DISPLAY_ID_2"),
                 true,
                 true,
-                new HotKey.HotKey(Key.F3, KeyModifiers.Control)),
+                new KeyCombination(Key.F3, KeyModifiers.Control)),
         ];
 
         Displays = [];

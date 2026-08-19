@@ -219,7 +219,7 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         form.SelectedAuthenticationMethod = selectedAuthenticationMethod;
         form.SelectedRegion = selectedRegion;
         form.SelectedDisplay = selectedDisplay;
-        form.RecallHotKey = snapshot.RecallHotKey;
+        form.ShowCommandHotKey = snapshot.ShowCommandHotKey;
         form.IsNoSound = snapshot.IsNoSound;
         form.IsWindowedMode = snapshot.IsWindowedMode;
         return form;
@@ -237,7 +237,7 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
             DisplaySelectionMapper.Map(form.SelectedDisplay),
             form.IsNoSound,
             form.IsWindowedMode, 
-            form.RecallHotKey
+            form.ShowCommandHotKey
         );
     }
     

@@ -49,7 +49,7 @@
 
                 <CheckBox IsChecked="{Binding FallbackToPrimaryDisplayIfInvalid}"
                           Margin="0 0 0 8">Fall back to the primary display if the target display is unavailable</CheckBox>
-                <CheckBox IsChecked="{Binding CenterMouseCursorInRecalledWindow}"
+                <CheckBox IsChecked="{Binding CenterMouseCursorInShownWindow}"
                           Margin="0 0 0 8">Center the mouse cursor when showing an instance window</CheckBox>
                 <CheckBox IsChecked="{Binding CloseInstancesOnAppExit}"
                           Margin="0 0 0 8">Close all instances on application exit</CheckBox>

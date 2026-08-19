@@ -12,7 +12,7 @@ public class GlobalSettingsService(ConfigService configService)
         var snapshot = GetSnapshot() with
         {
             GameExecutablePath = draft.GameExecutablePath,
-            CenterMouseCursorInRecalledWindow = draft.CenterMouseCursorInRecalledWindow,
+            CenterMouseCursorInShownWindow = draft.CenterMouseCursorInShownWindow,
             FallbackToPrimaryDisplayIfInvalid = draft.FallbackToPrimaryDisplayIfInvalid,
             CloseInstancesOnAppExit = draft.CloseInstancesOnAppExit
         };

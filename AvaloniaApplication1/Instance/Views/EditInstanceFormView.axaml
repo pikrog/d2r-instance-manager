@@ -107,9 +107,9 @@
                     </ComboBox.DataTemplates>
                 </ComboBox>
                 
-                <TextBlock VerticalAlignment="Center" x:Name="RecallHotKeyLabel">Recall Hotkey</TextBlock>
-                <controls:HotkeyBox AutomationProperties.LabeledBy="{Binding #RecallHotKeyLabel}"
-                              KeyGesture="{Binding RecallHotKeyGesture}"/>
+                <TextBlock VerticalAlignment="Center" x:Name="ShowCommandHotKeyLabel">Show Command Hotkey</TextBlock>
+                <controls:HotkeyBox AutomationProperties.LabeledBy="{Binding #ShowCommandHotKeyLabel}"
+                              KeyGesture="{Binding ShowCommandHotKeyGesture}"/>
                 
                 <controls:Section Title="General game settings"/>
                 <WrapPanel>

@@ -10,7 +10,7 @@ public record GlobalSettingsSnapshot
     int GracefulInstanceCloseTimeoutMs = 250,
     int GracefulInstanceCloseRetries = 20,
     int ForcefulInstanceCloseTimeoutMs = 3000,
-    bool CenterMouseCursorInRecalledWindow = true, // per instance config? + minimize to tray if another window is recalled
+    bool CenterMouseCursorInShownWindow = true, // per instance config? + minimize to tray if another window is recalled
     bool FallbackToPrimaryDisplayIfInvalid = true,
     bool CloseInstancesOnAppExit = true, // used only by GameInstanceService
     AuthenticationMethod AuthenticationMethod = AuthenticationMethod.OsiTokenRegistry

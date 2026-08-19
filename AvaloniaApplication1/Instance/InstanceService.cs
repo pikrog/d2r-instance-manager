@@ -53,7 +53,7 @@ public class InstanceService(
             draft.Display,
             draft.IsNoSound,
             draft.IsWindowedMode,
-            draft.RecallHotKey
+            draft.ShowCommandHotKey
         );
 
         if (draft.Id is null)
