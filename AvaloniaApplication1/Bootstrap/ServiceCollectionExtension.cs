@@ -9,6 +9,7 @@ using AvaloniaApplication1.Engine.Factories;
 using AvaloniaApplication1.GameExecutable;
 using AvaloniaApplication1.GameExecutable.Providers;
 using AvaloniaApplication1.GlobalSettings;
+using AvaloniaApplication1.HotKey;
 using AvaloniaApplication1.Instance;
 using AvaloniaApplication1.Instance.ViewModels;
 using AvaloniaApplication1.MainWindow;
@@ -82,6 +83,7 @@ public static class ServiceCollectionExtension
             services.AddSingleton<IHotKeyService>(sp => sp.GetRequiredService<HotKeyService>());
             services.AddSingleton<IHotKeyWindowInitializer>(sp => sp.GetRequiredService<HotKeyService>());
             services.AddSingleton<HotKeyManager>();
+            services.AddSingleton<IHotKeySuspensionCoordinator>(sp => sp.GetRequiredService<HotKeyManager>());
             
             services.AddSingleton<InstanceHotKeyManager>();
             

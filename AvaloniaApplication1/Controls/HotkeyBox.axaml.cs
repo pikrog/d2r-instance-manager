@@ -112,6 +112,7 @@ public partial class HotkeyBox : TemplatedControl
         {
             _textBox.GotFocus -= OnGotFocus;
             _textBox.LostFocus -= OnLostFocus;
+            _textBox.DetachedFromVisualTree -= OnDetachedFromVisualTree;
         }
         
         _textBox = e.NameScope.Find<TextBox>("PART_TextBox");
@@ -120,6 +121,7 @@ public partial class HotkeyBox : TemplatedControl
         {
             _textBox.GotFocus += OnGotFocus;
             _textBox.LostFocus += OnLostFocus;
+            _textBox.DetachedFromVisualTree += OnDetachedFromVisualTree;
         }
     }
 
@@ -180,6 +182,11 @@ public partial class HotkeyBox : TemplatedControl
     }
 
     private void OnLostFocus(object? sender, FocusChangedEventArgs e)
+    {
+        IsCapturing = false;
+    }
+    
+    private void OnDetachedFromVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
     {
         IsCapturing = false;
     }

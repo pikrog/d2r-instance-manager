@@ -9,10 +9,12 @@
              xmlns:instance1="clr-namespace:AvaloniaApplication1.Instance.ViewModels"
              xmlns:display="clr-namespace:AvaloniaApplication1.Display"
              xmlns:dtos1="clr-namespace:AvaloniaApplication1.Authentication.Models"
+             xmlns:common="clr-namespace:AvaloniaApplication1.Common"
              mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="650"
              Width="450" Height="650"
              x:Class="AvaloniaApplication1.Instance.Views.EditInstanceFormView"
              x:DataType="instance1:EditInstanceFormDialogViewModel"
+             x:Name="Root"
              WindowStartupLocation="CenterOwner">
     <Design.DataContext>
         <designViewModels:EditInstanceFormDesignViewModel/>
@@ -108,8 +110,10 @@
                 </ComboBox>
                 
                 <TextBlock VerticalAlignment="Center" x:Name="ShowCommandHotKeyLabel">Show Command Hotkey</TextBlock>
-                <controls:HotkeyBox AutomationProperties.LabeledBy="{Binding #ShowCommandHotKeyLabel}"
-                              KeyGesture="{Binding ShowCommandHotKeyGesture}"/>
+                <controls:HotkeyBox x:Name="ShowCommandHotKey"
+                                    common:HotKeySuspension.Coordinator="{Binding #Root.HotKeySuspensionCoordinator}"
+                                    AutomationProperties.LabeledBy="{Binding #ShowCommandHotKeyLabel}"
+                                    KeyGesture="{Binding ShowCommandHotKeyGesture}"/>
                 
                 <controls:Section Title="General game settings"/>
                 <WrapPanel>

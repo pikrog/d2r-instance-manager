@@ -5,7 +5,7 @@ using AvaloniaApplication1.HotKey.Registration;
 
 namespace AvaloniaApplication1.HotKey;
 
-public class HotKeyManager
+public class HotKeyManager : IHotKeySuspensionCoordinator
 {
     private readonly IHotKeyService _hotKeyService;
     
