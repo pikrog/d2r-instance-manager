@@ -15,26 +15,45 @@ using AvaloniaApplication1.Instance.Models;
 
 namespace AvaloniaApplication1.Instance;
 
-public class InstanceService(
-    ConfigService configService,
-    InstanceConfigValidator validator,
-    InstanceManager instanceManager)
+public class InstanceService
 {
-    public event Action<Guid>? InstanceStateChanged
+    private readonly ConfigService _configService;
+    
+    private readonly InstanceConfigValidator _validator;
+    
+    private readonly InstanceManager _instanceManager;
+
+    public event EventHandler<InstanceStateChangedEventArgs>? InstanceStateChanged;
+
+    public InstanceService(ConfigService configService,
+        InstanceConfigValidator validator,
+        InstanceManager instanceManager)
     {
-        add => instanceManager.InstanceStateChanged += value;
-        remove => instanceManager.InstanceStateChanged -= value;
+        _configService = configService;
+        _validator = validator;
+        _instanceManager = instanceManager;
+
+        _instanceManager.InstanceStateChanged += OnInstanceStateChanged;
     }
+
+    private void OnInstanceStateChanged(Guid instanceId) => 
+        InstanceStateChanged?.Invoke(
+            this, 
+            new InstanceStateChangedEventArgs(instanceId)
+            );
 
     private async Task AddAsync(InstanceSnapshot snapshot)
     {
         await configService.ChangeAsync(context => context.AddInstance(snapshot));
         instanceManager.Register(snapshot.Id);
+        await _configService.ChangeAsync(context => context.AddInstance(snapshot));
+        _instanceManager.Register(snapshot.Id);
     }
 
     private async Task UpdateAsync(InstanceSnapshot snapshot)
     {
         await configService.ChangeAsync(context => context.UpdateInstance(snapshot));
+        await _configService.ChangeAsync(context => context.UpdateInstance(snapshot));
     }
 
     public async Task SaveAsync(InstanceDraft draft)
@@ -66,22 +85,24 @@ public class InstanceService(
     {
         await configService.ChangeAsync(context => context.RemoveInstance(id));
         instanceManager.Remove(id);
+        await _configService.ChangeAsync(context => context.RemoveInstance(id));
+        _instanceManager.Remove(id);
     }
 
     public InstanceSnapshot GetConfigSnapshot(Guid id)
     {
-        return configService.Config.GetInstance(id);
+        return _configService.Config.GetInstance(id);
     }
 
     public RuntimeSnapshot GetRuntimeSnapshot(Guid id)
     {
-        return instanceManager.GetRuntimeSnapshot(id);
+        return _instanceManager.GetRuntimeSnapshot(id);
     }
 
     private InstanceSummary CreateSummary(InstanceSnapshot snapshot, RuntimeSnapshot runtimeSnapshot)
     {
         var status = InstanceStatusMapper.Map(runtimeSnapshot);
-        var issues = validator.Validate(snapshot);
+        var issues = _validator.Validate(snapshot);
         return new InstanceSummary(snapshot.Id, snapshot.Name, status, runtimeSnapshot.IsActive, issues);
     }
 
@@ -94,32 +115,32 @@ public class InstanceService(
 
     public virtual IReadOnlyList<InstanceSummary> GetSummaries()
     {
-        var instances = instanceManager.GetAllRuntimeStates().ToDictionary(i => i.Id);
-        return configService.Config.GetAllInstances().Select(i =>
+        var instances = _instanceManager.GetAllRuntimeStates().ToDictionary(i => i.Id);
+        return _configService.Config.GetAllInstances().Select(i =>
             {
                 var runtimeSnapshot = instances[i.Id];
                 return CreateSummary(i, runtimeSnapshot);
             }).ToList();
     }
 
-    public Task<int> GetActiveCountAsync() => instanceManager.GetActiveCountAsync();
+    public Task<int> GetActiveCountAsync() => _instanceManager.GetActiveCountAsync();
 
     private string? ResolveDisplayId(DisplaySelection display)
     {
-        var isFallbackAllowed = configService.Config.GetGlobalSettings().FallbackToPrimaryDisplayIfInvalid;
+        var isFallbackAllowed = _configService.Config.GetGlobalSettings().FallbackToPrimaryDisplayIfInvalid;
         return DisplayResolver.ResolveDisplayId(display, isFallbackAllowed);
     }
 
     public async Task LaunchAsync(Guid id)
     {
-        var settings = configService.Config.GetGlobalSettings();
+        var settings = _configService.Config.GetGlobalSettings();
         
         var snapshot = GetConfigSnapshot(id);
         AuthenticationContext authenticationContext = new OfflineAuthenticationContext();
         if (snapshot.IsOnlineMode)
         {
-            var account = configService.Config.GetAccount(snapshot.AccountId!.Value);
-            var region = configService.Config.GetRegion(snapshot.RegionId!.Value);
+            var account = _configService.Config.GetAccount(snapshot.AccountId!.Value);
+            var region = _configService.Config.GetRegion(snapshot.RegionId!.Value);
             
             authenticationContext = snapshot.AuthenticationMethod switch
             {
@@ -165,13 +186,13 @@ public class InstanceService(
         
         var engineLaunchContext = new EngineLaunchContext(instanceLaunchContext, enginePolicies);
         
-        await instanceManager.LaunchAsync(snapshot.Id, engineLaunchContext);
+        await _instanceManager.LaunchAsync(snapshot.Id, engineLaunchContext);
     }
 
-    public async Task StopAsync(Guid id) => await instanceManager.StopAsync(id);
+    public async Task StopAsync(Guid id) => await _instanceManager.StopAsync(id);
 
     public Task<IReadOnlyList<ShutdownRequest>> RequestGracefulShutdownAllAsync() => 
-        instanceManager.RequestGracefulShutdownAllAsync();
+        _instanceManager.RequestGracefulShutdownAllAsync();
 
-    public void Show(Guid id) => instanceManager.Show(id);
+    public void Show(Guid id) => _instanceManager.Show(id);
 }

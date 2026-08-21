@@ -75,16 +75,16 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         _instanceService.InstanceStateChanged += OnInstanceStateChanged;
         SelectedInstances.CollectionChanged += OnSelectedInstancesCollectionChanged;
     }
-    
+
     private void OnSelectedInstancesCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         LaunchSelectedCommand.NotifyCanExecuteChanged();
         StopSelectedCommand.NotifyCanExecuteChanged();
     }
 
-    private void OnInstanceStateChanged(Guid id)
+    private void OnInstanceStateChanged(object? sender, InstanceStateChangedEventArgs e)
     {
-        Dispatcher.UIThread.Post(() => RefreshItem(id));
+        Dispatcher.UIThread.Post(() => RefreshItem(e.InstanceId));
     }
 
     private void OnInstancePropertyChanged(object? sender, PropertyChangedEventArgs e)
