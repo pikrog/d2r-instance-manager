@@ -18,7 +18,9 @@ namespace AvaloniaApplication1
 
         private bool _isWaitingForConfirmation;
         
-        public static IServiceProvider? Services { get; private set; }
+        private static IServiceProvider? _services;
+        
+        public static IServiceProvider Services => _services ?? throw new InvalidOperationException("Services not initialized");
         
         public override void Initialize()
         {
@@ -36,10 +38,10 @@ namespace AvaloniaApplication1
                 await Task.Delay(1000);
                 await Dispatcher.UIThread.InvokeAsync(() => initialWindow.ProgressBar.Opacity = 1);
                 
-                Services = await AppBootstrapper.BootstrapAsync();
-                Services.GetRequiredService<AppRuntimeBootstrapper>().Bootstrap();
+                _services = await AppBootstrapper.BootstrapAsync();
+                _services.GetRequiredService<AppRuntimeBootstrapper>().Bootstrap();
                 
-                var mainWindowViewModel = Services.GetRequiredService<MainWindowViewModel>();
+                var mainWindowViewModel = _services.GetRequiredService<MainWindowViewModel>();
                 await mainWindowViewModel.SetupAsync();
                 
                 await Dispatcher.UIThread.InvokeAsync(() =>

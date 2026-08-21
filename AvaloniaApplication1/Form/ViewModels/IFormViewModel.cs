@@ -1,6 +1,8 @@
-﻿namespace AvaloniaApplication1.Form.ViewModels;
+﻿using AvaloniaApplication1.Common;
 
-public interface IFormViewModel
+namespace AvaloniaApplication1.Form.ViewModels;
+
+public interface IFormViewModel : IViewModel
 {
     bool Validate();
 }

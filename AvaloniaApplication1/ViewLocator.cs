@@ -1,10 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Media;
 using AvaloniaApplication1.Common;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AvaloniaApplication1;
 
@@ -23,9 +23,7 @@ public partial class ViewLocator : IDataTemplate
 
         var viewModelType = param.GetType();
 
-        while (viewModelType is not null 
-               && viewModelType.IsAssignableTo(typeof(ViewModelBase))
-               && viewModelType != typeof(ViewModelBase))
+        while (viewModelType is not null && viewModelType.IsAssignableTo(typeof(IViewModel)))
         {
             var viewName = viewModelType.FullName!.Replace("ViewModel", "View", StringComparison.Ordinal);
             
@@ -33,7 +31,7 @@ public partial class ViewLocator : IDataTemplate
 
             if (viewType is not null)
             {
-                return (Control)Activator.CreateInstance(viewType)!;
+                return (Control)ActivatorUtilities.CreateInstance(App.Services, viewType);
             }
             
             viewModelType = viewModelType.BaseType;

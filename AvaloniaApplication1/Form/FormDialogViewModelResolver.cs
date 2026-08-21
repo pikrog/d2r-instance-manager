@@ -4,7 +4,7 @@ using AvaloniaApplication1.Form.ViewModels;
 using AvaloniaApplication1.Instance.ViewModels;
 using EditInstanceFormViewModel = AvaloniaApplication1.Instance.ViewModels.EditInstanceFormViewModel;
 
-namespace AvaloniaApplication1.Form.Resolvers;
+namespace AvaloniaApplication1.Form;
 
 public static class FormDialogViewModelResolver
 {
