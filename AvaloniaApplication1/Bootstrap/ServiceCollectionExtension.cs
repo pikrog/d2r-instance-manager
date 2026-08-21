@@ -77,11 +77,20 @@ public static class ServiceCollectionExtension
             services.AddSingleton<IPageController>(sp => sp.GetRequiredService<PageHost>());
             services.AddSingleton<IPageProvider, PageProvider>();
             services.AddSingleton<NavigationService>();
+
+            services.AddSingleton<HotKeyService>();
+            services.AddSingleton<IHotKeyService>(sp => sp.GetRequiredService<HotKeyService>());
+            services.AddSingleton<IHotKeyWindowInitializer>(sp => sp.GetRequiredService<HotKeyService>());
+            services.AddSingleton<HotKeyManager>();
+            
+            services.AddSingleton<InstanceHotKeyManager>();
             
             services.AddTransient<MainWindowViewModel>();
 
             services.AddSingleton<InstanceManagerBootstrapper>();
             services.AddSingleton<AppRuntimeBootstrapper>();
+            
+            services.AddSingleton<MainWindowRuntimeBootstrapper>();
         }
     }
 }

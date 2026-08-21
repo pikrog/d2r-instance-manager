@@ -12,6 +12,7 @@ using AvaloniaApplication1.Engine.Models;
 using AvaloniaApplication1.Engine.Models.Contexts.Launch;
 using AvaloniaApplication1.Engine.Models.StateMachine;
 using AvaloniaApplication1.Instance.Models;
+using AvaloniaApplication1.Instance.Models.EventArgs;
 
 namespace AvaloniaApplication1.Instance;
 
@@ -24,6 +25,8 @@ public class InstanceService
     private readonly InstanceManager _instanceManager;
 
     public event EventHandler<InstanceStateChangedEventArgs>? InstanceStateChanged;
+    
+    public event EventHandler<InstanceConfigChangedEventArgs>? InstanceConfigChanged;
 
     public InstanceService(ConfigService configService,
         InstanceConfigValidator validator,
@@ -44,16 +47,21 @@ public class InstanceService
 
     private async Task AddAsync(InstanceSnapshot snapshot)
     {
-        await configService.ChangeAsync(context => context.AddInstance(snapshot));
-        instanceManager.Register(snapshot.Id);
         await _configService.ChangeAsync(context => context.AddInstance(snapshot));
         _instanceManager.Register(snapshot.Id);
+        
+        var eventArgs = new InstanceConfigChangedEventArgs(snapshot.Id, newSnapshot: snapshot);
+        InstanceConfigChanged?.Invoke(this, eventArgs);
     }
 
     private async Task UpdateAsync(InstanceSnapshot snapshot)
     {
-        await configService.ChangeAsync(context => context.UpdateInstance(snapshot));
+        var oldSnapshot = GetConfigSnapshot(snapshot.Id);
+        
         await _configService.ChangeAsync(context => context.UpdateInstance(snapshot));
+        
+        var eventArgs = new InstanceConfigChangedEventArgs(snapshot.Id, oldSnapshot, snapshot);
+        InstanceConfigChanged?.Invoke(this, eventArgs);
     }
 
     public async Task SaveAsync(InstanceDraft draft)
@@ -83,15 +91,23 @@ public class InstanceService
     
     public async Task RemoveAsync(Guid id)
     {
-        await configService.ChangeAsync(context => context.RemoveInstance(id));
-        instanceManager.Remove(id);
+        var snapshot = GetConfigSnapshot(id);
+        
         await _configService.ChangeAsync(context => context.RemoveInstance(id));
         _instanceManager.Remove(id);
+        
+        var eventArgs = new InstanceConfigChangedEventArgs(snapshot.Id, snapshot);
+        InstanceConfigChanged?.Invoke(this, eventArgs);
     }
 
     public InstanceSnapshot GetConfigSnapshot(Guid id)
     {
         return _configService.Config.GetInstance(id);
+    }
+
+    public IReadOnlyList<InstanceSnapshot> GetConfigSnapshots()
+    {
+        return _configService.Config.GetAllInstances();
     }
 
     public RuntimeSnapshot GetRuntimeSnapshot(Guid id)

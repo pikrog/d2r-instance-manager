@@ -51,6 +51,9 @@ namespace AvaloniaApplication1
                         DataContext = mainWindowViewModel,
                     };
                     mainWindow.Closing += OnMainWindowClosing;
+
+                    _services.GetRequiredService<MainWindowRuntimeBootstrapper>().Bootstrap(mainWindow);
+                    
                     desktop.MainWindow = mainWindow;
                     desktop.MainWindow.Show();
                     initialWindow.Close();

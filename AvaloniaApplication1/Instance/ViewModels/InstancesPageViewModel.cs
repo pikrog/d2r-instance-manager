@@ -12,6 +12,7 @@ using AvaloniaApplication1.Display;
 using AvaloniaApplication1.GlobalSettings;
 using AvaloniaApplication1.GlobalSettings.Issues;
 using AvaloniaApplication1.Instance.Models;
+using AvaloniaApplication1.Instance.Models.EventArgs;
 using AvaloniaApplication1.Navigation;
 using AvaloniaApplication1.Overlay;
 using AvaloniaApplication1.Region;

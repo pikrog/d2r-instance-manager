@@ -210,17 +210,6 @@ internal static partial class WinApi
         
         public DateTime ToDateTime() => DateTime.FromFileTime(ToLong());
     }
-
-    [Flags]
-    internal enum HotKeyModifiers : uint
-    {
-        None        = 0x0000,
-        Alt         = 0x0001,
-        Control     = 0x0002,
-        NoRepeat    = 0x4000,
-        Shift       = 0x0004,
-        Win         = 0x0008,
-    }
     
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     public struct DisplayDevice
@@ -294,14 +283,6 @@ internal static partial class WinApi
     [LibraryImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
     internal static partial bool ShowWindow(IntPtr windowHandle, ShowCommand showCommand);
-
-    [LibraryImport("user32.dll", SetLastError = true)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    internal static partial bool RegisterHotKey(IntPtr windowHandle, int hotKeyId, HotKeyModifiers modifiers, uint virtualKeyCode);
-
-    [LibraryImport("user32.dll", SetLastError = true)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    internal static partial bool UnregisterHotKey(IntPtr windowHandle, int hotKeyId);
 
     [LibraryImport("user32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
