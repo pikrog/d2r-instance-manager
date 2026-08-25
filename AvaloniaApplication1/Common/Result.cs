@@ -1,7 +1,6 @@
 ﻿using System;
-using AvaloniaApplication1.Common;
 
-namespace AvaloniaApplication1.Engine.Common;
+namespace AvaloniaApplication1.Common;
 
 public readonly struct Result<TValue, TError>
 {
