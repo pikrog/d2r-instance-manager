@@ -52,10 +52,23 @@ public partial class InstanceItemViewModel : SelectableViewModelBase
             InstanceStatus.Unknown => SemanticType.Danger,
             _ => throw new InvalidOperationException($"Unknown status {Status}")
         };
-
+    
     public bool HasIssues => Issues.Any();
     
     public bool RequiresAttention => Issues.Any(i => i.RequiresAttention);
+    
+    public SemanticType? IssuesSemanticType
+    {
+        get
+        {
+            if (IsActive || !HasIssues)
+                return null;
+
+            return RequiresAttention
+                ? SemanticType.Danger
+                : SemanticType.Warning;
+        }
+    }
     
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanEdit), nameof(CanDelete))]
@@ -86,6 +99,7 @@ public partial class InstanceItemViewModel : SelectableViewModelBase
     {
         OnPropertyChanged(nameof(HasIssues));
         OnPropertyChanged(nameof(RequiresAttention));
+        OnPropertyChanged(nameof(IssuesSemanticType));
         
         OnPropertyChanged(nameof(CanLaunch));
     }

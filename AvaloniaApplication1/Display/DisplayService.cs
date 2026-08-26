@@ -17,7 +17,7 @@ public class DisplayService(ConfigService configService)
         var options = displays
             .Select(DisplayOption (d) =>
                 new DisplayOption.Specific(d.Index, d.Id, d.Description, d.Width, d.Height, true))
-            .Prepend(new DisplayOption.Primary())
+            .Prepend(DisplayOption.Primary.Instance)
             .ToList();
         
         if (selection is null || options.Any(o => DisplayMatcher.IsMatch(selection, o))) 

@@ -117,12 +117,21 @@
     <Compile Update="Instance\Views\EditInstanceFormView.Design.cs">
       <DependentUpon>EditInstanceFormView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Languages\Validation.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Validation.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Update="Languages\HotkeyBoxStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>HotkeyBoxStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Languages\Validation.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Validation.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

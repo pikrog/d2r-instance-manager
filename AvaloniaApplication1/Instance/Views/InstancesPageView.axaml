@@ -10,7 +10,7 @@
              xmlns:instanceIssues="clr-namespace:AvaloniaApplication1.Instance.Models.Issues"
              xmlns:settingsIssues="clr-namespace:AvaloniaApplication1.GlobalSettings.Issues"
              xmlns:views="clr-namespace:AvaloniaApplication1.Instance.Views"
-             xmlns:instance="clr-namespace:AvaloniaApplication1.Instance"
+             xmlns:hotKey="clr-namespace:AvaloniaApplication1.Instance.Models.Issues.HotKey"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Name="Root"
              x:Class="AvaloniaApplication1.Instance.Views.InstancesPageView"
@@ -19,10 +19,6 @@
     <Design.DataContext>
         <designViewModels:InstancesPageDesignViewModel />
     </Design.DataContext>
-    
-    <UserControl.Resources>
-        <instance:InstanceIssuesSemanticConverter x:Key="InstanceIssuesSemanticConverter" />
-    </UserControl.Resources>
     
     <UserControl.DataTemplates>
         <DataTemplate x:DataType="instanceIssues:MissingDisplay">
@@ -56,6 +52,31 @@
         </DataTemplate>
         <DataTemplate x:DataType="instanceIssues:MissingRegion">
             <TextBlock>The instance has online mode enabled but is missing a region.</TextBlock>
+        </DataTemplate>
+        
+        <DataTemplate x:DataType="hotKey:ExternalHotKeyConflict">
+            <TextBlock>
+                The hotkey
+                [<Run FontWeight="Bold" Text="{Binding KeyCombination}" />]
+                is already in use by another application.
+            </TextBlock>
+        </DataTemplate>
+        
+        <DataTemplate x:DataType="hotKey:InternalHotKeyConflict">
+            <TextBlock>
+                The hotkey
+                [<Run FontWeight="Bold" Text="{Binding KeyCombination}" />]
+                is already assigned to another command.
+            </TextBlock>
+        </DataTemplate>
+        
+        <DataTemplate x:DataType="hotKey:FailedHotKeyRegistration">
+            <TextBlock>
+                Failed to register the hotkey.
+                [<Run FontWeight="Bold" Text="{Binding KeyCombination}" />].
+                <LineBreak />
+                <TextBlock Text="{Binding Exception.Message}" />
+            </TextBlock>
         </DataTemplate>
         
         <DataTemplate x:DataType="settingsIssues:MissingExecutablePath">
@@ -205,7 +226,7 @@
                                             
                                         <ContentControl Grid.Column="2" 
                                                         Classes="icon hoverable"
-                                                        semantic:SemanticClass.Type="{Binding Path=.,Converter={StaticResource InstanceIssuesSemanticConverter}}"
+                                                        semantic:SemanticClass.Type="{Binding Path=IssuesSemanticType}"
                                                         VerticalAlignment="Center">
                                             <ContentControl.IsVisible>
                                                 <MultiBinding Converter="{x:Static BoolConverters.And}">

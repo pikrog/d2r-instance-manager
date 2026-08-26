@@ -1,5 +1,5 @@
 ﻿using Avalonia.Controls;
-using AvaloniaApplication1.HotKey;
+using AvaloniaApplication1.HotKey.Platform;
 
 namespace AvaloniaApplication1.Instance.Views;
 

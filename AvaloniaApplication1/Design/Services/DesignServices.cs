@@ -12,7 +12,10 @@ using AvaloniaApplication1.Engine.Factories;
 using AvaloniaApplication1.GameExecutable;
 using AvaloniaApplication1.GameExecutable.Providers;
 using AvaloniaApplication1.GlobalSettings;
+using AvaloniaApplication1.HotKey;
+using AvaloniaApplication1.HotKey.Config;
 using AvaloniaApplication1.Instance;
+using AvaloniaApplication1.Instance.ViewModels;
 using AvaloniaApplication1.Navigation;
 using AvaloniaApplication1.Overlay;
 using AvaloniaApplication1.Region;
@@ -70,10 +73,17 @@ public static class DesignServices
     public static readonly PageHost PageHost = new();
     
     public static InstanceService InstanceService { get; } = new InstanceDesignService(ConfigService, InstanceConfigValidator, InstanceManager);
+
+    public static readonly IInstancePresenter InstancePresenter = new InstanceDesignPresenter(InstanceService);
     
     private static readonly PageDesignProvider PageProvider = new();
     
     public static readonly NavigationService NavigationService = new(PageHost, PageProvider);
+
+    public static readonly IHotKeyConfigValidator HotKeyConfigValidator = new FakeHotKeyConfigValidator();
+
+    public static readonly EditInstanceFormViewModelFactory EditInstanceFormViewModelFactory =
+        new(HotKeyConfigValidator, AccountService, RegionService, DisplayService);
     
     static DesignServices()
     {

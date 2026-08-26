@@ -13,23 +13,27 @@
         <Setter Property="CapturingPlaceholderText" Value="{x:Static lang:HotkeyBoxStrings.CapturingPlaceholderText}"/>
         <Setter Property="Template">
             <ControlTemplate TargetType="{x:Type cc:HotkeyBox}">
-                <TextBox Name="PART_TextBox"
-                         IsReadOnly="True"
-                         CaretBrush="Transparent"
-                         SelectionBrush="Transparent"
-                         Text="{Binding DisplayText, RelativeSource={RelativeSource TemplatedParent}}"
-                         PlaceholderText="{Binding PlaceholderText, RelativeSource={RelativeSource TemplatedParent}}">
-                    <TextBox.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="Clear" InputGesture="Delete" Command="{Binding ClearCommand, RelativeSource={RelativeSource TemplatedParent}}"/>
-                        </ContextMenu>
-                    </TextBox.ContextMenu>
-                </TextBox>
+                <DataValidationErrors>
+                    <TextBox Name="PART_TextBox"
+                             IsReadOnly="True"
+                             CaretBrush="Transparent"
+                             SelectionBrush="Transparent"
+                             Text="{Binding DisplayText, RelativeSource={RelativeSource TemplatedParent}}"
+                             PlaceholderText="{Binding PlaceholderText, RelativeSource={RelativeSource TemplatedParent}}"
+                             DataValidationErrors.HasErrors="{Binding (DataValidationErrors.HasErrors), RelativeSource={RelativeSource TemplatedParent}}">
+                        <TextBox.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Clear" InputGesture="Delete" Command="{Binding ClearCommand, RelativeSource={RelativeSource TemplatedParent}}"/>
+                            </ContextMenu>
+                        </TextBox.ContextMenu>
+                    </TextBox>
+                </DataValidationErrors>
             </ControlTemplate>
         </Setter>
     </Style>
     
-    <!--<Style Selector="cc|HotkeyBox:capturing /template/ TextBox#PART_TextBox">
-        
-    </Style>-->
+    <Style Selector="cc|HotkeyBox:error /template/ TextBox#PART_TextBox">
+        <Setter Property="BorderBrush" Value="Red" />
+        <Setter Property="BorderThickness" Value="1" />
+    </Style>
 </Styles>

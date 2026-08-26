@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls;
 
-namespace AvaloniaApplication1.HotKey;
+namespace AvaloniaApplication1.HotKey.Platform;
 
 public interface IHotKeyWindowInitializer
 {

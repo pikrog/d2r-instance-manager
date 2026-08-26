@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using Avalonia;
 using AvaloniaApplication1.Controls;
-using AvaloniaApplication1.HotKey;
+using AvaloniaApplication1.HotKey.Platform;
 
 namespace AvaloniaApplication1.Common;
 

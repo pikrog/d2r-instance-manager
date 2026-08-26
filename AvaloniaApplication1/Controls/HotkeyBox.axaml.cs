@@ -1,12 +1,10 @@
-﻿using System;
-using System.Globalization;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
-using Avalonia.Data.Converters;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using AvaloniaApplication1.Common;
 using CommunityToolkit.Mvvm.Input;
 
 namespace AvaloniaApplication1.Controls;
@@ -19,7 +17,8 @@ public partial class HotkeyBox : TemplatedControl
             nameof(KeyGesture), 
             c => c.KeyGesture,
             (c, v) => c.KeyGesture = v,
-            defaultBindingMode: BindingMode.TwoWay
+            defaultBindingMode: BindingMode.TwoWay,
+            enableDataValidation: true
             );
 
     public KeyGesture KeyGesture
@@ -146,7 +145,7 @@ public partial class HotkeyBox : TemplatedControl
     {
         DisplayText = KeyGesture.Key == Key.None
             ? string.Empty
-            : KeyGesture.ToString();
+            : KeysStringifier.ToString(KeyGesture.Key, KeyGesture.KeyModifiers);
     }
 
     private void UpdatePlaceholderText()

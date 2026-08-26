@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -8,6 +9,10 @@ namespace AvaloniaApplication1.Form.ViewModels;
 
 public abstract class FormViewModelBase : ObservableValidator, INotifyDataErrorInfo, IFormViewModel
 {
+    protected FormViewModelBase() { }
+    
+    protected FormViewModelBase(IServiceProvider serviceProvider) : base(serviceProvider, null) { }
+    
     private bool _showValidationErrors;
 
     public bool Validate()

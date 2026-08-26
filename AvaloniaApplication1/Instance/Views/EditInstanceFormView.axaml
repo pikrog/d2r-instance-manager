@@ -113,7 +113,7 @@
                 <controls:HotkeyBox x:Name="ShowCommandHotKey"
                                     common:HotKeySuspension.Coordinator="{Binding #Root.HotKeySuspensionCoordinator}"
                                     AutomationProperties.LabeledBy="{Binding #ShowCommandHotKeyLabel}"
-                                    KeyGesture="{Binding ShowCommandHotKeyGesture}"/>
+                                    KeyGesture="{Binding ShowCommandHotKey,Converter={StaticResource KeyCombinationToKeyGestureConverter}}"/>
                 
                 <controls:Section Title="General game settings"/>
                 <WrapPanel>

@@ -1,5 +1,5 @@
 ﻿using System;
-using AvaloniaApplication1.HotKey;
+using AvaloniaApplication1.HotKey.Platform;
 
 namespace AvaloniaApplication1.Design.Services;
 

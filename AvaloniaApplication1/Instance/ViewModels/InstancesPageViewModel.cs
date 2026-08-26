@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Threading;
-using AvaloniaApplication1.Account;
 using AvaloniaApplication1.Dialog;
 using AvaloniaApplication1.Display;
 using AvaloniaApplication1.GlobalSettings;
@@ -15,7 +14,6 @@ using AvaloniaApplication1.Instance.Models;
 using AvaloniaApplication1.Instance.Models.EventArgs;
 using AvaloniaApplication1.Navigation;
 using AvaloniaApplication1.Overlay;
-using AvaloniaApplication1.Region;
 using AvaloniaApplication1.Selectable;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -27,17 +25,15 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
 {
     private readonly InstanceService _instanceService;
 
-    private readonly AccountService _accountService;
-    
-    private readonly RegionService _regionService;
+    private readonly IInstancePresenter _instancePresenter;
 
-    private readonly DisplayService _displayService;
-    
     private readonly GlobalSettingsValidator _globalSettingsValidator;
     
     private readonly OverlayService _overlayService;
     
     private readonly NavigationService _navigationService;
+
+    private readonly EditInstanceFormViewModelFactory _formFactory;
 
     private readonly ObservableCollection<InstanceItemViewModel> _instances = [];
     
@@ -54,26 +50,24 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
     public partial GlobalSettingsIssue? FirstGlobalSettingsIssue { get; set; }
 
     public InstancesPageViewModel(InstanceService instanceService,
-        AccountService accountService,
-        RegionService regionService,
-        DisplayService displayService,
+        IInstancePresenter instancePresenter,
         GlobalSettingsValidator globalSettingsValidator,
         OverlayService overlayService,
-        NavigationService navigationService)
+        NavigationService navigationService,
+        EditInstanceFormViewModelFactory formFactory)
     {
         _instanceService = instanceService;
-        _accountService = accountService;
-        _regionService = regionService;
-        _displayService = displayService;
+        _instancePresenter = instancePresenter;
         _globalSettingsValidator = globalSettingsValidator;
         _overlayService = overlayService;
         _navigationService = navigationService;
+        _formFactory = formFactory;
         
         Instances = new ReadOnlyObservableCollection<InstanceItemViewModel>(_instances);
         
         SelectedInstances = new SelectedItemsCollection<InstanceItemViewModel>(Instances);
         
-        _instanceService.InstanceStateChanged += OnInstanceStateChanged;
+        _instancePresenter.InstancePresentationChanged += OnInstancePresentationChanged;
         SelectedInstances.CollectionChanged += OnSelectedInstancesCollectionChanged;
     }
 
@@ -83,7 +77,7 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         StopSelectedCommand.NotifyCanExecuteChanged();
     }
 
-    private void OnInstanceStateChanged(object? sender, InstanceStateChangedEventArgs e)
+    private void OnInstancePresentationChanged(object? sender, InstancePresentationChangedEventArgs e)
     {
         Dispatcher.UIThread.Post(() => RefreshItem(e.InstanceId));
     }
@@ -149,7 +143,7 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
     
     private void RefreshItem(Guid id)
     {
-        var summary = _instanceService.GetSummary(id);
+        var summary = _instancePresenter.Get(id);
 
         if (_instancesById.TryGetValue(id, out var item))
         {
@@ -162,7 +156,7 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
 
     private void RefreshInstances()
     {
-        var summaries = _instanceService.GetSummaries();
+        var summaries = _instancePresenter.GetAll();
 
         var summariesById = summaries.ToDictionary(s => s.Id);
 
@@ -195,37 +189,6 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         RefreshGlobalSettingsIssues();
     }
 
-    private async Task<EditInstanceFormViewModel> CreateForm(InstanceSnapshot? snapshot = null)
-    {
-        var accountOptions = _accountService.GetOptions();
-        var regionOptions = _regionService.GetOptions();
-        var displayOptions = await _displayService.GetOptionsAsync(snapshot?.Display as DisplaySelection.Specific);
-        var form = new EditInstanceFormViewModel(accountOptions, regionOptions, displayOptions)
-        {
-            SelectedDisplay = displayOptions[0],
-        };
-
-        if (snapshot is null)
-            return form;
-        
-        var selectedAccount = accountOptions.SingleOrDefault(x => x.Id == snapshot.AccountId);
-        var selectedRegion = regionOptions.SingleOrDefault(x => x.Id == snapshot.RegionId);
-        var selectedAuthenticationMethod = EditInstanceFormViewModel.AuthenticationMethodOptions.SingleOrDefault(o => o.AuthenticationMethod == snapshot.AuthenticationMethod);
-        var selectedDisplay = displayOptions.SingleOrDefault(o => DisplayMatcher.IsMatch(snapshot.Display, o)) ?? displayOptions[0];
-        
-        form.Id = snapshot.Id;
-        form.Name = snapshot.Name;
-        form.IsOnlineMode = snapshot.IsOnlineMode;
-        form.SelectedAccount = selectedAccount;
-        form.SelectedAuthenticationMethod = selectedAuthenticationMethod;
-        form.SelectedRegion = selectedRegion;
-        form.SelectedDisplay = selectedDisplay;
-        form.ShowCommandHotKey = snapshot.ShowCommandHotKey;
-        form.IsNoSound = snapshot.IsNoSound;
-        form.IsWindowedMode = snapshot.IsWindowedMode;
-        return form;
-    }
-
     private InstanceDraft CreateDraft(EditInstanceFormViewModel form)
     {
         return new InstanceDraft(
@@ -244,7 +207,7 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
     
     private async Task CoreEdit(InstanceSnapshot? snapshot = null)
     {
-        var form = await CreateForm(snapshot);
+        var form = await _formFactory.CreateAsync(snapshot);
         var okPressed = await this.OpenForm(form);
         if (!okPressed)
             return;

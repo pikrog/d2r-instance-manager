@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AvaloniaApplication1.HotKey;
+namespace AvaloniaApplication1.HotKey.Platform;
 
 public interface IHotKeySuspensionCoordinator
 {

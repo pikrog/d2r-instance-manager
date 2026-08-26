@@ -9,7 +9,8 @@ using AvaloniaApplication1.Engine.Factories;
 using AvaloniaApplication1.GameExecutable;
 using AvaloniaApplication1.GameExecutable.Providers;
 using AvaloniaApplication1.GlobalSettings;
-using AvaloniaApplication1.HotKey;
+using AvaloniaApplication1.HotKey.Config;
+using AvaloniaApplication1.HotKey.Platform;
 using AvaloniaApplication1.Instance;
 using AvaloniaApplication1.Instance.ViewModels;
 using AvaloniaApplication1.MainWindow;
@@ -57,6 +58,8 @@ public static class ServiceCollectionExtension
             services.AddSingleton<InstanceService>();
             services.AddSingleton<GlobalSettingsService>();
             services.AddSingleton<DisplayService>();
+
+            services.AddSingleton<IInstancePresenter, InstancePresenter>();
             
             services.AddSingleton<IGameExecutablePathProvider, GameConfigStorePathProvider>();
             services.AddSingleton<IGameExecutablePathProvider, UninstallEntryPathProvider>();
@@ -73,6 +76,8 @@ public static class ServiceCollectionExtension
             services.AddTransient<RegionsPageViewModel>();
             services.AddTransient<GlobalSettingsPageViewModel>();
             
+            services.AddSingleton<EditInstanceFormViewModelFactory>(); // transient or singleton?
+            
             services.AddSingleton<PageHost>();
             services.AddSingleton<IPageHost>(sp => sp.GetRequiredService<PageHost>());
             services.AddSingleton<IPageController>(sp => sp.GetRequiredService<PageHost>());
@@ -82,10 +87,13 @@ public static class ServiceCollectionExtension
             services.AddSingleton<HotKeyService>();
             services.AddSingleton<IHotKeyService>(sp => sp.GetRequiredService<HotKeyService>());
             services.AddSingleton<IHotKeyWindowInitializer>(sp => sp.GetRequiredService<HotKeyService>());
-            services.AddSingleton<HotKeyManager>();
-            services.AddSingleton<IHotKeySuspensionCoordinator>(sp => sp.GetRequiredService<HotKeyManager>());
+            services.AddSingleton<HotKeyRegistrationManager>();
+            services.AddSingleton<IHotKeySuspensionCoordinator>(sp => sp.GetRequiredService<HotKeyRegistrationManager>());
+            services.AddSingleton<IHotKeyConfigValidator, HotKeyConfigValidator>();
             
-            services.AddSingleton<InstanceHotKeyManager>();
+            services.AddSingleton<InstanceHotKeyBindingCoordinator>();
+            services.AddSingleton<InstanceHotKeyConfigProvider>();
+            services.AddSingleton<IHotKeyConfigProvider, InstanceHotKeyConfigProvider>(sp => sp.GetRequiredService<InstanceHotKeyConfigProvider>());
             
             services.AddTransient<MainWindowViewModel>();
 

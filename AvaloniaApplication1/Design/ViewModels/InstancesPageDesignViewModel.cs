@@ -7,12 +7,12 @@ namespace AvaloniaApplication1.Design.ViewModels;
 public sealed class InstancesPageDesignViewModel : InstancesPageViewModel
 {
     public InstancesPageDesignViewModel() : base(DesignServices.InstanceService,
-        DesignServices.AccountService,
-        DesignServices.RegionService,
-        DesignServices.DisplayService,
+        DesignServices.InstancePresenter,
         DesignServices.GlobalSettingsValidator,
         DesignServices.OverlayService,
-        DesignServices.NavigationService)
+        DesignServices.NavigationService,
+        DesignServices.EditInstanceFormViewModelFactory
+        )
     {
         FirstGlobalSettingsIssue = new MissingExecutablePath();
 

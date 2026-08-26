@@ -1,6 +1,7 @@
 ﻿using System;
 using Avalonia.Input;
 using AvaloniaApplication1.Account.Models;
+using AvaloniaApplication1.Design.Services;
 using AvaloniaApplication1.Display;
 using AvaloniaApplication1.HotKey;
 using AvaloniaApplication1.Instance.ViewModels;
@@ -10,7 +11,8 @@ namespace AvaloniaApplication1.Design.ViewModels;
 
 public class EditInstanceFormDesignViewModel : EditInstanceFormViewModel
 {
-    public EditInstanceFormDesignViewModel() : base([
+    public EditInstanceFormDesignViewModel() : base(new FakeHotKeyConfigValidator(),
+        [
         new AccountOption(Guid.NewGuid(), "User 1", "user1@mail.com"),
         new AccountOption(Guid.NewGuid(), null, "user2@mail.com"), 
         new AccountOption(Guid.NewGuid(), "User 3", "user3@mail.com")

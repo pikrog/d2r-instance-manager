@@ -5,8 +5,10 @@ using System.Runtime.InteropServices;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Win32.Input;
+using AvaloniaApplication1.Common;
+using AvaloniaApplication1.HotKey.Platform.Registration.Native;
 
-namespace AvaloniaApplication1.HotKey;
+namespace AvaloniaApplication1.HotKey.Platform;
 
 public partial class HotKeyService : IHotKeyService, IHotKeyWindowInitializer
 {
@@ -54,8 +56,6 @@ public partial class HotKeyService : IHotKeyService, IHotKeyWindowInitializer
     private static partial bool UnregisterHotKey(IntPtr windowHandle, int hotKeyId);
     
     private const uint WmHotKey = 0x0312;
-
-    private const uint HotKeyAlreadyRegistered = 0x0581;
 
     private IntPtr WndProc(IntPtr windowHandle, uint message, IntPtr wParam, IntPtr lParam, ref bool handled)
     {
@@ -106,12 +106,12 @@ public partial class HotKeyService : IHotKeyService, IHotKeyWindowInitializer
         Win32Properties.AddWndProcHookCallback(window, WndProc);
     }
 
-    public bool Register(KeyCombination keyCombination)
+    public Result<Unit, HotKeyNativeRegistrationError> Register(KeyCombination keyCombination)
     {
         EnsureWindowInitialized();
         
         if (_idByHotKey.ContainsKey(keyCombination))
-            return true;
+            return Result<Unit, HotKeyNativeRegistrationError>.Success();
 
         var id = _nextHotKeyId;
         var (modifiers, code) = PlatformHotKey.Create(keyCombination);
@@ -119,9 +119,8 @@ public partial class HotKeyService : IHotKeyService, IHotKeyWindowInitializer
         if (!RegisterHotKey(_windowHandle, id, modifiers, code))
         {
             var errorCode = Marshal.GetLastWin32Error();
-            return errorCode == HotKeyAlreadyRegistered 
-                ? false 
-                : throw new Win32Exception(errorCode);
+            var error = new HotKeyNativeRegistrationError(errorCode);
+            return Result<Unit, HotKeyNativeRegistrationError>.Failure(error);
         }
         
         _idByHotKey[keyCombination] = id;
@@ -129,7 +128,7 @@ public partial class HotKeyService : IHotKeyService, IHotKeyWindowInitializer
         
         IncrementHotKeyId();
         
-        return true;
+        return Result<Unit, HotKeyNativeRegistrationError>.Success();
     }
 
     public void Unregister(KeyCombination keyCombination)

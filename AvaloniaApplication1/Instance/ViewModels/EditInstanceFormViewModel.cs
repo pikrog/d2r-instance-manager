@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using Avalonia.Input;
 using AvaloniaApplication1.Account.Models;
 using AvaloniaApplication1.Authentication.Models;
 using AvaloniaApplication1.Common;
 using AvaloniaApplication1.Display;
 using AvaloniaApplication1.Form.ViewModels;
 using AvaloniaApplication1.HotKey;
+using AvaloniaApplication1.HotKey.Config;
+using AvaloniaApplication1.HotKey.Coordination;
+using AvaloniaApplication1.Instance.Models;
 using AvaloniaApplication1.Region.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -58,14 +59,12 @@ public partial class EditInstanceFormViewModel : FormViewModelBase
     [Required]
     public partial DisplayOption SelectedDisplay { get; set; }
 
-    public KeyCombination ShowCommandHotKey
-    {
-        get => new(ShowCommandHotKeyGesture.Key, ShowCommandHotKeyGesture.KeyModifiers);
-        set => ShowCommandHotKeyGesture = new KeyGesture(value.Key, value.KeyModifiers);
-    }
-
+    public HotKeyCommand? ShowCommandHotKeyIdentity => Id.HasValue ? new ShowInstanceHotKeyCommand(Id.Value) : null;
+    
     [ObservableProperty]
-    public partial KeyGesture ShowCommandHotKeyGesture { get; set; } = new(Key.None);
+    [NotifyDataErrorInfo]
+    [NotBoundHotKey(nameof(ShowCommandHotKeyIdentity))]
+    public partial KeyCombination ShowCommandHotKey { get; set; }
 
     [ObservableProperty]
     public partial bool IsNoSound { get; set; }
@@ -73,19 +72,22 @@ public partial class EditInstanceFormViewModel : FormViewModelBase
     [ObservableProperty]
     public partial bool IsWindowedMode { get; set; }
 
-    public EditInstanceFormViewModel(IReadOnlyList<AccountOption> accounts, IReadOnlyList<RegionOption> regions, IReadOnlyList<DisplayOption> displays)
+    public EditInstanceFormViewModel(IHotKeyConfigValidator hotKeyConfigValidator,
+        IReadOnlyList<AccountOption> accounts,
+        IReadOnlyList<RegionOption> regions,
+        IReadOnlyList<DisplayOption> displays)
+        : base(new HotKeyConfigValidatorProvider(hotKeyConfigValidator))
     {
         Accounts = accounts;
         Regions = regions;
         Displays = displays;
-        
-        PropertyChanged += OnPropertyChanged;
     }
 
-    private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    partial void OnIsOnlineModeChanged(bool value)
     {
-        if (e.PropertyName != nameof(IsOnlineMode) || IsOnlineMode)
+        if (value)
             return;
+        
         ClearErrors(nameof(SelectedAccount));
         ClearErrors(nameof(SelectedAuthenticationMethod));
         ClearErrors(nameof(SelectedRegion));
