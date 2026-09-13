@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Avalonia.Input;
 using AvaloniaApplication1.Account.Models;
 using AvaloniaApplication1.Authentication.Models;
 using AvaloniaApplication1.Common;
@@ -60,11 +61,11 @@ public partial class EditInstanceFormViewModel : FormViewModelBase
     public partial DisplayOption SelectedDisplay { get; set; }
 
     public HotKeyCommand? ShowCommandHotKeyIdentity => Id.HasValue ? new ShowInstanceHotKeyCommand(Id.Value) : null;
-    
+
     [ObservableProperty]
     [NotifyDataErrorInfo]
     [NotBoundHotKey(nameof(ShowCommandHotKeyIdentity))]
-    public partial KeyCombination ShowCommandHotKey { get; set; }
+    public partial KeyCombination ShowCommandHotKey { get; set; } = new(Key.None);
 
     [ObservableProperty]
     public partial bool IsNoSound { get; set; }
