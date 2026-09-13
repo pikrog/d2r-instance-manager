@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -6,15 +5,28 @@ namespace AvaloniaApplication1.Bootstrap;
 
 public static class AppBootstrapper
 {
-    public static async Task<IServiceProvider> BootstrapAsync()
+    public static Task<ServiceProvider> BootstrapAsync()
     {
-        var coreConfigServicesBundle = await ConfigBootstrapper.BootstrapAsync();
-        return BuildServiceProvider(coreConfigServicesBundle);
+        var appDataEnvironment = AppDataEnvironment.CreateDefault();
+        return BootstrapAsync(appDataEnvironment);
+    }
+    
+    public static async Task<ServiceProvider> BootstrapAsync(AppDataEnvironment appDataEnvironment)
+    {
+        var coreLoggingServicesBundle = LoggingBootstrapper.Bootstrap(appDataEnvironment);
+        
+        var coreConfigServicesBundle = 
+            await ConfigBootstrapper.BootstrapAsync(appDataEnvironment, coreLoggingServicesBundle.Logger);
+        
+        return BuildServiceProvider(coreLoggingServicesBundle, coreConfigServicesBundle);   
     }
 
-    public static IServiceCollection CreateServiceCollection(CoreConfigServicesBundle coreConfigServicesBundle)
+    public static IServiceCollection CreateServiceCollection(
+        CoreLoggingServicesBundle coreLoggingServicesBundle,
+        CoreConfigServicesBundle coreConfigServicesBundle)
     {
         var services = new ServiceCollection();
+        services.AddLoggingServices(coreLoggingServicesBundle);
         services.AddConfigServices(coreConfigServicesBundle);
         services.AddEngineServices();
         services.AddApplicationServices();
@@ -22,10 +34,11 @@ public static class AppBootstrapper
     }
 
     public static ServiceProvider BuildServiceProvider(
+        CoreLoggingServicesBundle coreLoggingServicesBundle,
         CoreConfigServicesBundle coreConfigServicesBundle,
         ServiceProviderOptions? options = null)
     {
-        var services = CreateServiceCollection(coreConfigServicesBundle);
+        var services = CreateServiceCollection(coreLoggingServicesBundle, coreConfigServicesBundle);
         return services.BuildServiceProvider(options ?? CreateDefaultServiceProviderOptions());
     }
 

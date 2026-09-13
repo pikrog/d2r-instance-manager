@@ -10,6 +10,7 @@
         xmlns:instance="clr-namespace:AvaloniaApplication1.Instance.ViewModels"
         xmlns:region="clr-namespace:AvaloniaApplication1.Region.ViewModels"
         xmlns:settings="clr-namespace:AvaloniaApplication1.GlobalSettings"
+        xmlns:logs="clr-namespace:AvaloniaApplication1.Log"
         mc:Ignorable="d" 
         d:DesignWidth="900" d:DesignHeight="600"
         Width="900" Height="600"
@@ -69,7 +70,12 @@
                                                             ConverterParameter={x:Type region:RegionsPageViewModel}}">
                                     Regions
                                 </controls:NavTab>
-                                <controls:NavTab Icon="{SvgImage /Assets/images/book.svg}"> <!--todo: implement logs-->
+                                <controls:NavTab Icon="{SvgImage /Assets/images/book.svg}"
+                                                 Command="{Binding SetPageCommand}" 
+                                                 CommandParameter="{x:Type logs:LogsPageViewModel}"
+                                                 IsActive="{Binding PageHost.CurrentPage,
+                                                            Converter={StaticResource IsPageTypeConverter}, 
+                                                            ConverterParameter={x:Type logs:LogsPageViewModel}}">
                                     Logs
                                 </controls:NavTab>
                                 <controls:NavTab Icon="{SvgImage /Assets/images/settings.svg}" 

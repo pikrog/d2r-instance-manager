@@ -6,9 +6,9 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using AvaloniaApplication1.Bootstrap;
+using AvaloniaApplication1.MainWindow;
 using Microsoft.Extensions.DependencyInjection;
-using MainWindowView = AvaloniaApplication1.MainWindow.MainWindowView;
-using MainWindowViewModel = AvaloniaApplication1.MainWindow.MainWindowViewModel;
+
 
 namespace AvaloniaApplication1
 {
@@ -18,7 +18,7 @@ namespace AvaloniaApplication1
 
         private bool _isWaitingForConfirmation;
         
-        private static IServiceProvider? _services;
+        private static ServiceProvider? _services;
         
         public static IServiceProvider Services => _services ?? throw new InvalidOperationException("Services not initialized");
         
@@ -29,8 +29,11 @@ namespace AvaloniaApplication1
 
         private async Task InitializeAsync(IClassicDesktopStyleApplicationLifetime desktop)
         {
-            // todo: cleanup. error window. initial window = progress bar
+            // todo: error window
+            
             desktop.ShutdownRequested += OnShutdownRequested;
+            desktop.Exit += (_, _) => _services?.Dispose();
+            
             var initialWindow = new InitialWindowView();
             try
             {
@@ -60,7 +63,7 @@ namespace AvaloniaApplication1
                 });
             } catch (Exception e)
             {
-                Console.Error.WriteLine(e);
+                Serilog.Log.Fatal(e, "Application failed to start");
                 
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
@@ -123,8 +126,7 @@ namespace AvaloniaApplication1
             }
             catch (Exception exception)
             {
-                // todo: log and show error window
-                Console.WriteLine(exception);
+                Serilog.Log.Fatal(exception, "Application failed to exit");
             }
         }
 

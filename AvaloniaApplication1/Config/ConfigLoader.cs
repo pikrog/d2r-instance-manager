@@ -3,10 +3,11 @@ using System.Threading.Tasks;
 using AvaloniaApplication1.Config.Stores;
 using AvaloniaApplication1.GlobalSettings;
 using AvaloniaApplication1.Region.Models;
+using Microsoft.Extensions.Logging;
 
 namespace AvaloniaApplication1.Config;
 
-public class ConfigLoader(IConfigStore configStore)
+public class ConfigLoader(IConfigStore configStore, ILogger<ConfigLoader> logger)
 {
     private static AppConfig CreateDefault()
     {
@@ -16,15 +17,15 @@ public class ConfigLoader(IConfigStore configStore)
             Accounts = [],
             Regions =
             [
-                new RegionSnapshot(ConfigConstants.EuropeRegionId,
-                    ConfigConstants.EuropeRegionName,
-                    ConfigConstants.EuropeRegionAddress),
-                new RegionSnapshot(ConfigConstants.UnitedStatesRegionId,
-                    ConfigConstants.UnitedStatesRegionName,
-                    ConfigConstants.UnitedStatesRegionAddress),
-                new RegionSnapshot(ConfigConstants.AsiaRegionId,
-                    ConfigConstants.AsiaRegionName,
-                    ConfigConstants.AsiaRegionAddress)
+                new RegionSnapshot(ConfigDefaults.EuropeRegionId,
+                    ConfigDefaults.EuropeRegionName,
+                    ConfigDefaults.EuropeRegionAddress),
+                new RegionSnapshot(ConfigDefaults.UnitedStatesRegionId,
+                    ConfigDefaults.UnitedStatesRegionName,
+                    ConfigDefaults.UnitedStatesRegionAddress),
+                new RegionSnapshot(ConfigDefaults.AsiaRegionId,
+                    ConfigDefaults.AsiaRegionName,
+                    ConfigDefaults.AsiaRegionAddress)
             ],
             Instances = [],
             Displays = [],
@@ -47,6 +48,9 @@ public class ConfigLoader(IConfigStore configStore)
         catch (IOException e) when (e is FileNotFoundException or DirectoryNotFoundException)
         {
             config = CreateDefault();
+            
+            logger.LogInformation("Created default config");
+            
             await configStore.SaveAsync(config);
         }
         Validate(config);

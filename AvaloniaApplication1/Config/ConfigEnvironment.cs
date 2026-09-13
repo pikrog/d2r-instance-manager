@@ -5,18 +5,20 @@ namespace AvaloniaApplication1.Config;
 
 public class ConfigEnvironment
 {
+    private const string ConfigFileName = "config.json";
+    
     public required string FilePath { get; init; }
-
+    
     public required string DirectoryPath { get; init; }
 
-    public static ConfigEnvironment CreateInApplicationDataDirectory()
+    public static ConfigEnvironment Derive(AppDataEnvironment environment)
     {
-        var applicationDataDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        var configDirectoryPath = Path.Combine(applicationDataDirectory, ConfigConstants.ConfigDirectoryName);
-        var configFilePath = Path.Combine(configDirectoryPath, ConfigConstants.ConfigFileName);
+        var directoryPath = environment.DirectoryPath;
+        var configFilePath = Path.Combine(directoryPath, ConfigFileName);
+        
         return new ConfigEnvironment
         {
-            DirectoryPath = configDirectoryPath,
+            DirectoryPath = directoryPath,
             FilePath = configFilePath
         };
     }

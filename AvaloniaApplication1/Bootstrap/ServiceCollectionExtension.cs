@@ -13,12 +13,14 @@ using AvaloniaApplication1.HotKey.Config;
 using AvaloniaApplication1.HotKey.Platform;
 using AvaloniaApplication1.Instance;
 using AvaloniaApplication1.Instance.ViewModels;
+using AvaloniaApplication1.Log;
 using AvaloniaApplication1.MainWindow;
 using AvaloniaApplication1.Navigation;
 using AvaloniaApplication1.Overlay;
 using AvaloniaApplication1.Region;
 using AvaloniaApplication1.Region.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 
 namespace AvaloniaApplication1.Bootstrap;
 
@@ -26,12 +28,19 @@ public static class ServiceCollectionExtension
 {
     extension(IServiceCollection services)
     {
-        public void AddConfigServices(CoreConfigServicesBundle coreConfigServicesBundle)
+        public void AddLoggingServices(CoreLoggingServicesBundle bundle)
         {
-            services.AddSingleton(coreConfigServicesBundle.ConfigEnvironment);
-            services.AddSingleton(coreConfigServicesBundle.ConfigStore);
-            services.AddSingleton(coreConfigServicesBundle.ConfigLoader);
-            services.AddSingleton(coreConfigServicesBundle.AppConfig);
+            services.AddSingleton<ILogStoreReader>(bundle.LogStore);
+            services.AddSingleton<ILogStoreWriter>(bundle.LogStore);
+            services.AddLogging(builder => builder.AddSerilog(bundle.Logger, dispose: true));
+        }
+        
+        public void AddConfigServices(CoreConfigServicesBundle bundle)
+        {
+            services.AddSingleton(bundle.ConfigEnvironment);
+            services.AddSingleton(bundle.ConfigStore);
+            services.AddSingleton(bundle.ConfigLoader);
+            services.AddSingleton(bundle.AppConfig);
             services.AddSingleton<ConfigContext>();
             services.AddSingleton<ConfigService>();
         }
@@ -74,6 +83,7 @@ public static class ServiceCollectionExtension
             services.AddTransient<InstancesPageViewModel>();
             services.AddTransient<AccountsPageViewModel>();
             services.AddTransient<RegionsPageViewModel>();
+            services.AddTransient<LogsPageViewModel>();
             services.AddTransient<GlobalSettingsPageViewModel>();
             
             services.AddSingleton<EditInstanceFormViewModelFactory>(); // transient or singleton?

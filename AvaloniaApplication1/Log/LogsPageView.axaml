@@ -1,0 +1,70 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:AvaloniaApplication1.Log"
+             xmlns:design="clr-namespace:AvaloniaApplication1.Design.ViewModels"
+             xmlns:semantic="clr-namespace:AvaloniaApplication1.Semantic"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AvaloniaApplication1.Log.LogsPageView"
+             x:DataType="local:LogsPageViewModel">
+    
+    <Design.DataContext>
+        <design:LogsPageDesignViewModel />
+    </Design.DataContext>
+    
+    <UserControl.Resources>
+        <local:LogLevelToSemanticTypeConverter x:Key="LogLevelToSemanticTypeConverter" />
+    </UserControl.Resources>
+    
+    <UserControl.Styles>
+        <Style Selector="TextBlock.warning">
+            <Setter Property="Foreground" Value="{DynamicResource WarningContent}" />
+        </Style>
+        
+        <Style Selector="TextBlock.danger">
+            <Setter Property="Foreground" Value="{DynamicResource DangerContent}" />
+        </Style>
+        
+        <Style Selector="TextBlock.info">
+            <Setter Property="Foreground" Value="{DynamicResource InfoContent}" />
+        </Style>
+    </UserControl.Styles>
+    
+    <DockPanel>
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
+            <ComboBox>
+                <ComboBox.Items>
+                    <ComboBoxItem>Debug</ComboBoxItem>
+                    <ComboBoxItem>Error</ComboBoxItem>
+                    <ComboBoxItem>Warning</ComboBoxItem>
+                    <ComboBoxItem>Info</ComboBoxItem>
+                </ComboBox.Items>
+            </ComboBox>
+        </StackPanel>
+        <ListBox DockPanel.Dock="Left">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <CheckBox>Test</CheckBox>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.Items>
+                <ListBoxItem><CheckBox>Config</CheckBox></ListBoxItem>
+                <ListBoxItem><CheckBox>Instance</CheckBox></ListBoxItem>
+            </ListBox.Items>
+        </ListBox>
+        <ItemsControl ItemsSource="{Binding Entries}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="local:LogEntry">
+                    <TextBlock semantic:SemanticClass.Type="{Binding Level, Converter={StaticResource LogLevelToSemanticTypeConverter}}">
+                        <Run Text="{Binding Timestamp.DateTime}" />
+                        [<Run Text="{Binding Level}" />]
+                        <Run Text="{Binding Message}" />
+                    </TextBlock>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </DockPanel>
+</UserControl>

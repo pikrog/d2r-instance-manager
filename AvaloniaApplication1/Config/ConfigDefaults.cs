@@ -2,11 +2,8 @@
 
 namespace AvaloniaApplication1.Config;
 
-public static class ConfigConstants
+public static class ConfigDefaults
 {
-    public const string ConfigFileName = "config.json";
-    public const string ConfigDirectoryName = "D2R Instance Manager";
-
     public static readonly Guid EuropeRegionId = new("eec68aa3-049a-4145-9474-6397cdc5a1cf");
     public const string EuropeRegionName = "Europe";
     public const string EuropeRegionAddress = "eu.actual.battle.net";
