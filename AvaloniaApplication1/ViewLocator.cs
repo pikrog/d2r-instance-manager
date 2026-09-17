@@ -31,7 +31,9 @@ public partial class ViewLocator : IDataTemplate
 
             if (viewType is not null)
             {
-                return (Control)ActivatorUtilities.CreateInstance(App.Services, viewType);
+                return Avalonia.Controls.Design.IsDesignMode 
+                    ? (Control)Activator.CreateInstance(viewType)! 
+                    : (Control)ActivatorUtilities.CreateInstance(App.Services, viewType);
             }
             
             viewModelType = viewModelType.BaseType;
