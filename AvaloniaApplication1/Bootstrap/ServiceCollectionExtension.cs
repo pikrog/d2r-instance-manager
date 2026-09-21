@@ -32,6 +32,7 @@ public static class ServiceCollectionExtension
         {
             services.AddSingleton<ILogStoreReader>(bundle.LogStore);
             services.AddSingleton<ILogStoreWriter>(bundle.LogStore);
+            services.AddSingleton(bundle.InstanceNameRegistry);
             services.AddLogging(builder => builder.AddSerilog(bundle.Logger, dispose: true));
         }
         
@@ -107,7 +108,7 @@ public static class ServiceCollectionExtension
             
             services.AddTransient<MainWindowViewModel>();
 
-            services.AddSingleton<InstanceManagerBootstrapper>();
+            services.AddSingleton<InstanceRuntimeBootstrapper>();
             services.AddSingleton<AppRuntimeBootstrapper>();
             
             services.AddSingleton<MainWindowRuntimeBootstrapper>();

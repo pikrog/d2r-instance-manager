@@ -1,17 +1,23 @@
 ﻿using System;
+using AvaloniaApplication1.Engine.Platform;
 
 namespace AvaloniaApplication1.Display;
 
 public static class DisplayResolver
 {
-    public static string? ResolveDisplayId(DisplaySelection selection, bool isFallbackAllowed) =>
+    public static ResolvedDisplay? ResolveDisplayId(DisplaySelection selection, bool isFallbackAllowed) =>
         selection switch
         {
-            DisplaySelection.Primary => Engine.Platform.DisplayInfo.GetPrimary().Id,
+            DisplaySelection.Primary => 
+                new ResolvedDisplay(DisplayInfo.GetPrimary().Id, false),
+            
             DisplaySelection.Specific specific => 
-                Engine.Platform.DisplayInfo.Exists(specific.Id) 
-                    ? specific.Id 
-                    : isFallbackAllowed ? Engine.Platform.DisplayInfo.GetPrimary().Id : null,
+                DisplayInfo.Exists(specific.Id) 
+                    ? new ResolvedDisplay(specific.Id, false)
+                    : isFallbackAllowed 
+                        ? new ResolvedDisplay(DisplayInfo.GetPrimary().Id, true) 
+                        : null,
+            
             _ => throw new InvalidOperationException($"Unexpected display selection: {selection.GetType().Name}")
         };
 }

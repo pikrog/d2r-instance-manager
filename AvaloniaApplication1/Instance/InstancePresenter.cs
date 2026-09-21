@@ -20,7 +20,7 @@ public class InstancePresenter : IInstancePresenter
         _hotKeyBindingCoordinator = hotKeyBindingCoordinator;
         
         _service.InstanceConfigChanged += (_, args) => OnInstanceChanged(args.InstanceId);
-        _service.InstanceStateChanged += (_, args) => OnInstanceChanged(args.InstanceId);
+        _service.InstanceStateChanged += (_, args) => OnInstanceChanged(args.Id);
         _hotKeyBindingCoordinator.BindingStateChanged += (_, args) => OnInstanceChanged(args.Command.InstanceId);
     }
 

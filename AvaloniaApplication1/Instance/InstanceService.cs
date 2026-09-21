@@ -11,45 +11,69 @@ using AvaloniaApplication1.Engine.Helpers.ProcessStop;
 using AvaloniaApplication1.Engine.Models;
 using AvaloniaApplication1.Engine.Models.Contexts.Launch;
 using AvaloniaApplication1.Engine.Models.StateMachine;
+using AvaloniaApplication1.GameExecutable;
+using AvaloniaApplication1.GlobalSettings;
 using AvaloniaApplication1.Instance.Models;
 using AvaloniaApplication1.Instance.Models.EventArgs;
+using AvaloniaApplication1.Log;
+using Microsoft.Extensions.Logging;
 
 namespace AvaloniaApplication1.Instance;
 
 public class InstanceService
 {
     private readonly ConfigService _configService;
-    
+
     private readonly InstanceConfigValidator _validator;
-    
+
     private readonly InstanceManager _instanceManager;
 
-    public event EventHandler<InstanceStateChangedEventArgs>? InstanceStateChanged;
+    private readonly InstanceNameRegistry _instanceNameRegistry;
+
+    private readonly ILogger<InstanceService> _logger;
+
+    public event EventHandler<RuntimeSnapshot>? InstanceStateChanged;
     
     public event EventHandler<InstanceConfigChangedEventArgs>? InstanceConfigChanged;
 
+    private readonly Dictionary<Guid, bool> _instanceActivityStates = [];
+
     public InstanceService(ConfigService configService,
         InstanceConfigValidator validator,
-        InstanceManager instanceManager)
+        InstanceManager instanceManager,
+        InstanceNameRegistry instanceNameRegistry,
+        ILogger<InstanceService> logger)
     {
         _configService = configService;
         _validator = validator;
         _instanceManager = instanceManager;
+        _instanceNameRegistry = instanceNameRegistry;
+        _logger = logger;
 
         _instanceManager.InstanceStateChanged += OnInstanceStateChanged;
     }
 
-    private void OnInstanceStateChanged(Guid instanceId) => 
-        InstanceStateChanged?.Invoke(
-            this, 
-            new InstanceStateChangedEventArgs(instanceId)
-            );
+    private void OnInstanceStateChanged(object? sender, RuntimeSnapshot snapshot)
+    {
+        var previousActivityState = _instanceActivityStates.GetValueOrDefault(snapshot.Id);
+        _instanceActivityStates[snapshot.Id] = snapshot.IsActive;
+
+        if (previousActivityState && !snapshot.IsActive)
+        {
+            var instanceName = _instanceNameRegistry.Get(snapshot.Id);
+            using var _ = _logger.BeginScope(new Dictionary<string, object?>{{ LogProperties.InstanceName, instanceName }});
+            _logger.LogInformation("Instance stopped");
+        }
+
+        InstanceStateChanged?.Invoke(this, snapshot);
+    }
 
     private async Task AddAsync(InstanceSnapshot snapshot)
     {
         await _configService.ChangeAsync(context => context.AddInstance(snapshot));
+        _instanceNameRegistry.Set(snapshot.Id, snapshot.Name);
         _instanceManager.Register(snapshot.Id);
-        
+
         var eventArgs = new InstanceConfigChangedEventArgs(snapshot.Id, newSnapshot: snapshot);
         InstanceConfigChanged?.Invoke(this, eventArgs);
     }
@@ -57,9 +81,10 @@ public class InstanceService
     private async Task UpdateAsync(InstanceSnapshot snapshot)
     {
         var oldSnapshot = GetConfigSnapshot(snapshot.Id);
-        
+
         await _configService.ChangeAsync(context => context.UpdateInstance(snapshot));
-        
+        _instanceNameRegistry.Set(snapshot.Id, snapshot.Name);
+
         var eventArgs = new InstanceConfigChangedEventArgs(snapshot.Id, oldSnapshot, snapshot);
         InstanceConfigChanged?.Invoke(this, eventArgs);
     }
@@ -92,10 +117,11 @@ public class InstanceService
     public async Task RemoveAsync(Guid id)
     {
         var snapshot = GetConfigSnapshot(id);
-        
+
         await _configService.ChangeAsync(context => context.RemoveInstance(id));
+        _instanceNameRegistry.Remove(id);
         _instanceManager.Remove(id);
-        
+
         var eventArgs = new InstanceConfigChangedEventArgs(snapshot.Id, snapshot);
         InstanceConfigChanged?.Invoke(this, eventArgs);
     }
@@ -140,11 +166,78 @@ public class InstanceService
     }
 
     public Task<int> GetActiveCountAsync() => _instanceManager.GetActiveCountAsync();
-
-    private string? ResolveDisplayId(DisplaySelection display)
+    
+    private AuthenticationContext GetAuthenticationContext(InstanceSnapshot instance)
     {
-        var isFallbackAllowed = _configService.Config.GetGlobalSettings().FallbackToPrimaryDisplayIfInvalid;
-        return DisplayResolver.ResolveDisplayId(display, isFallbackAllowed);
+        if (!instance.IsOnlineMode)
+            return new OfflineAuthenticationContext();
+
+        var account = _configService.Config.GetAccount(instance.AccountId!.Value);
+        var region = _configService.Config.GetRegion(instance.RegionId!.Value);
+
+        return instance.AuthenticationMethod switch
+        {
+            AuthenticationMethod.CommandLineArguments => new CliAuthenticationContext(account.Username, account.Password, region.Address),
+            AuthenticationMethod.OsiTokenRegistry => new OsiAuthenticationContext(region.Address),
+            _ => throw new InvalidOperationException($"Unknown authentication method {instance.AuthenticationMethod}")
+        };
+    }
+    
+    private EnginePolicies CreateEnginePolicies(GlobalSettingsSnapshot settings)
+    {
+        var multiboxRetry = new RetryPolicy(
+            TimeSpan.FromMilliseconds(settings.UnlockMultiboxRetryDelayMs),
+            settings.UnlockMultiboxMaxRetries);
+
+        var gracefulStopRetry = new RetryPolicy(
+            TimeSpan.FromMilliseconds(settings.GracefulInstanceCloseTimeoutMs),
+            settings.GracefulInstanceCloseRetries);
+
+        return new EnginePolicies(
+            multiboxRetry,
+            new ProcessStopPolicies(gracefulStopRetry, TimeSpan.FromMilliseconds(settings.ForcefulInstanceCloseTimeoutMs))
+        );
+    }
+
+    private bool ValidateGameExecutableFile(string path)
+    {
+        var fileValidationResult = GameExecutableFileValidator.Validate(path);
+
+        if (fileValidationResult.FileMetadata is { } d)
+        {
+            _logger.LogTrace(
+                """
+                File metadata: 
+                    Company Name={CompanyName}, 
+                    Product Name={ProductName}, 
+                    Description={Description}, 
+                    Version={Version}
+                """,
+                d.CompanyName,
+                d.ProductName,
+                d.Description,
+                d.Version);
+        }
+
+        switch (fileValidationResult.Code)
+        {
+            case GameExecutableFileValidator.ValidateResultCode.Ok:
+                return true;
+            case GameExecutableFileValidator.ValidateResultCode.MissingPath:
+                _logger.LogError("The game executable path is missing");
+                return false;
+            case GameExecutableFileValidator.ValidateResultCode.FileNotFound:
+                _logger.LogError("The game executable file was not found: {GameExecutablePath}", path);
+                return false;
+            case GameExecutableFileValidator.ValidateResultCode.InvalidExecutableFormat:
+                _logger.LogError("The game executable file has an invalid format: {GameExecutablePath}", path);
+                return false;
+            case GameExecutableFileValidator.ValidateResultCode.UnrecognizedExecutable:
+                _logger.LogWarning("The executable was found but its metadata does not match the expected game");
+                return true;
+            default:
+                throw new InvalidOperationException($"Unknown game executable file validation result {fileValidationResult}");
+        }
     }
 
     public async Task LaunchAsync(Guid id)
@@ -152,57 +245,45 @@ public class InstanceService
         var settings = _configService.Config.GetGlobalSettings();
         
         var snapshot = GetConfigSnapshot(id);
-        AuthenticationContext authenticationContext = new OfflineAuthenticationContext();
-        if (snapshot.IsOnlineMode)
-        {
-            var account = _configService.Config.GetAccount(snapshot.AccountId!.Value);
-            var region = _configService.Config.GetRegion(snapshot.RegionId!.Value);
-            
-            authenticationContext = snapshot.AuthenticationMethod switch
-            {
-                AuthenticationMethod.CommandLineArguments => new CliAuthenticationContext(account.Username, account.Password,
-                    region.Address),
-                AuthenticationMethod.OsiTokenRegistry => new OsiAuthenticationContext(region.Address),
-                _ => throw new InvalidOperationException($"Unknown authentication method {snapshot.AuthenticationMethod}")
-            };
-        }
+        var authenticationContext = GetAuthenticationContext(snapshot);
 
-        var displayId = ResolveDisplayId(snapshot.Display);
-        if (displayId is null)
-            throw new InvalidOperationException("Failed to resolve display id"); // todo: return Result<Unit, Error>
+        using var _ = _logger.BeginScope(new Dictionary<string, object> {{ LogProperties.InstanceName, snapshot.Name }});
         
-        // todo: check if path is valid
+        var displayResolution = DisplayResolver.ResolveDisplayId(snapshot.Display, settings.FallbackToPrimaryDisplayIfInvalid);
+        if (displayResolution is not { Id: var displayId, IsFallback: var isFallback })
+            return; // todo: return error
+
+        if (isFallback)
+        {
+            var cachedDisplay = _configService.Config.GetCachedDisplay(displayId);
+            var displayDescription = $"{cachedDisplay.Description} [{cachedDisplay.Width}x{cachedDisplay.Height}]";
+            _logger.LogWarning(
+                "Display {DisplayDescription} selected for this instance is not available, falling back to primary display",
+                displayDescription);
+        }
+        
+        var executablePath = settings.GameExecutablePath;
+        
+        _logger.LogTrace("Executable path: {GameExecutablePath}", executablePath);
+        
+        if (!ValidateGameExecutableFile(executablePath))
+            return; // todo: return error
         
         var instanceLaunchContext = new InstanceLaunchContext(
-            settings.GameExecutablePath,
+            executablePath,
             authenticationContext,
             displayId,
             snapshot.IsNoSound,
             snapshot.IsWindowedMode
         );
-
-        var multiboxUnlockRetryPolicy = new RetryPolicy(
-            TimeSpan.FromMilliseconds(settings.UnlockMultiboxRetryDelayMs),
-            settings.UnlockMultiboxMaxRetries
-        );
-
-        var gracefulInstanceStopRetryPolicy = new RetryPolicy(
-            TimeSpan.FromMilliseconds(settings.GracefulInstanceCloseTimeoutMs),
-            settings.GracefulInstanceCloseRetries
-        );
         
-        var forcefulInstanceStopTimeout = TimeSpan.FromMilliseconds(settings.ForcefulInstanceCloseTimeoutMs);
-        
-        var processStopPolicies = new ProcessStopPolicies(gracefulInstanceStopRetryPolicy, forcefulInstanceStopTimeout);
-        
-        var enginePolicies = new EnginePolicies(
-            multiboxUnlockRetryPolicy,
-            processStopPolicies
-        );
+        var enginePolicies = CreateEnginePolicies(settings);
         
         var engineLaunchContext = new EngineLaunchContext(instanceLaunchContext, enginePolicies);
         
         await _instanceManager.LaunchAsync(snapshot.Id, engineLaunchContext);
+        
+        _logger.LogInformation("Instance launched");
     }
 
     public async Task StopAsync(Guid id) => await _instanceManager.StopAsync(id);

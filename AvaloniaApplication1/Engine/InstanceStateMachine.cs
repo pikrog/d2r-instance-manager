@@ -58,8 +58,10 @@ public static class InstanceStateMachine
                     State.WaitingForUnlock,
                     [
                         new MonitorProcessExit(e.ProcessManager, Require(session.Policies).ProcessStopPolicies.ForcefulExitCode),
-                        new UnlockMultibox(Require(session.Policies?.UnlockMultiboxRetryPolicy))]
-                    );
+                        new UnlockMultibox(
+                            Require(session.Policies?.UnlockMultiboxRetryPolicy), 
+                            e.ProcessManager.Id)
+                    ]);
             case (State.Starting, ProcessStartFailed):
                 return To(
                     session.CompleteCleanup(CleanupItem.Process),

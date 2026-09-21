@@ -3,10 +3,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using AvaloniaApplication1.Common;
 using AvaloniaApplication1.Engine.Common;
+using AvaloniaApplication1.Engine.Platform.Process;
 
 namespace AvaloniaApplication1.Engine.Helpers.MultiboxUnlock;
 
-using MultiboxUnlockResult = Result<Unit, RetryingMultiboxUnlockError>;
+using MultiboxUnlockResult = Result<ProcessIdentity, RetryingMultiboxUnlockError>;
 
 public class RetryingMultiboxUnlocker(RetryPolicy retryPolicy)
 {
@@ -18,7 +19,7 @@ public class RetryingMultiboxUnlocker(RetryPolicy retryPolicy)
             ++retries;
             var result = await MultiboxUnlocker.UnlockAsync(cancellationToken);
             if (result.IsSuccess)
-                return MultiboxUnlockResult.Success();
+                return MultiboxUnlockResult.Success(result.Value);
             switch (result.Error)
             {
                 case MultiboxUnlockError.EventNotFound:

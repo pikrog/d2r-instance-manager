@@ -2,12 +2,12 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AvaloniaApplication1.Common;
-using AvaloniaApplication1.Engine.Common;
 using AvaloniaApplication1.Engine.Platform;
+using AvaloniaApplication1.Engine.Platform.Process;
 
 namespace AvaloniaApplication1.Engine.Helpers.MultiboxUnlock;
 
-using MultiboxUnlockResult = Result<Unit, MultiboxUnlockError>;
+using MultiboxUnlockResult = Result<ProcessIdentity, MultiboxUnlockError>;
 
 public static class MultiboxUnlocker
 {
@@ -26,7 +26,7 @@ public static class MultiboxUnlocker
 
         var closeSourceResult = @event.CloseSource();
         return closeSourceResult == KernelObject.CloseResult.Success 
-            ? MultiboxUnlockResult.Success()
+            ? MultiboxUnlockResult.Success(@event.ProcessIdentity)
             : MultiboxUnlockResult.Failure(MultiboxUnlockError.CloseSourceFailed); 
     }
 }

@@ -1,9 +1,9 @@
 namespace AvaloniaApplication1.Bootstrap;
 
-public class AppRuntimeBootstrapper(InstanceManagerBootstrapper instanceManagerBootstrapper)
+public class AppRuntimeBootstrapper(InstanceRuntimeBootstrapper instanceRuntimeBootstrapper)
 {
     public void Bootstrap()
     {
-        instanceManagerBootstrapper.Bootstrap();
+        instanceRuntimeBootstrapper.Bootstrap();
     }
 }

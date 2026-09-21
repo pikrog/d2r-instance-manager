@@ -12,7 +12,7 @@ namespace AvaloniaApplication1.Engine;
 
 public class InstanceManager(InstanceEngineFactory engineFactory)
 {
-    public event Action<Guid>? InstanceStateChanged;
+    public event EventHandler<RuntimeSnapshot>? InstanceStateChanged;
     
     private readonly Dictionary<Guid, InstanceEngine> _instances = [];
     
@@ -26,9 +26,9 @@ public class InstanceManager(InstanceEngineFactory engineFactory)
         _instances[id] = instance;
     }
 
-    private void OnInstanceStateChanged(object? sender, Guid id)
+    private void OnInstanceStateChanged(object? sender, RuntimeSnapshot snapshot)
     {
-        InstanceStateChanged?.Invoke(id);
+        InstanceStateChanged?.Invoke(this, snapshot);
     }
 
     public void Remove(Guid id)

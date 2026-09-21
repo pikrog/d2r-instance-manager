@@ -17,7 +17,7 @@ public static partial class GameExecutableFileValidator
     
     private const uint BadExeFormat = 0xC1;
 
-    public enum Result
+    public enum ValidateResultCode
     {
         Ok,
         MissingPath,
@@ -26,27 +26,36 @@ public static partial class GameExecutableFileValidator
         UnrecognizedExecutable,
     }
 
-    public static Result Validate(string path)
+    public readonly record struct ValidateResult(ValidateResultCode Code, FileMetadata? FileMetadata = null);
+
+    public static ValidateResult Validate(string path)
     {
         if (string.IsNullOrWhiteSpace(path))
-            return Result.MissingPath;
+            return new ValidateResult(ValidateResultCode.MissingPath);
         
         if (!File.Exists(path))
-            return Result.FileNotFound;
+            return new ValidateResult(ValidateResultCode.FileNotFound);
 
+        var fileVersionInfo = FileVersionInfo.GetVersionInfo(path);
+        var fileMetadata = new FileMetadata(
+            fileVersionInfo.ProductName,
+            fileVersionInfo.CompanyName,
+            fileVersionInfo.FileDescription,
+            fileVersionInfo.FileVersion
+        );
+        
         if (!GetBinaryType(path, out var type))
         {
-            return Marshal.GetLastPInvokeError() == BadExeFormat 
-                ? Result.InvalidExecutableFormat 
-                : Result.FileNotFound;
+            return Marshal.GetLastPInvokeError() == BadExeFormat
+                ? new ValidateResult(ValidateResultCode.InvalidExecutableFormat, fileMetadata)
+                : new ValidateResult(ValidateResultCode.FileNotFound);
         }
 
         if (type != BinaryType.Executable64Bit)
-            return Result.InvalidExecutableFormat;
+            return new ValidateResult(ValidateResultCode.InvalidExecutableFormat, fileMetadata);
         
-        var fileVersionInfo = FileVersionInfo.GetVersionInfo(path);
         return fileVersionInfo.ProductName != GameExecutableConstants.ProductName 
-            ? Result.UnrecognizedExecutable 
-            : Result.Ok;
+            ? new ValidateResult(ValidateResultCode.UnrecognizedExecutable, fileMetadata)
+            : new ValidateResult(ValidateResultCode.Ok, fileMetadata);
     }
 }

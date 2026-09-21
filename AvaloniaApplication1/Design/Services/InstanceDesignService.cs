@@ -6,11 +6,13 @@ using AvaloniaApplication1.Engine;
 using AvaloniaApplication1.Instance;
 using AvaloniaApplication1.Instance.Models;
 using AvaloniaApplication1.Instance.Models.Issues;
+using AvaloniaApplication1.Log;
+using Microsoft.Extensions.Logging;
 
 namespace AvaloniaApplication1.Design.Services;
 
-public class InstanceDesignService(ConfigService configService, InstanceConfigValidator validator, InstanceManager manager) 
-    : InstanceService(configService, validator, manager)
+public class InstanceDesignService(ConfigService configService, InstanceConfigValidator validator, InstanceManager manager, InstanceNameRegistry registry, ILogger<InstanceService> logger) 
+    : InstanceService(configService, validator, manager, registry, logger)
 {
     public override IReadOnlyList<InstanceSummary> GetSummaries() => [
         new(Guid.NewGuid(), "Main", InstanceStatus.Running, true, []),

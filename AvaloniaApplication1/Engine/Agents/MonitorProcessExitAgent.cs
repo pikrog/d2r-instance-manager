@@ -4,17 +4,35 @@ using AvaloniaApplication1.Common;
 using AvaloniaApplication1.Engine.Common;
 using AvaloniaApplication1.Engine.Models.Events;
 using AvaloniaApplication1.Engine.Platform.Process;
+using Microsoft.Extensions.Logging;
 
 namespace AvaloniaApplication1.Engine.Agents;
 
 using ExitCodeResult = Result<uint?, ProcessError>;
 
-public class MonitorProcessExitAgent(ProcessManager processManager, uint forcefulExitCode) : AgentBase<ExitCodeResult>
+public class MonitorProcessExitAgent(ProcessManager processManager, uint forcefulExitCode, ILogger<MonitorProcessExitAgent> logger) 
+    : AgentBase<ExitCodeResult>
 {
     protected override async Task<ExitCodeResult> RunAgentTaskAsync(CancellationToken cancellationToken)
     {
         await processManager.WaitForExitAsync(cancellationToken);
-        return processManager.ExitCode;
+        
+        var result = processManager.ExitCode;
+
+        if (result.IsSuccess)
+        {
+            logger.LogDebug(
+                "Process {ProcessId} exited with code {ExitCode} (terminated: {Terminated})",
+                processManager.Id, result.Value, result.Value == forcefulExitCode);
+        }
+        else
+        {
+            logger.LogError(
+                "Failed to get exit code for process {ProcessId}: {Error} ({NativeErrorCode})",
+                processManager.Id, result.Error.FailureReason, result.Error.NativeErrorCode);
+        }
+
+        return result;
     }
 
 

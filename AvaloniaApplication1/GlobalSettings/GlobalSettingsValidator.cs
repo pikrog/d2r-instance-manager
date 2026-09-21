@@ -16,14 +16,14 @@ public class GlobalSettingsValidator(ConfigService configService)
         
         var path = settings.GameExecutablePath;
         var executableValidationResult = GameExecutableFileValidator.Validate(path);
-        GlobalSettingsIssue? executableValidationIssue = executableValidationResult switch
+        GlobalSettingsIssue? executableValidationIssue = executableValidationResult.Code switch
         {
-            GameExecutableFileValidator.Result.Ok => null,
-            GameExecutableFileValidator.Result.MissingPath => new MissingExecutablePath(),
-            GameExecutableFileValidator.Result.FileNotFound => new ExecutableFileNotFound(path),
-            GameExecutableFileValidator.Result.InvalidExecutableFormat => new InvalidExecutableFileFormat(path),
-            GameExecutableFileValidator.Result.UnrecognizedExecutable => new UnrecognizedExecutable(path),
-            _ => throw new InvalidOperationException($"Unexpected executable validation result: {executableValidationResult}")
+            GameExecutableFileValidator.ValidateResultCode.Ok => null,
+            GameExecutableFileValidator.ValidateResultCode.MissingPath => new MissingExecutablePath(),
+            GameExecutableFileValidator.ValidateResultCode.FileNotFound => new ExecutableFileNotFound(path),
+            GameExecutableFileValidator.ValidateResultCode.InvalidExecutableFormat => new InvalidExecutableFileFormat(path),
+            GameExecutableFileValidator.ValidateResultCode.UnrecognizedExecutable => new UnrecognizedExecutable(path),
+            _ => throw new InvalidOperationException($"Unexpected executable validation result code: {executableValidationResult.Code}")
         };
         
         if (executableValidationIssue is not null)

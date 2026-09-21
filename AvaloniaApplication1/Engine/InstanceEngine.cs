@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
@@ -14,11 +13,14 @@ using AvaloniaApplication1.Engine.Models.Effects;
 using AvaloniaApplication1.Engine.Models.Events;
 using AvaloniaApplication1.Engine.Models.Messages;
 using AvaloniaApplication1.Engine.Models.StateMachine;
+using Microsoft.Extensions.Logging;
 
 namespace AvaloniaApplication1.Engine;
 
 public class InstanceEngine : IAsyncDisposable
 {
+    public const string IdLogProperty = "InstanceId";
+    
     public Guid Id { get; }
     
     private readonly Channel<Message> _channel = Channel.CreateUnbounded<Message>();
@@ -37,7 +39,11 @@ public class InstanceEngine : IAsyncDisposable
     
     private readonly ProcessStartInfoFactory _processStartInfoFactory;
     
-    public event EventHandler<Guid>? StateChanged;
+    private readonly ILoggerFactory _loggerFactory;
+    
+    private readonly ILogger<InstanceEngine> _logger;
+
+    public event EventHandler<RuntimeSnapshot>? StateChanged;
 
     private RuntimeSnapshot _runtimeSnapshot;
     
@@ -47,16 +53,18 @@ public class InstanceEngine : IAsyncDisposable
         private set
         {
             Volatile.Write(ref _runtimeSnapshot, value);
-            StateChanged?.Invoke(this, Id);
+            StateChanged?.Invoke(this, value);
         }
     }
 
-    public InstanceEngine(Guid id, LaunchCoordinator launchCoordinator, ProcessStartInfoFactory processStartInfoFactory)
+    public InstanceEngine(Guid id, LaunchCoordinator launchCoordinator, ProcessStartInfoFactory processStartInfoFactory, ILoggerFactory loggerFactory)
     {
         Id = id;
         
         _launchCoordinator = launchCoordinator;
         _processStartInfoFactory = processStartInfoFactory;
+        _loggerFactory = loggerFactory;
+        _logger = loggerFactory.CreateLogger<InstanceEngine>();
         
         _runtimeSnapshot = Snap();
         
@@ -112,7 +120,7 @@ public class InstanceEngine : IAsyncDisposable
         _engineCancellationTokenSource.Dispose();
     }
 
-    public async Task FlushAsync()
+    public async Task FlushAsync() // todo: what if channel is complete?
     {
         var completion = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         var message = new FlushRequested(completion);
@@ -149,8 +157,9 @@ public class InstanceEngine : IAsyncDisposable
         }
     }
 
-    private async Task Loop()
+    private async Task Loop() // todo: loop restart or move lifecycle management to manager
     {
+        using var _ = _logger.BeginScope(new Dictionary<string, object> {{IdLogProperty, Id}});
         try
         {
             await foreach (var message in _channel.Reader.ReadAllAsync(_engineCancellationTokenSource.Token))
@@ -165,6 +174,8 @@ public class InstanceEngine : IAsyncDisposable
         }
         catch (Exception e)
         {
+            _logger.LogError(e, "Unexpected error in engine loop");
+            
             _session = _session.AddErrorEvent(new UnexpectedError(e, nameof(Loop))) with { State = State.Inactive };
             RuntimeSnapshot = Snap();
         }
@@ -187,13 +198,17 @@ public class InstanceEngine : IAsyncDisposable
     {
         var previousState = _session.State;
         var result = InstanceStateMachine.Apply(_session, @event);
-
-        Debug.WriteLine($"[{Id}] <state> ({@event.GetType().Name}) {previousState}->{result.Session.State}");
+        
+        _logger.LogTrace(
+            "State transition: {PreviousState}->{NextState} (caused by event: {Event})", 
+            previousState, result.Session.State, @event);
+        
         _session = result.Session;
 
         foreach (var effect in result.Effects)
         {
-            Debug.WriteLine($"[{Id}] <fx> {effect.GetType().Name}");
+            _logger.LogTrace("Executing effect: {Effect}", effect);
+            
             await ExecuteEffect(effect);
         }
     }
@@ -213,16 +228,28 @@ public class InstanceEngine : IAsyncDisposable
                 await PublishAsync(new LaunchLeaseReleased());
                 break;
             case StartProcess e:
-                RunSessionAgent(new StartProcessAgent(e.ProcessStartInfo));
+                RunSessionAgent(new StartProcessAgent(e.ProcessStartInfo, _loggerFactory.CreateLogger<StartProcessAgent>()));
                 break;
             case UnlockMultibox e:
-                RunSessionAgent(new UnlockMultiboxAgent(new RetryingMultiboxUnlocker(e.RetryPolicy)));
+                RunSessionAgent(
+                    new UnlockMultiboxAgent(
+                        new RetryingMultiboxUnlocker(e.RetryPolicy), 
+                        e.ExpectedProcessId, 
+                        _loggerFactory.CreateLogger<UnlockMultiboxAgent>()));
                 break;
             case MonitorProcessExit e:
-                RunCleanupAgent(new MonitorProcessExitAgent(e.ProcessManager, e.ForcefulExitCode));
+                RunCleanupAgent(
+                    new MonitorProcessExitAgent(
+                        e.ProcessManager, 
+                        e.ForcefulExitCode, 
+                        _loggerFactory.CreateLogger<MonitorProcessExitAgent>()));
                 break;
             case StopProcess e:
-                RunCleanupAgent(new StopProcessAgent(e.ProcessManager, new RetryingProcessStopper(e.Policies)));
+                RunCleanupAgent(
+                    new StopProcessAgent(
+                        e.ProcessManager, 
+                        new RetryingProcessStopper(e.Policies),
+                        _loggerFactory.CreateLogger<StopProcessAgent>()));
                 break;
             case Cancel:
                 await _sessionCancellationTokenSource.CancelAsync();

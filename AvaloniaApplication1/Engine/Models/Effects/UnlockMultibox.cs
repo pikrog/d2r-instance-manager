@@ -2,4 +2,4 @@
 
 namespace AvaloniaApplication1.Engine.Models.Effects;
 
-public sealed record UnlockMultibox(RetryPolicy RetryPolicy) : Effect;
+public sealed record UnlockMultibox(RetryPolicy RetryPolicy, uint ExpectedProcessId) : Effect;

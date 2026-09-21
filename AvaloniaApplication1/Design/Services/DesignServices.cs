@@ -12,13 +12,14 @@ using AvaloniaApplication1.Engine.Factories;
 using AvaloniaApplication1.GameExecutable;
 using AvaloniaApplication1.GameExecutable.Providers;
 using AvaloniaApplication1.GlobalSettings;
-using AvaloniaApplication1.HotKey;
 using AvaloniaApplication1.HotKey.Config;
 using AvaloniaApplication1.Instance;
 using AvaloniaApplication1.Instance.ViewModels;
+using AvaloniaApplication1.Log;
 using AvaloniaApplication1.Navigation;
 using AvaloniaApplication1.Overlay;
 using AvaloniaApplication1.Region;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace AvaloniaApplication1.Design.Services;
 
@@ -47,7 +48,8 @@ public static class DesignServices
     private static readonly IGameExecutablePathProvider GameExecutablePathProvider =
         new DesignGameExecutablePathProvider();
 
-    public static GameExecutablePathLocator GameExecutablePathLocator { get; } = new([GameExecutablePathProvider]);
+    public static GameExecutablePathLocator GameExecutablePathLocator { get; } =
+        new([GameExecutablePathProvider]);
     
     private static readonly LaunchCoordinator LaunchCoordinator = new();
 
@@ -58,13 +60,16 @@ public static class DesignServices
     private static readonly ArgumentsFactory ArgumentsFactory = new(ArgumentStringBuilder);
     
     private static readonly ProcessStartInfoFactory ProcessStartInfoFactory = new(ArgumentsFactory);
-
-    private static readonly InstanceEngineFactory InstanceEngineFactory = new(LaunchCoordinator, ProcessStartInfoFactory);
+    
+    private static readonly InstanceEngineFactory InstanceEngineFactory = 
+        new(LaunchCoordinator, ProcessStartInfoFactory, new NullLoggerFactory());
     
     private static readonly InstanceManager InstanceManager = new(InstanceEngineFactory);
 
-    private static readonly InstanceManagerBootstrapper ManagerBootstrapper =
-        new(ConfigContext, InstanceManager);
+    private static readonly InstanceNameRegistry InstanceNameRegistry = new();
+    
+    private static readonly InstanceRuntimeBootstrapper ManagerBootstrapper =
+        new(ConfigContext, InstanceManager, InstanceNameRegistry);
 
     private static readonly InstanceConfigValidator InstanceConfigValidator = new(ConfigService);
 
@@ -72,7 +77,13 @@ public static class DesignServices
     
     public static readonly PageHost PageHost = new();
     
-    public static InstanceService InstanceService { get; } = new InstanceDesignService(ConfigService, InstanceConfigValidator, InstanceManager);
+    public static InstanceService InstanceService { get; } = 
+        new InstanceDesignService(
+            ConfigService,
+            InstanceConfigValidator,
+            InstanceManager, 
+            InstanceNameRegistry, 
+            new NullLogger<InstanceService>());
 
     public static readonly IInstancePresenter InstancePresenter = new InstanceDesignPresenter(InstanceService);
     
@@ -80,7 +91,7 @@ public static class DesignServices
     
     public static readonly NavigationService NavigationService = new(PageHost, PageProvider);
 
-    public static readonly IHotKeyConfigValidator HotKeyConfigValidator = new FakeHotKeyConfigValidator();
+    private static readonly IHotKeyConfigValidator HotKeyConfigValidator = new FakeHotKeyConfigValidator();
 
     public static readonly EditInstanceFormViewModelFactory EditInstanceFormViewModelFactory =
         new(HotKeyConfigValidator, AccountService, RegionService, DisplayService);
