@@ -50,7 +50,6 @@ public static class ServiceCollectionExtension
         {
             services.AddSingleton<LaunchCoordinator>();
             services.AddSingleton<IArgumentFormatter, ShellExecuteArgumentFormatter>();
-            services.AddSingleton<ArgumentListFormatter>();
             services.AddSingleton<IArgumentStringBuilder, ArgumentStringBuilder>();
             services.AddSingleton<ArgumentsFactory>();
             services.AddSingleton<ProcessStartInfoFactory>();
