@@ -1,4 +1,5 @@
-﻿using AvaloniaApplication1.Log;
+﻿using System;
+using AvaloniaApplication1.Log;
 using Serilog;
 using Serilog.Templates;
 
@@ -32,7 +33,7 @@ public static class LoggingBootstrapper
             .Enrich.With(instanceNameEnricher)
             .WriteTo.Sink(inMemorySink)
             .WriteTo.Console(expressionTemplate)
-            .WriteTo.File(logEnvironment.FilePath, rollingInterval: RollingInterval.Day)
+            .WriteTo.File(expressionTemplate, logEnvironment.FilePath, rollingInterval: RollingInterval.Day)
             .CreateLogger();
 
         Serilog.Log.Logger = logger;
