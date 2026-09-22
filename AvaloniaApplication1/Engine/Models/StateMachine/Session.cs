@@ -2,6 +2,7 @@
 using System.Collections.Immutable;
 using AvaloniaApplication1.Engine.Common;
 using AvaloniaApplication1.Engine.Coordination;
+using AvaloniaApplication1.Engine.Models.Contexts;
 using AvaloniaApplication1.Engine.Models.Contexts.Launch;
 using AvaloniaApplication1.Engine.Models.Events;
 using AvaloniaApplication1.Engine.Platform.Process;
@@ -14,7 +15,7 @@ public sealed record Session : IDisposable
     public bool IsShuttingDown { get; init; }
     public LaunchLease? Lease { get; init; }
     public EnginePolicies? Policies { get; init; }
-    public ProcessStartInfo? ProcessStartInfo { get; init; }
+    public ProcessStartContext? ProcessStartContext { get; init; }
     public ProcessManager? Process { get; init; }
     public ProcessExitResult? ProcessExitResult { get; init; }
     public CleanupState CleanupState { get; init; } = new();

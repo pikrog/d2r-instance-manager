@@ -56,13 +56,11 @@ public static class DesignServices
     private static readonly ShellExecuteArgumentFormatter ArgumentFormatter = new();
 
     private static readonly ArgumentStringBuilder ArgumentStringBuilder = new(ArgumentFormatter);
-
-    private static readonly ArgumentsFactory ArgumentsFactory = new(ArgumentStringBuilder);
     
-    private static readonly ProcessStartInfoFactory ProcessStartInfoFactory = new(ArgumentsFactory);
+    private static readonly ProcessStartRequestFactory ProcessStartRequestFactory = new(ArgumentStringBuilder);
     
     private static readonly InstanceEngineFactory InstanceEngineFactory = 
-        new(LaunchCoordinator, ProcessStartInfoFactory, new NullLoggerFactory());
+        new(LaunchCoordinator, ProcessStartRequestFactory, new NullLoggerFactory());
     
     private static readonly InstanceManager InstanceManager = new(InstanceEngineFactory);
 

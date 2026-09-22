@@ -2,6 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AvaloniaApplication1.Common;
+using AvaloniaApplication1.Engine.Factories;
+using AvaloniaApplication1.Engine.Models.Contexts;
 using AvaloniaApplication1.Engine.Models.Events;
 using AvaloniaApplication1.Engine.Platform.Process;
 using Microsoft.Extensions.Logging;
@@ -10,11 +12,19 @@ namespace AvaloniaApplication1.Engine.Agents;
 
 using ProcessResult = Result<ProcessManager, ProcessError>;
 
-public class StartProcessAgent(ProcessStartInfo startInfo, ILogger<StartProcessAgent> logger) : AgentBase<ProcessResult>
+public class StartProcessAgent(ProcessStartContext startContext, ProcessStartRequestFactory requestFactory, ILogger<StartProcessAgent> logger) : AgentBase<ProcessResult>
 {
     protected override async Task<ProcessResult> RunAgentTaskAsync(CancellationToken cancellationToken)
     {
-        var result = await ProcessManager.StartAsync(startInfo);
+        var request = requestFactory.Create(startContext);
+        
+        var redactedRequest = requestFactory.CreateRedacted(startContext);
+        logger.LogDebug(
+            "Starting process {GameExecutablePath}\r\nwith command-line arguments: {CommandLineArguments}",
+            redactedRequest.FileName,
+            redactedRequest.Arguments);
+        
+        var result = await ProcessManager.StartAsync(request);
 
         if (result.IsSuccess)
         {

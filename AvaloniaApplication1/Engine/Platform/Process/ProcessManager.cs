@@ -189,17 +189,17 @@ public sealed class ProcessManager : IDisposable
         return IdentityResult.Success(new ProcessIdentity(id.Value, creationTime.Value));
     }
     
-    public static ProcessResult Start(ProcessStartInfo startInfo)
+    public static ProcessResult Start(ProcessStartRequest startRequest)
     {
         var mask = WinApi.ShellExecuteMask.NoCloseProcess;
-        if (startInfo.DisplayHandle is not null)
+        if (startRequest.DisplayHandle is not null)
             mask |= WinApi.ShellExecuteMask.Monitor;
-        var monitorHandle = startInfo.DisplayHandle ?? IntPtr.Zero;
+        var monitorHandle = startRequest.DisplayHandle ?? IntPtr.Zero;
         var info = new WinApi.ShellExecuteInfo()
         {
             Size = Marshal.SizeOf<WinApi.ShellExecuteInfo>(),
-            File = startInfo.FileName,
-            Parameters = startInfo.Arguments,
+            File = startRequest.FileName,
+            Parameters = startRequest.Arguments,
             Show = WinApi.ShowCommand.ShowNormal,
             Mask = mask,
             MonitorHandle = monitorHandle,
@@ -207,10 +207,10 @@ public sealed class ProcessManager : IDisposable
         };
         return WinApi.ShellExecuteEx(ref info)
             ? GetProcessByOwnedHandle(info.ProcessHandle) 
-            : ProcessResult.Failure(ProcessError.ForStart(startInfo.FileName));
+            : ProcessResult.Failure(ProcessError.ForStart(startRequest.FileName));
     }
 
-    public static Task<ProcessResult> StartAsync(ProcessStartInfo startInfo) => Task.Run(() => Start(startInfo));
+    public static Task<ProcessResult> StartAsync(ProcessStartRequest startRequest) => Task.Run(() => Start(startRequest));
 
     public static ProcessResult GetProcessByOwnedHandle(IntPtr handle, uint? expectedProcessId = null) =>
         GetProcessByHandle(handle, true, expectedProcessId);

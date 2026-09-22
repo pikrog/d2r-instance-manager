@@ -1,6 +1,9 @@
-﻿using AvaloniaApplication1.Engine.Models.Contexts.Launch;
-using AvaloniaApplication1.Engine.Platform.Process;
+﻿using AvaloniaApplication1.Engine.Models.Contexts;
+using AvaloniaApplication1.Engine.Models.Contexts.Launch;
 
 namespace AvaloniaApplication1.Engine.Models.Events;
 
-public sealed record LaunchRequested(AuthenticationContext AuthenticationContext, ProcessStartInfo ProcessStartInfo, EnginePolicies EnginePolicies) : Event;
+public sealed record LaunchRequested(
+    AuthenticationContext AuthenticationContext,
+    ProcessStartContext ProcessStartContext,
+    EnginePolicies EnginePolicies) : Event;

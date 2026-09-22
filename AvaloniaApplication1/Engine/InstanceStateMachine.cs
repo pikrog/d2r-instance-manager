@@ -43,7 +43,7 @@ public static class InstanceStateMachine
                 return To(
                     (session with { Lease = e.Lease }).RequireCleanup(CleanupItem.Process),
                     State.Starting,
-                    [new StartProcess(Require(session.ProcessStartInfo))]
+                    [new StartProcess(Require(session.ProcessStartContext))]
                     );
             case (State.WaitingForStart, LaunchLeaseCanceled):
                 return To(session.CompleteCleanup(CleanupItem.LaunchLease), State.Stopping);
@@ -164,7 +164,7 @@ public static class InstanceStateMachine
     {
         var session = new Session
         {
-            ProcessStartInfo = @event.ProcessStartInfo,
+            ProcessStartContext = @event.ProcessStartContext,
             Policies = @event.EnginePolicies
         };
 

@@ -37,7 +37,7 @@ public class InstanceEngine : IAsyncDisposable
     
     private readonly LaunchCoordinator _launchCoordinator;
     
-    private readonly ProcessStartInfoFactory _processStartInfoFactory;
+    private readonly ProcessStartRequestFactory _processStartRequestFactory;
     
     private readonly ILoggerFactory _loggerFactory;
     
@@ -57,12 +57,12 @@ public class InstanceEngine : IAsyncDisposable
         }
     }
 
-    public InstanceEngine(Guid id, LaunchCoordinator launchCoordinator, ProcessStartInfoFactory processStartInfoFactory, ILoggerFactory loggerFactory)
+    public InstanceEngine(Guid id, LaunchCoordinator launchCoordinator, ProcessStartRequestFactory processStartRequestFactory, ILoggerFactory loggerFactory)
     {
         Id = id;
         
         _launchCoordinator = launchCoordinator;
-        _processStartInfoFactory = processStartInfoFactory;
+        _processStartRequestFactory = processStartRequestFactory;
         _loggerFactory = loggerFactory;
         _logger = loggerFactory.CreateLogger<InstanceEngine>();
         
@@ -90,8 +90,8 @@ public class InstanceEngine : IAsyncDisposable
     
     public Task LaunchAsync(EngineLaunchContext context)
     {
-        var processStartInfo = _processStartInfoFactory.Create(context.InstanceLaunchContext);
-        var @event = new LaunchRequested(context.InstanceLaunchContext.AuthenticationContext, processStartInfo, context.Policies);
+        var processStartContext = ProcessStartContextFactory.Create(context.InstanceLaunchContext);
+        var @event = new LaunchRequested(context.InstanceLaunchContext.AuthenticationContext, processStartContext, context.Policies);
         return PublishCompletableAsync(@event);
     }
     
@@ -228,7 +228,11 @@ public class InstanceEngine : IAsyncDisposable
                 await PublishAsync(new LaunchLeaseReleased());
                 break;
             case StartProcess e:
-                RunSessionAgent(new StartProcessAgent(e.ProcessStartInfo, _loggerFactory.CreateLogger<StartProcessAgent>()));
+                RunSessionAgent(
+                    new StartProcessAgent(
+                        e.ProcessStartContext, 
+                        _processStartRequestFactory,
+                        _loggerFactory.CreateLogger<StartProcessAgent>()));
                 break;
             case UnlockMultibox e:
                 RunSessionAgent(

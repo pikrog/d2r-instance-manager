@@ -1,3 +1,5 @@
-﻿namespace AvaloniaApplication1.Engine.Models.Contexts.Arguments;
+﻿using AvaloniaApplication1.Engine.Common;
 
-public sealed record CliArgumentsContext(string AccountUsername, string AccountPassword, string RegionAddress) : AuthenticationArgumentsContext;
+namespace AvaloniaApplication1.Engine.Models.Contexts.Arguments;
+
+public sealed record CliArgumentsContext(string AccountUsername, RedactedString AccountPassword, string RegionAddress) : AuthenticationArgumentsContext;
