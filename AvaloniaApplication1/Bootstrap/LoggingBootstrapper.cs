@@ -33,7 +33,7 @@ public static class LoggingBootstrapper
             .Enrich.With(instanceNameEnricher)
             .WriteTo.Sink(inMemorySink)
             .WriteTo.Console(expressionTemplate)
-            .WriteTo.File(expressionTemplate, logEnvironment.FilePath, rollingInterval: RollingInterval.Day)
+            .WriteTo.File(expressionTemplate, logEnvironment.FilePath)
             .CreateLogger();
 
         Serilog.Log.Logger = logger;
