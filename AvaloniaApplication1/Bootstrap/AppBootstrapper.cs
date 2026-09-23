@@ -1,33 +1,37 @@
 using System.Threading.Tasks;
+using AvaloniaApplication1.CommandLine;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AvaloniaApplication1.Bootstrap;
 
 public static class AppBootstrapper
 {
-    public static Task<ServiceProvider> BootstrapAsync()
+    public static Task<ServiceProvider> BootstrapAsync(CliOptions cliOptions)
     {
         var appDataEnvironment = AppDataEnvironment.CreateDefault();
-        return BootstrapAsync(appDataEnvironment);
+        return BootstrapAsync(appDataEnvironment, cliOptions);
     }
     
-    public static async Task<ServiceProvider> BootstrapAsync(AppDataEnvironment appDataEnvironment)
+    public static async Task<ServiceProvider> BootstrapAsync(AppDataEnvironment appDataEnvironment, CliOptions cliOptions)
     {
-        var coreLoggingServicesBundle = LoggingBootstrapper.Bootstrap(appDataEnvironment);
+        var logLevel = LogLevelMapper.Map(cliOptions.CliLogLevel);
+        var coreLoggingServicesBundle = LoggingBootstrapper.Bootstrap(appDataEnvironment, logLevel);
         
         var coreConfigServicesBundle = 
             await ConfigBootstrapper.BootstrapAsync(appDataEnvironment, coreLoggingServicesBundle.Logger);
         
-        return BuildServiceProvider(coreLoggingServicesBundle, coreConfigServicesBundle);   
+        return BuildServiceProvider(coreLoggingServicesBundle, coreConfigServicesBundle, cliOptions);   
     }
 
     public static IServiceCollection CreateServiceCollection(
         CoreLoggingServicesBundle coreLoggingServicesBundle,
-        CoreConfigServicesBundle coreConfigServicesBundle)
+        CoreConfigServicesBundle coreConfigServicesBundle,
+        CliOptions cliOptions)
     {
         var services = new ServiceCollection();
         services.AddLoggingServices(coreLoggingServicesBundle);
         services.AddConfigServices(coreConfigServicesBundle);
+        services.AddSingleton(cliOptions);
         services.AddEngineServices();
         services.AddApplicationServices();
         return services;
@@ -36,9 +40,10 @@ public static class AppBootstrapper
     public static ServiceProvider BuildServiceProvider(
         CoreLoggingServicesBundle coreLoggingServicesBundle,
         CoreConfigServicesBundle coreConfigServicesBundle,
+        CliOptions cliOptions,
         ServiceProviderOptions? options = null)
     {
-        var services = CreateServiceCollection(coreLoggingServicesBundle, coreConfigServicesBundle);
+        var services = CreateServiceCollection(coreLoggingServicesBundle, coreConfigServicesBundle, cliOptions);
         return services.BuildServiceProvider(options ?? CreateDefaultServiceProviderOptions());
     }
 

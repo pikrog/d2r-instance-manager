@@ -1,5 +1,4 @@
-﻿using System;
-using AvaloniaApplication1.Log;
+﻿using AvaloniaApplication1.Log;
 using Serilog;
 using Serilog.Templates;
 
@@ -11,14 +10,16 @@ public static class LoggingBootstrapper
                                                     "{#if InstanceName is not null}[{InstanceName}] {#end}" +
                                                     "{@m}\r\n";
     
-    public static CoreLoggingServicesBundle Bootstrap(AppDataEnvironment environment)
+    public static CoreLoggingServicesBundle Bootstrap(AppDataEnvironment environment, LogLevel logLevel = LogLevel.Information)
     {
         var logEnvironment = LogEnvironment.Derive(environment);
-        return Bootstrap(logEnvironment);
+        return Bootstrap(logEnvironment, logLevel);
     }
     
-    public static CoreLoggingServicesBundle Bootstrap(LogEnvironment logEnvironment)
+    public static CoreLoggingServicesBundle Bootstrap(LogEnvironment logEnvironment, LogLevel logLevel)
     {
+        var logEventLevel = LogEventLevelMapper.Map(logLevel);
+        
         var logStore = new LogStore();
         
         var instanceNameRegistry = new InstanceNameRegistry();
@@ -29,7 +30,7 @@ public static class LoggingBootstrapper
         var expressionTemplate = new ExpressionTemplate(ExpressionTemplateString);
 
         var logger = new LoggerConfiguration()
-            .MinimumLevel.Verbose()
+            .MinimumLevel.Is(logEventLevel)
             .Enrich.With(instanceNameEnricher)
             .WriteTo.Sink(inMemorySink)
             .WriteTo.Console(expressionTemplate)

@@ -6,6 +6,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using AvaloniaApplication1.Bootstrap;
+using AvaloniaApplication1.CommandLine;
 using AvaloniaApplication1.MainWindow;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -37,11 +38,13 @@ namespace AvaloniaApplication1
             var initialWindow = new InitialWindowView();
             try
             {
+                var cliOptions = CliParser.Parse(desktop.Args ?? []);
+                
                 await Dispatcher.UIThread.InvokeAsync(initialWindow.Show);
                 await Task.Delay(1000);
                 await Dispatcher.UIThread.InvokeAsync(() => initialWindow.ProgressBar.Opacity = 1);
                 
-                _services = await AppBootstrapper.BootstrapAsync();
+                _services = await AppBootstrapper.BootstrapAsync(cliOptions);
                 _services.GetRequiredService<AppRuntimeBootstrapper>().Bootstrap();
                 
                 var mainWindowViewModel = _services.GetRequiredService<MainWindowViewModel>();
