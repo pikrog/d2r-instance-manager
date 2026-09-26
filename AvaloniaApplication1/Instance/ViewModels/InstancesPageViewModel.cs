@@ -79,7 +79,13 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
 
     private void OnInstancePresentationChanged(object? sender, InstancePresentationChangedEventArgs e)
     {
-        Dispatcher.UIThread.Post(() => RefreshItem(e.InstanceId));
+        Dispatcher.UIThread.Post(() =>
+        {
+            if (e.IsRemoved)
+                RemoveInstance(e.InstanceId);
+            else
+                RefreshItem(e.InstanceId);
+        });
     }
 
     private void OnInstancePropertyChanged(object? sender, PropertyChangedEventArgs e)

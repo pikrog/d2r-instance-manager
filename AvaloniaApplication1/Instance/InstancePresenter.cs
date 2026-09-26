@@ -13,25 +13,50 @@ public class InstancePresenter : IInstancePresenter
     private readonly InstanceService _service;
     
     private readonly InstanceHotKeyBindingCoordinator _hotKeyBindingCoordinator;
+    
+    private readonly HashSet<Guid> _knownInstanceIds;
 
     public InstancePresenter(InstanceService service, InstanceHotKeyBindingCoordinator hotKeyBindingCoordinator)
     {
         _service = service;
         _hotKeyBindingCoordinator = hotKeyBindingCoordinator;
         
-        _service.InstanceConfigChanged += (_, args) => OnInstanceChanged(args.InstanceId);
+        _knownInstanceIds = _service.GetConfigSnapshots()
+            .Select(x => x.Id)
+            .ToHashSet();
+        
+        _service.InstanceConfigChanged += OnInstanceConfigChanged;
         _service.InstanceStateChanged += (_, args) => OnInstanceChanged(args.Id);
         _hotKeyBindingCoordinator.BindingStateChanged += (_, args) => OnInstanceChanged(args.Command.InstanceId);
     }
 
     public event EventHandler<InstancePresentationChangedEventArgs>? InstancePresentationChanged;
 
-    private void OnInstanceChanged(Guid instanceId) =>
+    private void OnInstanceConfigChanged(object? sender, InstanceConfigChangedEventArgs e)
+    {
+        if (e.NewSnapshot is null)
+        {
+            _knownInstanceIds.Remove(e.InstanceId);
+            InstancePresentationChanged?.Invoke(
+                this, 
+                InstancePresentationChangedEventArgs.Removed(e.InstanceId));
+            return;
+        }
+        
+        _knownInstanceIds.Add(e.InstanceId);
+        OnInstanceChanged(e.InstanceId);
+    }
+
+    private void OnInstanceChanged(Guid instanceId)
+    {
+        if (!_knownInstanceIds.Contains(instanceId))
+            return;
+        
         InstancePresentationChanged?.Invoke(
-            this,
-            new InstancePresentationChangedEventArgs(instanceId)
-            );
-    
+            this, 
+            InstancePresentationChangedEventArgs.Updated(instanceId));
+    }
+
     private InstanceSummary ApplyHotKeyIssueIfNeeded(InstanceSummary summary)
     {
         var instanceId = summary.Id;

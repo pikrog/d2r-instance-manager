@@ -6,20 +6,13 @@ using AvaloniaApplication1.Instance.Models.EventArgs;
 
 namespace AvaloniaApplication1.Design.Services;
 
-public class InstanceDesignPresenter : IInstancePresenter
+public class InstanceDesignPresenter(InstanceService service) : IInstancePresenter
 {
-    private readonly InstanceService _service;
-
-    public InstanceDesignPresenter(InstanceService service)
-    {
-        _service = service;
-        
-        _service.InstanceConfigChanged += (_, args) => InstancePresentationChanged?.Invoke(this, new InstancePresentationChangedEventArgs(args.InstanceId));
-    }
-
+    #pragma warning disable CS0067
     public event EventHandler<InstancePresentationChangedEventArgs>? InstancePresentationChanged;
+    #pragma warning restore CS0067
     
-    public InstanceSummary Get(Guid instanceId) => _service.GetSummary(instanceId);
+    public InstanceSummary Get(Guid instanceId) => service.GetSummary(instanceId);
 
-    public IReadOnlyList<InstanceSummary> GetAll() => _service.GetSummaries();
+    public IReadOnlyList<InstanceSummary> GetAll() => service.GetSummaries();
 }
