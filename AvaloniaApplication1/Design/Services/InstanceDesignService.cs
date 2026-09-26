@@ -6,7 +6,7 @@ using AvaloniaApplication1.Engine;
 using AvaloniaApplication1.Instance;
 using AvaloniaApplication1.Instance.Models;
 using AvaloniaApplication1.Instance.Models.Issues;
-using AvaloniaApplication1.Log;
+using AvaloniaApplication1.Log.Instance;
 using Microsoft.Extensions.Logging;
 
 namespace AvaloniaApplication1.Design.Services;

@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using AvaloniaApplication1.CommandLine;
+using AvaloniaApplication1.Log;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AvaloniaApplication1.Bootstrap;
@@ -15,7 +16,12 @@ public static class AppBootstrapper
     public static async Task<ServiceProvider> BootstrapAsync(AppDataEnvironment appDataEnvironment, CliOptions cliOptions)
     {
         var logLevel = LogLevelMapper.Map(cliOptions.CliLogLevel);
-        var coreLoggingServicesBundle = LoggingBootstrapper.Bootstrap(appDataEnvironment, logLevel);
+        var logSettings = new LogSettings()
+        {
+            MinimumLevel = logLevel,
+        };
+        
+        var coreLoggingServicesBundle = LoggingBootstrapper.Bootstrap(appDataEnvironment, logSettings);
         
         var coreConfigServicesBundle = 
             await ConfigBootstrapper.BootstrapAsync(appDataEnvironment, coreLoggingServicesBundle.Logger);

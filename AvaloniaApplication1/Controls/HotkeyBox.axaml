@@ -33,7 +33,7 @@
     </Style>
     
     <Style Selector="cc|HotkeyBox:error /template/ TextBox#PART_TextBox">
-        <Setter Property="BorderBrush" Value="Red" />
+        <Setter Property="BorderBrush" Value="Red" /> <!--todo: use app resources-->
         <Setter Property="BorderThickness" Value="1" />
     </Style>
 </Styles>

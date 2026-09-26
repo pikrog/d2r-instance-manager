@@ -2,22 +2,25 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:local="clr-namespace:AvaloniaApplication1.Log"
+             xmlns:log="clr-namespace:AvaloniaApplication1.Log"
              xmlns:design="clr-namespace:AvaloniaApplication1.Design.ViewModels"
-             xmlns:semantic="clr-namespace:AvaloniaApplication1.Semantic"
+             xmlns:logInstance="clr-namespace:AvaloniaApplication1.Log.Instance"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="AvaloniaApplication1.Log.LogsPageView"
-             x:DataType="local:LogsPageViewModel">
+             x:DataType="log:LogsPageViewModel">
     
     <Design.DataContext>
         <design:LogsPageDesignViewModel />
     </Design.DataContext>
     
     <UserControl.Resources>
-        <local:LogLevelToSemanticTypeConverter x:Key="LogLevelToSemanticTypeConverter" />
+        <log:LogLevelToSemanticTypeConverter x:Key="LogLevelToSemanticTypeConverter" />
+        
+        <Color x:Key="TableViewColumnHeaderSeparatorBackground">Transparent</Color>
     </UserControl.Resources>
     
     <UserControl.Styles>
+        
         <Style Selector="TextBlock.warning">
             <Setter Property="Foreground" Value="{DynamicResource WarningContent}" />
         </Style>
@@ -31,40 +34,194 @@
         </Style>
     </UserControl.Styles>
     
-    <DockPanel>
-        <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
-            <ComboBox>
-                <ComboBox.Items>
-                    <ComboBoxItem>Debug</ComboBoxItem>
-                    <ComboBoxItem>Error</ComboBoxItem>
-                    <ComboBoxItem>Warning</ComboBoxItem>
-                    <ComboBoxItem>Info</ComboBoxItem>
-                </ComboBox.Items>
-            </ComboBox>
-        </StackPanel>
-        <ListBox DockPanel.Dock="Left">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Vertical">
-                        <CheckBox>Test</CheckBox>
+    <Border Classes="outlined hovering rounded" Margin="30"> <!--todo: margin: main-card? page-content? page-content-card? page-margin?-->
+        <Border Classes="rounded" ClipToBounds="True">
+            <DockPanel>
+                <Border DockPanel.Dock="Top" Padding="10"> 
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBox PlaceholderText="Enter search text... 🔍"/>
+                        
+                        <ComboBox SelectedItem="{Binding Level}" ItemsSource="{Binding AvailableLogLevels}" />
+                        
+                        <Button VerticalAlignment="Stretch" 
+                                BorderBrush="{DynamicResource PrimaryForeground}"
+                                Background="Transparent"
+                                CornerRadius="3"
+                                MinHeight="32"
+                                Padding="12,5,0,7"
+                                Margin="0 0 0 1">
+                            <Button.Flyout>
+                                <Flyout>
+                                    <ScrollViewer>
+                                        <ItemsControl ItemsSource="{Binding InstanceFilterSelections}">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel />
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            
+                                            <!--<ItemsControl.ItemTemplate>
+                                                <DataTemplate></DataTemplate>
+                                            </ItemsControl.ItemTemplate>-->
+                                            <ItemsControl.DataTemplates>
+                                                <DataTemplate x:DataType="logInstance:NamedInstanceFilterSelection">
+                                                    <CheckBox IsChecked="{Binding IsSelected}">
+                                                        <TextBlock Text="{Binding Name}" />
+                                                    </CheckBox>
+                                                </DataTemplate>
+                                                <DataTemplate x:DataType="logInstance:NoInstanceFilterSelection">
+                                                    <CheckBox IsChecked="{Binding IsSelected}">
+                                                        (no instance)
+                                                    </CheckBox>
+                                                </DataTemplate>
+                                            </ItemsControl.DataTemplates>
+                                        </ItemsControl>
+                                    </ScrollViewer>
+                                </Flyout>
+                            </Button.Flyout>
+                            <Grid ColumnDefinitions="*,32">
+                                <TextBlock Grid.Column="0" IsVisible="{Binding !InstanceFilterActiveSelections.Any}" Text="All instances" />
+                                <!--TextBlock: IsVisible=IsOnlySingleNamedInstanceFilterActive Text=InstanceName-->
+                                <TextBlock Grid.Column="0" IsVisible="{Binding IsOnlyNoInstanceFilterActive}" Text="No instance" />
+                                <TextBlock Grid.Column="0" IsVisible="{Binding IsOnlyNamedInstanceFilterActive}">
+                                    <Run Text="{Binding InstanceFilterActiveSelections.Count}" />
+                                    <Run>instance(s)</Run>
+                                </TextBlock>
+                                <TextBlock Grid.Column="0" IsVisible="{Binding IsMixedFilteringActive}">
+                                    <Run Text="{Binding InstanceFilterActiveSelections.Count}" />
+                                    <Run>selections</Run>
+                                </TextBlock>
+                                <PathIcon x:Name="DropDownGlyph"
+                                          Grid.Column="1"
+                                          UseLayoutRounding="False"
+                                          IsHitTestVisible="False"
+                                          Height="12"
+                                          Width="12"
+                                          Margin="0,0,10,0"
+                                          HorizontalAlignment="Right"
+                                          VerticalAlignment="Center"
+                                          Foreground="{DynamicResource ComboBoxDropDownGlyphForeground}"
+                                          Data="M1939 486L2029 576L1024 1581L19 576L109 486L1024 1401L1939 486Z"/>
+                            </Grid>
+                        </Button>
                     </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-            <ListBox.Items>
-                <ListBoxItem><CheckBox>Config</CheckBox></ListBoxItem>
-                <ListBoxItem><CheckBox>Instance</CheckBox></ListBoxItem>
-            </ListBox.Items>
-        </ListBox>
-        <ItemsControl ItemsSource="{Binding Entries}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate x:DataType="local:LogEntry">
-                    <TextBlock semantic:SemanticClass.Type="{Binding Level, Converter={StaticResource LogLevelToSemanticTypeConverter}}">
-                        <Run Text="{Binding Timestamp.DateTime}" />
-                        [<Run Text="{Binding Level}" />]
-                        <Run Text="{Binding Message}" />
-                    </TextBlock>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-    </DockPanel>
+                </Border>
+                
+                <TableView ItemsSource="{Binding FilteredEntries}" Background="{DynamicResource PrimaryBackground}"
+                           Margin="0 10 0 0">
+                    <TableView.Resources>
+                        <SolidColorBrush x:Key="SystemControlBackgroundChromeMediumBrush" Color="Transparent" />
+                    </TableView.Resources>
+                    <TableView.Styles>
+                        <Style Selector="Border">
+                            <Setter Property="BoxShadow" Value="0 2 4 0 #1F000000" /> <!--todo: top-bar shadow resource-->
+                        </Style>
+                        
+                        <Style Selector="TableViewColumnHeader TextBlock">
+                            <Setter Property="FontWeight" Value="Bold" />
+                        </Style>
+                    </TableView.Styles>
+                    <TableView.Columns>
+                        <TableViewColumn Width="25" CanUserResize="False">
+                            <TableViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Panel Width="16" VerticalAlignment="Top">
+                                        <Panel Background="Transparent" ToolTip.Tip="Fatal">
+                                            <Panel.IsVisible>
+                                                <Binding Path="Level"
+                                                         Converter="{x:Static ObjectConverters.Equal}"
+                                                         ConverterParameter="{x:Static log:LogLevel.Fatal}" />
+                                            </Panel.IsVisible>
+                                            <Svg Classes="danger" Path="/Assets/images/fatal.svg" /> 
+                                        </Panel>
+                                        
+                                        <Panel Background="Transparent" ToolTip.Tip="Error">
+                                            <Panel.IsVisible>
+                                                <Binding Path="Level"
+                                                         Converter="{x:Static ObjectConverters.Equal}"
+                                                         ConverterParameter="{x:Static log:LogLevel.Error}" />
+                                            </Panel.IsVisible>
+                                            <Svg Classes="danger" Path="/Assets/images/error.svg" /> 
+                                        </Panel>
+                                        
+                                        <Panel Background="Transparent" ToolTip.Tip="Warning">
+                                            <Panel.IsVisible>
+                                                <Binding Path="Level"
+                                                         Converter="{x:Static ObjectConverters.Equal}"
+                                                         ConverterParameter="{x:Static log:LogLevel.Warning}" />
+                                            </Panel.IsVisible>
+                                            <Svg Classes="warning" Path="/Assets/images/warning.svg" /> 
+                                        </Panel>
+                                        
+                                        <Panel Background="Transparent" ToolTip.Tip="Information">
+                                            <Panel.IsVisible>
+                                                <Binding Path="Level"
+                                                         Converter="{x:Static ObjectConverters.Equal}"
+                                                         ConverterParameter="{x:Static log:LogLevel.Information}" />
+                                            </Panel.IsVisible>
+                                            <Svg Classes="info" Path="/Assets/images/info.svg" /> 
+                                        </Panel>
+                                        
+                                        <Panel Background="Transparent" ToolTip.Tip="Debug">
+                                            <Panel.IsVisible>
+                                                <Binding Path="Level"
+                                                         Converter="{x:Static ObjectConverters.Equal}"
+                                                         ConverterParameter="{x:Static log:LogLevel.Debug}" />
+                                            </Panel.IsVisible>
+                                            <Svg Classes="info" Path="/Assets/images/debug.svg" /> 
+                                        </Panel>
+                                        
+                                        <Panel Background="Transparent" ToolTip.Tip="Verbose">
+                                            <Panel.IsVisible>
+                                                <Binding Path="Level"
+                                                         Converter="{x:Static ObjectConverters.Equal}"
+                                                         ConverterParameter="{x:Static log:LogLevel.Verbose}" />
+                                            </Panel.IsVisible>
+                                            <Svg Classes="info" Path="/Assets/images/verbose.svg" /> 
+                                        </Panel>
+                                    </Panel>
+                                </DataTemplate>
+                            </TableViewColumn.CellTemplate>
+                        </TableViewColumn>
+                        
+                        <TableViewColumn Header="Time" Width="*">
+                            <TableViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontFamily="Consolas" Text="{Binding Timestamp, StringFormat=HH:mm:ss.fff}"
+                                               ToolTip.Tip="{Binding Timestamp, StringFormat=dd MMM yyyy HH:mm:ss.fff}"/>
+                                </DataTemplate>
+                            </TableViewColumn.CellTemplate>
+                        </TableViewColumn>
+                        
+                        <TableViewColumn Header="Source" Width="1.3*">
+                            <TableViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontFamily="Consolas" Text="{Binding SourceModule}"
+                                               ToolTip.Tip="{Binding SourceModule}"/>
+                                </DataTemplate>
+                            </TableViewColumn.CellTemplate>
+                        </TableViewColumn>
+                        
+                        <TableViewColumn Header="Instance" Width="1.3*">
+                            <TableViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontFamily="Consolas" Text="{Binding InstanceName}"
+                                               ToolTip.Tip="{Binding InstanceName}"/>
+                                </DataTemplate>
+                            </TableViewColumn.CellTemplate>
+                        </TableViewColumn>
+                        
+                        <TableViewColumn Header="Message" Width="4*" Binding="{Binding Message}">
+                            <TableViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Message}"
+                                               ToolTip.Tip="{Binding Message}"/>
+                                </DataTemplate>
+                            </TableViewColumn.CellTemplate>
+                        </TableViewColumn>
+                    </TableView.Columns>
+                </TableView>
+            </DockPanel>
+        </Border>
+    </Border>
 </UserControl>

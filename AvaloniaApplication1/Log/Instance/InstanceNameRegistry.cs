@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 
-namespace AvaloniaApplication1.Log;
+namespace AvaloniaApplication1.Log.Instance;
 
 public class InstanceNameRegistry
 {

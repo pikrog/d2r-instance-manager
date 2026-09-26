@@ -1,12 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Serilog.Events;
+using Serilog.Templates;
 
 namespace AvaloniaApplication1.Log;
 
 public static class LogEntryMapper
 {
+    private static readonly ExpressionTemplate MessageTemplate = new("{@m}");
+
+    private static string RenderMessage(LogEvent logEvent)
+    {
+        var writer = new StringWriter();
+        MessageTemplate.Format(logEvent, writer);
+        return writer.ToString();
+    }
+    
     private static LogLevel MapLevel(LogEventLevel logEventLevel) =>
         logEventLevel switch
         {
@@ -37,7 +48,7 @@ public static class LogEntryMapper
             _ => value.ToString()
         };
     
-    private static IReadOnlyDictionary<string, object?> MapProperties(
+    private static Dictionary<string, object?> MapProperties(
         IReadOnlyDictionary<string, LogEventPropertyValue> properties
         ) => 
         properties.ToDictionary(
@@ -45,12 +56,20 @@ public static class LogEntryMapper
             kv => UnwrapPropertyValue(kv.Value)
             );
     
-    public static LogEntry Map(LogEvent logEvent) =>
-        new(
-            logEvent.Timestamp, 
-            MapLevel(logEvent.Level), 
-            logEvent.MessageTemplate.Render(logEvent.Properties), 
+    public static LogEntry Map(LogEvent logEvent)
+    {
+        var level = MapLevel(logEvent.Level);
+        var source = (logEvent.Properties.GetValueOrDefault("SourceContext") as ScalarValue)?.Value?.ToString();
+        var message = RenderMessage(logEvent);
+        var properties = MapProperties(logEvent.Properties);
+        
+        return new LogEntry(
+            logEvent.Timestamp,
+            level,
+            source,
+            message,
             logEvent.Exception,
-            MapProperties(logEvent.Properties)
-            );
+            properties
+        );
+    }
 }

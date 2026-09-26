@@ -15,7 +15,7 @@ using AvaloniaApplication1.GlobalSettings;
 using AvaloniaApplication1.HotKey.Config;
 using AvaloniaApplication1.Instance;
 using AvaloniaApplication1.Instance.ViewModels;
-using AvaloniaApplication1.Log;
+using AvaloniaApplication1.Log.Instance;
 using AvaloniaApplication1.Navigation;
 using AvaloniaApplication1.Overlay;
 using AvaloniaApplication1.Region;

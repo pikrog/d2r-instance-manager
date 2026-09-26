@@ -16,6 +16,7 @@ using AvaloniaApplication1.GlobalSettings;
 using AvaloniaApplication1.Instance.Models;
 using AvaloniaApplication1.Instance.Models.EventArgs;
 using AvaloniaApplication1.Log;
+using AvaloniaApplication1.Log.Instance;
 using Microsoft.Extensions.Logging;
 
 namespace AvaloniaApplication1.Instance;

@@ -2,7 +2,7 @@
 using Serilog.Core;
 using Serilog.Events;
 
-namespace AvaloniaApplication1.Log;
+namespace AvaloniaApplication1.Log.Instance;
 
 public class InstanceNameEnricher(InstanceNameRegistry registry) : ILogEventEnricher
 {
