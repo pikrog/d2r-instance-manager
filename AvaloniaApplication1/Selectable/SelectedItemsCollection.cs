@@ -7,7 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace AvaloniaApplication1.Selectable;
 
-public sealed class SelectedItemsCollection<T> : ObservableObject, INotifyCollectionChanged where T : SelectableViewModelBase
+public sealed class SelectedItemsCollection<T> : ObservableObject, INotifyCollectionChanged where T : SelectableObservable
 {
     private readonly ReadOnlyObservableCollection<T> _allItems;
     
@@ -93,7 +93,7 @@ public sealed class SelectedItemsCollection<T> : ObservableObject, INotifyCollec
         var itemPropertyChangedEventArgs = new ItemPropertyChangedEventArgs<T>(item, e.PropertyName);
         ItemPropertyChanged?.Invoke(this, itemPropertyChangedEventArgs);
         
-        if (e.PropertyName != nameof(SelectableViewModelBase.IsSelected))
+        if (e.PropertyName != nameof(SelectableObservable.IsSelected))
             return;
         
         if (item.IsSelected)

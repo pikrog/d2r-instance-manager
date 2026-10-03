@@ -9,10 +9,11 @@ public sealed record LogEntry(
     string? Source,
     string Message,
     Exception? Exception,
-    IReadOnlyDictionary<string, object?> Properties
+    IReadOnlyDictionary<string, LogValue> Properties
 )
 {
     public string? SourceModule => Source?.Split('.')[^1];
 
-    public string? InstanceName => Properties.GetValueOrDefault(LogProperties.InstanceName) as string;
+    public string? InstanceName =>
+        (Properties.GetValueOrDefault(LogProperties.InstanceName) as LogValue.Scalar)?.Value as string;
 }

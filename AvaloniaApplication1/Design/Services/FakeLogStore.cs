@@ -14,7 +14,7 @@ public class FakeLogStore : ILogStoreReader
     
     private static readonly DateTimeOffset StartDateTimeOffset = DateTimeOffset.Now;
     
-    private static readonly Dictionary<string, object?> InstanceEnrichedProperties = new(){{LogProperties.InstanceName, "Nova"}};
+    private static readonly Dictionary<string, LogValue> InstanceEnrichedProperties = new(){{LogProperties.InstanceName, new LogValue.Scalar("Nova")}};
     
     private readonly List<LogEntry> _entries =
     [
@@ -22,8 +22,8 @@ public class FakeLogStore : ILogStoreReader
         new(StartDateTimeOffset.AddSeconds(1), LogLevel.Information, "InstanceService", "Instance started", null, InstanceEnrichedProperties),
         new(StartDateTimeOffset.AddSeconds(2), LogLevel.Debug, "InstanceEngine", "Process PID 1234 started", null, InstanceEnrichedProperties),
         new(StartDateTimeOffset.AddSeconds(3), LogLevel.Error, "InstanceEngine", "Multibox unlocking for instance 'test' timed out", null, InstanceEnrichedProperties),
-        new(StartDateTimeOffset.AddSeconds(4), LogLevel.Verbose, "HotKeyBindingCoordinator", "Ctrl+F4 was pressed", null, ReadOnlyDictionary<string, object?>.Empty),
-        new(StartDateTimeOffset.AddSeconds(5), LogLevel.Fatal, "", "Unhandled exception", new InvalidOperationException("Channel was completed"), ReadOnlyDictionary<string, object?>.Empty),
+        new(StartDateTimeOffset.AddSeconds(4), LogLevel.Verbose, "HotKeyBindingCoordinator", "Ctrl+F4 was pressed", null, ReadOnlyDictionary<string, LogValue>.Empty),
+        new(StartDateTimeOffset.AddSeconds(5), LogLevel.Fatal, "", "Unhandled exception", new InvalidOperationException("Channel was completed"), ReadOnlyDictionary<string, LogValue>.Empty),
     ];
     
     public IReadOnlyList<LogEntry> Entries => _entries;

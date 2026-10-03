@@ -52,6 +52,14 @@
     <Style Selector="TextBlock.secondary">
         <Setter Property="Foreground" Value="{DynamicResource SecondaryForeground}" />
     </Style>
+    
+    <Style Selector="TextBlock.mono">
+        <Setter Property="FontFamily" Value="Consolas" />
+    </Style>
+    
+    <Style Selector="Run.mono">
+        <Setter Property="FontFamily" Value="Consolas" />
+    </Style>
 
     <Style Selector="Border.hovering">
         <Setter Property="BoxShadow" Value="0 16 32 -4 #14000000" />

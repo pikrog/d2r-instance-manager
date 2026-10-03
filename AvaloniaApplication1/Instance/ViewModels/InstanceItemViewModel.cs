@@ -11,7 +11,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace AvaloniaApplication1.Instance.ViewModels;
 
-public partial class InstanceItemViewModel : SelectableViewModelBase
+public partial class InstanceItemViewModel : SelectableObservable
 {
     // todo: runtime errors
     public Guid Id { get; set; }

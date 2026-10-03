@@ -34,6 +34,7 @@ public static class ServiceCollectionExtension
             services.AddSingleton<ILogStoreWriter>(bundle.LogStore);
             services.AddSingleton(bundle.LogSettings);
             services.AddSingleton(bundle.InstanceNameRegistry);
+            services.AddSingleton<ILogService, LogService>();
             services.AddLogging(builder => builder.AddSerilog(bundle.Logger, dispose: true));
         }
         
@@ -65,6 +66,7 @@ public static class ServiceCollectionExtension
             services.AddSingleton<AccountService>();
             services.AddSingleton<RegionService>();
             services.AddSingleton<InstanceService>();
+            services.AddSingleton<IInstanceConfigProvider>(sp => sp.GetRequiredService<InstanceService>());
             services.AddSingleton<GlobalSettingsService>();
             services.AddSingleton<DisplayService>();
 

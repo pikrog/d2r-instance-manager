@@ -30,25 +30,27 @@ public static class LogEntryMapper
             _ => throw new InvalidOperationException($"Unexpected log level: {logEventLevel}")
         };
 
-    private static object? UnwrapPropertyValue(LogEventPropertyValue value) =>
+    private static LogValue UnwrapPropertyValue(LogEventPropertyValue value) =>
         value switch
         {
-            ScalarValue scalar => scalar.Value,
-            SequenceValue sequence => sequence.Elements.Select(UnwrapPropertyValue).ToList(),
+            ScalarValue scalar => new LogValue.Scalar(scalar.Value),
+            SequenceValue sequence => new LogValue.Sequence(sequence.Elements.Select(UnwrapPropertyValue).ToList()),
             DictionaryValue dictionary =>
+                new LogValue.Dictionary(
                 dictionary.Elements.ToDictionary(
-                    kv => UnwrapPropertyValue(kv.Key)?.ToString() ?? string.Empty,
+                    kv => UnwrapPropertyValue(kv.Key)?.ToString() ?? string.Empty, 
                     kv => UnwrapPropertyValue(kv.Value)
-                ),
+                )),
             StructureValue structure =>
-                structure.Properties.ToDictionary(
-                    p => p.Name,
-                    p => UnwrapPropertyValue(p.Value)
-                ),
-            _ => value.ToString()
+                new LogValue.Dictionary(
+                    structure.Properties.ToDictionary(
+                        p => p.Name, 
+                        p => UnwrapPropertyValue(p.Value)
+                )),
+            _ => new LogValue.Scalar(value.ToString())
         };
     
-    private static Dictionary<string, object?> MapProperties(
+    private static Dictionary<string, LogValue> MapProperties(
         IReadOnlyDictionary<string, LogEventPropertyValue> properties
         ) => 
         properties.ToDictionary(

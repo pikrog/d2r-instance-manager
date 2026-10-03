@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using AvaloniaApplication1.Instance;
-using AvaloniaApplication1.Log.Instance;
 using AvaloniaApplication1.Navigation;
-using AvaloniaApplication1.Selectable;
 using CommunityToolkit.Mvvm.ComponentModel;
+using DynamicData;
 
 namespace AvaloniaApplication1.Log;
 
@@ -17,71 +17,77 @@ public partial class LogsPageViewModel : PageViewModel
 {
     private readonly ILogStoreReader _store;
 
-    private readonly InstanceService _instanceService;
+    private readonly IInstanceConfigProvider _instanceConfigProvider;
+    
+    private readonly ILogService _logService;
     
     private IDisposable? _subscriptionHandle;
 
     private readonly ObservableCollection<LogEntry> _entries = [];
-
-    public ReadOnlyObservableCollection<LogEntry> Entries { get; }
     
     private readonly ObservableCollection<LogEntry> _filteredEntries = [];
     
     public ReadOnlyObservableCollection<LogEntry> FilteredEntries { get; }
+    
+    public LogFilter Filter { get; private set; }
+
+    [ObservableProperty] 
+    public partial string? SearchText { get; set; }
 
     [ObservableProperty] 
     public partial LogLevel Level { get; set; } = LogLevel.Information;
     
-    public IReadOnlyList<LogLevel> AvailableLogLevels { get; }
-    
-    private readonly NoInstanceFilterSelection _noInstanceFilterSelection = new();
+    public IReadOnlyList<LogLevel> AvailableLogLevelOptions { get; }
 
-    private readonly ObservableCollection<InstanceFilterSelection> _instanceFilterSelections = [];
-
-    public ReadOnlyObservableCollection<InstanceFilterSelection> InstanceFilterSelections { get; }
-
-    public SelectedItemsCollection<InstanceFilterSelection> InstanceFilterActiveSelections { get; }
+    public NameFilter InstanceFilter { get; } = new();
     
-    public bool IsOnlyNoInstanceFilterActive => 
-        InstanceFilterActiveSelections.Count == 1 && _noInstanceFilterSelection.IsSelected;
-
-    public bool IsOnlyNamedInstanceFilterActive =>
-        InstanceFilterActiveSelections.Any && !_noInstanceFilterSelection.IsSelected;
+    public NameFilter SourceFilter { get; } = new();
     
-    public bool IsMixedFilteringActive =>
-        InstanceFilterActiveSelections.Count > 1 && _noInstanceFilterSelection.IsSelected;
-    
-    public LogsPageViewModel(ILogStoreReader store, LogSettings logSettings, InstanceService instanceService)
+    public LogsPageViewModel(ILogStoreReader store, LogSettings logSettings, ILogService logService, IInstanceConfigProvider instanceConfigProvider)
     {
         _store = store;
-        _instanceService = instanceService; // todo: replace with LogService
+        _instanceConfigProvider = instanceConfigProvider;
+        _logService = logService;
         
-        Entries = new ReadOnlyObservableCollection<LogEntry>(_entries);
         FilteredEntries = new ReadOnlyObservableCollection<LogEntry>(_filteredEntries);
 
-        AvailableLogLevels = Enum.GetValues<LogLevel>()
+        AvailableLogLevelOptions = Enum.GetValues<LogLevel>()
             .Where(l => LogLevels.IsEnabled(l, logSettings.MinimumLevel))
             .ToArray();
-        
-        InstanceFilterSelections = new ReadOnlyObservableCollection<InstanceFilterSelection>(_instanceFilterSelections);
-        InstanceFilterActiveSelections = new SelectedItemsCollection<InstanceFilterSelection>(InstanceFilterSelections);
-        InstanceFilterActiveSelections.CollectionChanged += OnInstanceFilterActiveSelectionsChanged; 
+
+        InstanceFilter.ActiveSelections.CollectionChanged += OnNameFilterActiveSelectionsChanged;
+        SourceFilter.ActiveSelections.CollectionChanged += OnNameFilterActiveSelectionsChanged;
+
+        Filter = CreateFilter();
     }
 
-    private void OnInstanceFilterActiveSelectionsChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    private void OnNameFilterActiveSelectionsChanged(object? sender, NotifyCollectionChangedEventArgs e) =>
+        UpdateFilter();
+
+    private LogFilter CreateFilter() =>
+        new(Level,
+            InstanceFilter.ActiveNames,
+            InstanceFilter.IsNoNameActive,
+            SourceFilter.ActiveNames,
+            SourceFilter.IsNoNameActive,
+            SearchText);
+
+    private void UpdateFilter()
     {
+        Filter = CreateFilter();
+        
         RefreshEntries();
-        OnPropertyChanged(nameof(IsOnlyNoInstanceFilterActive));
-        OnPropertyChanged(nameof(IsOnlyNamedInstanceFilterActive));
-        OnPropertyChanged(nameof(IsMixedFilteringActive));
     }
 
     private void AddEntry(LogEntry entry)
     {
         _entries.Add(entry);
         
-        if (LogLevels.IsVisible(entry.Level, Level))
+        if (_logService.IsEntryVisible(entry, Filter))
             _filteredEntries.Add(entry);
+        
+        if (!string.IsNullOrEmpty(entry.SourceModule))
+            SourceFilter.AddName(entry.SourceModule);
     }
     
     private void OnNextEntry(LogEntry entry)
@@ -89,30 +95,17 @@ public partial class LogsPageViewModel : PageViewModel
         Dispatcher.UIThread.Post(() => AddEntry(entry));
     }
 
-    private bool IsEntryVisibleByInstance(string? instanceName) =>
-        !InstanceFilterActiveSelections.Any
-        || (string.IsNullOrEmpty(instanceName) 
-            ? _noInstanceFilterSelection.IsSelected
-            : InstanceFilterActiveSelections.Items
-                .Any(i => (i as NamedInstanceFilterSelection)?.Name == instanceName));
-
-    private bool IsEntryVisible(LogEntry entry) => 
-        LogLevels.IsVisible(entry.Level, Level) && IsEntryVisibleByInstance(entry.InstanceName);
-
     private void RefreshEntries()
     {
+        var entries = _logService.Filter(_entries, Filter);
+        
         _filteredEntries.Clear();
-        foreach (var entry in _entries)
-        {
-            if (IsEntryVisible(entry))
-                _filteredEntries.Add(entry);
-        }
+        _filteredEntries.AddRange(entries);
     }
-    
-    partial void OnLevelChanged(LogLevel value)
-    {
-        RefreshEntries();
-    }
+
+    partial void OnLevelChanged(LogLevel value) => UpdateFilter();
+
+    partial void OnSearchTextChanged(string? value) => UpdateFilter();
 
     private void SubscribeAndFetchLogs()
     {
@@ -130,15 +123,13 @@ public partial class LogsPageViewModel : PageViewModel
 
     private void FillInstancesFilter()
     {
-        var instances = _instanceService.GetConfigSnapshots()
-            .Select(i => new NamedInstanceFilterSelection(i.Name))
+        var instances = _instanceConfigProvider.GetConfigSnapshots()
+            .Select(i => i.Name)
             .ToList();
         
-        _instanceFilterSelections.Clear();
+        InstanceFilter.ClearNames();
         foreach (var instance in instances)
-            _instanceFilterSelections.Add(instance);
-
-        _instanceFilterSelections.Add(_noInstanceFilterSelection);
+            InstanceFilter.AddName(instance);
     }
     
     public override Task OnEnterAsync()

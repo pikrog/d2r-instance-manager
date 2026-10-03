@@ -21,7 +21,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AvaloniaApplication1.Instance;
 
-public class InstanceService
+public class InstanceService : IInstanceConfigProvider
 {
     private readonly ConfigService _configService;
 

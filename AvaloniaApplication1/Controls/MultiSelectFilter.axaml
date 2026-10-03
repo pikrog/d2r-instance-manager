@@ -1,0 +1,113 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:AvaloniaApplication1.Controls"
+        xmlns:selectable="clr-namespace:AvaloniaApplication1.Selectable"
+        xmlns:design="clr-namespace:AvaloniaApplication1.Design.Controls.MultiSelectFilter">
+    <Design.PreviewWith>
+        <Border Width="400" Height="400" Padding="10">
+            <controls:MultiSelectFilter ItemsSource="{x:Static design:MultiSelectFilterDesignData.ExampleSelectables}" VerticalAlignment="Top">
+                <controls:MultiSelectFilter.SummaryContent>
+                    <TextBlock>
+                        <Run Text="{Binding Source={x:Static design:MultiSelectFilterDesignData.SelectedItemsCollection}, Path=Count}" />
+                        <Run>selections</Run>
+                    </TextBlock>
+                </controls:MultiSelectFilter.SummaryContent>
+                
+                <controls:MultiSelectFilter.DataTemplates>
+                    <DataTemplate x:DataType="design:ExampleSelectable">
+                        <TextBlock Text="{Binding Label}" />
+                    </DataTemplate>
+                </controls:MultiSelectFilter.DataTemplates>
+            </controls:MultiSelectFilter>
+        </Border>
+    </Design.PreviewWith>
+
+    <Style Selector="controls|MultiSelectFilter">
+        <Setter Property="MaxFlyoutHeight" Value="250" />
+        
+        <Setter Property="ItemTemplate">
+            <DataTemplate x:DataType="selectable:ISelectable">
+                <CheckBox IsChecked="{Binding IsSelected}">
+                    <ContentControl Content="{Binding}"/>
+                </CheckBox>
+            </DataTemplate>
+        </Setter>
+        
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Button Background="Transparent" BorderThickness="0" Padding="0"
+                        Width="{TemplateBinding Width}"
+                        Height="{TemplateBinding Height}"
+                        MinWidth="{TemplateBinding MinWidth}"
+                        MaxWidth="{TemplateBinding MaxWidth}"
+                        MinHeight="{TemplateBinding MinHeight}"
+                        MaxHeight="{TemplateBinding MaxHeight}">
+                    <Button.Flyout>
+                                <Flyout Placement="BottomEdgeAlignedLeft">
+                                    <ItemsControl MaxHeight="{TemplateBinding MaxFlyoutHeight}" ItemsSource="{TemplateBinding ItemsSource}"
+                                                  ItemTemplate="{TemplateBinding ItemTemplate}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        
+                                        <ItemsControl.Template>
+                                            <ControlTemplate>
+                                                <ScrollViewer>
+                                                    <ItemsPresenter />
+                                                </ScrollViewer>
+                                            </ControlTemplate>
+                                        </ItemsControl.Template>
+                                    </ItemsControl>
+                                </Flyout>
+                            </Button.Flyout>
+                    <Border x:Name="Background"
+                            Background="{DynamicResource ComboBoxBackground}"
+                            BorderBrush="{DynamicResource ComboBoxBorderBrush}"
+                            BorderThickness="{DynamicResource ComboBoxBorderThemeThickness}"
+                            CornerRadius="{DynamicResource ControlCornerRadius}"
+                            MinHeight="32">
+                            <Grid ColumnDefinitions="*,32">
+                                <ContentControl Grid.Column="0" 
+                                                Margin="10 0 0 0"
+                                                HorizontalContentAlignment="Stretch"
+                                                VerticalContentAlignment="Center"
+                                                Content="{TemplateBinding SummaryContent}" />
+                                
+                                <PathIcon x:Name="DropDownGlyph"
+                                          Grid.Column="1"
+                                          UseLayoutRounding="False"
+                                          IsHitTestVisible="False"
+                                          Height="12"
+                                          Width="12"
+                                          Margin="0,0,10,0"
+                                          HorizontalAlignment="Right"
+                                          VerticalAlignment="Center"
+                                          Foreground="{DynamicResource ComboBoxDropDownGlyphForeground}"
+                                          Data="M1939 486L2029 576L1024 1581L19 576L109 486L1024 1401L1939 486Z"/>
+                            </Grid>
+                        </Border>
+                        </Button>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+    
+    <Style Selector="controls|MultiSelectFilter /template/ Button:pointerover /template/ Border#Background">
+        <Setter Property="Background" Value="{DynamicResource ComboBoxBackgroundPointerOver}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ComboBoxBorderBrushPointerOver}" />
+    </Style>
+    
+    <Style Selector="controls|MultiSelectFilter /template/ Button:pressed">
+        <Setter Property="RenderTransform" Value="{x:Null}" />
+    </Style>
+                                    
+    <Style Selector="controls|MultiSelectFilter /template/ Button:pressed /template/ Border#Background">
+        <Setter Property="Background" Value="{DynamicResource ComboBoxBackgroundPressed}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource ComboBoxBorderBrushPressed}" />
+    </Style>
+    
+    <Style Selector="controls|MultiSelectFilter /template/ Button:focus-visible /template/ Border#Background">
+        <Setter Property="BorderBrush" Value="{DynamicResource ComboBoxBackgroundBorderBrushFocused}" />
+    </Style>
+</Styles>

@@ -109,5 +109,6 @@
         <StyleInclude Source="/Card/Views/Card.axaml" />
         <StyleInclude Source="/Controls/Spinner.axaml" />
         <StyleInclude Source="/Controls/NavTab.axaml" />
+        <StyleInclude Source="/Controls/MultiSelectFilter.axaml" />
     </Application.Styles>
 </Application>

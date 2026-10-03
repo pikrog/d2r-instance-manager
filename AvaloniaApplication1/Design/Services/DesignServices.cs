@@ -15,6 +15,7 @@ using AvaloniaApplication1.GlobalSettings;
 using AvaloniaApplication1.HotKey.Config;
 using AvaloniaApplication1.Instance;
 using AvaloniaApplication1.Instance.ViewModels;
+using AvaloniaApplication1.Log;
 using AvaloniaApplication1.Log.Instance;
 using AvaloniaApplication1.Navigation;
 using AvaloniaApplication1.Overlay;
@@ -93,6 +94,10 @@ public static class DesignServices
 
     public static readonly EditInstanceFormViewModelFactory EditInstanceFormViewModelFactory =
         new(HotKeyConfigValidator, AccountService, RegionService, DisplayService);
+    
+    public static readonly ILogStoreReader LogStore = new FakeLogStore();
+    
+    public static readonly LogService LogService = new();
     
     static DesignServices()
     {

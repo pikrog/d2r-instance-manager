@@ -5,7 +5,14 @@ namespace AvaloniaApplication1.Design.ViewModels;
 
 public class LogsPageDesignViewModel : LogsPageViewModel
 {
-    public LogsPageDesignViewModel() : base(new FakeLogStore(), new LogSettings{ MinimumLevel = LogLevel.Verbose }, DesignServices.InstanceService)
+    public LogsPageDesignViewModel() : base(
+        DesignServices.LogStore,
+        new LogSettings
+        {
+            MinimumLevel = LogLevel.Verbose
+        },
+        DesignServices.LogService,
+        DesignServices.InstanceService)
     {
         Level = LogLevel.Verbose;
         
