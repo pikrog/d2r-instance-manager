@@ -7,9 +7,11 @@ namespace AvaloniaApplication1.Bootstrap;
 
 public static class LoggingBootstrapper
 {
-    private const string ExpressionTemplateString = "[{@t:HH:mm:ss.fff}] [{@l:u3}] [{SourceContext}] " +
+    private const string ExpressionTemplateString = "[{@t:HH:mm:ss.fff}] [{@l:u3}] " +
+                                                    "{#if SourceContext is not null}[{SourceContext}] {#end}" +
                                                     "{#if InstanceName is not null}[{InstanceName}] {#end}" +
-                                                    "{@m}\r\n";
+                                                    "{@m}\r\n" +
+                                                    "{#if @x is not null}{@x}\r\n{#end}";
     
     public static CoreLoggingServicesBundle Bootstrap(AppDataEnvironment environment, LogSettings logSettings)
     {
