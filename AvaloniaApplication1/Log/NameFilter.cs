@@ -6,6 +6,7 @@ using System.Linq;
 using AvaloniaApplication1.Log.Filter;
 using AvaloniaApplication1.Selectable;
 using CommunityToolkit.Mvvm.ComponentModel;
+using DynamicData.Binding;
 
 namespace AvaloniaApplication1.Log;
 
@@ -15,7 +16,7 @@ public class NameFilter : ObservableObject
     
     private readonly NoNameFilterSelection _noNameSelection = new();
 
-    private readonly ObservableCollection<FilterSelection> _selections;
+    private readonly ObservableCollectionExtended<FilterSelection> _selections;
 
     public ReadOnlyObservableCollection<FilterSelection> Selections { get; }
 
@@ -59,7 +60,7 @@ public class NameFilter : ObservableObject
         var selections = names.Select(FilterSelection (n) => new NamedFilterSelection(n))
             .Append(_noNameSelection);
         
-        _selections = new ObservableCollection<FilterSelection>(selections);
+        _selections = new ObservableCollectionExtended<FilterSelection>(selections);
         Selections = new ReadOnlyObservableCollection<FilterSelection>(_selections);
         ActiveSelections = new SelectedItemsCollection<FilterSelection>(Selections);
         ActiveSelections.CollectionChanged += OnActiveSelectionsChanged; 
@@ -106,8 +107,11 @@ public class NameFilter : ObservableObject
     public void ClearNames()
     {
         _names.Clear();
+
+        using var _ = _selections.SuspendNotifications();
         
-        _selections.Clear();
-        _selections.Add(_noNameSelection);
+        for (var i = _selections.Count - 1; i >= 0; i--)
+            if (_selections[i] is NamedFilterSelection)
+                _selections.RemoveAt(i);
     }
 }
