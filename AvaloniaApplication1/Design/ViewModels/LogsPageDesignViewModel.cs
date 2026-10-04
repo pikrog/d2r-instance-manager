@@ -1,5 +1,6 @@
 ﻿using AvaloniaApplication1.Design.Services;
 using AvaloniaApplication1.Log;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace AvaloniaApplication1.Design.ViewModels;
 
@@ -12,7 +13,8 @@ public class LogsPageDesignViewModel : LogsPageViewModel
             MinimumLevel = LogLevel.Verbose
         },
         DesignServices.LogService,
-        DesignServices.InstanceService)
+        DesignServices.InstanceService,
+        new NullLogger<LogsPageViewModel>())
     {
         Level = LogLevel.Verbose;
         

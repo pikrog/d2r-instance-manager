@@ -148,6 +148,8 @@
 
                     </StackPanel>
                 </Border>
+                
+                <ProgressBar DockPanel.Dock="Bottom" IsIndeterminate="True" IsVisible="{Binding IsFiltering}"/>
 
                 <TableView ItemsSource="{Binding FilteredEntries}" 
                            Background="{DynamicResource PrimaryBackground}"

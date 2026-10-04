@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace AvaloniaApplication1.Log;
 
@@ -37,8 +38,18 @@ public class LogService : ILogService
         && IsEntryVisibleByName(entry.InstanceName, filter.InstanceNames, filter.IncludeNoInstance)
         && IsEntryVisibleByName(entry.SourceModule, filter.SourceModules, filter.IncludeNoSourceModule)
         && IsEntryVisibleBySearchText(entry, filter.SearchText);
-    
-    public IReadOnlyList<LogEntry> Filter(IEnumerable<LogEntry> logEntries, LogFilter filter) => 
-        logEntries.Where(e => IsEntryVisible(e, filter))
-            .ToList();
+
+    public IReadOnlyList<LogEntry> Filter(IEnumerable<LogEntry> logEntries,
+        LogFilter filter,
+        CancellationToken cancellationToken = default)
+    {
+        var result = new List<LogEntry>();
+        foreach (var entry in logEntries)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (IsEntryVisible(entry, filter))
+                result.Add(entry);
+        }
+        return result;
+    }
 }
