@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -13,6 +14,8 @@ public sealed class SelectedItemsCollection<T> : ObservableObject, INotifyCollec
     
     private readonly ObservableCollection<T> _selectedItems;
 
+    private readonly HashSet<T> _subscribed = [];
+
     public ReadOnlyObservableCollection<T> Items { get; }
     
     public int Count => _selectedItems.Count;
@@ -26,15 +29,27 @@ public sealed class SelectedItemsCollection<T> : ObservableObject, INotifyCollec
     public SelectedItemsCollection(ReadOnlyObservableCollection<T> allItems)
     {
         _allItems = allItems;
-        
+
         foreach (var item in allItems)
-            item.PropertyChanged += OnItemPropertyChanged;
+            Subscribe(item);
         
         _selectedItems = new ObservableCollection<T>(allItems.Where(i => i.IsSelected));
         Items = new ReadOnlyObservableCollection<T>(_selectedItems);
 
         ((INotifyCollectionChanged)allItems).CollectionChanged += OnAllItemsCollectionChanged;
         _selectedItems.CollectionChanged += OnSelectedItemsCollectionChanged;
+    }
+
+    private void Subscribe(T item)
+    {
+        if (_subscribed.Add(item))
+            item.PropertyChanged += OnItemPropertyChanged;
+    }
+
+    private void Unsubscribe(T item)
+    {
+        if (_subscribed.Remove(item))
+            item.PropertyChanged -= OnItemPropertyChanged;
     }
 
     private void OnSelectedItemsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -49,16 +64,17 @@ public sealed class SelectedItemsCollection<T> : ObservableObject, INotifyCollec
     {
         if (e.Action == NotifyCollectionChangedAction.Reset)
         {
-            foreach (var item in _selectedItems)
-                item.PropertyChanged -= OnItemPropertyChanged;
+            foreach (var item in _subscribed.ToArray())
+                Unsubscribe(item);
             
             _selectedItems.Clear();
-            
-            foreach (var item in (ReadOnlyObservableCollection<T>)sender!)
-                item.PropertyChanged += OnItemPropertyChanged;
-            
-            foreach (var item in _allItems.Where(i => i.IsSelected))
-                _selectedItems.Add(item);
+
+            foreach (var item in _allItems)
+            {
+                Subscribe(item);
+                if (item.IsSelected)
+                    _selectedItems.Add(item);
+            }
             
             return;
         }
@@ -70,7 +86,7 @@ public sealed class SelectedItemsCollection<T> : ObservableObject, INotifyCollec
         {
             foreach (T item in e.OldItems)
             {
-                item.PropertyChanged -= OnItemPropertyChanged;
+                Unsubscribe(item);
                 _selectedItems.Remove(item);
             }
         }
@@ -79,9 +95,9 @@ public sealed class SelectedItemsCollection<T> : ObservableObject, INotifyCollec
         {
             foreach (T item in e.NewItems)
             {
-                if (item.IsSelected)
+                Subscribe(item);
+                if (item.IsSelected && !_selectedItems.Contains(item))
                     _selectedItems.Add(item);
-                item.PropertyChanged += OnItemPropertyChanged;
             }
         }
     }
