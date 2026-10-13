@@ -56,8 +56,10 @@
                                 <DataTemplate>
                                     <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
                                         <log:LogLevelIcon Grid.Column="0" 
+                                                          VerticalAlignment="Center"
                                                           Level="{Binding}" />
                                         <TextBlock Grid.Column="1" 
+                                                   VerticalAlignment="Center"
                                                    Text="{Binding}"
                                                    TextTrimming="CharacterEllipsis" />
                                     </Grid>
