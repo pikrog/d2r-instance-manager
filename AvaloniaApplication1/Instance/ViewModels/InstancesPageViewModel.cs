@@ -333,6 +333,16 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
     public override Task OnEnterAsync()
     {
         Refresh();
+        
+        _instanceService.SetAcknowledgingNotifications(true);
+        
+        return Task.CompletedTask;
+    }
+
+    public override Task OnLeaveAsync()
+    {
+        _instanceService.SetAcknowledgingNotifications(false);
+        
         return Task.CompletedTask;
     }
 }

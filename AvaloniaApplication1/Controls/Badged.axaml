@@ -1,0 +1,61 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:AvaloniaApplication1.Controls">
+    <Design.PreviewWith>
+        <Border Width="200">
+            <StackPanel Margin="10 20" Orientation="Vertical">
+                <Border Classes="rounded" Padding="2,16" Background="Transparent">
+                    <StackPanel Orientation="Vertical" Spacing="6">
+                        <controls:Badged Count="5" OverlayOffsetX="-14" OverlayOffsetY="-8">
+                            <Image Height="24" HorizontalAlignment="Center" Source="{SvgImage /Assets/images/play.svg}" />
+                        </controls:Badged>
+                        
+                        <TextBlock HorizontalAlignment="Center">Instances</TextBlock>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+
+    <Style Selector="controls|Badged">
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="BadgeBackground" Value="{DynamicResource DangerContent}" />
+        <Setter Property="BadgeForeground" Value="{DynamicResource PrimaryBackground}" />
+        
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <ContentPresenter Content="{TemplateBinding Content}"
+                                      ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                    
+                    <Canvas HorizontalAlignment="Right" VerticalAlignment="Top" Width="0" Height="0"
+                            IsVisible="{TemplateBinding Count}">
+                        <Border Canvas.Left="{TemplateBinding OverlayOffsetX}" 
+                                Canvas.Top="{TemplateBinding OverlayOffsetY}"
+                                Name="Background"
+                                Background="{TemplateBinding BadgeBackground}"
+                                ToolTip.Tip="{TemplateBinding Count}">
+                            <TextBlock Name="Count" 
+                                       Foreground="{TemplateBinding BadgeForeground}"
+                                       Text="{TemplateBinding Count}" />
+                        </Border>
+                    </Canvas>
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+    
+    <Style Selector="controls|Badged /template/ Border#Background">
+        <Setter Property="CornerRadius" Value="100" /> 
+        <Setter Property="Padding" Value="4 1" />
+        <Setter Property="MinWidth" Value="14" />
+        <Setter Property="MinHeight" Value="14" />
+    </Style>
+    
+    <Style Selector="controls|Badged /template/ TextBlock#Count">
+        <Setter Property="FontSize" Value="8" />
+        <Setter Property="TextAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+</Styles>

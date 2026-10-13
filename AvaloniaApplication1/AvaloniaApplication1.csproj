@@ -127,6 +127,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Validation.resx</DependentUpon>
     </Compile>
+    <Compile Update="Controls\Badged.axaml.cs">
+      <DependentUpon>Badged.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

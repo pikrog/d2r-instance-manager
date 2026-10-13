@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using AvaloniaApplication1.Authentication.Models;
 using AvaloniaApplication1.Config;
@@ -37,7 +38,39 @@ public class InstanceService : IInstanceConfigProvider
     
     public event EventHandler<InstanceConfigChangedEventArgs>? InstanceConfigChanged;
 
+    private readonly Lock _instanceActivityStatesLock = new();
+    
     private readonly Dictionary<Guid, bool> _instanceActivityStates = [];
+
+    private int _cachedActiveCount;
+
+    public int CachedActiveCount
+    {
+        get
+        {
+            lock (_instanceActivityStatesLock)
+                return _cachedActiveCount;
+        }
+    }
+    
+    public event EventHandler<int>? ActiveCountChanged;
+    
+    private readonly Lock _notificationsLock = new();
+    
+    private bool _isAcknowledgingNotifications;
+    
+    private int _unacknowledgedNotificationCount;
+
+    public int UnacknowledgedNotificationCount
+    {
+        get
+        {
+            lock (_notificationsLock)
+                return _unacknowledgedNotificationCount;
+        }
+    }
+    
+    public event EventHandler<int>? NotificationCountChanged;
 
     public InstanceService(ConfigService configService,
         InstanceConfigValidator validator,
@@ -54,19 +87,78 @@ public class InstanceService : IInstanceConfigProvider
         _instanceManager.InstanceStateChanged += OnInstanceStateChanged;
     }
 
+    private static bool HasInstanceFailed(RuntimeSnapshot snapshot) =>
+        snapshot.Errors.Any() || snapshot.ProcessExitResult is not ProcessExitResult.Success;
+
     private void OnInstanceStateChanged(object? sender, RuntimeSnapshot snapshot)
     {
-        var previousActivityState = _instanceActivityStates.GetValueOrDefault(snapshot.Id);
-        _instanceActivityStates[snapshot.Id] = snapshot.IsActive;
+        bool previousActivityState;
+        int? newActiveCount = null;
+        int? newUnacknowledgedCount = null;
+
+        lock (_instanceActivityStatesLock)
+        {
+            previousActivityState = _instanceActivityStates.GetValueOrDefault(snapshot.Id);
+            _instanceActivityStates[snapshot.Id] = snapshot.IsActive;
+
+            if (previousActivityState != snapshot.IsActive)
+            {
+                _cachedActiveCount += snapshot.IsActive ? 1 : -1;
+                newActiveCount = _cachedActiveCount;
+            }
+        }
+
+        lock (_notificationsLock)
+        {
+            if (!_isAcknowledgingNotifications && previousActivityState && !snapshot.IsActive && HasInstanceFailed(snapshot))
+            {
+                _unacknowledgedNotificationCount++;
+                newUnacknowledgedCount = _unacknowledgedNotificationCount;
+            }
+        }
 
         if (previousActivityState && !snapshot.IsActive)
         {
             var instanceName = _instanceNameRegistry.Get(snapshot.Id);
             using var _ = _logger.BeginScope(new Dictionary<string, object?>{{ LogProperties.InstanceName, instanceName }});
-            _logger.LogInformation("Instance stopped");
+            
+            if (HasInstanceFailed(snapshot))
+                _logger.LogError("Instance failed");
+            else
+                _logger.LogInformation("Instance stopped");
         }
 
         InstanceStateChanged?.Invoke(this, snapshot);
+        
+        if (newActiveCount is { } activeCount)
+            ActiveCountChanged?.Invoke(this, activeCount);
+        
+        if (newUnacknowledgedCount is { } unacknowledgedCount)
+            NotificationCountChanged?.Invoke(this, unacknowledgedCount);
+    }
+    
+    public void SetAcknowledgingNotifications(bool isAcknowledging)
+    {
+        var notifyCountChanged = false;
+        
+        lock (_notificationsLock)
+        {
+            if (_isAcknowledgingNotifications == isAcknowledging)
+                return;
+
+            _isAcknowledgingNotifications = isAcknowledging;
+
+            if (!isAcknowledging)
+                return;
+            
+            if (_unacknowledgedNotificationCount != 0)
+                notifyCountChanged = true;
+            
+            _unacknowledgedNotificationCount = 0;
+        }
+        
+        if (notifyCountChanged)
+            NotificationCountChanged?.Invoke(this, 0);
     }
 
     private async Task AddAsync(InstanceSnapshot snapshot)
@@ -125,6 +217,15 @@ public class InstanceService : IInstanceConfigProvider
 
         var eventArgs = new InstanceConfigChangedEventArgs(snapshot.Id, snapshot);
         InstanceConfigChanged?.Invoke(this, eventArgs);
+
+        int? newActiveCount = null;
+        lock (_instanceActivityStatesLock)
+        {
+            if (_instanceActivityStates.Remove(snapshot.Id, out var wasActive) && wasActive)
+                newActiveCount = --_cachedActiveCount;
+        }
+        if (newActiveCount is { } count)
+            ActiveCountChanged?.Invoke(this, count);
     }
 
     public InstanceSnapshot GetConfigSnapshot(Guid id)
@@ -284,7 +385,7 @@ public class InstanceService : IInstanceConfigProvider
         
         await _instanceManager.LaunchAsync(snapshot.Id, engineLaunchContext);
         
-        _logger.LogInformation("Instance launched");
+        _logger.LogInformation("Instance launch requested");
     }
 
     public async Task StopAsync(Guid id) => await _instanceManager.StopAsync(id);
