@@ -11,8 +11,14 @@ using Microsoft.Extensions.Logging;
 
 namespace AvaloniaApplication1.Design.Services;
 
-public class InstanceDesignService(ConfigService configService, InstanceConfigValidator validator, InstanceManager manager, InstanceNameRegistry registry, ILogger<InstanceService> logger) 
-    : InstanceService(configService, validator, manager, registry, logger)
+public class InstanceDesignService(
+    ConfigService configService,
+    InstanceConfigValidator validator,
+    InstanceManager manager,
+    InstanceNameRegistry registry,
+    InstanceLaunchContextFactory factory,
+    ILogger<InstanceService> logger) 
+    : InstanceService(configService, validator, manager, registry, factory, logger)
 {
     public override IReadOnlyList<InstanceSummary> GetSummaries() => [
         new(Guid.NewGuid(), "Main", InstanceStatus.Running, true, []),

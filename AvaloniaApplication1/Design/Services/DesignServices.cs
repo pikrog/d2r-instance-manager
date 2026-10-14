@@ -61,7 +61,7 @@ public static class DesignServices
     private static readonly ProcessStartRequestFactory ProcessStartRequestFactory = new(ArgumentStringBuilder);
     
     private static readonly InstanceEngineFactory InstanceEngineFactory = 
-        new(LaunchCoordinator, ProcessStartRequestFactory, new NullLoggerFactory());
+        new(LaunchCoordinator, ProcessStartRequestFactory, NullLoggerFactory.Instance);
     
     private static readonly InstanceManager InstanceManager = new(InstanceEngineFactory);
 
@@ -76,13 +76,17 @@ public static class DesignServices
     
     public static readonly PageHost PageHost = new();
     
+    private static readonly InstanceLaunchContextFactory InstanceLaunchContextFactory = new(ConfigService, 
+        NullLogger<InstanceLaunchContextFactory>.Instance);
+    
     public static InstanceService InstanceService { get; } = 
         new InstanceDesignService(
             ConfigService,
             InstanceConfigValidator,
             InstanceManager, 
-            InstanceNameRegistry, 
-            new NullLogger<InstanceService>());
+            InstanceNameRegistry,
+            InstanceLaunchContextFactory,
+            NullLogger<InstanceService>.Instance);
 
     public static readonly IInstancePresenter InstancePresenter = new InstanceDesignPresenter(InstanceService);
     

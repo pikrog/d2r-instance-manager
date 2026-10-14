@@ -14,7 +14,7 @@ public class LogsPageDesignViewModel : LogsPageViewModel
         },
         DesignServices.LogService,
         DesignServices.InstanceService,
-        new NullLogger<LogsPageViewModel>())
+        NullLogger<LogsPageDesignViewModel>.Instance)
     {
         Level = LogLevel.Verbose;
         

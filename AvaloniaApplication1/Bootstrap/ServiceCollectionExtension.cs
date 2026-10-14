@@ -69,6 +69,8 @@ public static class ServiceCollectionExtension
             services.AddSingleton<IInstanceConfigProvider>(sp => sp.GetRequiredService<InstanceService>());
             services.AddSingleton<GlobalSettingsService>();
             services.AddSingleton<DisplayService>();
+            
+            services.AddSingleton<InstanceLaunchContextFactory>();
 
             services.AddSingleton<IInstancePresenter, InstancePresenter>();
             
@@ -88,7 +90,7 @@ public static class ServiceCollectionExtension
             services.AddTransient<LogsPageViewModel>();
             services.AddTransient<GlobalSettingsPageViewModel>();
             
-            services.AddSingleton<EditInstanceFormViewModelFactory>(); // transient or singleton?
+            services.AddSingleton<EditInstanceFormViewModelFactory>();
             
             services.AddSingleton<PageHost>();
             services.AddSingleton<IPageHost>(sp => sp.GetRequiredService<PageHost>());

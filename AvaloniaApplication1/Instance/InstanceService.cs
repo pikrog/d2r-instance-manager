@@ -3,17 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AvaloniaApplication1.Authentication.Models;
 using AvaloniaApplication1.Config;
-using AvaloniaApplication1.Display;
 using AvaloniaApplication1.Engine;
 using AvaloniaApplication1.Engine.Common;
-using AvaloniaApplication1.Engine.Helpers.ProcessStop;
 using AvaloniaApplication1.Engine.Models;
-using AvaloniaApplication1.Engine.Models.Contexts.Launch;
 using AvaloniaApplication1.Engine.Models.StateMachine;
-using AvaloniaApplication1.GameExecutable;
-using AvaloniaApplication1.GlobalSettings;
 using AvaloniaApplication1.Instance.Models;
 using AvaloniaApplication1.Instance.Models.EventArgs;
 using AvaloniaApplication1.Log;
@@ -31,6 +25,8 @@ public class InstanceService : IInstanceConfigProvider
     private readonly InstanceManager _instanceManager;
 
     private readonly InstanceNameRegistry _instanceNameRegistry;
+    
+    private readonly InstanceLaunchContextFactory _launchContextFactory;
 
     private readonly ILogger<InstanceService> _logger;
 
@@ -76,12 +72,14 @@ public class InstanceService : IInstanceConfigProvider
         InstanceConfigValidator validator,
         InstanceManager instanceManager,
         InstanceNameRegistry instanceNameRegistry,
+        InstanceLaunchContextFactory launchContextFactory,
         ILogger<InstanceService> logger)
     {
         _configService = configService;
         _validator = validator;
         _instanceManager = instanceManager;
         _instanceNameRegistry = instanceNameRegistry;
+        _launchContextFactory = launchContextFactory;
         _logger = logger;
 
         _instanceManager.InstanceStateChanged += OnInstanceStateChanged;
@@ -268,124 +266,22 @@ public class InstanceService : IInstanceConfigProvider
     }
 
     public Task<int> GetActiveCountAsync() => _instanceManager.GetActiveCountAsync();
-    
-    private AuthenticationContext GetAuthenticationContext(InstanceSnapshot instance)
+
+    public async Task<InstanceLaunchFailure?> LaunchAsync(Guid id)
     {
-        if (!instance.IsOnlineMode)
-            return new OfflineAuthenticationContext();
-
-        var account = _configService.Config.GetAccount(instance.AccountId!.Value);
-        var region = _configService.Config.GetRegion(instance.RegionId!.Value);
-
-        return instance.AuthenticationMethod switch
-        {
-            AuthenticationMethod.CommandLineArguments => new CliAuthenticationContext(account.Username, account.Password, region.Address),
-            AuthenticationMethod.OsiTokenRegistry => new OsiAuthenticationContext(region.Address),
-            _ => throw new InvalidOperationException($"Unknown authentication method {instance.AuthenticationMethod}")
-        };
-    }
-    
-    private EnginePolicies CreateEnginePolicies(GlobalSettingsSnapshot settings)
-    {
-        var multiboxRetry = new RetryPolicy(
-            TimeSpan.FromMilliseconds(settings.UnlockMultiboxRetryDelayMs),
-            settings.UnlockMultiboxMaxRetries);
-
-        var gracefulStopRetry = new RetryPolicy(
-            TimeSpan.FromMilliseconds(settings.GracefulInstanceCloseTimeoutMs),
-            settings.GracefulInstanceCloseRetries);
-
-        return new EnginePolicies(
-            multiboxRetry,
-            new ProcessStopPolicies(gracefulStopRetry, TimeSpan.FromMilliseconds(settings.ForcefulInstanceCloseTimeoutMs))
-        );
-    }
-
-    private bool ValidateGameExecutableFile(string path)
-    {
-        var fileValidationResult = GameExecutableFileValidator.Validate(path);
-
-        if (fileValidationResult.FileMetadata is { } d)
-        {
-            _logger.LogTrace(
-                """
-                File metadata: 
-                    Company Name={CompanyName}, 
-                    Product Name={ProductName}, 
-                    Description={Description}, 
-                    Version={Version}
-                """,
-                d.CompanyName,
-                d.ProductName,
-                d.Description,
-                d.Version);
-        }
-
-        switch (fileValidationResult.Code)
-        {
-            case GameExecutableFileValidator.ValidateResultCode.Ok:
-                return true;
-            case GameExecutableFileValidator.ValidateResultCode.MissingPath:
-                _logger.LogError("The game executable path is missing");
-                return false;
-            case GameExecutableFileValidator.ValidateResultCode.FileNotFound:
-                _logger.LogError("The game executable file was not found: {GameExecutablePath}", path);
-                return false;
-            case GameExecutableFileValidator.ValidateResultCode.InvalidExecutableFormat:
-                _logger.LogError("The game executable file has an invalid format: {GameExecutablePath}", path);
-                return false;
-            case GameExecutableFileValidator.ValidateResultCode.UnrecognizedExecutable:
-                _logger.LogWarning("The executable was found but its metadata does not match the expected game");
-                return true;
-            default:
-                throw new InvalidOperationException($"Unknown game executable file validation result {fileValidationResult}");
-        }
-    }
-
-    public async Task LaunchAsync(Guid id)
-    {
-        var settings = _configService.Config.GetGlobalSettings();
-        
         var snapshot = GetConfigSnapshot(id);
-        var authenticationContext = GetAuthenticationContext(snapshot);
 
-        using var _ = _logger.BeginScope(new Dictionary<string, object> {{ LogProperties.InstanceName, snapshot.Name }});
-        
-        var displayResolution = DisplayResolver.ResolveDisplayId(snapshot.Display, settings.FallbackToPrimaryDisplayIfInvalid);
-        if (displayResolution is not { Id: var displayId, IsFallback: var isFallback })
-            return; // todo: return error
+        using var _ = _logger.BeginScope(new Dictionary<string, object> { { LogProperties.InstanceName, snapshot.Name } });
 
-        if (isFallback)
-        {
-            var cachedDisplay = _configService.Config.GetCachedDisplay(displayId);
-            var displayDescription = $"{cachedDisplay.Description} [{cachedDisplay.Width}x{cachedDisplay.Height}]";
-            _logger.LogWarning(
-                "Display {DisplayDescription} selected for this instance is not available, falling back to primary display",
-                displayDescription);
-        }
-        
-        var executablePath = settings.GameExecutablePath;
-        
-        _logger.LogTrace("Executable path: {GameExecutablePath}", executablePath);
-        
-        if (!ValidateGameExecutableFile(executablePath))
-            return; // todo: return error
-        
-        var instanceLaunchContext = new InstanceLaunchContext(
-            executablePath,
-            authenticationContext,
-            displayId,
-            snapshot.IsNoSound,
-            snapshot.IsWindowedMode
-        );
-        
-        var enginePolicies = CreateEnginePolicies(settings);
-        
-        var engineLaunchContext = new EngineLaunchContext(instanceLaunchContext, enginePolicies);
-        
-        await _instanceManager.LaunchAsync(snapshot.Id, engineLaunchContext);
+        var preparation = _launchContextFactory.Create(snapshot);
+        if (!preparation.IsSuccess)
+            return preparation.Error;
+
+        await _instanceManager.LaunchAsync(snapshot.Id, preparation.Value);
         
         _logger.LogInformation("Instance launch requested");
+
+        return null;
     }
 
     public async Task StopAsync(Guid id) => await _instanceManager.StopAsync(id);
