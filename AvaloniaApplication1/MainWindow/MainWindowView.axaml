@@ -42,6 +42,11 @@
         <Style Selector="TextBlock.status">
             <Setter Property="FontSize" Value="11" />
         </Style>
+        
+        <Style Selector="controls|NavTab.logs /template/ controls|Badged">
+            <Setter Property="OverlayOffsetX" Value="-8" />
+            <Setter Property="OverlayOffsetY" Value="-5" />
+        </Style>
     </Window.Styles>
     
     <Design.DataContext>
@@ -126,12 +131,14 @@
                                                             ConverterParameter={x:Type region:RegionsPageViewModel}}">
                                     Regions
                                 </controls:NavTab>
-                                <controls:NavTab Icon="{SvgImage /Assets/images/book.svg}"
+                                <controls:NavTab Classes="logs"
+                                                 Icon="{SvgImage /Assets/images/book.svg}"
                                                  Command="{Binding SetPageCommand}" 
                                                  CommandParameter="{x:Type logs:LogsPageViewModel}"
                                                  IsActive="{Binding PageHost.CurrentPage,
                                                             Converter={StaticResource IsPageTypeConverter}, 
-                                                            ConverterParameter={x:Type logs:LogsPageViewModel}}">
+                                                            ConverterParameter={x:Type logs:LogsPageViewModel}}"
+                                                 BadgeCount="{Binding LogsNotificationCount}">
                                     Logs
                                 </controls:NavTab>
                                 <controls:NavTab Icon="{SvgImage /Assets/images/settings.svg}" 

@@ -29,9 +29,14 @@ public partial class MainWindowViewModel : ViewModelBase, IDialogParticipant
     private readonly InstanceService _instanceService;
     
     private readonly INotificationSource _instancesNotificationSource;
+    
+    private readonly INotificationSource _logsNotificationSource;
 
     [ObservableProperty]
     public partial int InstancesNotificationCount { get; private set; }
+    
+    [ObservableProperty]
+    public partial int LogsNotificationCount { get; private set; }
     
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsSingleInstanceActive), nameof(AreMultipleInstancesActive))]
@@ -46,21 +51,25 @@ public partial class MainWindowViewModel : ViewModelBase, IDialogParticipant
         IOverlayHost overlayHost,
         OverlayService overlayService,
         InstanceService instanceService,
-        [FromKeyedServices(NotificationCounterKey.Instances)] INotificationSource instancesNotificationSource)
+        [FromKeyedServices(NotificationCounterKey.Instances)] INotificationSource instancesNotificationSource,
+        [FromKeyedServices(NotificationCounterKey.Logs)] INotificationSource logsNotificationSource)
     {
         _navigationService = navigationService;
         _overlayService = overlayService;
         _instanceService = instanceService;
         _instancesNotificationSource = instancesNotificationSource;
+        _logsNotificationSource = logsNotificationSource;
         
         PageHost = pageHost;
         OverlayHost = overlayHost;
 
         _instanceService.ActiveCountChanged += (_, _) => Dispatcher.UIThread.Post(UpdateActiveInstancesCount);
         _instancesNotificationSource.CountChanged += (_, _) => Dispatcher.UIThread.Post(UpdateInstancesNotificationCount);
+        _logsNotificationSource.CountChanged += (_, _) => Dispatcher.UIThread.Post(UpdateLogsNotificationCount);
         
         UpdateActiveInstancesCount();
         UpdateInstancesNotificationCount();
+        UpdateLogsNotificationCount();
     }
 
     private void UpdateActiveInstancesCount()
@@ -71,6 +80,11 @@ public partial class MainWindowViewModel : ViewModelBase, IDialogParticipant
     private void UpdateInstancesNotificationCount()
     {
         InstancesNotificationCount = _instancesNotificationSource.Count;
+    }
+
+    private void UpdateLogsNotificationCount()
+    {
+        LogsNotificationCount = _logsNotificationSource.Count;
     }
 
     public async Task SetupAsync() => await _navigationService.NavigateAsync<InstancesPageViewModel>();

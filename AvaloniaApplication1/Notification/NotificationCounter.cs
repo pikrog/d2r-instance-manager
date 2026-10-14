@@ -3,13 +3,13 @@ using System.Threading;
 
 namespace AvaloniaApplication1.Notification;
 
-public class NotificationCounter : INotificationSource, INotificationSink, INotificationAcknowledger
+public class NotificationCounter(int initialCount = 0) : INotificationSource, INotificationSink, INotificationAcknowledger
 {
     private readonly Lock _gate = new();
 
     private bool _isAcknowledging;
 
-    private int _count;
+    private int _count = initialCount;
 
     public int Count
     {

@@ -105,6 +105,8 @@ public static class DesignServices
     
     public static readonly ILogStoreReader LogStore = new FakeLogStore();
     
+    public static readonly NotificationCounter LogNotificationCounter = new(2);
+    
     public static readonly LogService LogService = new();
     
     static DesignServices()

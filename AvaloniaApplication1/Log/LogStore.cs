@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using AvaloniaApplication1.Notification;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AvaloniaApplication1.Log;
 
-public sealed class LogStore : ILogStoreReader, ILogStoreWriter
+public sealed class LogStore(
+    [FromKeyedServices(NotificationCounterKey.Logs)] INotificationSink notificationSink) 
+    : ILogStoreReader, ILogStoreWriter
 {
     private sealed class SubscriptionHandle(LogStore store, Action<LogEntry> onNewEntry) : IDisposable
     {
@@ -58,6 +62,9 @@ public sealed class LogStore : ILogStoreReader, ILogStoreWriter
             
             _entries.Add(logEntry);
         }
+        
+        if (logEntry.Level == LogLevel.Error)
+            notificationSink.Increment();
         
         foreach (var subscriber in subscribers)
             subscriber(logEntry);

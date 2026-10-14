@@ -37,6 +37,7 @@ public static class ServiceCollectionExtension
             services.AddSingleton(bundle.LogSettings);
             services.AddSingleton(bundle.InstanceNameRegistry);
             services.AddSingleton<ILogService, LogService>();
+            services.AddNotificationCounter(NotificationCounterKey.Logs, bundle.NotificationCounter);
             services.AddLogging(builder => builder.AddSerilog(bundle.Logger, dispose: true));
         }
         
@@ -63,9 +64,12 @@ public static class ServiceCollectionExtension
         private static NotificationCounter GetNotificationCounter(IServiceProvider serviceProvider, object? key) =>
             serviceProvider.GetRequiredKeyedService<NotificationCounter>(key);
         
-        private void AddNotificationCounter(NotificationCounterKey key)
+        private void AddNotificationCounter(NotificationCounterKey key, NotificationCounter? counter = null)
         {
-            services.AddKeyedSingleton<NotificationCounter>(key);
+            if (counter is null)
+                services.AddKeyedSingleton<NotificationCounter>(key);
+            else
+                services.AddKeyedSingleton(key, counter);
             
             services.AddKeyedSingleton<INotificationAcknowledger>(key, GetNotificationCounter);
             services.AddKeyedSingleton<INotificationSink>(key, GetNotificationCounter);
@@ -87,7 +91,6 @@ public static class ServiceCollectionExtension
             services.AddSingleton<InstanceLaunchContextFactory>();
 
             services.AddNotificationCounter(NotificationCounterKey.Instances);
-            services.AddNotificationCounter(NotificationCounterKey.Logs);
 
             services.AddSingleton<IInstancePresenter, InstancePresenter>();
             

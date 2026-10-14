@@ -1,5 +1,6 @@
 ﻿using AvaloniaApplication1.Log;
 using AvaloniaApplication1.Log.Instance;
+using AvaloniaApplication1.Notification;
 using Serilog;
 using Serilog.Templates;
 
@@ -22,8 +23,10 @@ public static class LoggingBootstrapper
     public static CoreLoggingServicesBundle Bootstrap(LogEnvironment logEnvironment, LogSettings logSettings)
     {
         var minimumLogLevel = LogEventLevelMapper.Map(logSettings.MinimumLevel);
+
+        var notificationCounter = new NotificationCounter();
         
-        var logStore = new LogStore();
+        var logStore = new LogStore(notificationCounter);
         
         var instanceNameRegistry = new InstanceNameRegistry();
         var instanceNameEnricher = new InstanceNameEnricher(instanceNameRegistry);
@@ -42,6 +45,6 @@ public static class LoggingBootstrapper
 
         Serilog.Log.Logger = logger;
 
-        return new CoreLoggingServicesBundle(logger, logStore, instanceNameRegistry, logSettings);
+        return new CoreLoggingServicesBundle(logger, logStore, instanceNameRegistry, logSettings, notificationCounter);
     }
 }

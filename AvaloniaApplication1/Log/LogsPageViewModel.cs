@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 using Avalonia.Threading;
 using AvaloniaApplication1.Instance;
 using AvaloniaApplication1.Navigation;
+using AvaloniaApplication1.Notification;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData.Binding;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace AvaloniaApplication1.Log;
@@ -21,6 +23,8 @@ public partial class LogsPageViewModel : PageViewModel
     private readonly IInstanceConfigProvider _instanceConfigProvider;
     
     private readonly ILogService _logService;
+    
+    private readonly INotificationAcknowledger _notificationAcknowledger;
     
     private readonly ILogger<LogsPageViewModel> _logger;
     
@@ -59,11 +63,13 @@ public partial class LogsPageViewModel : PageViewModel
         LogSettings logSettings,
         ILogService logService,
         IInstanceConfigProvider instanceConfigProvider,
+        [FromKeyedServices(NotificationCounterKey.Logs)] INotificationAcknowledger notificationAcknowledger,
         ILogger<LogsPageViewModel> logger)
     {
         _store = store;
         _instanceConfigProvider = instanceConfigProvider;
         _logService = logService;
+        _notificationAcknowledger = notificationAcknowledger;
         _logger = logger;
         
         FilteredEntries = new ReadOnlyObservableCollection<LogEntry>(_filteredEntries);
@@ -240,11 +246,15 @@ public partial class LogsPageViewModel : PageViewModel
         
         SubscribeAndFetchLogs();
         
+        _notificationAcknowledger.SetAcknowledgingNotifications(true);
+        
         return Task.CompletedTask;
     }
 
     public override Task OnLeaveAsync()
     {
+        _notificationAcknowledger.SetAcknowledgingNotifications(false);
+        
         _subscriptionHandle?.Dispose();
         _subscriptionHandle = null;
         
