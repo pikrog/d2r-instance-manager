@@ -13,11 +13,13 @@ using AvaloniaApplication1.GlobalSettings.Issues;
 using AvaloniaApplication1.Instance.Models;
 using AvaloniaApplication1.Instance.Models.EventArgs;
 using AvaloniaApplication1.Navigation;
+using AvaloniaApplication1.Notification;
 using AvaloniaApplication1.Overlay;
 using AvaloniaApplication1.Selectable;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AvaloniaApplication1.Instance.ViewModels;
 
@@ -34,6 +36,8 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
     private readonly NavigationService _navigationService;
 
     private readonly EditInstanceFormViewModelFactory _formFactory;
+    
+    private readonly INotificationAcknowledger _notificationAcknowledger;
 
     private readonly ObservableCollection<InstanceItemViewModel> _instances = [];
     
@@ -54,7 +58,8 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         GlobalSettingsValidator globalSettingsValidator,
         OverlayService overlayService,
         NavigationService navigationService,
-        EditInstanceFormViewModelFactory formFactory)
+        EditInstanceFormViewModelFactory formFactory,
+        [FromKeyedServices(NotificationCounterKey.Instances)] INotificationAcknowledger notificationAcknowledger)
     {
         _instanceService = instanceService;
         _instancePresenter = instancePresenter;
@@ -62,6 +67,7 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         _overlayService = overlayService;
         _navigationService = navigationService;
         _formFactory = formFactory;
+        _notificationAcknowledger = notificationAcknowledger;
         
         Instances = new ReadOnlyObservableCollection<InstanceItemViewModel>(_instances);
         
@@ -334,14 +340,14 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
     {
         Refresh();
         
-        _instanceService.SetAcknowledgingNotifications(true);
+        _notificationAcknowledger.SetAcknowledgingNotifications(true);
         
         return Task.CompletedTask;
     }
 
     public override Task OnLeaveAsync()
     {
-        _instanceService.SetAcknowledgingNotifications(false);
+        _notificationAcknowledger.SetAcknowledgingNotifications(false);
         
         return Task.CompletedTask;
     }

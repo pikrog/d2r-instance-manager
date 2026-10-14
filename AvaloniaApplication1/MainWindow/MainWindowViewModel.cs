@@ -6,11 +6,13 @@ using AvaloniaApplication1.Dialog;
 using AvaloniaApplication1.Instance;
 using AvaloniaApplication1.Instance.ViewModels;
 using AvaloniaApplication1.Navigation;
+using AvaloniaApplication1.Notification;
 using AvaloniaApplication1.Overlay;
 using AvaloniaApplication1.Overlay.Dialog.ShutdownProgress;
 using AvaloniaApplication1.Overlay.Dialog.StopInstances;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AvaloniaApplication1.MainWindow;
 
@@ -25,6 +27,8 @@ public partial class MainWindowViewModel : ViewModelBase, IDialogParticipant
     private readonly OverlayService _overlayService;
     
     private readonly InstanceService _instanceService;
+    
+    private readonly INotificationSource _instancesNotificationSource;
 
     [ObservableProperty]
     public partial int InstancesNotificationCount { get; private set; }
@@ -41,17 +45,19 @@ public partial class MainWindowViewModel : ViewModelBase, IDialogParticipant
         NavigationService navigationService,
         IOverlayHost overlayHost,
         OverlayService overlayService,
-        InstanceService instanceService)
+        InstanceService instanceService,
+        [FromKeyedServices(NotificationCounterKey.Instances)] INotificationSource instancesNotificationSource)
     {
         _navigationService = navigationService;
         _overlayService = overlayService;
         _instanceService = instanceService;
+        _instancesNotificationSource = instancesNotificationSource;
         
         PageHost = pageHost;
         OverlayHost = overlayHost;
 
         _instanceService.ActiveCountChanged += (_, _) => Dispatcher.UIThread.Post(UpdateActiveInstancesCount);
-        _instanceService.NotificationCountChanged += (_, _) => Dispatcher.UIThread.Post(UpdateInstancesNotificationCount);
+        _instancesNotificationSource.CountChanged += (_, _) => Dispatcher.UIThread.Post(UpdateInstancesNotificationCount);
         
         UpdateActiveInstancesCount();
         UpdateInstancesNotificationCount();
@@ -64,7 +70,7 @@ public partial class MainWindowViewModel : ViewModelBase, IDialogParticipant
 
     private void UpdateInstancesNotificationCount()
     {
-        InstancesNotificationCount = _instanceService.UnacknowledgedNotificationCount;
+        InstancesNotificationCount = _instancesNotificationSource.Count;
     }
 
     public async Task SetupAsync() => await _navigationService.NavigateAsync<InstancesPageViewModel>();

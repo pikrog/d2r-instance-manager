@@ -9,7 +9,8 @@ public class MainWindowDesignViewModel : MainWindowViewModel
         DesignServices.NavigationService,
         DesignServices.OverlayHost,
         DesignServices.OverlayService,
-        DesignServices.InstanceService)
+        DesignServices.InstanceService,
+        DesignServices.InstanceNotificationCounter)
     {
         SetupAsync().GetAwaiter().GetResult();
     }

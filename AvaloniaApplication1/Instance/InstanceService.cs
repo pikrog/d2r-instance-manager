@@ -12,6 +12,8 @@ using AvaloniaApplication1.Instance.Models;
 using AvaloniaApplication1.Instance.Models.EventArgs;
 using AvaloniaApplication1.Log;
 using AvaloniaApplication1.Log.Instance;
+using AvaloniaApplication1.Notification;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace AvaloniaApplication1.Instance;
@@ -27,6 +29,8 @@ public class InstanceService : IInstanceConfigProvider
     private readonly InstanceNameRegistry _instanceNameRegistry;
     
     private readonly InstanceLaunchContextFactory _launchContextFactory;
+    
+    private readonly INotificationSink _notificationSink;
 
     private readonly ILogger<InstanceService> _logger;
 
@@ -50,29 +54,13 @@ public class InstanceService : IInstanceConfigProvider
     }
     
     public event EventHandler<int>? ActiveCountChanged;
-    
-    private readonly Lock _notificationsLock = new();
-    
-    private bool _isAcknowledgingNotifications;
-    
-    private int _unacknowledgedNotificationCount;
-
-    public int UnacknowledgedNotificationCount
-    {
-        get
-        {
-            lock (_notificationsLock)
-                return _unacknowledgedNotificationCount;
-        }
-    }
-    
-    public event EventHandler<int>? NotificationCountChanged;
 
     public InstanceService(ConfigService configService,
         InstanceConfigValidator validator,
         InstanceManager instanceManager,
         InstanceNameRegistry instanceNameRegistry,
         InstanceLaunchContextFactory launchContextFactory,
+        [FromKeyedServices(NotificationCounterKey.Instances)] INotificationSink notificationSink,
         ILogger<InstanceService> logger)
     {
         _configService = configService;
@@ -80,6 +68,7 @@ public class InstanceService : IInstanceConfigProvider
         _instanceManager = instanceManager;
         _instanceNameRegistry = instanceNameRegistry;
         _launchContextFactory = launchContextFactory;
+        _notificationSink = notificationSink;
         _logger = logger;
 
         _instanceManager.InstanceStateChanged += OnInstanceStateChanged;
@@ -92,7 +81,6 @@ public class InstanceService : IInstanceConfigProvider
     {
         bool previousActivityState;
         int? newActiveCount = null;
-        int? newUnacknowledgedCount = null;
 
         lock (_instanceActivityStatesLock)
         {
@@ -106,14 +94,8 @@ public class InstanceService : IInstanceConfigProvider
             }
         }
 
-        lock (_notificationsLock)
-        {
-            if (!_isAcknowledgingNotifications && previousActivityState && !snapshot.IsActive && HasInstanceFailed(snapshot))
-            {
-                _unacknowledgedNotificationCount++;
-                newUnacknowledgedCount = _unacknowledgedNotificationCount;
-            }
-        }
+        if (previousActivityState && !snapshot.IsActive && HasInstanceFailed(snapshot))
+            _notificationSink.Increment();
 
         if (previousActivityState && !snapshot.IsActive)
         {
@@ -130,33 +112,6 @@ public class InstanceService : IInstanceConfigProvider
         
         if (newActiveCount is { } activeCount)
             ActiveCountChanged?.Invoke(this, activeCount);
-        
-        if (newUnacknowledgedCount is { } unacknowledgedCount)
-            NotificationCountChanged?.Invoke(this, unacknowledgedCount);
-    }
-    
-    public void SetAcknowledgingNotifications(bool isAcknowledging)
-    {
-        var notifyCountChanged = false;
-        
-        lock (_notificationsLock)
-        {
-            if (_isAcknowledgingNotifications == isAcknowledging)
-                return;
-
-            _isAcknowledgingNotifications = isAcknowledging;
-
-            if (!isAcknowledging)
-                return;
-            
-            if (_unacknowledgedNotificationCount != 0)
-                notifyCountChanged = true;
-            
-            _unacknowledgedNotificationCount = 0;
-        }
-        
-        if (notifyCountChanged)
-            NotificationCountChanged?.Invoke(this, 0);
     }
 
     private async Task AddAsync(InstanceSnapshot snapshot)

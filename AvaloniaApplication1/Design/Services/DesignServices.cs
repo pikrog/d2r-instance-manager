@@ -18,6 +18,7 @@ using AvaloniaApplication1.Instance.ViewModels;
 using AvaloniaApplication1.Log;
 using AvaloniaApplication1.Log.Instance;
 using AvaloniaApplication1.Navigation;
+using AvaloniaApplication1.Notification;
 using AvaloniaApplication1.Overlay;
 using AvaloniaApplication1.Region;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -78,6 +79,8 @@ public static class DesignServices
     
     private static readonly InstanceLaunchContextFactory InstanceLaunchContextFactory = new(ConfigService, 
         NullLogger<InstanceLaunchContextFactory>.Instance);
+
+    public static readonly NotificationCounter InstanceNotificationCounter = new();
     
     public static InstanceService InstanceService { get; } = 
         new InstanceDesignService(
@@ -86,6 +89,7 @@ public static class DesignServices
             InstanceManager, 
             InstanceNameRegistry,
             InstanceLaunchContextFactory,
+            InstanceNotificationCounter,
             NullLogger<InstanceService>.Instance);
 
     public static readonly IInstancePresenter InstancePresenter = new InstanceDesignPresenter(InstanceService);

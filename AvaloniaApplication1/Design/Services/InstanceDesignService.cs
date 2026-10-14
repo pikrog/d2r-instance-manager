@@ -7,6 +7,7 @@ using AvaloniaApplication1.Instance;
 using AvaloniaApplication1.Instance.Models;
 using AvaloniaApplication1.Instance.Models.Issues;
 using AvaloniaApplication1.Log.Instance;
+using AvaloniaApplication1.Notification;
 using Microsoft.Extensions.Logging;
 
 namespace AvaloniaApplication1.Design.Services;
@@ -17,8 +18,9 @@ public class InstanceDesignService(
     InstanceManager manager,
     InstanceNameRegistry registry,
     InstanceLaunchContextFactory factory,
+    INotificationSink notificationSink,
     ILogger<InstanceService> logger) 
-    : InstanceService(configService, validator, manager, registry, factory, logger)
+    : InstanceService(configService, validator, manager, registry, factory, notificationSink, logger)
 {
     public override IReadOnlyList<InstanceSummary> GetSummaries() => [
         new(Guid.NewGuid(), "Main", InstanceStatus.Running, true, []),

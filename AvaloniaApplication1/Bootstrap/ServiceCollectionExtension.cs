@@ -1,4 +1,5 @@
-﻿using AvaloniaApplication1.Account;
+﻿using System;
+using AvaloniaApplication1.Account;
 using AvaloniaApplication1.Account.ViewModels;
 using AvaloniaApplication1.Config;
 using AvaloniaApplication1.Display;
@@ -16,6 +17,7 @@ using AvaloniaApplication1.Instance.ViewModels;
 using AvaloniaApplication1.Log;
 using AvaloniaApplication1.MainWindow;
 using AvaloniaApplication1.Navigation;
+using AvaloniaApplication1.Notification;
 using AvaloniaApplication1.Overlay;
 using AvaloniaApplication1.Region;
 using AvaloniaApplication1.Region.ViewModels;
@@ -58,6 +60,18 @@ public static class ServiceCollectionExtension
             services.AddSingleton<InstanceManager>();
         }
 
+        private static NotificationCounter GetNotificationCounter(IServiceProvider serviceProvider, object? key) =>
+            serviceProvider.GetRequiredKeyedService<NotificationCounter>(key);
+        
+        private void AddNotificationCounter(NotificationCounterKey key)
+        {
+            services.AddKeyedSingleton<NotificationCounter>(key);
+            
+            services.AddKeyedSingleton<INotificationAcknowledger>(key, GetNotificationCounter);
+            services.AddKeyedSingleton<INotificationSink>(key, GetNotificationCounter);
+            services.AddKeyedSingleton<INotificationSource>(key, GetNotificationCounter);
+        }
+        
         public void AddApplicationServices()
         {
             services.AddSingleton<InstanceConfigValidator>();
@@ -71,6 +85,9 @@ public static class ServiceCollectionExtension
             services.AddSingleton<DisplayService>();
             
             services.AddSingleton<InstanceLaunchContextFactory>();
+
+            services.AddNotificationCounter(NotificationCounterKey.Instances);
+            services.AddNotificationCounter(NotificationCounterKey.Logs);
 
             services.AddSingleton<IInstancePresenter, InstancePresenter>();
             
