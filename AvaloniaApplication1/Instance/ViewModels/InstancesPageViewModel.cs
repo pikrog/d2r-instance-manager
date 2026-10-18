@@ -213,13 +213,14 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
             DisplaySelectionMapper.Map(form.SelectedDisplay),
             form.IsNoSound,
             form.IsWindowedMode, 
-            form.ShowCommandHotKey
+            form.ShowCommandHotKey,
+            (form.SelectedDisplay as DisplayOption.Specific)?.Snapshot
         );
     }
     
     private async Task CoreEdit(InstanceSnapshot? snapshot = null)
     {
-        var form = await _formFactory.CreateAsync(snapshot);
+        var form = _formFactory.Create(snapshot);
         var okPressed = await this.OpenForm(form);
         if (!okPressed)
             return;

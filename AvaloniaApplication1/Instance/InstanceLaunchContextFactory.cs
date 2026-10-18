@@ -72,7 +72,7 @@ public class InstanceLaunchContextFactory(
 
     private void LogDisplayFallback(string displayId)
     {
-        var cached = configService.Config.GetCachedDisplay(displayId);
+        var cached = configService.Config.GetDisplay(displayId);
         logger.LogWarning(
             "Display {DisplayDescription} selected for this instance is not available, falling back to primary display",
             $"{cached.Description} [{cached.Width}x{cached.Height}]");

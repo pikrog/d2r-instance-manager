@@ -15,25 +15,25 @@ public class EditInstanceFormViewModelFactory(
     DisplayService displayService
     )
 {
-    public Task<EditInstanceFormViewModel> CreateAsync(InstanceSnapshot? snapshot) => 
+    public EditInstanceFormViewModel Create(InstanceSnapshot? snapshot) => 
         snapshot is null ? CreateNew() : CreateEdit(snapshot);
 
-    private async Task<EditInstanceFormViewModel> CreateNew()
+    private EditInstanceFormViewModel CreateNew()
     {
         var accountOptions = accountService.GetOptions();
         var regionOptions = regionService.GetOptions();
-        var displayOptions = await displayService.GetOptionsAsync();
+        var displayOptions = displayService.GetOptions();
         return new EditInstanceFormViewModel(hotKeyConfigValidator, accountOptions, regionOptions, displayOptions)
         {
             SelectedDisplay = displayOptions[0]
         };
     }
 
-    private async Task<EditInstanceFormViewModel> CreateEdit(InstanceSnapshot snapshot)
+    private EditInstanceFormViewModel CreateEdit(InstanceSnapshot snapshot)
     {
         var accountOptions = accountService.GetOptions();
         var regionOptions = regionService.GetOptions();
-        var displayOptions = await displayService.GetOptionsAsync(snapshot.Display as DisplaySelection.Specific);
+        var displayOptions = displayService.GetOptions(snapshot.Display as DisplaySelection.Specific);
         
         var selectedAccount = accountOptions.SingleOrDefault(x => x.Id == snapshot.AccountId);
         var selectedRegion = regionOptions.SingleOrDefault(x => x.Id == snapshot.RegionId);

@@ -15,5 +15,6 @@ public record InstanceDraft(
     DisplaySelection Display,
     bool IsNoSound,
     bool IsWindowedMode,
-    KeyCombination ShowCommandHotKey
+    KeyCombination ShowCommandHotKey,
+    DisplaySnapshot? DisplaySnapshotToCache
     );

@@ -24,8 +24,8 @@ public class EditInstanceFormDesignViewModel : EditInstanceFormViewModel
     ],
     [
         new DisplayOption.Primary(),
-        new DisplayOption.Specific(1, "FAKE_DISPLAY_ID_1", "MSI X01", 1920, 1080, true),
-        new DisplayOption.Specific(2, "FAKE_DISPLAY_ID_2", "LG Y02", 1440, 900, true)
+        new DisplayOption.Specific(1, new DisplaySnapshot("FAKE_DISPLAY_ID_1", "MSI X01", 1920, 1080), true),
+        new DisplayOption.Specific(2, new DisplaySnapshot("FAKE_DISPLAY_ID_2", "LG Y02", 1440, 900), true)
     ])
     {
         Name = "Hammer";

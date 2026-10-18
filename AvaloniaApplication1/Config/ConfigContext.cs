@@ -145,13 +145,13 @@ public class ConfigContext(AppConfig appConfig) : IConfigReader
     #endregion
     
     #region Displays
-    public CachedDisplaySnapshot GetCachedDisplay(string id)
+    public DisplaySnapshot GetDisplay(string id)
     {
         var display = appConfig.Displays.Find(i => i.Id == id);
         return display ?? throw new ConfigNotFoundException($"Display with id {id} not found");
     }
     
-    public void CacheDisplay(CachedDisplaySnapshot snapshot)
+    public void SaveDisplay(DisplaySnapshot snapshot)
     {
         var index = appConfig.Displays.FindIndex(i => i.Id == snapshot.Id);
         if (index == -1)
@@ -160,6 +160,11 @@ public class ConfigContext(AppConfig appConfig) : IConfigReader
             return;
         }
         appConfig.Displays[index] = snapshot;
+    }
+
+    public bool DisplayExists(string id)
+    {
+        return appConfig.Displays.Exists(i => i.Id == id);
     }
     #endregion
 }

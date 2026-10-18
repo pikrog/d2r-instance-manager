@@ -26,5 +26,6 @@ public interface IConfigReader
     IReadOnlyList<AccountSnapshot> GetAllAccounts();
     bool AccountExists(Guid id);
     
-    CachedDisplaySnapshot GetCachedDisplay(string id);
+    DisplaySnapshot GetDisplay(string id);
+    bool DisplayExists(string id);
 }

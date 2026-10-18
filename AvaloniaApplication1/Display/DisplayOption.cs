@@ -7,9 +7,11 @@ public abstract record DisplayOption
         public static readonly Primary Instance = new();
     }
 
-    public sealed record Specific(int? Index, string Id, string Description, int Width, int Height, bool IsConnected) : DisplayOption
+    public sealed record Specific(int? Index, DisplaySnapshot Snapshot, bool IsConnected) : DisplayOption
     {
-        public string Label => $"{(Index is not null ? $"{Index} - " : "")}{Description} ({Width}x{Height}){(IsConnected ? "" : " [disconnected]")}";
+        public string Id => Snapshot.Id;
+        
+        public string Label => $"{(Index is not null ? $"{Index} - " : "")}{Snapshot.Description} ({Snapshot.Width}x{Snapshot.Height}){(IsConnected ? "" : " [disconnected]")}";
     }
 
     public static readonly DisplayOption Default = Primary.Instance;

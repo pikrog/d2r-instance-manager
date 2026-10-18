@@ -13,5 +13,5 @@ public class AppConfig
     public required List<AccountSnapshot> Accounts { get; set; }
     public required List<RegionSnapshot> Regions { get; set; }
     public required List<InstanceSnapshot> Instances { get; set; }
-    public required List<CachedDisplaySnapshot> Displays { get; set; }
+    public required List<DisplaySnapshot> Displays { get; set; }
 }

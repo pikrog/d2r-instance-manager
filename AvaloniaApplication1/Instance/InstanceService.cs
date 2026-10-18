@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AvaloniaApplication1.Config;
+using AvaloniaApplication1.Display;
 using AvaloniaApplication1.Engine;
 using AvaloniaApplication1.Engine.Common;
 using AvaloniaApplication1.Engine.Models;
@@ -113,10 +114,16 @@ public class InstanceService : IInstanceConfigProvider
         if (newActiveCount is { } activeCount)
             ActiveCountChanged?.Invoke(this, activeCount);
     }
-
-    private async Task AddAsync(InstanceSnapshot snapshot)
+    
+    private async Task AddAsync(InstanceSnapshot snapshot, DisplaySnapshot? displaySnapshotToCache)
     {
-        await _configService.ChangeAsync(context => context.AddInstance(snapshot));
+        await _configService.ChangeAsync(context =>
+        {
+            context.AddInstance(snapshot);
+            
+            if (displaySnapshotToCache is not null)
+                context.SaveDisplay(displaySnapshotToCache);
+        });
         _instanceNameRegistry.Set(snapshot.Id, snapshot.Name);
         _instanceManager.Register(snapshot.Id);
 
@@ -124,11 +131,17 @@ public class InstanceService : IInstanceConfigProvider
         InstanceConfigChanged?.Invoke(this, eventArgs);
     }
 
-    private async Task UpdateAsync(InstanceSnapshot snapshot)
+    private async Task UpdateAsync(InstanceSnapshot snapshot, DisplaySnapshot? displaySnapshotToCache)
     {
         var oldSnapshot = GetConfigSnapshot(snapshot.Id);
 
-        await _configService.ChangeAsync(context => context.UpdateInstance(snapshot));
+        await _configService.ChangeAsync(context =>
+        {
+            context.UpdateInstance(snapshot);
+            
+            if (displaySnapshotToCache is not null)
+                context.SaveDisplay(displaySnapshotToCache);
+        });
         _instanceNameRegistry.Set(snapshot.Id, snapshot.Name);
 
         var eventArgs = new InstanceConfigChangedEventArgs(snapshot.Id, oldSnapshot, snapshot);
@@ -155,9 +168,9 @@ public class InstanceService : IInstanceConfigProvider
         );
 
         if (draft.Id is null)
-            await AddAsync(snapshot);
+            await AddAsync(snapshot, draft.DisplaySnapshotToCache);
         else
-            await UpdateAsync(snapshot);
+            await UpdateAsync(snapshot, draft.DisplaySnapshotToCache);
     }
     
     public async Task RemoveAsync(Guid id)

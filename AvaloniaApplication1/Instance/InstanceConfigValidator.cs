@@ -17,9 +17,17 @@ public class InstanceConfigValidator(ConfigService configService)
         if (snapshot.Display is DisplaySelection.Specific display && DisplayResolver.ResolveDisplayId(display, false) is null)
         {
             var isFallbackAllowed = configService.Config.GetGlobalSettings().FallbackToPrimaryDisplayIfInvalid;
-            var cachedDisplay = configService.Config.GetCachedDisplay(display.Id);
-            var missingDisplay = new MissingDisplay(cachedDisplay, isFallbackAllowed);
-            issues.Add(missingDisplay);
+
+            if (!configService.Config.DisplayExists(display.Id))
+            {
+                issues.Add(new InvalidDisplay());
+            }
+            else
+            {
+                var cachedDisplay = configService.Config.GetDisplay(display.Id);
+                var missingDisplay = new MissingDisplay(cachedDisplay, isFallbackAllowed);
+                issues.Add(missingDisplay);
+            }
         }
 
         if (snapshot.IsOnlineMode)

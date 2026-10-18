@@ -27,7 +27,7 @@ public class InstanceDesignService(
         new(Guid.NewGuid(), "Battle Orders", InstanceStatus.Starting, true, []),
         new(Guid.NewGuid(), "Enchant", InstanceStatus.Failed, false, []),
         new(Guid.NewGuid(), "Mule [EU]", InstanceStatus.Queued, true, []),
-        new(Guid.NewGuid(), "Mule [US]", InstanceStatus.Inactive, false, [new MissingDisplay(new CachedDisplaySnapshot("fake", "LG", 1440, 800), true)]),
+        new(Guid.NewGuid(), "Mule [US]", InstanceStatus.Inactive, false, [new MissingDisplay(new DisplaySnapshot("fake", "LG", 1440, 800), true)]),
         new(Guid.NewGuid(), "Mule [Asia]", InstanceStatus.Inactive, false, [new DeletedAccount()]),
     ];
 }

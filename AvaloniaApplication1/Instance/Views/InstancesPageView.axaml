@@ -41,6 +41,10 @@
                 </TextBlock>
             </Panel>
         </DataTemplate>
+        <DataTemplate x:DataType="instanceIssues:InvalidDisplay">
+            <TextBlock>The instance refers to an invalid display.</TextBlock>
+        </DataTemplate>
+        
         <DataTemplate x:DataType="instanceIssues:DeletedAccount">
             <TextBlock>The instance refers to a deleted account.</TextBlock>
         </DataTemplate>
