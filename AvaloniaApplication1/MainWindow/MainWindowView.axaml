@@ -154,7 +154,7 @@
                     </DockPanel>
             </Border>
             
-            <ContentControl Content="{Binding PageHost.CurrentPage}"/>
+            <ContentControl Margin="30" Content="{Binding PageHost.CurrentPage}" />
             <!--<TransitioningContentControl Content="{Binding CurrentPage}">
                 <TransitioningContentControl.PageTransition>
                     <PageSlide Duration="0:0:0.25"></PageSlide>

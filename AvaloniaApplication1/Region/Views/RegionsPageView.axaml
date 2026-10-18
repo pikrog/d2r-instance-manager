@@ -25,7 +25,7 @@
     </UserControl.Styles>
 
     <ScrollViewer>
-        <ItemsControl ItemsSource="{Binding Cards}" ClipToBounds="False" Margin="30">
+        <ItemsControl ItemsSource="{Binding Cards}" ClipToBounds="False">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel ItemSpacing="30" LineSpacing="30" />

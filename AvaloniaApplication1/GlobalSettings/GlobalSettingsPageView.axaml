@@ -10,7 +10,7 @@
              x:DataType="globalSettings1:GlobalSettingsPageViewModel"
              dialog:DialogService.Register="{Binding}">
     <ScrollViewer>
-            <StackPanel Name="Panel" Margin="40">
+            <StackPanel>
                 <StackPanel.Styles>
                     <Style Selector="controls|Section">
                         <Setter Property="Margin" Value="0 8 0 2"/>    <!--todo: StackPanel spacing + StackPanel per label + input-->

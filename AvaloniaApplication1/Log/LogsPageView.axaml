@@ -40,7 +40,7 @@
         
     </UserControl.Styles>
     
-    <Border Classes="outlined hovering rounded" Margin="30"> <!--todo: margin: main-card? page-content? page-content-card? page-margin?-->
+    <Border Classes="outlined hovering rounded">
         <Border Classes="rounded" ClipToBounds="True">
             <DockPanel>
                 <Border DockPanel.Dock="Top" Padding="10">

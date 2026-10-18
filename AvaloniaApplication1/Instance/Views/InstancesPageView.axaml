@@ -138,7 +138,7 @@
         </Style>
     </UserControl.Styles>
 
-    <Border Classes="outlined hovering rounded" Margin="30">
+    <Border Classes="outlined hovering rounded">
         <Border Classes="rounded" ClipToBounds="True">
             <DockPanel Grid.IsSharedSizeScope="True">
                 <Border DockPanel.Dock="Top"
