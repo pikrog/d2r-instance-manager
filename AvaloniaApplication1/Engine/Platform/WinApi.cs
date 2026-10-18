@@ -351,4 +351,8 @@ internal static partial class WinApi
     [DllImport("user32.dll", CharSet = CharSet.Unicode)]
     [return: MarshalAs(UnmanagedType.Bool)]
     internal static extern bool GetMonitorInfo(nint monitorHandle, ref MonitorInfoEx monitorInfo);
+    
+    [LibraryImport("user32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static partial bool SetCursorPos(int x, int y);
 }

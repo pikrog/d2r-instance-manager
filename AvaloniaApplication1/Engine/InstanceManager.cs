@@ -7,6 +7,7 @@ using AvaloniaApplication1.Engine.Factories;
 using AvaloniaApplication1.Engine.Models;
 using AvaloniaApplication1.Engine.Models.Contexts.Launch;
 using AvaloniaApplication1.Engine.Models.StateMachine;
+using AvaloniaApplication1.Engine.Platform;
 
 namespace AvaloniaApplication1.Engine;
 
@@ -81,9 +82,20 @@ public class InstanceManager(InstanceEngineFactory engineFactory)
 
     private Task FlushAll() => Task.WhenAll(_instances.Values.Select(e => e.FlushAsync()));
     
-    public void Show(Guid id)
+    public void Show(Guid id, bool centerMouseCursor)
     {
         var snapshot = GetRuntimeSnapshot(id);
-        snapshot.Process?.BringMainWindowToTop();
+
+        if (snapshot.Process is not { } process)
+            return;
+        
+        var window = process.MainWindowHandle;
+        
+        Window.BringToTop(window);
+        
+        if (!centerMouseCursor)
+            return;
+        
+        Window.CenterMouseCursorInside(window);
     }
 }

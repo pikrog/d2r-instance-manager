@@ -257,5 +257,10 @@ public class InstanceService : IInstanceConfigProvider
     public Task<IReadOnlyList<ShutdownRequest>> RequestGracefulShutdownAllAsync() => 
         _instanceManager.RequestGracefulShutdownAllAsync();
 
-    public void Show(Guid id) => _instanceManager.Show(id);
+    public void Show(Guid id)
+    {
+        var centerMouseCursor = _configService.Config.GetGlobalSettings().CenterMouseCursorInShownWindow;
+        
+        _instanceManager.Show(id, centerMouseCursor);
+    }
 }

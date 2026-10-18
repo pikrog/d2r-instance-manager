@@ -94,26 +94,6 @@ public sealed class ProcessManager : IDisposable
                ? RequestState.Accepted
                : RequestState.Rejected;
     }
-
-    public RequestState BringMainWindowToTop()
-    {
-        var mainWindowHandle = MainWindowHandle;
-        if (mainWindowHandle == IntPtr.Zero)
-            return RequestState.Rejected;
-        
-        WinApi.ShowWindow(mainWindowHandle, WinApi.ShowCommand.Restore);
-        var currentThreadId = WinApi.GetCurrentThreadId();
-        var foregroundWindowHandle = WinApi.GetForegroundWindow();
-        var foregroundWindowThreadId = WinApi.GetWindowThreadProcessId(foregroundWindowHandle, out _);
-        if (foregroundWindowThreadId == 0 || currentThreadId != foregroundWindowThreadId 
-            && !WinApi.AttachThreadInput(foregroundWindowThreadId, currentThreadId, true) 
-            || !WinApi.BringWindowToTop(mainWindowHandle))
-            return RequestState.Rejected;
-        WinApi.ShowWindow(mainWindowHandle, WinApi.ShowCommand.Show);
-        if (currentThreadId != foregroundWindowThreadId)
-            WinApi.AttachThreadInput(foregroundWindowThreadId, currentThreadId, false);
-        return RequestState.Accepted;
-    }
     
     public void Suspend()
     {
