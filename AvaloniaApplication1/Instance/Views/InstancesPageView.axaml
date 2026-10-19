@@ -182,7 +182,7 @@
                                 </TextBlock>
                                 <StackPanel Grid.Column="2" Orientation="Horizontal">
                                     <Button Classes="icon danger" Command="{Binding StopSelectedCommand}">
-                                        <Svg Classes="inherit-foreground" Path="/Assets/images/close.svg" />
+                                        <Svg Classes="inherit-foreground" Path="/Assets/images/discard.svg" />
                                     </Button>
                                     <Button Classes="icon success" Command="{Binding LaunchSelectedCommand}">
                                         <Svg Classes="inherit-foreground" Path="/Assets/images/play.svg" />
@@ -293,7 +293,7 @@
                                                         Command="{Binding DataContext.StopCommand, ElementName=Root}"
                                                         CommandParameter="{Binding}"
                                                         IsVisible="{Binding IsActive}">
-                                                    <Svg Classes="inherit-foreground" Path="/Assets/images/close.svg" />
+                                                    <Svg Classes="inherit-foreground" Path="/Assets/images/discard.svg" />
                                                 </Button>
                                                 <Button Grid.Column="4" Classes="icon success"
                                                         Command="{Binding DataContext.LaunchCommand, ElementName=Root}"
