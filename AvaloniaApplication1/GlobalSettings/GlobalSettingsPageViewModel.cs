@@ -14,7 +14,6 @@ public partial class GlobalSettingsPageViewModel : PageViewModel, IDialogPartici
     private readonly GameExecutablePathLocator _gameExecutablePathLocator;
 
     [ObservableProperty]
-    // [Required]
     public partial string GameExecutablePath { get; set; } = "";
     
     [ObservableProperty]
@@ -26,34 +25,41 @@ public partial class GlobalSettingsPageViewModel : PageViewModel, IDialogPartici
     [ObservableProperty]
     public partial bool CloseInstancesOnAppExit { get; set; }
     
+    private GlobalSettingsDraft? _savedDraft;
+    
     public GlobalSettingsPageViewModel(GlobalSettingsService globalSettingsService,
         GameExecutablePathLocator gameExecutablePathLocator)
     {
         _globalSettingsService = globalSettingsService;
         _gameExecutablePathLocator = gameExecutablePathLocator;
-        
-        Refresh();
     }
 
     public void Refresh()
     {
         var settings = _globalSettingsService.GetSnapshot(); // todo: Get Snapshot Projection for UI?
+        
         GameExecutablePath = settings.GameExecutablePath;
         FallbackToPrimaryDisplayIfInvalid = settings.FallbackToPrimaryDisplayIfInvalid;
         CenterMouseCursorInShownWindow = settings.CenterMouseCursorInShownWindow;
         CloseInstancesOnAppExit = settings.CloseInstancesOnAppExit;
+        
+        _savedDraft = CreateDraft();
     }
+
+    private GlobalSettingsDraft CreateDraft() => new(GameExecutablePath, 
+        CenterMouseCursorInShownWindow,
+        FallbackToPrimaryDisplayIfInvalid,
+        CloseInstancesOnAppExit);
 
     public async Task SaveAsync()
     {
-        var draft = new GlobalSettingsDraft(
-            GameExecutablePath,
-            CenterMouseCursorInShownWindow,
-            FallbackToPrimaryDisplayIfInvalid,
-            CloseInstancesOnAppExit
-        );
+        var draft = CreateDraft();
+        if (_savedDraft is { } savedDraft && draft == savedDraft)
+            return;
         
         await _globalSettingsService.SaveAsync(draft);
+        
+        _savedDraft = draft;
     }
 
     [RelayCommand]
@@ -79,5 +85,5 @@ public partial class GlobalSettingsPageViewModel : PageViewModel, IDialogPartici
         return Task.CompletedTask;
     }
     
-    public override async Task OnLeaveAsync() => await SaveAsync(); // todo: publish save request to some serialization service
+    public override async Task OnLeaveAsync() => await SaveAsync();
 }
