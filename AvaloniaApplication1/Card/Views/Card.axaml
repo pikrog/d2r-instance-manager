@@ -9,13 +9,21 @@
         <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="Template">
             <ControlTemplate>
-                <Border Classes="hovering rounded outlined"
+                <Border Classes="card hovering rounded outlined"
                         Classes.dimmed="{TemplateBinding IsDimmed}"
                         Padding="{TemplateBinding Padding}"
                         Background="{TemplateBinding Background}">
                     <ContentPresenter Content="{TemplateBinding Content}" />
                 </Border>
             </ControlTemplate>
+        </Setter>
+    </Style>
+    
+    <Style Selector="views|Card /template/ Border.card">
+        <Setter Property="Transitions">
+            <Transitions>
+                <DoubleTransition Property="Opacity" Duration="0:0:0.2" />
+            </Transitions>
         </Setter>
     </Style>
 </Styles>
