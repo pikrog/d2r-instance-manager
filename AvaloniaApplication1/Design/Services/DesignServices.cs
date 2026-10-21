@@ -21,6 +21,7 @@ using AvaloniaApplication1.Navigation;
 using AvaloniaApplication1.Notification;
 using AvaloniaApplication1.Overlay;
 using AvaloniaApplication1.Region;
+using AvaloniaApplication1.Toast;
 using Microsoft.Extensions.Logging.Abstractions;
 
 namespace AvaloniaApplication1.Design.Services;
@@ -97,6 +98,10 @@ public static class DesignServices
     private static readonly PageDesignProvider PageProvider = new();
     
     public static readonly NavigationService NavigationService = new(PageHost, PageProvider);
+    
+    public static readonly FakeToastHost ToastHost = new();
+
+    public static readonly ToastService ToastService = new(ToastHost);
 
     private static readonly IHotKeyConfigValidator HotKeyConfigValidator = new FakeHotKeyConfigValidator();
 

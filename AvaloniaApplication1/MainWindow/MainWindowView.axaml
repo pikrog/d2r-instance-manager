@@ -11,6 +11,7 @@
         xmlns:region="clr-namespace:AvaloniaApplication1.Region.ViewModels"
         xmlns:settings="clr-namespace:AvaloniaApplication1.GlobalSettings"
         xmlns:logs="clr-namespace:AvaloniaApplication1.Log"
+        xmlns:toast="clr-namespace:AvaloniaApplication1.Toast"
         mc:Ignorable="d" 
         d:DesignWidth="900" d:DesignHeight="620"
         Width="900" Height="620"
@@ -161,6 +162,10 @@
                 </TransitioningContentControl.PageTransition>
             </TransitioningContentControl>-->
         </DockPanel>
+        
+        <toast:ToastStack Host="{Binding ToastHost}"
+                          HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                          Width="400" Margin="10" />
         
         <Border DataContext="{Binding OverlayHost}" IsVisible="{Binding IsOverlayVisible}"
                 Background="#80000000">

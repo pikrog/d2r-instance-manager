@@ -1,0 +1,166 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:toast="clr-namespace:AvaloniaApplication1.Toast"
+             xmlns:semantic="clr-namespace:AvaloniaApplication1.Semantic"
+             xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
+             xmlns:descriptors="clr-namespace:AvaloniaApplication1.Toast.Descriptors"
+             xmlns:common="clr-namespace:AvaloniaApplication1.Common"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AvaloniaApplication1.Toast.ToastStack"
+             x:Name="Root">
+    <UserControl.Resources>
+        <x:Double x:Key="ToastIdleOpacity">0.85</x:Double>
+    </UserControl.Resources>
+    
+    <UserControl.Styles>
+        <Style Selector="Border.toast">
+            <Setter Property="Opacity" Value="{StaticResource ToastIdleOpacity}" />
+
+            <Style.Animations>
+                <Animation Duration="0:0:0.2" Easing="CubicEaseOut">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="0" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="{StaticResource ToastIdleOpacity}" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        
+        <Style Selector="Border.toast:pointerover">
+            <Setter Property="Opacity" Value="1" />
+        </Style>
+        
+        <Style Selector="Border.toast.decaying">
+            <Setter Property="Opacity" Value="0" />
+            
+            <Style.Animations>
+                <Animation Duration="{x:Static toast:ToastNotification.DecayDuration}" Easing="CubicEaseIn">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="{StaticResource ToastIdleOpacity}" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="0" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+            
+        </Style>
+
+        <Style Selector="Border.toast:pointerover controls|RevealableContent">
+            <Setter Property="IsRevealed" Value="True" />
+        </Style>
+
+        <Style Selector="Border.toast.success">
+            <Setter Property="BorderBrush" Value="{DynamicResource SuccessOutline}" />
+            <Setter Property="Background" Value="{DynamicResource SuccessBackground}" />
+
+            <Style Selector="^ Svg.toast-icon">
+                <Setter Property="Path" Value="/Assets/images/success.svg" />
+                <Setter Property="CurrentColor" Value="{DynamicResource SuccessContentColor}" />
+            </Style>
+        </Style>
+
+        <Style Selector="Border.toast.warning">
+            <Setter Property="BorderBrush" Value="{DynamicResource WarningOutline}" />
+            <Setter Property="Background" Value="{DynamicResource WarningBackground}" />
+
+            <Style Selector="^ Svg.toast-icon">
+                <Setter Property="Path" Value="/Assets/images/warning.svg" />
+                <Setter Property="CurrentColor" Value="{DynamicResource WarningContentColor}" />
+            </Style>
+        </Style>
+
+        <Style Selector="Border.toast.danger">
+            <Setter Property="BorderBrush" Value="{DynamicResource DangerOutline}" />
+            <Setter Property="Background" Value="{DynamicResource DangerBackground}" />
+
+            <Style Selector="^ Svg.toast-icon">
+                <Setter Property="Path" Value="/Assets/images/error.svg" />
+                <Setter Property="CurrentColor" Value="{DynamicResource DangerContentColor}" />
+            </Style>
+        </Style>
+
+        <Style Selector="Border.toast.info">
+            <Setter Property="BorderBrush" Value="{DynamicResource InfoOutline}" />
+            <Setter Property="Background" Value="{DynamicResource InfoBackground}" />
+
+            <Style Selector="^ Svg.toast-icon">
+                <Setter Property="Path" Value="/Assets/images/info.svg" />
+                <Setter Property="CurrentColor" Value="{DynamicResource InfoContentColor}" />
+            </Style>
+        </Style>
+
+        <Style Selector="StackPanel.toast-content">
+            <Setter Property="Spacing" Value="6" />
+
+            <Style Selector="^ > TextBlock">
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="TextWrapping" Value="Wrap" />
+                <Setter Property="LineSpacing" Value="4" />
+            </Style>
+
+            <Style Selector="^ > TextBlock:nth-child(1)">
+                <Setter Property="FontWeight" Value="Bold" />
+            </Style>
+        </Style>
+    </UserControl.Styles>
+
+    <UserControl.DataTemplates>
+        <DataTemplate x:DataType="descriptors:GameExecutableFound">
+            <StackPanel Classes="toast-content">
+                <TextBlock>
+                    Auto-detect
+                </TextBlock>
+                <TextBlock>
+                    <Run>The game executable path was found:</Run>
+                    <Run Text="{Binding Path}" />.
+                </TextBlock>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:DataType="descriptors:GameExecutableNotFound">
+            <StackPanel Classes="toast-content">
+                <TextBlock>
+                    Auto-detect
+                </TextBlock>
+                <TextBlock>
+                    Failed to locate the game executable.
+                </TextBlock>
+            </StackPanel>
+        </DataTemplate>
+    </UserControl.DataTemplates>
+
+    <ItemsControl Classes="toast-stack" ItemsSource="{Binding Host.Toasts,ElementName=Root}">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <StackPanel Spacing="8"/>
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+
+        <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="toast:ToastNotification">
+                <Border Classes="toast rounded hovering thinly-outlined"
+                        Classes.decaying="{Binding IsDecaying}"
+                        semantic:SemanticClass.Type="{Binding Descriptor.SemanticType}"
+                        Padding="10">
+                    <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="16">
+                        <Svg Grid.Column="0" Classes="toast-icon" Width="30" />
+
+                        <ContentControl Grid.Column="1" Content="{Binding Descriptor}" />
+
+                        <controls:RevealableContent Grid.Column="2">
+                            <Button Classes="icon" Command="{Binding CloseCommand}">
+                                <Svg Path="/Assets/images/close.svg" />
+                            </Button>
+                        </controls:RevealableContent>
+                    </Grid>
+                </Border>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
+</UserControl>

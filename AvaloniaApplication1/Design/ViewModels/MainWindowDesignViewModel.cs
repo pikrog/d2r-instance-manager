@@ -9,6 +9,7 @@ public class MainWindowDesignViewModel : MainWindowViewModel
         DesignServices.NavigationService,
         DesignServices.OverlayHost,
         DesignServices.OverlayService,
+        DesignServices.ToastHost,
         DesignServices.InstanceService,
         DesignServices.InstanceNotificationCounter,
         DesignServices.LogNotificationCounter)

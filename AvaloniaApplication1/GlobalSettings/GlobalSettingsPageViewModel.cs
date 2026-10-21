@@ -2,6 +2,8 @@
 using AvaloniaApplication1.Dialog;
 using AvaloniaApplication1.GameExecutable;
 using AvaloniaApplication1.Navigation;
+using AvaloniaApplication1.Toast;
+using AvaloniaApplication1.Toast.Descriptors;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -12,6 +14,8 @@ public partial class GlobalSettingsPageViewModel : PageViewModel, IDialogPartici
     private readonly GlobalSettingsService _globalSettingsService;
     
     private readonly GameExecutablePathLocator _gameExecutablePathLocator;
+    
+    private readonly ToastService _toastService;
 
     [ObservableProperty]
     public partial string GameExecutablePath { get; set; } = "";
@@ -28,10 +32,12 @@ public partial class GlobalSettingsPageViewModel : PageViewModel, IDialogPartici
     private GlobalSettingsDraft? _savedDraft;
     
     public GlobalSettingsPageViewModel(GlobalSettingsService globalSettingsService,
-        GameExecutablePathLocator gameExecutablePathLocator)
+        GameExecutablePathLocator gameExecutablePathLocator,
+        ToastService toastService)
     {
         _globalSettingsService = globalSettingsService;
         _gameExecutablePathLocator = gameExecutablePathLocator;
+        _toastService = toastService;
     }
 
     public void Refresh()
@@ -75,8 +81,18 @@ public partial class GlobalSettingsPageViewModel : PageViewModel, IDialogPartici
     public void AutoDetectGameExecutablePath()
     {
         var path = _gameExecutablePathLocator.TryLocate();
-        if (path is not null)
-            GameExecutablePath = path;
+        
+        if (path is null)
+        {
+            var errorToast = new GameExecutableNotFound();
+            _toastService.Show(errorToast);
+            return;
+        }
+        
+        GameExecutablePath = path;
+        
+        var toast = new GameExecutableFound(path);
+        _toastService.Show(toast);
     }
 
     public override Task OnEnterAsync()

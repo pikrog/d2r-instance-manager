@@ -10,6 +10,7 @@ using AvaloniaApplication1.Notification;
 using AvaloniaApplication1.Overlay;
 using AvaloniaApplication1.Overlay.Dialog.ShutdownProgress;
 using AvaloniaApplication1.Overlay.Dialog.StopInstances;
+using AvaloniaApplication1.Toast;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +22,8 @@ public partial class MainWindowViewModel : ViewModelBase, IDialogParticipant
     public IPageHost PageHost { get; }
 
     public IOverlayHost OverlayHost { get; }
+    
+    public IToastHost ToastHost { get; }
     
     private readonly NavigationService _navigationService;
     
@@ -50,6 +53,7 @@ public partial class MainWindowViewModel : ViewModelBase, IDialogParticipant
         NavigationService navigationService,
         IOverlayHost overlayHost,
         OverlayService overlayService,
+        IToastHost toastHost,
         InstanceService instanceService,
         [FromKeyedServices(NotificationCounterKey.Instances)] INotificationSource instancesNotificationSource,
         [FromKeyedServices(NotificationCounterKey.Logs)] INotificationSource logsNotificationSource)
@@ -62,6 +66,7 @@ public partial class MainWindowViewModel : ViewModelBase, IDialogParticipant
         
         PageHost = pageHost;
         OverlayHost = overlayHost;
+        ToastHost = toastHost;
 
         _instanceService.ActiveCountChanged += (_, _) => Dispatcher.UIThread.Post(UpdateActiveInstancesCount);
         _instancesNotificationSource.CountChanged += (_, _) => Dispatcher.UIThread.Post(UpdateInstancesNotificationCount);

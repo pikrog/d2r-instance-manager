@@ -301,6 +301,11 @@
         <Setter Property="BorderBrush" Value="{DynamicResource PrimaryOutline}" />
         <Setter Property="BorderThickness" Value="1" />
     </Style>
+    
+    <Style Selector="Border.thinly-outlined">
+        <Setter Property="BorderBrush" Value="{DynamicResource PrimaryOutline}" />
+        <Setter Property="BorderThickness" Value="{StaticResource MaximallyThin}" />
+    </Style>
 
     <Style Selector="RadioButton.nav-tab">
         <Setter Property="Template">

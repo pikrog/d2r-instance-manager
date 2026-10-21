@@ -21,6 +21,7 @@ using AvaloniaApplication1.Notification;
 using AvaloniaApplication1.Overlay;
 using AvaloniaApplication1.Region;
 using AvaloniaApplication1.Region.ViewModels;
+using AvaloniaApplication1.Toast;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -103,6 +104,11 @@ public static class ServiceCollectionExtension
             services.AddSingleton<IOverlayHost>(sp => sp.GetRequiredService<OverlayHost>());
             services.AddSingleton<IOverlayController>(sp => sp.GetRequiredService<OverlayHost>());
             services.AddSingleton<OverlayService>();
+
+            services.AddSingleton<ToastHost>();
+            services.AddSingleton<IToastHost>(sp => sp.GetRequiredService<ToastHost>());
+            services.AddSingleton<IToastController>(sp => sp.GetRequiredService<ToastHost>());
+            services.AddSingleton<ToastService>();
 
             services.AddTransient<InstancesPageViewModel>();
             services.AddTransient<AccountsPageViewModel>();
