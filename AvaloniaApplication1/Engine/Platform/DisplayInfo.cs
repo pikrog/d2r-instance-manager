@@ -5,22 +5,8 @@ using System.Runtime.InteropServices;
 
 namespace AvaloniaApplication1.Engine.Platform;
 
-public class DisplayInfo(int index, IntPtr handle, string id, string description, int width, int height, bool isPrimary)
+public record DisplayInfo(int Index, IntPtr Handle, string Id, string Description, int Width, int Height, bool IsPrimary)
 {
-    public int Index { get; } = index;
-    
-    public IntPtr Handle { get; } = handle;
-
-    public string Id { get; } = id;
-    
-    public string Description { get; } = description;
-
-    public int Width { get; } = width;
-
-    public int Height { get; } = height;
-    
-    public bool IsPrimary { get; } = isPrimary;
-
     public static DisplayInfo GetPrimary() => GetAll().Single(d => d.IsPrimary);
 
     public static DisplayInfo? GetById(string id) => GetAll().SingleOrDefault(d => d.Id == id);

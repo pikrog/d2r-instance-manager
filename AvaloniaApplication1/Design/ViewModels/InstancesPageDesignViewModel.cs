@@ -12,7 +12,8 @@ public sealed class InstancesPageDesignViewModel : InstancesPageViewModel
         DesignServices.OverlayService,
         DesignServices.NavigationService,
         DesignServices.EditInstanceFormViewModelFactory,
-        DesignServices.InstanceNotificationCounter)
+        DesignServices.InstanceNotificationCounter,
+        DesignServices.DisplayConfigMonitor)
     {
         FirstGlobalSettingsIssue = new MissingExecutablePath();
 

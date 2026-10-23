@@ -1,4 +1,6 @@
-﻿using AvaloniaApplication1.Account;
+﻿using System;
+using Avalonia.Threading;
+using AvaloniaApplication1.Account;
 using AvaloniaApplication1.Bootstrap;
 using AvaloniaApplication1.Config;
 using AvaloniaApplication1.Config.Stores;
@@ -113,9 +115,20 @@ public static class DesignServices
     public static readonly NotificationCounter LogNotificationCounter = new(2);
     
     public static readonly LogService LogService = new();
+
+    public static readonly FakeDisplayConfigMonitor DisplayConfigMonitor = new();
+
+    private static readonly DisplayConfigChangeNotifier DisplayConfigChangeNotifier =
+        new(DisplayConfigMonitor, ToastService);
     
     static DesignServices()
     {
         ManagerBootstrapper.Bootstrap();
+        
+        DisplayConfigChangeNotifier.Initialize();
+
+        DispatcherTimer.RunOnce(
+            () => DisplayConfigMonitor.TriggerDisplayConfigChanged(), 
+            TimeSpan.FromSeconds(2.5));
     }
 }

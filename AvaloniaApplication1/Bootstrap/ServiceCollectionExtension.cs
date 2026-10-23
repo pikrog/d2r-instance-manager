@@ -110,6 +110,11 @@ public static class ServiceCollectionExtension
             services.AddSingleton<IToastController>(sp => sp.GetRequiredService<ToastHost>());
             services.AddSingleton<ToastService>();
 
+            services.AddSingleton<DisplayConfigMonitor>();
+            services.AddSingleton<IDisplayConfigMonitor>(sp => sp.GetRequiredService<DisplayConfigMonitor>());
+            services.AddSingleton<IDisplayConfigMonitorWindowInitializer>(sp => sp.GetRequiredService<DisplayConfigMonitor>());
+            services.AddSingleton<DisplayConfigChangeNotifier>();
+
             services.AddTransient<InstancesPageViewModel>();
             services.AddTransient<AccountsPageViewModel>();
             services.AddTransient<RegionsPageViewModel>();

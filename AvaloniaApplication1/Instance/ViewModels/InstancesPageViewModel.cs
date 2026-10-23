@@ -38,6 +38,8 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
     private readonly EditInstanceFormViewModelFactory _formFactory;
     
     private readonly INotificationAcknowledger _notificationAcknowledger;
+    
+    private readonly IDisplayConfigMonitor _displayConfigMonitor;
 
     private readonly ObservableCollection<InstanceItemViewModel> _instances = [];
     
@@ -59,7 +61,8 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         OverlayService overlayService,
         NavigationService navigationService,
         EditInstanceFormViewModelFactory formFactory,
-        [FromKeyedServices(NotificationCounterKey.Instances)] INotificationAcknowledger notificationAcknowledger)
+        [FromKeyedServices(NotificationCounterKey.Instances)] INotificationAcknowledger notificationAcknowledger,
+        IDisplayConfigMonitor displayConfigMonitor)
     {
         _instanceService = instanceService;
         _instancePresenter = instancePresenter;
@@ -68,12 +71,11 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         _navigationService = navigationService;
         _formFactory = formFactory;
         _notificationAcknowledger = notificationAcknowledger;
+        _displayConfigMonitor = displayConfigMonitor;
         
         Instances = new ReadOnlyObservableCollection<InstanceItemViewModel>(_instances);
         
         SelectedInstances = new SelectedItemsCollection<InstanceItemViewModel>(Instances);
-        
-        _instancePresenter.InstancePresentationChanged += OnInstancePresentationChanged;
         SelectedInstances.CollectionChanged += OnSelectedInstancesCollectionChanged;
     }
 
@@ -117,6 +119,8 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
                 break;
         }
     }
+
+    private void OnDisplayConfigChanged(object? sender, EventArgs e) => Refresh();
 
     private static InstanceItemViewModel CreateItem(InstanceSummary summary) =>
         new(summary.Id, summary.Name, summary.Status, summary.IsActive, summary.Issues);
@@ -339,6 +343,9 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
 
     public override Task OnEnterAsync()
     {
+        _instancePresenter.InstancePresentationChanged += OnInstancePresentationChanged;
+        _displayConfigMonitor.DisplayConfigChanged += OnDisplayConfigChanged;
+        
         Refresh();
         
         _notificationAcknowledger.SetAcknowledgingNotifications(true);
@@ -348,6 +355,9 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
 
     public override Task OnLeaveAsync()
     {
+        _instancePresenter.InstancePresentationChanged -= OnInstancePresentationChanged;
+        _displayConfigMonitor.DisplayConfigChanged -= OnDisplayConfigChanged;
+        
         _notificationAcknowledger.SetAcknowledgingNotifications(false);
         
         return Task.CompletedTask;

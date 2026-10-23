@@ -133,6 +133,17 @@
                 </TextBlock>
             </StackPanel>
         </DataTemplate>
+        
+        <DataTemplate x:DataType="descriptors:DisplayConfigChanged">
+            <StackPanel Classes="toast-content">
+                <TextBlock>
+                    Display configuration changed
+                </TextBlock>
+                <TextBlock>
+                    A change in display configuration was detected.
+                </TextBlock>
+            </StackPanel>
+        </DataTemplate>
     </UserControl.DataTemplates>
 
     <ItemsControl Classes="toast-stack" ItemsSource="{Binding Host.Toasts,ElementName=Root}">
