@@ -63,7 +63,7 @@ public sealed class LogStore(
             _entries.Add(logEntry);
         }
         
-        if (logEntry.Level == LogLevel.Error)
+        if (LogLevels.IsVisible(logEntry.Level, LogLevel.Error))
             notificationSink.Increment();
         
         foreach (var subscriber in subscribers)
