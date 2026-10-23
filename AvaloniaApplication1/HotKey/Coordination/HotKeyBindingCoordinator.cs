@@ -54,7 +54,7 @@ public abstract class HotKeyBindingCoordinator<THotKeyCommand> where THotKeyComm
 
     protected abstract Action CreateAction(THotKeyCommand command);
 
-    private (HotKeyBindingState, HotKeyNativeRegistrationError?) ResolveBindingState(
+    private static (HotKeyBindingState, HotKeyNativeRegistrationError?) ResolveBindingState(
         HotKeyNativeRegistrationState nativeRegistrationState)
     {
         var newState = nativeRegistrationState switch
@@ -67,6 +67,8 @@ public abstract class HotKeyBindingCoordinator<THotKeyCommand> where THotKeyComm
                     : HotKeyBindingState.UnknownError,
             
             HotKeyNoNativeRegistration => HotKeyBindingState.NotConfigured,
+            
+            HotKeyNativeRegistrationDeferred => HotKeyBindingState.Pending,
             
             _ => throw new InvalidOperationException($"Unexpected native registration state: {nativeRegistrationState}")
         };

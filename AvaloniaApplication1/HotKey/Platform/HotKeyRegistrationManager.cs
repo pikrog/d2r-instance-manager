@@ -21,12 +21,15 @@ public class HotKeyRegistrationManager : IHotKeySuspensionCoordinator
     
     public bool IsSuspended => _suspensionCount > 0;
     
+    public bool CanRegisterNatively => _hotKeyService.IsReady && !IsSuspended;
+    
     public event EventHandler<HotKeyNativeRegistrationStateChangedEventArgs>? HotKeyNativeRegistrationStateChanged;
     
     public HotKeyRegistrationManager(IHotKeyService hotKeyService)
     {
         _hotKeyService = hotKeyService;
         _hotKeyService.HotKeyPressed += OnHotKeyPressed;
+        _hotKeyService.BecameReady += OnServiceBecameReady;
     }
 
     private void OnHotKeyPressed(object? sender, HotKeyPressedEventArgs e)
@@ -36,6 +39,8 @@ public class HotKeyRegistrationManager : IHotKeySuspensionCoordinator
         
         entry.Action();
     }
+
+    private void OnServiceBecameReady(object? sender, EventArgs e) => RestoreRegistrations();
 
     private void SetState(KeyCombination keyCombination, HotKeyNativeRegistrationState state)
     {
@@ -77,7 +82,10 @@ public class HotKeyRegistrationManager : IHotKeySuspensionCoordinator
         _entries[keyCombination] = new HotKeyEntry(handle, token, HotKeyNoNativeRegistration.Instance, action);
         _keyCombinationsByHandle[handle] = keyCombination;
         
-        var state = RegisterCore(keyCombination);
+        var state = _hotKeyService.IsReady
+            ? RegisterCore(keyCombination)
+            : HotKeyNativeRegistrationDeferred.Instance;
+        
         return new HotKeyInternalRegistrationSuccess(handle, token, state);
     }
 
@@ -147,6 +155,9 @@ public class HotKeyRegistrationManager : IHotKeySuspensionCoordinator
     
     private void RestoreRegistrations()
     {
+        if (!CanRegisterNatively)
+            return;
+        
         foreach (var keyCombination in _entries.Keys.ToList())
             RegisterCore(keyCombination);
     }

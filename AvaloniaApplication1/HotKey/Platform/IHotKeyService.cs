@@ -6,6 +6,9 @@ namespace AvaloniaApplication1.HotKey.Platform;
 
 public interface IHotKeyService
 {
+    bool IsReady { get; }
+    event EventHandler BecameReady;
+    
     Result<Unit, HotKeyNativeRegistrationError> Register(KeyCombination keyCombination);
     void Unregister(KeyCombination keyCombination);
     event EventHandler<HotKeyPressedEventArgs> HotKeyPressed;

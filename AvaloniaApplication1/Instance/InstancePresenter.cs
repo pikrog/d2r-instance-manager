@@ -74,7 +74,9 @@ public class InstancePresenter : IInstancePresenter
             { State: HotKeyBindingState.UnknownError, Error: { } error } =>
                 new FailedHotKeyRegistration(keyCombination, error.Exception),
             
-            { State: HotKeyBindingState.NotConfigured } or { State: HotKeyBindingState.Registered } => 
+            { State: HotKeyBindingState.NotConfigured } 
+                or { State: HotKeyBindingState.Registered }
+                or { State: HotKeyBindingState.Pending } => 
                 null,
   
             _ => throw new InvalidOperationException($"Invalid hot key binding summary: {binding}")

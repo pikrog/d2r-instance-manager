@@ -86,6 +86,10 @@ public partial class HotKeyService : IHotKeyService, IHotKeyWindowInitializer
     
     private int _nextHotKeyId = MinHotKeyId;
 
+    public bool IsReady { get; private set; }
+
+    public event EventHandler? BecameReady;
+
     private void IncrementHotKeyId()
     {
         _nextHotKeyId++;
@@ -93,22 +97,29 @@ public partial class HotKeyService : IHotKeyService, IHotKeyWindowInitializer
             _nextHotKeyId = MinHotKeyId;
     }
 
-    private void EnsureWindowInitialized()
+    private void EnsureInitialized()
     {
-        if (_windowHandle == IntPtr.Zero)
+        if (!IsReady)
             throw new InvalidOperationException("HotKeyService must be initialized with a window before registering hotkeys.");
     }
 
     public void Initialize(Window window)
     {
-        var handle = window.TryGetPlatformHandle() ?? throw new InvalidOperationException("Window handle could not be retrieved.");
+        if (IsReady)
+            throw new InvalidOperationException("HotKeyService has already been initialized.");
+        
+        var handle = window.TryGetPlatformHandle() 
+                     ?? throw new InvalidOperationException("Window handle could not be retrieved.");
         _windowHandle = handle.Handle;
         Win32Properties.AddWndProcHookCallback(window, WndProc);
+        
+        IsReady = true;
+        BecameReady?.Invoke(this, EventArgs.Empty);
     }
 
     public Result<Unit, HotKeyNativeRegistrationError> Register(KeyCombination keyCombination)
     {
-        EnsureWindowInitialized();
+        EnsureInitialized();
         
         if (_idByHotKey.ContainsKey(keyCombination))
             return Result<Unit, HotKeyNativeRegistrationError>.Success();
@@ -133,7 +144,7 @@ public partial class HotKeyService : IHotKeyService, IHotKeyWindowInitializer
 
     public void Unregister(KeyCombination keyCombination)
     {
-        EnsureWindowInitialized();
+        EnsureInitialized();
         
         if (!_idByHotKey.TryGetValue(keyCombination, out var id))
             return;

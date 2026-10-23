@@ -3,6 +3,7 @@
 public enum HotKeyBindingState
 {
     NotConfigured,
+    Pending,
     Registered,
     ExternalConflict,
     InternalConflict,
