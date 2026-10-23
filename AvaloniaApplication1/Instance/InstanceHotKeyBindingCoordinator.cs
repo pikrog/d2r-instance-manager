@@ -1,12 +1,15 @@
 ﻿using System;
 using AvaloniaApplication1.HotKey.Coordination;
 using AvaloniaApplication1.HotKey.Platform;
+using AvaloniaApplication1.Initialization;
 using AvaloniaApplication1.Instance.Models;
 using AvaloniaApplication1.Instance.Models.EventArgs;
 
 namespace AvaloniaApplication1.Instance;
 
-public class InstanceHotKeyBindingCoordinator : HotKeyBindingCoordinator<ShowInstanceHotKeyCommand, Guid>
+public class InstanceHotKeyBindingCoordinator : 
+    HotKeyBindingCoordinator<ShowInstanceHotKeyCommand, Guid>,
+    IRuntimeInitializer
 {
     private readonly InstanceHotKeyConfigProvider _hotKeyConfigProvider;
     
@@ -20,12 +23,12 @@ public class InstanceHotKeyBindingCoordinator : HotKeyBindingCoordinator<ShowIns
     {
         _hotKeyConfigProvider = hotKeyConfigProvider;
         _instanceService = instanceService;
-
-        _instanceService.InstanceConfigChanged += OnInstanceConfigChanged;
     }
 
     public void Initialize()
     {
+        _instanceService.InstanceConfigChanged += OnInstanceConfigChanged;
+        
         foreach (var binding in _hotKeyConfigProvider.GetBindings())
             Register(binding.Command, binding.KeyCombination);
     }

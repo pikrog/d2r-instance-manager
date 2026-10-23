@@ -71,7 +71,7 @@ public static class DesignServices
 
     private static readonly InstanceNameRegistry InstanceNameRegistry = new();
     
-    private static readonly InstanceRuntimeBootstrapper ManagerBootstrapper =
+    private static readonly InstanceRuntimeInitializer ManagerInitializer =
         new(ConfigContext, InstanceManager, InstanceNameRegistry);
 
     private static readonly InstanceConfigValidator InstanceConfigValidator = new(ConfigService);
@@ -123,7 +123,7 @@ public static class DesignServices
     
     static DesignServices()
     {
-        ManagerBootstrapper.Bootstrap();
+        ManagerInitializer.Initialize();
         
         DisplayConfigChangeNotifier.Initialize();
 

@@ -7,10 +7,11 @@ using Avalonia.Input;
 using Avalonia.Win32.Input;
 using AvaloniaApplication1.Common;
 using AvaloniaApplication1.HotKey.Platform.Registration.Native;
+using AvaloniaApplication1.Initialization;
 
 namespace AvaloniaApplication1.HotKey.Platform;
 
-public partial class HotKeyService : IHotKeyService, IHotKeyWindowInitializer
+public partial class HotKeyService : IHotKeyService, IWindowRuntimeInitializer
 {
     [Flags]
     private enum PlatformKeyModifiers : uint

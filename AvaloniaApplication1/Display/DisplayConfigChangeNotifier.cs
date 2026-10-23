@@ -1,10 +1,11 @@
 ﻿using System;
+using AvaloniaApplication1.Initialization;
 using AvaloniaApplication1.Toast;
 using AvaloniaApplication1.Toast.Descriptors;
 
 namespace AvaloniaApplication1.Display;
 
-public class DisplayConfigChangeNotifier(IDisplayConfigMonitor monitor, ToastService toastService)
+public class DisplayConfigChangeNotifier(IDisplayConfigMonitor monitor, ToastService toastService) : IRuntimeInitializer
 {
     public void Initialize()
     {

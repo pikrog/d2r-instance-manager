@@ -12,6 +12,7 @@ using AvaloniaApplication1.GameExecutable.Providers;
 using AvaloniaApplication1.GlobalSettings;
 using AvaloniaApplication1.HotKey.Config;
 using AvaloniaApplication1.HotKey.Platform;
+using AvaloniaApplication1.Initialization;
 using AvaloniaApplication1.Instance;
 using AvaloniaApplication1.Instance.ViewModels;
 using AvaloniaApplication1.Log;
@@ -77,6 +78,12 @@ public static class ServiceCollectionExtension
             services.AddKeyedSingleton<INotificationSource>(key, GetNotificationCounter);
         }
         
+        private void AddRegisteredRuntimeInitializer<T>() where T : IRuntimeInitializer =>
+            services.AddSingleton<IRuntimeInitializer>(sp => sp.GetRequiredService<T>());
+        
+        private void AddRegisteredWindowRuntimeInitializer<T>() where T : IWindowRuntimeInitializer =>
+            services.AddSingleton<IWindowRuntimeInitializer>(sp => sp.GetRequiredService<T>());
+        
         public void AddApplicationServices()
         {
             services.AddSingleton<InstanceConfigValidator>();
@@ -112,7 +119,6 @@ public static class ServiceCollectionExtension
 
             services.AddSingleton<DisplayConfigMonitor>();
             services.AddSingleton<IDisplayConfigMonitor>(sp => sp.GetRequiredService<DisplayConfigMonitor>());
-            services.AddSingleton<IDisplayConfigMonitorWindowInitializer>(sp => sp.GetRequiredService<DisplayConfigMonitor>());
             services.AddSingleton<DisplayConfigChangeNotifier>();
 
             services.AddTransient<InstancesPageViewModel>();
@@ -131,7 +137,6 @@ public static class ServiceCollectionExtension
 
             services.AddSingleton<HotKeyService>();
             services.AddSingleton<IHotKeyService>(sp => sp.GetRequiredService<HotKeyService>());
-            services.AddSingleton<IHotKeyWindowInitializer>(sp => sp.GetRequiredService<HotKeyService>());
             services.AddSingleton<HotKeyRegistrationManager>();
             services.AddSingleton<IHotKeySuspensionCoordinator>(sp => sp.GetRequiredService<HotKeyRegistrationManager>());
             services.AddSingleton<IHotKeyConfigValidator, HotKeyConfigValidator>();
@@ -142,10 +147,14 @@ public static class ServiceCollectionExtension
             
             services.AddTransient<MainWindowViewModel>();
 
-            services.AddSingleton<InstanceRuntimeBootstrapper>();
-            services.AddSingleton<AppRuntimeBootstrapper>();
+            services.AddSingleton<IRuntimeInitializer, InstanceRuntimeInitializer>();
+            services.AddRegisteredRuntimeInitializer<InstanceHotKeyBindingCoordinator>();
+            services.AddRegisteredRuntimeInitializer<DisplayConfigChangeNotifier>();
+            services.AddSingleton<RuntimeBootstrapper>();
             
-            services.AddSingleton<MainWindowRuntimeBootstrapper>();
+            services.AddRegisteredWindowRuntimeInitializer<HotKeyService>();
+            services.AddRegisteredWindowRuntimeInitializer<DisplayConfigMonitor>();
+            services.AddSingleton<WindowRuntimeBootstrapper>();
         }
     }
 }

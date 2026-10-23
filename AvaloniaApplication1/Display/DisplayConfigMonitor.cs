@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Controls;
 using AvaloniaApplication1.Engine.Platform;
+using AvaloniaApplication1.Initialization;
 using Window = Avalonia.Controls.Window;
 
 namespace AvaloniaApplication1.Display;
 
-public class DisplayConfigMonitor : IDisplayConfigMonitor, IDisplayConfigMonitorWindowInitializer
+public class DisplayConfigMonitor : IDisplayConfigMonitor, IWindowRuntimeInitializer
 {
     public event EventHandler? DisplayConfigChanged;
 
