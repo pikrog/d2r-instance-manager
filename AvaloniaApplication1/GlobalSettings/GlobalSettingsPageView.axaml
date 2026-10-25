@@ -9,7 +9,8 @@
              x:Class="AvaloniaApplication1.GlobalSettings.GlobalSettingsPageView"
              x:DataType="globalSettings1:GlobalSettingsPageViewModel"
              dialog:DialogService.Register="{Binding}">
-    <ScrollViewer>
+    <Border Classes="outlined hovering rounded" Padding="15">
+        <ScrollViewer>
             <StackPanel>
                 <StackPanel.Styles>
                     <Style Selector="controls|Section">
@@ -38,21 +39,13 @@
                     </Button>
                 </Grid>
 
-                <controls:Section Title="Default authentication"/>
-                
-                <TextBlock>Authentication method</TextBlock>
-                <ComboBox>Command-line arguments</ComboBox>
-                
-                <CheckBox>Enable automated token acquisition</CheckBox>
-                
                 <controls:Section Title="Behavior"/>
 
                 <CheckBox IsChecked="{Binding FallbackToPrimaryDisplayIfInvalid}"
                           Margin="0 0 0 8">Fall back to the primary display if the target display is unavailable</CheckBox>
                 <CheckBox IsChecked="{Binding CenterMouseCursorInShownWindow}"
                           Margin="0 0 0 8">Center the mouse cursor when showing an instance window</CheckBox>
-                <CheckBox IsChecked="{Binding CloseInstancesOnAppExit}"
-                          Margin="0 0 0 8">Close all instances on application exit</CheckBox>
             </StackPanel>
         </ScrollViewer>
+    </Border>
 </UserControl>
