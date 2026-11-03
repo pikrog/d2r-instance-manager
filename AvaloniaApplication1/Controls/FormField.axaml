@@ -60,8 +60,8 @@
                 </ToolTip.Tip>
             </Path>
         </StackPanel>
-        <TextBox Name="Input" Text="{Binding  #Root.Text, Mode=TwoWay}" 
-                 PasswordChar="{Binding  #Root.PasswordChar}" RevealPassword="{Binding #Root.RevealPassword}"
+        <TextBox Name="Input" Text="{Binding  #Root.Text, Mode=TwoWay}"
+                 Classes.secret="{Binding #Root.IsSecret}"
                  DataValidationErrors.HasErrors="{Binding #Root.(DataValidationErrors.HasErrors)}">
             <ToolTip.Tip>
                 <ItemsControl ItemsSource="{Binding #Root.(DataValidationErrors.Errors)}"/>

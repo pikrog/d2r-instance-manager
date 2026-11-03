@@ -336,4 +336,7 @@
     <Style Selector="controls|RevealableContent:not(:revealed) Button.icon">
         <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}" />
     </Style>
+    <Style Selector="TextBox.secret">
+        <Setter Property="PasswordChar" Value="•" />
+    </Style>
 </Styles>

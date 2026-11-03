@@ -57,7 +57,7 @@
                             <StackPanel Orientation="Vertical" Spacing="14" DataContext="{Binding EditForm}">
                                 <controls:FormField Label="Display name" Text="{Binding DisplayName}"/>
                                 <controls:FormField Label="Username" Text="{Binding Username}" />
-                                <controls:FormField Label="Password" Text="{Binding Password}" PasswordChar="•" />
+                                <controls:FormField Label="Password" Text="{Binding Password}" IsSecret="True" />
                             </StackPanel>
                         </views:EditableCard.EditContent>
                     </views:EditableCard>

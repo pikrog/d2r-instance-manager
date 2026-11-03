@@ -16,9 +16,9 @@ public partial class FormField : UserControl
             defaultBindingMode: BindingMode.TwoWay,
             enableDataValidation: true
             );
-    
-    public static readonly StyledProperty<char> PasswordCharProperty =
-        TextBox.PasswordCharProperty.AddOwner<FormField>();
+
+    public static readonly StyledProperty<bool> IsSecretProperty =
+        AvaloniaProperty.Register<FormField, bool>(nameof(IsSecret));
     
     public static readonly StyledProperty<bool> RevealPasswordProperty =
         TextBox.RevealPasswordProperty.AddOwner<FormField>();
@@ -34,19 +34,13 @@ public partial class FormField : UserControl
         get => GetValue(LabelProperty);
         set => SetValue(LabelProperty, value);
     }
-    
-    public char PasswordChar
+
+    public bool IsSecret
     {
-        get => GetValue(PasswordCharProperty);
-        set => SetValue(PasswordCharProperty, value);
+        get => GetValue(IsSecretProperty);
+        set => SetValue(IsSecretProperty, value);
     }
-    
-    public bool RevealPassword
-    {
-        get => GetValue(RevealPasswordProperty);
-        set => SetValue(RevealPasswordProperty, value);
-    }
-    
+
     public FormField()
     {
         InitializeComponent();
