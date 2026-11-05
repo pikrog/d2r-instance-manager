@@ -13,7 +13,8 @@
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Light">
                     <SolidColorBrush x:Key="PrimaryBackground">White</SolidColorBrush>
-                    <SolidColorBrush x:Key="PrimaryForeground">Black</SolidColorBrush>
+                    <Color x:Key="PrimaryForegroundColor">Black</Color>
+                    <SolidColorBrush x:Key="PrimaryForeground" Color="{StaticResource PrimaryForegroundColor}"/>
                     <SolidColorBrush x:Key="PrimaryHoverBackground" Opacity="0.05" Color="#0B0BA0" />
                     
                     <SolidColorBrush x:Key="SecondaryForeground">#666666</SolidColorBrush>
@@ -27,7 +28,7 @@
                     
                     <SolidColorBrush x:Key="AccentSecondaryBackground">LightBlue</SolidColorBrush>
                     
-                    <SolidColorBrush x:Key="SubtleBackground">#F9F9F9</SolidColorBrush>
+                    <SolidColorBrush x:Key="SubtleBackground">#F9F9FE</SolidColorBrush>
                     
                     <SolidColorBrush x:Key="DisabledForeground">#40000000</SolidColorBrush>
 
@@ -65,31 +66,82 @@
                     
                     <SolidColorBrush x:Key="EvenRowBackground">White</SolidColorBrush>
                     <SolidColorBrush x:Key="OddRowBackground">#F9F9F9</SolidColorBrush>
+                    
+                    <BoxShadows x:Key="NavTabBoxShadow">0 0 64 0 #14000000</BoxShadows>
+                    <BoxShadows x:Key="HoveringBoxShadow">0 16 32 -4 #14000000</BoxShadows>
+                    <BoxShadows x:Key="DepressedBoxShadow">inset 0 1 3 0 #80000000</BoxShadows>
+                    <BoxShadows x:Key="BottomShadow">0 2 4 0 #1F000000</BoxShadows>
+                    <BoxShadows x:Key="TopShadow">0 -2 4 0 #1F000000</BoxShadows>
+                    
+                    <Bitmap x:Key="AppLogo">/Assets/images/logo.png</Bitmap>
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Dark">
-                    <SolidColorBrush x:Key="PrimaryBackground">Black</SolidColorBrush>
-                    <SolidColorBrush x:Key="PrimaryForeground">White</SolidColorBrush>
-                    <SolidColorBrush x:Key="PrimaryHoverBackground" Opacity="0.05" Color="White" />
+                    <SolidColorBrush x:Key="PrimaryBackground">#1E1E1E</SolidColorBrush>
+                    <Color x:Key="PrimaryForegroundColor">#F2F2F2</Color>
+                    <SolidColorBrush x:Key="PrimaryForeground" Color="{StaticResource PrimaryForegroundColor}"/>
+                    <SolidColorBrush x:Key="PrimaryHoverBackground" Opacity="0.12" Color="#8C8CFF" />
+
+                    <SolidColorBrush x:Key="SecondaryForeground">#A0A0A0</SolidColorBrush>
+
+                    <SolidColorBrush x:Key="AccentPrimaryBackground">#14283A</SolidColorBrush>
+                    <SolidColorBrush x:Key="AccentPrimaryHoverBackground">#1B3750</SolidColorBrush>
+                    <SolidColorBrush x:Key="AccentPrimaryPressedBackground">#234765</SolidColorBrush>
+                    <SolidColorBrush x:Key="AccentPrimaryOutline">#4C9ED9</SolidColorBrush>
+                    <Color x:Key="AccentPrimaryContentColor">#8CC8F2</Color>
+                    <SolidColorBrush x:Key="AccentPrimaryContent" Color="{StaticResource AccentPrimaryContentColor}" />
+
+                    <SolidColorBrush x:Key="AccentSecondaryBackground">#2F5F7A</SolidColorBrush>
+
+                    <SolidColorBrush x:Key="SubtleBackground">#262629</SolidColorBrush>
+
+                    <SolidColorBrush x:Key="DisabledForeground">#59FFFFFF</SolidColorBrush>
+
+                    <SolidColorBrush x:Key="DangerBackground">#3A1A17</SolidColorBrush>
+                    <SolidColorBrush x:Key="DangerHoverBackground">#4D221E</SolidColorBrush>
+                    <SolidColorBrush x:Key="DangerPressedBackground">#612B26</SolidColorBrush>
+                    <SolidColorBrush x:Key="DangerOutline">#E87A70</SolidColorBrush>
+                    <Color x:Key="DangerContentColor">#F5A29A</Color>
+                    <SolidColorBrush x:Key="DangerContent" Color="{StaticResource DangerContentColor}" />
+
+                    <SolidColorBrush x:Key="WarningBackground">#3A2D0F</SolidColorBrush>
+                    <SolidColorBrush x:Key="WarningHoverBackground">#4D3C14</SolidColorBrush>
+                    <SolidColorBrush x:Key="WarningPressedBackground">#614C1A</SolidColorBrush>
+                    <SolidColorBrush x:Key="WarningOutline">#E3A008</SolidColorBrush>
+                    <Color x:Key="WarningContentColor">#F2C45C</Color>
+                    <SolidColorBrush x:Key="WarningContent" Color="{StaticResource WarningContentColor}" />
+
+                    <SolidColorBrush x:Key="SuccessBackground">#162B1E</SolidColorBrush>
+                    <SolidColorBrush x:Key="SuccessHoverBackground">#1E3A28</SolidColorBrush>
+                    <SolidColorBrush x:Key="SuccessPressedBackground">#274A33</SolidColorBrush>
+                    <SolidColorBrush x:Key="SuccessOutline">#4FA86B</SolidColorBrush>
+                    <Color x:Key="SuccessContentColor">#8FD4A5</Color>
+                    <SolidColorBrush x:Key="SuccessContent" Color="{StaticResource SuccessContentColor}" />
+
+                    <SolidColorBrush x:Key="InfoBackground">#14283A</SolidColorBrush>
+                    <SolidColorBrush x:Key="InfoHoverBackground">#1B3750</SolidColorBrush>
+                    <SolidColorBrush x:Key="InfoPressedBackground">#234765</SolidColorBrush>
+                    <SolidColorBrush x:Key="InfoOutline">#4C9ED9</SolidColorBrush>
+                    <Color x:Key="InfoContentColor">#8CC8F2</Color>
+                    <SolidColorBrush x:Key="InfoContent" Color="{StaticResource InfoContentColor}" />
+
+                    <SolidColorBrush x:Key="PrimaryOutline">#3A3A3F</SolidColorBrush>
+
+                    <SolidColorBrush x:Key="SectionUnderline">#44FFFFFF</SolidColorBrush>
+
+                    <SolidColorBrush x:Key="EvenRowBackground">#1E1E1E</SolidColorBrush>
+                    <SolidColorBrush x:Key="OddRowBackground">#252526</SolidColorBrush>
                     
-                    <SolidColorBrush x:Key="SecondaryForeground">#999999</SolidColorBrush>
+                    <BoxShadows x:Key="NavTabBoxShadow">0 0 48 0 #66000000</BoxShadows>
+                    <BoxShadows x:Key="HoveringBoxShadow">0 16 32 -4 #80000000</BoxShadows>
+                    <BoxShadows x:Key="DepressedBoxShadow">inset 0 1 3 0 #B3000000</BoxShadows>
+                    <BoxShadows x:Key="BottomShadow">0 2 4 0 #66000000</BoxShadows>
+                    <BoxShadows x:Key="TopShadow">0 -2 4 0 #66000000</BoxShadows>
                     
-                    <SolidColorBrush x:Key="AccentSecondaryBackground">DarkBlue</SolidColorBrush>
-                    
-                    <SolidColorBrush x:Key="DangerBackground">#D13438</SolidColorBrush>
-                    <SolidColorBrush x:Key="DangerHoverBackground">#E74856</SolidColorBrush>
-                    <SolidColorBrush x:Key="DangerPressedBackground">#C50F1F</SolidColorBrush>
-                    
-                    <SolidColorBrush x:Key="PrimaryOutline">#e5e7eb</SolidColorBrush>
-                    
-                    <SolidColorBrush x:Key="SectionUnderline">#4444</SolidColorBrush>
-                    
-                    <SolidColorBrush x:Key="EvenRowBackground">Black</SolidColorBrush>
-                    <SolidColorBrush x:Key="OddRowBackground">#060606</SolidColorBrush>
+                    <Bitmap x:Key="AppLogo">/Assets/images/logo-dark.png</Bitmap>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
 
             <StreamGeometry x:Key="ErrorGeometry">M14,7 A7,7 0 0,0 0,7 M0,7 A7,7 0 1,0 14,7 M7,3l0,5 M7,9l0,2</StreamGeometry>
-            <!-- <StreamGeometry x:Key="WarningGeometry">M11.9998 8.99999V13M11.9998 17H12.0098M10.6151 3.89171L2.39019 18.0983C1.93398 18.8863 1.70588 19.2803 1.73959 19.6037C1.769 19.8857 1.91677 20.142 2.14613 20.3088C2.40908 20.5 2.86435 20.5 3.77487 20.5H20.2246C21.1352 20.5 21.5904 20.5 21.8534 20.3088C22.0827 20.142 22.2305 19.8857 22.2599 19.6037C22.2936 19.2803 22.0655 18.8863 21.6093 18.0983L13.3844 3.89171C12.9299 3.10654 12.7026 2.71396 12.4061 2.58211C12.1474 2.4671 11.8521 2.4671 11.5935 2.58211C11.2969 2.71396 11.0696 3.10655 10.6151 3.89171Z</StreamGeometry> -->
             <StreamGeometry x:Key="SpinnerGeometry">M12,2 A10,10 0 1 1 11.99,2</StreamGeometry>
 
             <x:Double x:Key="UnrevealedOpacity">0.25</x:Double>

@@ -6,7 +6,6 @@
              xmlns:semantic="clr-namespace:AvaloniaApplication1.Semantic"
              xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
              xmlns:descriptors="clr-namespace:AvaloniaApplication1.Toast.Descriptors"
-             xmlns:common="clr-namespace:AvaloniaApplication1.Common"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="AvaloniaApplication1.Toast.ToastStack"
              x:Name="Root">
@@ -166,7 +165,7 @@
 
                         <controls:RevealableContent Grid.Column="2">
                             <Button Classes="icon" Command="{Binding CloseCommand}">
-                                <Svg Path="/Assets/images/close.svg" />
+                                <Svg Classes="default-foreground" Path="/Assets/images/close.svg" />
                             </Button>
                         </controls:RevealableContent>
                     </Grid>

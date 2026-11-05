@@ -10,8 +10,7 @@
         Background="Transparent"
         CanResize="False" CanMaximize="False"
         SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen"
-        ShowInTaskbar="True"
-        RequestedThemeVariant="Light">
+        ShowInTaskbar="True">
     <Window.Resources>
         <Animation x:Key="ShakeAnimation" x:SetterTargetType="TextBox" Duration="0:0:0.3">
             <KeyFrame Cue="0%">

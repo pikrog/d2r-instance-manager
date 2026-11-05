@@ -8,7 +8,8 @@
         x:Class="AvaloniaApplication1.InitialWindowView"
         Title="D2R Instance Manager Splash Screen"
         CanResize="False" CanMinimize="False" CanMaximize="False"
-        WindowDecorations="BorderOnly">
+        WindowDecorations="BorderOnly"
+        Background="{DynamicResource PrimaryBackground}">
     <Window.Styles>
         <Style Selector="ProgressBar">
             <Setter Property="Transitions">

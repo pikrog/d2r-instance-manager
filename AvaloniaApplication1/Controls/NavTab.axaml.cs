@@ -1,7 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
-using Avalonia.Media;
 using AvaloniaApplication1.Semantic;
 
 namespace AvaloniaApplication1.Controls;
@@ -11,8 +10,8 @@ public class NavTab : Button
 {
     private const string ActivePseudoClass = ":active";
     
-    public static readonly StyledProperty<IImage?> IconProperty = 
-        AvaloniaProperty.Register<NavTab, IImage?>(nameof(Icon));
+    public static readonly StyledProperty<string?> SvgPathProperty = 
+        AvaloniaProperty.Register<NavTab, string?>(nameof(SvgPath));
     
     public static readonly StyledProperty<bool> IsActiveProperty =
         AvaloniaProperty.Register<NavTab, bool>(nameof(IsActive));
@@ -23,10 +22,10 @@ public class NavTab : Button
     public static readonly StyledProperty<int> BadgeCountProperty =
         AvaloniaProperty.Register<NavTab, int>(nameof(BadgeCount));
 
-    public IImage? Icon
+    public string? SvgPath
     {
-        get => GetValue(IconProperty); 
-        set => SetValue(IconProperty, value);
+        get => GetValue(SvgPathProperty); 
+        set => SetValue(SvgPathProperty, value);
     }
 
     public bool IsActive

@@ -163,7 +163,7 @@
                     </TableView.Resources>
                     <TableView.Styles>
                         <Style Selector="Border">
-                            <Setter Property="BoxShadow" Value="0 2 4 0 #1F000000" /> <!--todo: top-bar shadow resource-->
+                            <Setter Property="BoxShadow" Value="{DynamicResource TopShadow}" />
                         </Style>
                         
                         <Style Selector="TableViewColumnHeader TextBlock">

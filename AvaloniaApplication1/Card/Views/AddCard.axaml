@@ -13,7 +13,7 @@
         </Style>
         <Style Selector="Button:disabled /template/ ContentPresenter#PART_ContentPresenter">
             <Setter Property="Background" Value="Transparent" />
-        </Style> <!--todo: rewrite smarter? use IsEnabled to dim?-->
+        </Style>
     </UserControl.Styles>
     <views:Card IsDimmed="{Binding #Root.IsDimmed}">
         <Button Classes="rounded"
@@ -21,7 +21,10 @@
                 BorderThickness="0" Background="Transparent" Padding="0 24" 
                 Command="{Binding #Root.Command}">
             <Grid ColumnDefinitions="Auto, Auto" ColumnSpacing="8" Opacity="0.60">
-                <Image Grid.Column="0" VerticalAlignment="Center" Source="{SvgImage /Assets/images/add.svg}" Width="32" Height="32"/>
+                <Svg Grid.Column="0" 
+                     Classes="default-foreground" 
+                     VerticalAlignment="Center" Width="32" Height="32"
+                     Path="/Assets/images/add.svg" />
                 <TextBlock Grid.Column="1" VerticalAlignment="Center">Add</TextBlock>
             </Grid>
         </Button>

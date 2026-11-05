@@ -7,7 +7,8 @@
                 <Border Classes="rounded" Padding="2,16" Background="Transparent">
                     <StackPanel Orientation="Vertical" Spacing="6">
                         <controls:Badged Count="5" OverlayOffsetX="-14" OverlayOffsetY="-8">
-                            <Image Height="24" HorizontalAlignment="Center" Source="{SvgImage /Assets/images/play.svg}" />
+                            <Svg Classes="default-foreground" Height="24" HorizontalAlignment="Center" 
+                                 Path="/Assets/images/play.svg" />
                         </controls:Badged>
                         
                         <TextBlock HorizontalAlignment="Center">Instances</TextBlock>

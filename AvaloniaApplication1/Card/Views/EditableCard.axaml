@@ -26,19 +26,18 @@
                         <Button Classes="icon rounded"
                                 Command="{Binding #Root.EditCommand}"
                                 CommandParameter="{Binding #Root.EditCommandParameter}">
-                            <Image Source="{SvgImage /Assets/images/edit.svg}" />
+                            <Svg Classes="default-foreground" Path="/Assets/images/edit.svg" />
                         </Button>
                         <Button Classes="icon rounded"
                                 Command="{Binding #Root.DeleteCommand}"
                                 CommandParameter="{Binding #Root.DeleteCommandParameter}">
-                            <Image Source="{SvgImage /Assets/images/delete.svg}" />
+                            <Svg Classes="default-foreground" Path="/Assets/images/delete.svg" />
                         </Button>
                     </StackPanel>
                 </controls:RevealableContent>
                 
                 <StackPanel Orientation="Vertical" Spacing="10" Margin="12 12 12 24">
                     <StackPanel Orientation="Horizontal" Spacing="8">
-                        <!-- <Image Source="{Binding #Root.Icon}" Width="24" Height="24" /> -->
                         <TextBlock Classes="h2" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding #Root.Title}" />
                     </StackPanel>
                     
@@ -51,7 +50,6 @@
             </DockPanel>
 
             <DockPanel IsVisible="{Binding #Root.IsEdited}">
-                <!-- todo: fix button pos, should be centered on card, not the grid -->
                 <StackPanel DockPanel.Dock="Bottom"
                             Opacity="0.6"
                             Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
@@ -59,13 +57,13 @@
                             Command="{Binding #Root.AcceptCommand}"
                             CommandParameter="{Binding #Root.AcceptCommandParameter}"
                             IsDefault="True">
-                        <Image Source="{SvgImage /Assets/images/accept.svg}" />
+                        <Svg Classes="default-foreground" Path="/Assets/images/accept.svg" />
                     </Button>
                     <Button Classes="icon rounded"
                             Command="{Binding #Root.DiscardCommand}"
                             CommandParameter="{Binding #Root.DiscardCommandParameter}"
                             IsCancel="True">
-                        <Image Source="{SvgImage /Assets/images/discard.svg}" />
+                        <Svg Classes="default-foreground" Path="/Assets/images/discard.svg" />
                     </Button>
                 </StackPanel>
                 <ContentPresenter Content="{Binding #Root.EditContent}" Margin="12 12 12 24"/>

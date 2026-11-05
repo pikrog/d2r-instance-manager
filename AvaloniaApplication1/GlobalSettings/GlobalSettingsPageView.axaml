@@ -37,10 +37,10 @@
                              AutomationProperties.LabeledBy="{Binding #GameExecutablePathLabel}"
                              Text="{Binding GameExecutablePath}"/>
                     <Button Grid.Column="1" Classes="icon" Command="{Binding BrowseForGameExecutablePathCommand}">
-                        <Image Source="{SvgImage /Assets/images/browse.svg}"/>
+                        <Svg Classes="default-foreground" Path="/Assets/images/browse.svg" />
                     </Button>
                     <Button Grid.Column="2" Classes="icon" Command="{Binding AutoDetectGameExecutablePathCommand}">
-                        <Image Source="{SvgImage /Assets/images/auto.svg}"/>
+                        <Svg Classes="default-foreground" Path="/Assets/images/auto.svg" />
                     </Button>
                 </Grid>
 
@@ -89,7 +89,7 @@
                                 </TextBlock>
                             </ToolTip.Tip>
                             <StackPanel Orientation="Horizontal" Spacing="8">
-                                <Svg Path="/Assets/images/key.svg" Height="20"/>
+                                <Svg Classes="default-foreground"  Path="/Assets/images/key.svg" Height="20"/>
                                 <TextBlock>Set the passphrase</TextBlock>
                             </StackPanel>
                         </Button>

@@ -25,8 +25,8 @@ public partial class EditableCard : UserControl
     public static readonly StyledProperty<object?> EditContentProperty =
         AvaloniaProperty.Register<EditableCard, object?>(nameof(EditContent));
 
-    public static readonly StyledProperty<IImage?> IconProperty =
-        AvaloniaProperty.Register<EditableCard, IImage?>(nameof(Icon));
+    public static readonly StyledProperty<string?> SvgPathProperty =
+        AvaloniaProperty.Register<EditableCard, string?>(nameof(SvgPath));
     
     public static readonly StyledProperty<string> TitleProperty =
         AvaloniaProperty.Register<EditableCard, string>(nameof(Title));
@@ -88,10 +88,10 @@ public partial class EditableCard : UserControl
         set => SetValue(TitleProperty, value);
     }
     
-    public IImage? Icon
+    public string? SvgPath
     {
-        get => GetValue(IconProperty);
-        set => SetValue(IconProperty, value);
+        get => GetValue(SvgPathProperty);
+        set => SetValue(SvgPathProperty, value);
     }
 
     public string Subtitle

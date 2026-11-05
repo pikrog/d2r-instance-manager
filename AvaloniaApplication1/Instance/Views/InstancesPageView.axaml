@@ -146,13 +146,13 @@
         <Border Classes="rounded" ClipToBounds="True">
             <DockPanel Grid.IsSharedSizeScope="True">
                 <Border DockPanel.Dock="Top"
-                        BoxShadow="0 2 4 0 #1F000000"
+                        BoxShadow="{DynamicResource BottomShadow}"
                         ZIndex="1">
                     <WrapPanel Orientation="Horizontal">
                         <Button Classes="toolbar-action"
                                 Command="{Binding NewCommand}">
                             <DockPanel>
-                                <Svg Path="/Assets/images/add-square.svg" />
+                                <Svg Classes="default-foreground" Path="/Assets/images/add-square.svg" />
                                 <TextBlock>New</TextBlock>
                             </DockPanel>
                         </Button>
@@ -160,7 +160,7 @@
                 </Border>
                 
                 <Border DockPanel.Dock="Bottom"
-                        BoxShadow="0 -2 4 0 #1F000000"
+                        BoxShadow="{DynamicResource TopShadow}"
                         ZIndex="1">
                     <StackPanel>
                         <Border Padding="20 15"
@@ -174,7 +174,7 @@
                                 <Button Grid.Column="0" Classes="icon" 
                                         HorizontalAlignment="Stretch"
                                         Command="{Binding ClearSelectionCommand}">
-                                    <Svg Path="/Assets/images/arrow-left.svg" Width="20" />
+                                    <Svg Classes="default-foreground" Path="/Assets/images/arrow-left.svg" Width="20" />
                                 </Button>
                                 <TextBlock Grid.Column="1" VerticalAlignment="Center">
                                     <Run Text="{Binding SelectedInstances.Count}"/>
@@ -196,7 +196,7 @@
                                 <Svg Grid.Column="0" Classes="icon inherit-foreground danger" Height="24" Path="/Assets/images/deny.svg" />
                                 <ContentControl Grid.Column="1" Content="{Binding FirstGlobalSettingsIssue}" />
                                 <Button Grid.Column="2" Classes="icon" Command="{Binding NavigateToGlobalSettingsCommand}">
-                                    <Svg Path="/Assets/images/fix.svg" />
+                                    <Svg Classes="default-foreground" Path="/Assets/images/fix.svg" />
                                 </Button>
                             </Grid>
                         </Border>
