@@ -1,0 +1,70 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:unlock="clr-namespace:AvaloniaApplication1.Unlock"
+        mc:Ignorable="d"
+        x:Class="AvaloniaApplication1.Unlock.UnlockWindowView"
+        x:DataType="unlock:UnlockWindowViewModel"
+        Title="D2R Instance Manager" 
+        Background="Transparent"
+        CanResize="False" CanMaximize="False"
+        SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen"
+        ShowInTaskbar="True"
+        RequestedThemeVariant="Light">
+    <Window.Resources>
+        <Animation x:Key="ShakeAnimation" x:SetterTargetType="TextBox" Duration="0:0:0.3">
+            <KeyFrame Cue="0%">
+                <Setter Property="TranslateTransform.X" Value="0" />
+            </KeyFrame>
+            <KeyFrame Cue="25%">
+                <Setter Property="TranslateTransform.X" Value="2" />
+            </KeyFrame>
+            <KeyFrame Cue="50%">
+                <Setter Property="TranslateTransform.X" Value="0" />
+            </KeyFrame>
+            <KeyFrame Cue="75%">
+                <Setter Property="TranslateTransform.X" Value="-2" />
+            </KeyFrame>
+            <KeyFrame Cue="100%">
+                <Setter Property="TranslateTransform.X" Value="0" />
+            </KeyFrame>
+        </Animation>
+    </Window.Resources>
+    
+    <Border Padding="24"
+            Background="{DynamicResource PrimaryBackground}">
+        <DockPanel>
+            <StackPanel DockPanel.Dock="Bottom" Classes="dialog-actions" Margin="0 24 0 0" HorizontalAlignment="Right">
+                <Button Classes="dialog-action neutral" IsCancel="True" Command="{Binding CancelCommand}">
+                    Cancel
+                </Button>
+                <Button Classes="dialog-action primary" 
+                        IsDefault="True" Command="{Binding  UnlockCommand}">
+                    Unlock
+                </Button>
+            </StackPanel>
+            <StackPanel Margin="8" Spacing="16">
+                <TextBlock Classes="h1">Unlock</TextBlock>
+                <StackPanel Classes="form-body">
+                <StackPanel Classes="dialog-text">
+                    <TextBlock Classes="paragraph">The configuration is protected by a passphrase.<LineBreak/>Enter the passphrase to unlock the manager.</TextBlock>
+                </StackPanel>
+
+                <StackPanel Classes="form-field">
+                    <TextBlock>Passphrase</TextBlock>
+                    <TextBox Classes="secret" 
+                             x:Name="PassphraseTextBox"
+                             AttachedToVisualTree="PassphraseTextBox_OnAttachedToVisualTree"
+                             Text="{Binding Passphrase}"
+                             DataValidationErrors.HasErrors="{Binding FailedToUnlock}" />
+                    <TextBlock Classes="error" 
+                               IsVisible="{Binding FailedToUnlock}">
+                        Invalid passphrase. Try again
+                    </TextBlock>
+                </StackPanel>
+            </StackPanel>
+            </StackPanel>
+        </DockPanel>
+    </Border>
+</Window>

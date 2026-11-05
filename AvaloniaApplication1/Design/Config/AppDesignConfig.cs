@@ -9,6 +9,7 @@ using AvaloniaApplication1.GlobalSettings;
 using AvaloniaApplication1.HotKey;
 using AvaloniaApplication1.Instance.Models;
 using AvaloniaApplication1.Region.Models;
+using AvaloniaApplication1.Secret.Data;
 
 namespace AvaloniaApplication1.Design.Config;
 
@@ -23,15 +24,15 @@ public class AppDesignConfig : AppConfig
             new AccountSnapshot(Guid.NewGuid(),
                 "User 1",
                 "user1@mail.com",
-                "*"),
+                new SecretData([])),
             new AccountSnapshot(Guid.NewGuid(),
                 null,
                 "user2@mail.com",
-                "*"),
+                new SecretData([])),
             new AccountSnapshot(Guid.NewGuid(),
                 "User 3",
                 "user3@mail.com",
-                "*"),
+                new SecretData([])),
         ];
 
         Regions =

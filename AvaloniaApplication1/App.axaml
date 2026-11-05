@@ -18,6 +18,13 @@
                     
                     <SolidColorBrush x:Key="SecondaryForeground">#666666</SolidColorBrush>
                     
+                    <SolidColorBrush x:Key="AccentPrimaryBackground">#EEF6FD</SolidColorBrush>
+                    <SolidColorBrush x:Key="AccentPrimaryHoverBackground">#D8EBFA</SolidColorBrush>
+                    <SolidColorBrush x:Key="AccentPrimaryPressedBackground">#BDDDF6</SolidColorBrush>
+                    <SolidColorBrush x:Key="AccentPrimaryOutline">#4C9ED9</SolidColorBrush>
+                    <Color x:Key="AccentPrimaryContentColor">#245D86</Color>
+                    <SolidColorBrush x:Key="AccentPrimaryContent" Color="{StaticResource AccentPrimaryContentColor}" />
+                    
                     <SolidColorBrush x:Key="AccentSecondaryBackground">LightBlue</SolidColorBrush>
                     
                     <SolidColorBrush x:Key="SubtleBackground">#F9F9F9</SolidColorBrush>

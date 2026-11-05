@@ -1,4 +1,5 @@
 ﻿using System;
+using AvaloniaApplication1.Account;
 using AvaloniaApplication1.Authentication.Models;
 using AvaloniaApplication1.Common;
 using AvaloniaApplication1.Config;
@@ -17,6 +18,7 @@ using LaunchPreparation = Result<EngineLaunchContext, InstanceLaunchFailure>;
 
 public class InstanceLaunchContextFactory(
     ConfigService configService,
+    AccountSnapshotTransformer accountSnapshotTransformer,
     ILogger<InstanceLaunchContextFactory> logger)
 {
     public LaunchPreparation Create(InstanceSnapshot instance)
@@ -56,7 +58,9 @@ public class InstanceLaunchContextFactory(
         if (!instance.IsOnlineMode)
             return new OfflineAuthenticationContext();
 
-        var account = configService.Config.GetAccount(instance.AccountId!.Value);
+        var accountConfigSnapshot = configService.Config.GetAccount(instance.AccountId!.Value);
+        var account = accountSnapshotTransformer.ToRuntimeSnapshot(accountConfigSnapshot);
+        
         var region = configService.Config.GetRegion(instance.RegionId!.Value);
 
         return instance.AuthenticationMethod switch

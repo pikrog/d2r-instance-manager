@@ -1,18 +1,19 @@
 ﻿using AvaloniaApplication1.Authentication.Models;
+using AvaloniaApplication1.Secret;
 
 namespace AvaloniaApplication1.GlobalSettings;
 
 public record GlobalSettingsSnapshot
-(
-    string GameExecutablePath = "",
-    int UnlockMultiboxMaxRetries = 10,
-    int UnlockMultiboxRetryDelayMs = 500,
-    int GracefulInstanceCloseTimeoutMs = 250,
-    int GracefulInstanceCloseRetries = 20,
-    int ForcefulInstanceCloseTimeoutMs = 3000,
-    bool CenterMouseCursorInShownWindow = true, // per instance config? + minimize to tray if another window is recalled
-    bool FallbackToPrimaryDisplayIfInvalid = true,
-    bool CloseInstancesOnAppExit = true, // used only by GameInstanceService
-    AuthenticationMethod AuthenticationMethod = AuthenticationMethod.OsiTokenRegistry
-    // todo: option: osi: auto authentication / browser authentication
-);
+{
+    public string GameExecutablePath { get; init; } = "";
+    public int UnlockMultiboxMaxRetries { get; init; } = 10;
+    public int UnlockMultiboxRetryDelayMs { get; init; } = 500;
+    public int GracefulInstanceCloseTimeoutMs { get; init; } = 250;
+    public int GracefulInstanceCloseRetries { get; init; } = 20;
+    public int ForcefulInstanceCloseTimeoutMs { get; init; } = 3000;
+    public bool CenterMouseCursorInShownWindow { get; init; } = true;
+    public bool FallbackToPrimaryDisplayIfInvalid { get; init; } = true;
+    public bool CloseInstancesOnAppExit { get; init; } = true;
+    public AuthenticationMethod AuthenticationMethod { get; init; } = AuthenticationMethod.OsiTokenRegistry;
+    public SecretProtectionSettings SecretProtection { get; init; } = new();
+}

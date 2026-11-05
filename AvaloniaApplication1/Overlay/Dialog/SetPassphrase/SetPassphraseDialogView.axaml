@@ -1,0 +1,40 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:setPassphrase="clr-namespace:AvaloniaApplication1.Overlay.Dialog.SetPassphrase"
+             xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="AvaloniaApplication1.Overlay.Dialog.SetPassphrase.SetPassphraseDialogView"
+             x:DataType="setPassphrase:SetPassphraseDialogViewModel">
+    <controls:Dialog>
+        <controls:Dialog.Header>
+            <TextBlock Classes="h1">Set the passphrase</TextBlock>
+        </controls:Dialog.Header>
+        
+        <controls:Dialog.Body>
+            <StackPanel Classes="form-body">
+                <StackPanel Classes="form-field">
+                    <TextBlock>Passphrase</TextBlock>
+                    <TextBox Classes="secret" Text="{Binding Passphrase}" />
+                </StackPanel>
+                
+                <StackPanel Classes="form-field">
+                    <TextBlock>Confirm passphrase</TextBlock>
+                    <TextBox Classes="secret" Text="{Binding ConfirmPassphrase}"  />
+                </StackPanel>
+            </StackPanel>
+        </controls:Dialog.Body>
+
+        <controls:Dialog.Footer>
+            <StackPanel Classes="dialog-actions">
+                <Button Classes="dialog-action neutral" IsCancel="True" Command="{Binding CancelCommand}">
+                    Cancel
+                </Button>
+                <Button Classes="dialog-action primary" IsDefault="True" Command="{Binding SetPassphraseCommand}">
+                    Set
+                </Button>
+            </StackPanel>
+        </controls:Dialog.Footer>
+    </controls:Dialog>
+</UserControl>

@@ -23,6 +23,7 @@ using AvaloniaApplication1.Navigation;
 using AvaloniaApplication1.Notification;
 using AvaloniaApplication1.Overlay;
 using AvaloniaApplication1.Region;
+using AvaloniaApplication1.Secret;
 using AvaloniaApplication1.Toast;
 using Microsoft.Extensions.Logging.Abstractions;
 
@@ -42,13 +43,23 @@ public static class DesignServices
     
     public static readonly OverlayService OverlayService = new(OverlayHost);
     
-    public static AccountService AccountService { get; } = new(ConfigService);
+    private static readonly FakeSecretProtectorFactory SecretProtectorFactory = new();
+
+    private static readonly AccountSnapshotTransformer AccountSnapshotTransformer = new(SecretProtectorFactory);
+    
+    public static AccountService AccountService { get; } = new(ConfigService, AccountSnapshotTransformer);
     
     public static RegionService RegionService { get; } = new(ConfigService);
 
     public static DisplayService DisplayService { get; } = new(ConfigService);
 
-    public static GlobalSettingsService GlobalSettingsService { get; } = new(ConfigService);
+    private static readonly MasterKeyService MasterKeyService = new();
+
+    private static readonly MasterKeyDeriver MasterKeyDeriver = new();
+
+    private static readonly SecretMigrationCoordinator SecretMigrationCoordinator = new(ConfigService, SecretProtectorFactory, MasterKeyDeriver, MasterKeyService);
+
+    public static GlobalSettingsService GlobalSettingsService { get; } = new(ConfigService, SecretMigrationCoordinator);
 
     private static readonly IGameExecutablePathProvider GameExecutablePathProvider =
         new DesignGameExecutablePathProvider();
@@ -80,7 +91,8 @@ public static class DesignServices
     
     public static readonly PageHost PageHost = new();
     
-    private static readonly InstanceLaunchContextFactory InstanceLaunchContextFactory = new(ConfigService, 
+    private static readonly InstanceLaunchContextFactory InstanceLaunchContextFactory = new(ConfigService,
+        AccountSnapshotTransformer,
         NullLogger<InstanceLaunchContextFactory>.Instance);
 
     public static readonly NotificationCounter InstanceNotificationCounter = new();

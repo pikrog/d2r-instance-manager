@@ -173,6 +173,28 @@
         <Setter Property="Foreground" Value="{DynamicResource DisabledForeground}" />
     </Style>
     
+    <Style Selector="Button.primary">
+        <Setter Property="Background" Value="{DynamicResource AccentPrimaryBackground}" />
+        <Setter Property="Foreground" Value="{DynamicResource AccentPrimaryContent}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentPrimaryOutline}" />
+    </Style>
+
+    <Style Selector="Button.primary:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AccentPrimaryHoverBackground}"/>
+        <Setter Property="Foreground" Value="{DynamicResource AccentPrimaryContent}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentPrimaryOutline}" />
+    </Style>
+
+    <Style Selector="Button.primary:pressed /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource AccentPrimaryPressedBackground}"/>
+        <Setter Property="Foreground" Value="{DynamicResource AccentPrimaryContent}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentPrimaryOutline}" />
+    </Style>
+    
+    <Style Selector="Button.primary:disabled">
+        <Setter Property="Foreground" Value="{DynamicResource DisabledForeground}" />
+    </Style>
+    
     <Style Selector="Button.icon">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Padding" Value="4" />
@@ -336,7 +358,22 @@
     <Style Selector="controls|RevealableContent:not(:revealed) Button.icon">
         <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}" />
     </Style>
+    
+    <Style Selector="StackPanel.form-field">
+        <Setter Property="Orientation" Value="Vertical" />
+        <Setter Property="Spacing" Value="4" />
+    </Style>
+    
+    <Style Selector="StackPanel.form-body">
+        <Setter Property="Orientation" Value="Vertical" />
+        <Setter Property="Spacing" Value="16" />
+    </Style>
+    
     <Style Selector="TextBox.secret">
         <Setter Property="PasswordChar" Value="•" />
+    </Style>
+    
+    <Style Selector="TextBlock.error">
+        <Setter Property="Foreground" Value="{DynamicResource DangerContent}" />
     </Style>
 </Styles>

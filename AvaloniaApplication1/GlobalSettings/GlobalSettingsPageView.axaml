@@ -4,11 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
              xmlns:dialog="clr-namespace:AvaloniaApplication1.Dialog"
-             xmlns:globalSettings1="clr-namespace:AvaloniaApplication1.GlobalSettings"
+             xmlns:globalSettings="clr-namespace:AvaloniaApplication1.GlobalSettings"
+             xmlns:design="clr-namespace:AvaloniaApplication1.Design.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="AvaloniaApplication1.GlobalSettings.GlobalSettingsPageView"
-             x:DataType="globalSettings1:GlobalSettingsPageViewModel"
+             x:DataType="globalSettings:GlobalSettingsPageViewModel"
              dialog:DialogService.Register="{Binding}">
+    <Design.DataContext>
+        <design:GlobalSettingsPageDesignViewModel />
+    </Design.DataContext>
+    
     <Border Classes="outlined hovering rounded" Padding="15">
         <ScrollViewer>
             <StackPanel>
@@ -45,6 +50,51 @@
                           Margin="0 0 0 8">Fall back to the primary display if the target display is unavailable</CheckBox>
                 <CheckBox IsChecked="{Binding CenterMouseCursorInShownWindow}"
                           Margin="0 0 0 8">Center the mouse cursor when showing an instance window</CheckBox>
+                
+                <controls:Section Title="Password protection" />
+                
+                <StackPanel Orientation="Vertical">
+                    <RadioButton GroupName="encryption" 
+                                 IsChecked="{Binding IsProtectionDisabledSelected,Mode=OneWay}" 
+                                 Command="{Binding SelectProtectionOptionCommand}" 
+                                 CommandParameter="{x:Static globalSettings:ProtectionSelection.Disabled}">
+                        Disabled
+                    </RadioButton>
+                    <RadioButton GroupName="encryption" 
+                                 IsChecked="{Binding IsProtectionByWindowsAccountSelected,Mode=OneWay}"
+                                 Command="{Binding SelectProtectionOptionCommand}" 
+                                 CommandParameter="{x:Static globalSettings:ProtectionSelection.ProtectedByWindowsAccount}">
+                        Protected by your Windows account
+                    </RadioButton>
+                    
+                    <Grid ColumnDefinitions="Auto, *">
+                        <RadioButton Grid.Column="0" GroupName="encryption" 
+                                     IsChecked="{Binding IsProtectionByPassphraseSelected,Mode=OneWay}"
+                                     Command="{Binding SelectProtectionOptionCommand}" 
+                                     CommandParameter="{x:Static globalSettings:ProtectionSelection.ProtectedByPassphrase}">
+                            Protected by a passphrase
+                        </RadioButton>
+                        
+                        <Button Grid.Column="1" HorizontalAlignment="Right"
+                                Classes="neutral"
+                                IsEnabled="{Binding IsProtectionByPassphraseSelected}"
+                                Command="{Binding SetPassphraseCommand}"
+                                ToolTip.ShowOnDisabled="True"
+                                ToolTip.ServiceEnabled="{Binding !IsProtectionByPassphraseSelected}">
+                            <ToolTip.Tip>
+                                <TextBlock>
+                                    You can set the passphrase only when using the
+                                    <Run FontWeight="Bold">[Protected by a passphrase]</Run>
+                                    password protection option.
+                                </TextBlock>
+                            </ToolTip.Tip>
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <Svg Path="/Assets/images/key.svg" Height="20"/>
+                                <TextBlock>Set the passphrase</TextBlock>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </StackPanel>
             </StackPanel>
         </ScrollViewer>
     </Border>

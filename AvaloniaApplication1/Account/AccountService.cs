@@ -7,7 +7,7 @@ using AvaloniaApplication1.Config;
 
 namespace AvaloniaApplication1.Account;
 
-public class AccountService(ConfigService configService)
+public class AccountService(ConfigService configService, AccountSnapshotTransformer transformer)
 {
     private async Task AddAsync(AccountSnapshot snapshot) => 
         await configService.ChangeAsync(context => context.AddAccount(snapshot));
@@ -21,12 +21,14 @@ public class AccountService(ConfigService configService)
 
         var id = draft.Id ?? Guid.NewGuid();
         var displayName = string.IsNullOrWhiteSpace(draft.DisplayName) ? null : draft.DisplayName;
-        var snapshot = new AccountSnapshot(id, displayName, draft.Username, draft.Password);
+        var runtimeSnapshot = new AccountRuntimeSnapshot(id, displayName, draft.Username, draft.Password);
+        
+        var configSnapshot = transformer.ToConfigSnapshot(runtimeSnapshot);
         
         if (draft.Id is null)
-            await AddAsync(snapshot);
+            await AddAsync(configSnapshot);
         else
-            await UpdateAsync(snapshot);
+            await UpdateAsync(configSnapshot);
     }
 
     public async Task RemoveAsync(Guid id) => await configService.ChangeAsync(context => context.RemoveAccount(id));
@@ -44,15 +46,15 @@ public class AccountService(ConfigService configService)
             .Where(i => i.AccountId.HasValue)
             .GroupBy(i => i.AccountId!.Value)
             .ToDictionary(g => g.Key, g => g.Count());
+
         return GetAllSnapshots()
+            .Select(transformer.ToRuntimeSnapshot)
             .Select(a => 
-                new AccountSummary(
-                    a.Id,
+                new AccountSummary(a.Id,
                     a.DisplayName,
                     a.Username, 
                     a.Password,
-                    instanceCounts.GetValueOrDefault(a.Id, 0)
-                    )
+                    instanceCounts.GetValueOrDefault(a.Id, 0))
             )
             .ToList();
     }

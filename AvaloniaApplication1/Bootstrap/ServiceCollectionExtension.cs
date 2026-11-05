@@ -22,7 +22,9 @@ using AvaloniaApplication1.Notification;
 using AvaloniaApplication1.Overlay;
 using AvaloniaApplication1.Region;
 using AvaloniaApplication1.Region.ViewModels;
+using AvaloniaApplication1.Secret;
 using AvaloniaApplication1.Toast;
+using AvaloniaApplication1.Unlock;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -96,6 +98,16 @@ public static class ServiceCollectionExtension
             services.AddSingleton<GlobalSettingsService>();
             services.AddSingleton<DisplayService>();
             
+            services.AddSingleton<IMasterKeyDeriver, MasterKeyDeriver>();
+            services.AddSingleton<MasterKeyService>();
+            services.AddSingleton<IMasterKeyProvider>(sp => sp.GetRequiredService<MasterKeyService>());
+            services.AddSingleton<ISecretMigrationCoordinator, SecretMigrationCoordinator>();
+            services.AddSingleton<INonKeyBasedSecretProtectionVerifier, SecretProtectionVerifier>();
+            services.AddSingleton<ISecretProtectorFactory, SecretProtectorFactory>();
+            services.AddSingleton<SecretMigrationCoordinator>();
+            
+            services.AddSingleton<AccountSnapshotTransformer>();
+            
             services.AddSingleton<InstanceLaunchContextFactory>();
 
             services.AddNotificationCounter(NotificationCounterKey.Instances);
@@ -144,6 +156,10 @@ public static class ServiceCollectionExtension
             services.AddSingleton<InstanceHotKeyBindingCoordinator>();
             services.AddSingleton<InstanceHotKeyConfigProvider>();
             services.AddSingleton<IHotKeyConfigProvider, InstanceHotKeyConfigProvider>(sp => sp.GetRequiredService<InstanceHotKeyConfigProvider>());
+
+            services.AddSingleton<IUnlockService, UnlockService>();
+            services.AddSingleton<UnlockCoordinator>();
+            services.AddTransient<UnlockWindowViewModel>();
             
             services.AddTransient<MainWindowViewModel>();
 

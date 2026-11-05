@@ -5,4 +5,5 @@ namespace AvaloniaApplication1.Design.ViewModels;
 
 public class GlobalSettingsPageDesignViewModel() : GlobalSettingsPageViewModel(DesignServices.GlobalSettingsService,
     DesignServices.GameExecutablePathLocator,
-    DesignServices.ToastService);
+    DesignServices.ToastService,
+    DesignServices.OverlayService);

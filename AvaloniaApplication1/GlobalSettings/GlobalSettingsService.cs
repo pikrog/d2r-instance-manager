@@ -1,9 +1,10 @@
 ﻿using System.Threading.Tasks;
 using AvaloniaApplication1.Config;
+using AvaloniaApplication1.Secret;
 
 namespace AvaloniaApplication1.GlobalSettings;
 
-public class GlobalSettingsService(ConfigService configService)
+public class GlobalSettingsService(ConfigService configService, ISecretMigrationCoordinator secretMigrationCoordinator)
 {
     public async Task SaveAsync(GlobalSettingsDraft draft)
     {
@@ -19,6 +20,10 @@ public class GlobalSettingsService(ConfigService configService)
         
         await configService.ChangeAsync(context => context.UpdateGlobalSettings(snapshot));   
 
+    public Task SetProtectionSettingsAsync(ProtectionSelection selection, string? passphrase)
+    {
+        var request = EncryptionRequestMapper.Map(selection, passphrase);
+        return secretMigrationCoordinator.MigrateAsync(request);
     }
     
     public GlobalSettingsSnapshot GetSnapshot()

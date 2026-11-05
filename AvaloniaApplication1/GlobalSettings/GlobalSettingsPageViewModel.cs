@@ -2,6 +2,8 @@
 using AvaloniaApplication1.Dialog;
 using AvaloniaApplication1.GameExecutable;
 using AvaloniaApplication1.Navigation;
+using AvaloniaApplication1.Overlay;
+using AvaloniaApplication1.Overlay.Dialog.SetPassphrase;
 using AvaloniaApplication1.Toast;
 using AvaloniaApplication1.Toast.Descriptors;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -9,14 +11,13 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace AvaloniaApplication1.GlobalSettings;
 
-public partial class GlobalSettingsPageViewModel : PageViewModel, IDialogParticipant
+public partial class GlobalSettingsPageViewModel(
+    GlobalSettingsService globalSettingsService,
+    GameExecutablePathLocator gameExecutablePathLocator,
+    ToastService toastService,
+    OverlayService overlayService)
+    : PageViewModel, IDialogParticipant
 {
-    private readonly GlobalSettingsService _globalSettingsService;
-    
-    private readonly GameExecutablePathLocator _gameExecutablePathLocator;
-    
-    private readonly ToastService _toastService;
-
     [ObservableProperty]
     public partial string GameExecutablePath { get; set; } = "";
     
@@ -28,28 +29,37 @@ public partial class GlobalSettingsPageViewModel : PageViewModel, IDialogPartici
     
     [ObservableProperty]
     public partial bool CloseInstancesOnAppExit { get; set; }
-    
-    private GlobalSettingsDraft? _savedDraft;
-    
-    public GlobalSettingsPageViewModel(GlobalSettingsService globalSettingsService,
-        GameExecutablePathLocator gameExecutablePathLocator,
-        ToastService toastService)
-    {
-        _globalSettingsService = globalSettingsService;
-        _gameExecutablePathLocator = gameExecutablePathLocator;
-        _toastService = toastService;
-    }
 
-    public void Refresh()
+    private string? _passphrase;
+    
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsProtectionDisabledSelected),
+        nameof(IsProtectionByWindowsAccountSelected),
+        nameof(IsProtectionByPassphraseSelected))]
+    public partial ProtectionSelection SelectedProtection { get; set; }
+    
+    public bool IsProtectionDisabledSelected => SelectedProtection == ProtectionSelection.Disabled;
+    
+    public bool IsProtectionByWindowsAccountSelected => SelectedProtection == ProtectionSelection.ProtectedByWindowsAccount;
+    
+    public bool IsProtectionByPassphraseSelected => SelectedProtection == ProtectionSelection.ProtectedByPassphrase;
+
+    private GlobalSettingsDraft? _savedDraft;
+
+    private ProtectionSelection? _savedProtectionSelection;
+
+    private void Refresh()
     {
-        var settings = _globalSettingsService.GetSnapshot(); // todo: Get Snapshot Projection for UI?
+        var settings = globalSettingsService.GetSnapshot();
         
         GameExecutablePath = settings.GameExecutablePath;
         FallbackToPrimaryDisplayIfInvalid = settings.FallbackToPrimaryDisplayIfInvalid;
         CenterMouseCursorInShownWindow = settings.CenterMouseCursorInShownWindow;
         CloseInstancesOnAppExit = settings.CloseInstancesOnAppExit;
+        SelectedProtection = ProtectionSelectionMapper.Map(settings.SecretProtection.EncryptionOptions);
         
         _savedDraft = CreateDraft();
+        _savedProtectionSelection = SelectedProtection;
     }
 
     private GlobalSettingsDraft CreateDraft() => new(GameExecutablePath, 
@@ -57,19 +67,36 @@ public partial class GlobalSettingsPageViewModel : PageViewModel, IDialogPartici
         FallbackToPrimaryDisplayIfInvalid,
         CloseInstancesOnAppExit);
 
-    public async Task SaveAsync()
+    private async Task SaveDraftIfChangedAsync()
     {
         var draft = CreateDraft();
         if (_savedDraft is { } savedDraft && draft == savedDraft)
             return;
         
-        await _globalSettingsService.SaveAsync(draft);
+        await globalSettingsService.SaveAsync(draft);
         
         _savedDraft = draft;
     }
 
+    private async Task SetProtectionIfChangedAsync()
+    {
+        if (SelectedProtection == _savedProtectionSelection || 
+            (SelectedProtection == ProtectionSelection.ProtectedByPassphrase && _passphrase is null))
+            return;
+        
+        await globalSettingsService.SetProtectionSettingsAsync(SelectedProtection, _passphrase);
+        
+        _savedProtectionSelection = SelectedProtection;
+    }
+
+    private async Task SaveAsync()
+    {
+        await SaveDraftIfChangedAsync();
+        await SetProtectionIfChangedAsync();
+    }
+
     [RelayCommand]
-    public async Task BrowseForGameExecutablePath()
+    private async Task BrowseForGameExecutablePath()
     {
         var openFileOptions = GameExecutablePickerOptionsFactory.Create();
         var path = await this.PickPathByOpenFilePicker(openFileOptions);
@@ -78,21 +105,50 @@ public partial class GlobalSettingsPageViewModel : PageViewModel, IDialogPartici
     }
 
     [RelayCommand]
-    public void AutoDetectGameExecutablePath()
+    private void AutoDetectGameExecutablePath()
     {
-        var path = _gameExecutablePathLocator.TryLocate();
+        var path = gameExecutablePathLocator.TryLocate();
         
         if (path is null)
         {
             var errorToast = new GameExecutableNotFound();
-            _toastService.Show(errorToast);
+            toastService.Show(errorToast);
             return;
         }
         
         GameExecutablePath = path;
         
         var toast = new GameExecutableFound(path);
-        _toastService.Show(toast);
+        toastService.Show(toast);
+    }
+
+    [RelayCommand]
+    private async Task SelectProtectionOption(ProtectionSelection selection)
+    {
+        SelectedProtection = selection;
+        
+        if (selection == ProtectionSelection.ProtectedByPassphrase 
+            && _savedProtectionSelection != ProtectionSelection.ProtectedByPassphrase 
+            && _passphrase is null)
+        {
+            var isSet = await SetPassphrase();
+            if (!isSet)
+                SelectedProtection = _savedProtectionSelection ?? ProtectionSelection.Disabled;
+        }
+    }
+
+    [RelayCommand]
+    private async Task<bool> SetPassphrase()
+    {
+        var dialog = new SetPassphraseDialogViewModel();
+        var result = await overlayService.ShowAsync(dialog);
+
+        if (result is not SetPassphraseResult.Entered { Passphrase: var passphrase })
+            return false;
+        
+        _passphrase = passphrase;
+        return true;
+
     }
 
     public override Task OnEnterAsync()

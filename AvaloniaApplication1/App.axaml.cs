@@ -8,6 +8,7 @@ using Avalonia.Threading;
 using AvaloniaApplication1.Bootstrap;
 using AvaloniaApplication1.CommandLine;
 using AvaloniaApplication1.MainWindow;
+using AvaloniaApplication1.Unlock;
 using Microsoft.Extensions.DependencyInjection;
 
 
@@ -42,10 +43,21 @@ namespace AvaloniaApplication1
                 
                 await Dispatcher.UIThread.InvokeAsync(initialWindow.Show);
                 await Task.Delay(1000);
-                await Dispatcher.UIThread.InvokeAsync(() => initialWindow.ProgressBar.Opacity = 1);
+                await SetProgressBarVisibilityAsync(true);
                 
                 _services = await AppBootstrapper.BootstrapAsync(cliOptions);
                 _services.GetRequiredService<RuntimeBootstrapper>().Bootstrap();
+
+                await SetProgressBarVisibilityAsync(false);
+                
+                var isUnlocked = await _services.GetRequiredService<UnlockCoordinator>().UnlockAsync(initialWindow);
+                if (!isUnlocked)
+                {
+                    await Dispatcher.UIThread.InvokeAsync(() => desktop.Shutdown());
+                    return;
+                }
+                
+                await SetProgressBarVisibilityAsync(true);
                 
                 var mainWindowViewModel = _services.GetRequiredService<MainWindowViewModel>();
                 await mainWindowViewModel.SetupAsync();
@@ -68,12 +80,13 @@ namespace AvaloniaApplication1
             {
                 Serilog.Log.Fatal(e, "Application failed to start");
                 
-                await Dispatcher.UIThread.InvokeAsync(() =>
-                {
-                    initialWindow.Close();
-                    desktop.Shutdown(1);
-                });
+                await Dispatcher.UIThread.InvokeAsync(() => desktop.Shutdown(1));
             }
+
+            return;
+
+            DispatcherOperation<double> SetProgressBarVisibilityAsync(bool visible) =>
+                Dispatcher.UIThread.InvokeAsync(() => initialWindow.ProgressBar.Opacity = visible ? 1 : 0);
         }
 
         private void OnShutdownRequested(object? sender, ShutdownRequestedEventArgs e)
