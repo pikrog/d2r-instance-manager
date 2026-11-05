@@ -79,10 +79,6 @@
       <DependentUpon>MainWindowView.axaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="InitialWindowView.axaml.cs">
-      <DependentUpon>InitialWindowView.axaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Card\Views\AddCard.axaml.cs">
       <DependentUpon>AddCard.axaml</DependentUpon>
       <SubType>Code</SubType>
@@ -130,6 +126,10 @@
     </Compile>
     <Compile Update="Controls\Badged.axaml.cs">
       <DependentUpon>Badged.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="InitialWindowView.axaml.cs">
+      <DependentUpon>InitialWindowView.axaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
