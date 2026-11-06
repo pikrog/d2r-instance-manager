@@ -63,8 +63,8 @@
                             </Style>
                         </DockPanel.Styles>
                         <Border DockPanel.Dock="Top" Height="140">
-                            <StackPanel Orientation="Vertical" Spacing="6" VerticalAlignment="Center">
-                                <Image Source="{DynamicResource AppLogo}" 
+                            <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                                <Image Source="/Assets/images/logo.png" 
                                        Height="75" RenderOptions.BitmapInterpolationMode="HighQuality" />
                                 <TextBlock HorizontalAlignment="Center" FontWeight="Bold" FontSize="15">
                                     D2RIM
