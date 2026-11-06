@@ -16,6 +16,7 @@
                     <Color x:Key="PrimaryForegroundColor">Black</Color>
                     <SolidColorBrush x:Key="PrimaryForeground" Color="{StaticResource PrimaryForegroundColor}"/>
                     <SolidColorBrush x:Key="PrimaryHoverBackground" Opacity="0.05" Color="#0B0BA0" />
+                    <SolidColorBrush x:Key="PrimaryPressedBackground">#E6E6E6</SolidColorBrush>
                     
                     <SolidColorBrush x:Key="SecondaryForeground">#666666</SolidColorBrush>
                     
@@ -29,8 +30,10 @@
                     <SolidColorBrush x:Key="AccentSecondaryBackground">LightBlue</SolidColorBrush>
                     
                     <SolidColorBrush x:Key="SubtleBackground">#F9F9FE</SolidColorBrush>
-                    
-                    <SolidColorBrush x:Key="DisabledForeground">#40000000</SolidColorBrush>
+
+                    <SolidColorBrush x:Key="DisabledBackground" Color="#E5E5E5"/>
+                    <Color x:Key="DisabledForegroundColor">#A3A3A3</Color>
+                    <SolidColorBrush x:Key="DisabledForeground" Color="{DynamicResource DisabledForegroundColor}" />
 
                     <SolidColorBrush x:Key="DangerBackground">#FDF0EE</SolidColorBrush>
                     <SolidColorBrush x:Key="DangerHoverBackground">#F9DAD6</SolidColorBrush>
@@ -78,6 +81,7 @@
                     <Color x:Key="PrimaryForegroundColor">#F2F2F2</Color>
                     <SolidColorBrush x:Key="PrimaryForeground" Color="{StaticResource PrimaryForegroundColor}"/>
                     <SolidColorBrush x:Key="PrimaryHoverBackground" Opacity="0.12" Color="#8C8CFF" />
+                    <SolidColorBrush x:Key="PrimaryPressedBackground">#383838</SolidColorBrush>
 
                     <SolidColorBrush x:Key="SecondaryForeground">#A0A0A0</SolidColorBrush>
 
@@ -92,7 +96,9 @@
 
                     <SolidColorBrush x:Key="SubtleBackground">#262629</SolidColorBrush>
 
-                    <SolidColorBrush x:Key="DisabledForeground">#59FFFFFF</SolidColorBrush>
+                    <SolidColorBrush x:Key="DisabledBackground" Color="#353535"/>
+                    <Color x:Key="DisabledForegroundColor">#777777</Color>
+                    <SolidColorBrush x:Key="DisabledForeground" Color="{DynamicResource DisabledForegroundColor}" />
 
                     <SolidColorBrush x:Key="DangerBackground">#3A1A17</SolidColorBrush>
                     <SolidColorBrush x:Key="DangerHoverBackground">#4D221E</SolidColorBrush>
