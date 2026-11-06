@@ -38,7 +38,8 @@
                     <SolidColorBrush x:Key="DangerBackground">#FDF0EE</SolidColorBrush>
                     <SolidColorBrush x:Key="DangerHoverBackground">#F9DAD6</SolidColorBrush>
                     <SolidColorBrush x:Key="DangerPressedBackground">#F4C0BA</SolidColorBrush>
-                    <SolidColorBrush x:Key="DangerOutline">#E87A70</SolidColorBrush>
+                    <Color x:Key="DangerOutlineColor">#E87A70</Color>
+                    <SolidColorBrush x:Key="DangerOutline" Color="{StaticResource DangerOutlineColor}" />
                     <Color x:Key="DangerContentColor">#B54C44</Color>
                     <SolidColorBrush x:Key="DangerContent" Color="{StaticResource DangerContentColor}" />
                     
@@ -75,6 +76,8 @@
                     <BoxShadows x:Key="DepressedBoxShadow">inset 0 1 3 0 #80000000</BoxShadows>
                     <BoxShadows x:Key="BottomShadow">0 2 4 0 #1F000000</BoxShadows>
                     <BoxShadows x:Key="TopShadow">0 -2 4 0 #1F000000</BoxShadows>
+                    
+                    <SolidColorBrush x:Key="SystemControlErrorTextForegroundBrush" Color="{StaticResource DangerOutlineColor}" />
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Dark">
                     <SolidColorBrush x:Key="PrimaryBackground">#1E1E1E</SolidColorBrush>
@@ -103,7 +106,8 @@
                     <SolidColorBrush x:Key="DangerBackground">#3A1A17</SolidColorBrush>
                     <SolidColorBrush x:Key="DangerHoverBackground">#4D221E</SolidColorBrush>
                     <SolidColorBrush x:Key="DangerPressedBackground">#612B26</SolidColorBrush>
-                    <SolidColorBrush x:Key="DangerOutline">#E87A70</SolidColorBrush>
+                    <Color x:Key="DangerOutlineColor">#E87A70</Color>
+                    <SolidColorBrush x:Key="DangerOutline" Color="{StaticResource DangerOutlineColor}" />
                     <Color x:Key="DangerContentColor">#F5A29A</Color>
                     <SolidColorBrush x:Key="DangerContent" Color="{StaticResource DangerContentColor}" />
 
@@ -140,9 +144,11 @@
                     <BoxShadows x:Key="DepressedBoxShadow">inset 0 1 3 0 #B3000000</BoxShadows>
                     <BoxShadows x:Key="BottomShadow">0 2 4 0 #66000000</BoxShadows>
                     <BoxShadows x:Key="TopShadow">0 -2 4 0 #66000000</BoxShadows>
+                    
+                    <SolidColorBrush x:Key="SystemControlErrorTextForegroundBrush" Color="{StaticResource DangerOutlineColor}" />
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
-
+            
             <StreamGeometry x:Key="ErrorGeometry">M14,7 A7,7 0 0,0 0,7 M0,7 A7,7 0 1,0 14,7 M7,3l0,5 M7,9l0,2</StreamGeometry>
             <StreamGeometry x:Key="SpinnerGeometry">M12,2 A10,10 0 1 1 11.99,2</StreamGeometry>
 

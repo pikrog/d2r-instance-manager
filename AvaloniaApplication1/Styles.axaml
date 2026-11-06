@@ -367,4 +367,16 @@
     <Style Selector="TextBlock.error">
         <Setter Property="Foreground" Value="{DynamicResource DangerContent}" />
     </Style>
+    
+    <Style Selector="TextBox.error">
+        <Setter Property="BorderBrush" Value="{DynamicResource DangerOutline}" />
+    </Style>
+    
+    <Style Selector="TextBox.error:focus /template/ Border#PART_BorderElement">
+        <Setter Property="BorderBrush" Value="{DynamicResource DangerOutline}" />
+    </Style>
+
+    <Style Selector="TextBox.error:pointerover /template/ Border#PART_BorderElement">
+        <Setter Property="BorderBrush" Value="{DynamicResource DangerOutline}" />
+    </Style>
 </Styles>

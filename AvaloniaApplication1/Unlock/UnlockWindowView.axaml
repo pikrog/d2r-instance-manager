@@ -53,10 +53,10 @@
                 <StackPanel Classes="form-field">
                     <TextBlock>Passphrase</TextBlock>
                     <TextBox Classes="secret" 
+                             Classes.error="{Binding FailedToUnlock}"
                              x:Name="PassphraseTextBox"
                              AttachedToVisualTree="PassphraseTextBox_OnAttachedToVisualTree"
-                             Text="{Binding Passphrase}"
-                             DataValidationErrors.HasErrors="{Binding FailedToUnlock}" />
+                             Text="{Binding Passphrase}" />
                     <TextBlock Classes="error" 
                                IsVisible="{Binding FailedToUnlock}">
                         Invalid passphrase. Try again
