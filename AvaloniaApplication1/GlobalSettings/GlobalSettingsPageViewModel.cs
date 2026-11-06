@@ -13,7 +13,8 @@ namespace AvaloniaApplication1.GlobalSettings;
 
 public partial class GlobalSettingsPageViewModel(
     GlobalSettingsService globalSettingsService,
-    GameExecutablePathLocator gameExecutablePathLocator,
+    IGameExecutablePathLocator gameExecutablePathLocator,
+    IGlobalSettingsPathValidator gameExecutablePathValidator,
     ToastService toastService,
     OverlayService overlayService)
     : PageViewModel, IDialogParticipant

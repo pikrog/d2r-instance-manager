@@ -4,7 +4,10 @@ using System.Runtime.InteropServices;
 
 namespace AvaloniaApplication1.GameExecutable;
 
-public static partial class GameExecutableFileValidator
+using ValidationResult = GameExecutableFileValidationResult;
+using ValidationResultCode = GameExecutableFileValidationResultCode;
+
+public partial class GameExecutableFileValidator : IGameExecutableFileValidator
 {
     internal enum BinaryType : uint
     {
@@ -17,24 +20,13 @@ public static partial class GameExecutableFileValidator
     
     private const uint BadExeFormat = 0xC1;
 
-    public enum ValidateResultCode
-    {
-        Ok,
-        MissingPath,
-        FileNotFound,
-        InvalidExecutableFormat,
-        UnrecognizedExecutable,
-    }
-
-    public readonly record struct ValidateResult(ValidateResultCode Code, FileMetadata? FileMetadata = null);
-
-    public static ValidateResult Validate(string path)
+    public ValidationResult Validate(string path)
     {
         if (string.IsNullOrWhiteSpace(path))
-            return new ValidateResult(ValidateResultCode.MissingPath);
+            return new ValidationResult(ValidationResultCode.MissingPath);
         
         if (!File.Exists(path))
-            return new ValidateResult(ValidateResultCode.FileNotFound);
+            return new ValidationResult(ValidationResultCode.FileNotFound);
 
         var fileVersionInfo = FileVersionInfo.GetVersionInfo(path);
         var fileMetadata = new FileMetadata(
@@ -47,15 +39,15 @@ public static partial class GameExecutableFileValidator
         if (!GetBinaryType(path, out var type))
         {
             return Marshal.GetLastPInvokeError() == BadExeFormat
-                ? new ValidateResult(ValidateResultCode.InvalidExecutableFormat, fileMetadata)
-                : new ValidateResult(ValidateResultCode.FileNotFound);
+                ? new ValidationResult(ValidationResultCode.InvalidExecutableFormat, fileMetadata)
+                : new ValidationResult(ValidationResultCode.FileNotFound);
         }
 
         if (type != BinaryType.Executable64Bit)
-            return new ValidateResult(ValidateResultCode.InvalidExecutableFormat, fileMetadata);
+            return new ValidationResult(ValidationResultCode.InvalidExecutableFormat, fileMetadata);
         
         return fileVersionInfo.ProductName != GameExecutableConstants.ProductName 
-            ? new ValidateResult(ValidateResultCode.UnrecognizedExecutable, fileMetadata)
-            : new ValidateResult(ValidateResultCode.Ok, fileMetadata);
+            ? new ValidationResult(ValidationResultCode.UnrecognizedExecutable, fileMetadata)
+            : new ValidationResult(ValidationResultCode.Ok, fileMetadata);
     }
 }

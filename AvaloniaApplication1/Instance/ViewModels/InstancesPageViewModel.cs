@@ -29,7 +29,7 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
 
     private readonly IInstancePresenter _instancePresenter;
 
-    private readonly GlobalSettingsValidator _globalSettingsValidator;
+    private readonly IGlobalSettingsValidator _globalSettingsValidator;
     
     private readonly OverlayService _overlayService;
     
@@ -57,7 +57,7 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
 
     public InstancesPageViewModel(InstanceService instanceService,
         IInstancePresenter instancePresenter,
-        GlobalSettingsValidator globalSettingsValidator,
+        IGlobalSettingsValidator globalSettingsValidator,
         OverlayService overlayService,
         NavigationService navigationService,
         EditInstanceFormViewModelFactory formFactory,

@@ -19,6 +19,7 @@ using LaunchPreparation = Result<EngineLaunchContext, InstanceLaunchFailure>;
 public class InstanceLaunchContextFactory(
     ConfigService configService,
     AccountSnapshotTransformer accountSnapshotTransformer,
+    IGameExecutableFileValidator gameExecutableFileValidator,
     ILogger<InstanceLaunchContextFactory> logger)
 {
     public LaunchPreparation Create(InstanceSnapshot instance)
@@ -84,7 +85,7 @@ public class InstanceLaunchContextFactory(
 
     private InstanceLaunchFailure? ValidateExecutable(string path)
     {
-        var result = GameExecutableFileValidator.Validate(path);
+        var result = gameExecutableFileValidator.Validate(path);
 
         if (result.FileMetadata is { } d)
         {
@@ -104,18 +105,18 @@ public class InstanceLaunchContextFactory(
 
         switch (result.Code)
         {
-            case GameExecutableFileValidator.ValidateResultCode.Ok:
+            case GameExecutableFileValidationResultCode.Ok:
                 return null;
-            case GameExecutableFileValidator.ValidateResultCode.UnrecognizedExecutable:
+            case GameExecutableFileValidationResultCode.UnrecognizedExecutable:
                 logger.LogWarning("The executable was found but its metadata does not match the expected game");
                 return null;
-            case GameExecutableFileValidator.ValidateResultCode.MissingPath:
+            case GameExecutableFileValidationResultCode.MissingPath:
                 logger.LogError("The game executable path is missing");
                 return InstanceLaunchFailure.ExecutablePathMissing;
-            case GameExecutableFileValidator.ValidateResultCode.FileNotFound:
+            case GameExecutableFileValidationResultCode.FileNotFound:
                 logger.LogError("The game executable file was not found: {GameExecutablePath}", path);
                 return InstanceLaunchFailure.ExecutableNotFound;
-            case GameExecutableFileValidator.ValidateResultCode.InvalidExecutableFormat:
+            case GameExecutableFileValidationResultCode.InvalidExecutableFormat:
                 logger.LogError("The game executable file has an invalid format: {GameExecutablePath}", path);
                 return InstanceLaunchFailure.ExecutableInvalidFormat;
             default:

@@ -89,7 +89,8 @@ public static class ServiceCollectionExtension
         public void AddApplicationServices()
         {
             services.AddSingleton<InstanceConfigValidator>();
-            services.AddSingleton<GlobalSettingsValidator>();
+            services.AddSingleton<IGlobalSettingsPathValidator, GlobalSettingsPathValidator>();
+            services.AddSingleton<IGlobalSettingsValidator, GlobalSettingsValidator>();
             
             services.AddSingleton<AccountService>();
             services.AddSingleton<RegionService>();
@@ -117,7 +118,8 @@ public static class ServiceCollectionExtension
             services.AddSingleton<IGameExecutablePathProvider, GameConfigStorePathProvider>();
             services.AddSingleton<IGameExecutablePathProvider, UninstallEntryPathProvider>();
             services.AddSingleton<IGameExecutablePathProvider, ProgramFilesPathProvider>();
-            services.AddSingleton<GameExecutablePathLocator>();
+            services.AddSingleton<IGameExecutablePathLocator, GameExecutablePathLocator>();
+            services.AddSingleton<IGameExecutableFileValidator, GameExecutableFileValidator>();
             
             services.AddSingleton<OverlayHost>();
             services.AddSingleton<IOverlayHost>(sp => sp.GetRequiredService<OverlayHost>());

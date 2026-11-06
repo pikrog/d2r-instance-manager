@@ -87,12 +87,17 @@ public static class DesignServices
 
     private static readonly InstanceConfigValidator InstanceConfigValidator = new(ConfigService);
 
-    public static readonly GlobalSettingsValidator GlobalSettingsValidator = new(ConfigService);
+    private static readonly GameExecutableFileValidator GameExecutableFileValidator = new();
+    
+    private static readonly GlobalSettingsPathValidator GlobalSettingsPathValidator = new(GameExecutableFileValidator);
+    
+    public static readonly GlobalSettingsValidator GlobalSettingsValidator = new(ConfigService, GlobalSettingsPathValidator);
     
     public static readonly PageHost PageHost = new();
     
     private static readonly InstanceLaunchContextFactory InstanceLaunchContextFactory = new(ConfigService,
         AccountSnapshotTransformer,
+        GameExecutableFileValidator,
         NullLogger<InstanceLaunchContextFactory>.Instance);
 
     public static readonly NotificationCounter InstanceNotificationCounter = new();
