@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36915.13 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvaloniaApplication1", "AvaloniaApplication1\AvaloniaApplication1.csproj", "{7B1E773D-623B-4126-847D-BBB3F63D8BDC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D2RInstanceManager", "D2RInstanceManager\D2RInstanceManager.csproj", "{7B1E773D-623B-4126-847D-BBB3F63D8BDC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
