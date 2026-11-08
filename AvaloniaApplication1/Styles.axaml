@@ -350,6 +350,10 @@
         <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}" />
     </Style>
     
+    <Style Selector="controls|RevealableContent:not(:revealed) Button.icon:disabled /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryForeground}" />
+    </Style>
+    
     <Style Selector="StackPanel.form-field">
         <Setter Property="Orientation" Value="Vertical" />
         <Setter Property="Spacing" Value="4" />
