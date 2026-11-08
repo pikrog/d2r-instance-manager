@@ -4,10 +4,10 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using AvaloniaApplication1.Common;
+using D2RInstanceManager.Common;
 using CommunityToolkit.Mvvm.Input;
 
-namespace AvaloniaApplication1.Controls;
+namespace D2RInstanceManager.Controls;
 
 public partial class HotkeyBox : TemplatedControl
 {

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using AvaloniaApplication1.Instance;
-using AvaloniaApplication1.Instance.Models;
-using AvaloniaApplication1.Instance.Models.EventArgs;
+using D2RInstanceManager.Instance;
+using D2RInstanceManager.Instance.Models;
+using D2RInstanceManager.Instance.Models.EventArgs;
 
-namespace AvaloniaApplication1.Design.Services;
+namespace D2RInstanceManager.Design.Services;
 
 public class InstanceDesignPresenter(InstanceService service) : IInstancePresenter
 {

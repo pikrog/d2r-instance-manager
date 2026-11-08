@@ -1,5 +1,5 @@
-﻿using AvaloniaApplication1.Common;
+﻿using D2RInstanceManager.Common;
 
-namespace AvaloniaApplication1.Config.Exceptions;
+namespace D2RInstanceManager.Config.Exceptions;
 
 public class ConfigException(string message) : ApplicationException(message);

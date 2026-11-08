@@ -1,7 +1,7 @@
-﻿using AvaloniaApplication1.Design.Services;
-using AvaloniaApplication1.GlobalSettings;
+﻿using D2RInstanceManager.Design.Services;
+using D2RInstanceManager.GlobalSettings;
 
-namespace AvaloniaApplication1.Design.ViewModels;
+namespace D2RInstanceManager.Design.ViewModels;
 
 public class GlobalSettingsPageDesignViewModel : GlobalSettingsPageViewModel
 {

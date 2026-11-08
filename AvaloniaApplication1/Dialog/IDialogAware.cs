@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AvaloniaApplication1.Dialog;
+namespace D2RInstanceManager.Dialog;
 
 public interface IDialogAware
 {

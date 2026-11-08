@@ -1,7 +1,7 @@
 ﻿using System;
 using Serilog.Events;
 
-namespace AvaloniaApplication1.Log;
+namespace D2RInstanceManager.Log;
 
 public static class LogEventLevelMapper
 {

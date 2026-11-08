@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AvaloniaApplication1.HotKey.Coordination;
+namespace D2RInstanceManager.HotKey.Coordination;
 
 public class HotKeyBindingStateChangedEventArgs<THotKeyCommand>(THotKeyCommand command, HotKeyBindingState state) 
     : EventArgs

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using Avalonia;
-using AvaloniaApplication1.Controls;
-using AvaloniaApplication1.HotKey.Platform;
+using D2RInstanceManager.Controls;
+using D2RInstanceManager.HotKey.Platform;
 
-namespace AvaloniaApplication1.Common;
+namespace D2RInstanceManager.Common;
 
 public static class HotKeySuspension
 {

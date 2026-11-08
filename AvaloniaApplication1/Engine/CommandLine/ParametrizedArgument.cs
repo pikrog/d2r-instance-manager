@@ -1,3 +1,3 @@
-﻿namespace AvaloniaApplication1.Engine.CommandLine;
+﻿namespace D2RInstanceManager.Engine.CommandLine;
 
 public sealed record ParametrizedArgument(string Name, string Value) : Argument;

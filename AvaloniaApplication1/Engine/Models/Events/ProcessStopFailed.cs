@@ -1,7 +1,7 @@
 ﻿using System;
-using AvaloniaApplication1.Engine.Helpers.ProcessStop.Error;
+using D2RInstanceManager.Engine.Helpers.ProcessStop.Error;
 
-namespace AvaloniaApplication1.Engine.Models.Events;
+namespace D2RInstanceManager.Engine.Models.Events;
 
 public sealed record ProcessStopFailed : FailedEvent<ProcessStopError>
 {

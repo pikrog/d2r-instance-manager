@@ -1,8 +1,8 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using AvaloniaApplication1.Engine.Models.Events;
+using D2RInstanceManager.Engine.Models.Events;
 
-namespace AvaloniaApplication1.Engine.Agents;
+namespace D2RInstanceManager.Engine.Agents;
 
 public interface IAgent
 {

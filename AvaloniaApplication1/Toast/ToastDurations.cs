@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AvaloniaApplication1.Toast;
+namespace D2RInstanceManager.Toast;
 
 public static class ToastDurations
 {

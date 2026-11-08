@@ -1,7 +1,7 @@
 using System;
-using AvaloniaApplication1.Display;
+using D2RInstanceManager.Display;
 
-namespace AvaloniaApplication1.Design.Services;
+namespace D2RInstanceManager.Design.Services;
 
 public class FakeDisplayConfigMonitor : IDisplayConfigMonitor
 {

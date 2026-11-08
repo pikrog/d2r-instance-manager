@@ -1,6 +1,6 @@
-﻿using AvaloniaApplication1.Common;
+﻿using D2RInstanceManager.Common;
 
-namespace AvaloniaApplication1.Form.ViewModels;
+namespace D2RInstanceManager.Form.ViewModels;
 
 public interface IFormViewModel : IViewModel
 {

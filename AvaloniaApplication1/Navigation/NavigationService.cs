@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace AvaloniaApplication1.Navigation;
+namespace D2RInstanceManager.Navigation;
 
 public class NavigationService(IPageController controller, IPageProvider provider)
 {

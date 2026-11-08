@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Input;
-using AvaloniaApplication1.HotKey.Platform.Registration.Internal;
-using AvaloniaApplication1.HotKey.Platform.Registration.Native;
+using D2RInstanceManager.HotKey.Platform.Registration.Internal;
+using D2RInstanceManager.HotKey.Platform.Registration.Native;
 
-namespace AvaloniaApplication1.HotKey.Platform;
+namespace D2RInstanceManager.HotKey.Platform;
 
 public class HotKeyRegistrationManager : IHotKeySuspensionCoordinator
 {

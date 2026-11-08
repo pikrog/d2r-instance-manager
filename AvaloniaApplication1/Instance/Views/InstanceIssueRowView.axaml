@@ -2,9 +2,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:issues="clr-namespace:AvaloniaApplication1.Instance.Models.Issues"
+             xmlns:issues="clr-namespace:D2RInstanceManager.Instance.Models.Issues"
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="100"
-             x:Class="AvaloniaApplication1.Instance.Views.InstanceIssueRowView"
+             x:Class="D2RInstanceManager.Instance.Views.InstanceIssueRowView"
              x:DataType="issues:InstanceIssue">
     <Design.DataContext>
         <issues:MissingRegion />

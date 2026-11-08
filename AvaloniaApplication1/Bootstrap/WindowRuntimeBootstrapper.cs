@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using Avalonia.Controls;
-using AvaloniaApplication1.Initialization;
+using D2RInstanceManager.Initialization;
 
-namespace AvaloniaApplication1.Bootstrap;
+namespace D2RInstanceManager.Bootstrap;
 
 public class WindowRuntimeBootstrapper(IEnumerable<IWindowRuntimeInitializer> initializers)
 {

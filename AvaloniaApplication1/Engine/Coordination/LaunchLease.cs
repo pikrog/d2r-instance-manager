@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace AvaloniaApplication1.Engine.Coordination;
+namespace D2RInstanceManager.Engine.Coordination;
 
 public sealed class LaunchLease(SemaphoreSlim semaphore) : IDisposable
 {

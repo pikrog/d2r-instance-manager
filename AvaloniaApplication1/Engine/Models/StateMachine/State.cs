@@ -1,4 +1,4 @@
-﻿namespace AvaloniaApplication1.Engine.Models.StateMachine;
+﻿namespace D2RInstanceManager.Engine.Models.StateMachine;
 
 public enum State
 {

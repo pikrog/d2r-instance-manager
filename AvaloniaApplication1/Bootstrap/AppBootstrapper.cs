@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
-using AvaloniaApplication1.CommandLine;
-using AvaloniaApplication1.Log;
+using D2RInstanceManager.CommandLine;
+using D2RInstanceManager.Log;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AvaloniaApplication1.Bootstrap;
+namespace D2RInstanceManager.Bootstrap;
 
 public static class AppBootstrapper
 {

@@ -1,7 +1,7 @@
-﻿using AvaloniaApplication1.Selectable;
+﻿using D2RInstanceManager.Selectable;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace AvaloniaApplication1.Design.Controls.MultiSelectFilter;
+namespace D2RInstanceManager.Design.Controls.MultiSelectFilter;
 
 public partial class ExampleSelectable(string? label) : SelectableObservable
 {

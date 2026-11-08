@@ -2,10 +2,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
-             xmlns:viewModels="clr-namespace:AvaloniaApplication1.Design.ViewModels"
+             xmlns:controls="clr-namespace:D2RInstanceManager.Controls"
+             xmlns:viewModels="clr-namespace:D2RInstanceManager.Design.ViewModels"
              mc:Ignorable="d" d:DesignWidth="400"
-             x:Class="AvaloniaApplication1.Design.Controls.ErrorFormFieldPreview"
+             x:Class="D2RInstanceManager.Design.Controls.ErrorFormFieldPreview"
              x:DataType="viewModels:ErrorFormFieldDesignViewModel">
     <Design.DataContext>
         <viewModels:ErrorFormFieldDesignViewModel/>

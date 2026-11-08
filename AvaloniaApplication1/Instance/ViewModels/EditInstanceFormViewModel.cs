@@ -2,19 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Avalonia.Input;
-using AvaloniaApplication1.Account.Models;
-using AvaloniaApplication1.Authentication.Models;
-using AvaloniaApplication1.Common;
-using AvaloniaApplication1.Display;
-using AvaloniaApplication1.Form.ViewModels;
-using AvaloniaApplication1.HotKey;
-using AvaloniaApplication1.HotKey.Config;
-using AvaloniaApplication1.HotKey.Coordination;
-using AvaloniaApplication1.Instance.Models;
-using AvaloniaApplication1.Region.Models;
+using D2RInstanceManager.Account.Models;
+using D2RInstanceManager.Authentication.Models;
+using D2RInstanceManager.Common;
+using D2RInstanceManager.Display;
+using D2RInstanceManager.Form.ViewModels;
+using D2RInstanceManager.HotKey;
+using D2RInstanceManager.HotKey.Config;
+using D2RInstanceManager.HotKey.Coordination;
+using D2RInstanceManager.Instance.Models;
+using D2RInstanceManager.Region.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace AvaloniaApplication1.Instance.ViewModels;
+namespace D2RInstanceManager.Instance.ViewModels;
 
 public partial class EditInstanceFormViewModel : FormViewModelBase
 {

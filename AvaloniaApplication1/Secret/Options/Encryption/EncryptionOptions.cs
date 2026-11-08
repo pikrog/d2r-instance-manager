@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace AvaloniaApplication1.Secret.Options.Encryption;
+namespace D2RInstanceManager.Secret.Options.Encryption;
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "$type")]
 [JsonDerivedType(typeof(NoEncryption), "noEncryption")]

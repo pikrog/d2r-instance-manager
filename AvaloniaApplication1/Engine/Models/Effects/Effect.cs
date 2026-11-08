@@ -1,3 +1,3 @@
-﻿namespace AvaloniaApplication1.Engine.Models.Effects;
+﻿namespace D2RInstanceManager.Engine.Models.Effects;
 
 public abstract record Effect;

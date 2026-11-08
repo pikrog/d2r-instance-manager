@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AvaloniaApplication1.Engine.Common;
+using D2RInstanceManager.Engine.Common;
 
-namespace AvaloniaApplication1.Engine.CommandLine;
+namespace D2RInstanceManager.Engine.CommandLine;
 
 public class ArgumentStringBuilder(IArgumentFormatter argumentFormatter, string argumentSeparator = " ") : IArgumentStringBuilder
 {

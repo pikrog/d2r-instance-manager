@@ -5,7 +5,7 @@
         mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="400"
         Width="600" Height="400"
         WindowStartupLocation="CenterScreen"
-        x:Class="AvaloniaApplication1.InitialWindowView"
+        x:Class="D2RInstanceManager.InitialWindowView"
         Title="D2R Instance Manager Splash Screen"
         CanResize="False" CanMinimize="False" CanMaximize="False"
         WindowDecorations="BorderOnly"

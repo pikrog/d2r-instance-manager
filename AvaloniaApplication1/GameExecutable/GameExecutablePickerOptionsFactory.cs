@@ -1,6 +1,6 @@
 ﻿using Avalonia.Platform.Storage;
 
-namespace AvaloniaApplication1.GameExecutable;
+namespace D2RInstanceManager.GameExecutable;
 
 public static class GameExecutablePickerOptionsFactory
 {

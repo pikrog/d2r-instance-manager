@@ -3,7 +3,7 @@ using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
 
-namespace AvaloniaApplication1.Card.Views;
+namespace D2RInstanceManager.Card.Views;
 
 public partial class AddCard : UserControl
 {

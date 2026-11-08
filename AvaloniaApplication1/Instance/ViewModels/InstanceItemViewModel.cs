@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using AvaloniaApplication1.Instance.Models;
-using AvaloniaApplication1.Instance.Models.Issues;
-using AvaloniaApplication1.Selectable;
-using AvaloniaApplication1.Semantic;
+using D2RInstanceManager.Instance.Models;
+using D2RInstanceManager.Instance.Models.Issues;
+using D2RInstanceManager.Selectable;
+using D2RInstanceManager.Semantic;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace AvaloniaApplication1.Instance.ViewModels;
+namespace D2RInstanceManager.Instance.ViewModels;
 
 public partial class InstanceItemViewModel : SelectableObservable
 {

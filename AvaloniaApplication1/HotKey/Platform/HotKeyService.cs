@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Win32.Input;
-using AvaloniaApplication1.Common;
-using AvaloniaApplication1.HotKey.Platform.Registration.Native;
-using AvaloniaApplication1.Initialization;
+using D2RInstanceManager.Common;
+using D2RInstanceManager.HotKey.Platform.Registration.Native;
+using D2RInstanceManager.Initialization;
 
-namespace AvaloniaApplication1.HotKey.Platform;
+namespace D2RInstanceManager.HotKey.Platform;
 
 public partial class HotKeyService : IHotKeyService, IWindowRuntimeInitializer
 {

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using AvaloniaApplication1.Account.ViewModels;
-using AvaloniaApplication1.Design.ViewModels;
-using AvaloniaApplication1.GlobalSettings;
-using AvaloniaApplication1.Instance.ViewModels;
-using AvaloniaApplication1.Log;
-using AvaloniaApplication1.Navigation;
-using AvaloniaApplication1.Region.ViewModels;
+using D2RInstanceManager.Account.ViewModels;
+using D2RInstanceManager.Design.ViewModels;
+using D2RInstanceManager.GlobalSettings;
+using D2RInstanceManager.Instance.ViewModels;
+using D2RInstanceManager.Log;
+using D2RInstanceManager.Navigation;
+using D2RInstanceManager.Region.ViewModels;
 
-namespace AvaloniaApplication1.Design.Services;
+namespace D2RInstanceManager.Design.Services;
 
 public class PageDesignProvider : IPageProvider
 {

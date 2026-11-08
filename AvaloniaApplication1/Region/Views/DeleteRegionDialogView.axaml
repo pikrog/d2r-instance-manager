@@ -2,11 +2,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:designViewModels="clr-namespace:AvaloniaApplication1.Design.ViewModels"
-             xmlns:delete="clr-namespace:AvaloniaApplication1.Overlay.Dialog.Delete"
-             xmlns:local="clr-namespace:AvaloniaApplication1.Region.ViewModels"
+             xmlns:designViewModels="clr-namespace:D2RInstanceManager.Design.ViewModels"
+             xmlns:delete="clr-namespace:D2RInstanceManager.Overlay.Dialog.Delete"
+             xmlns:local="clr-namespace:D2RInstanceManager.Region.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="AvaloniaApplication1.Region.Views.DeleteRegionDialogView"
+             x:Class="D2RInstanceManager.Region.Views.DeleteRegionDialogView"
              x:DataType="local:DeleteRegionDialogViewModel">
     <Design.DataContext>
         <designViewModels:DeleteRegionDialogDesignViewModel/>

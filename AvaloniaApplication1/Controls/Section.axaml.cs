@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 
-namespace AvaloniaApplication1.Controls;
+namespace D2RInstanceManager.Controls;
 
 public class Section : ContentControl
 {

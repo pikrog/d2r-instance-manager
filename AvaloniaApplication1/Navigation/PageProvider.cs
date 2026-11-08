@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AvaloniaApplication1.Navigation;
+namespace D2RInstanceManager.Navigation;
 
 public class PageProvider(IServiceProvider serviceProvider) : IPageProvider
 {

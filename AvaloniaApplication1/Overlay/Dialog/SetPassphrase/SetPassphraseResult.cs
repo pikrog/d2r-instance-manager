@@ -1,4 +1,4 @@
-﻿namespace AvaloniaApplication1.Overlay.Dialog.SetPassphrase;
+﻿namespace D2RInstanceManager.Overlay.Dialog.SetPassphrase;
 
 public abstract record SetPassphraseResult
 {

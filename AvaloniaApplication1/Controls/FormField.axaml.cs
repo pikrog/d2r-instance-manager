@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Markup.Xaml;
 
-namespace AvaloniaApplication1.Controls;
+namespace D2RInstanceManager.Controls;
 
 public partial class FormField : UserControl
 {

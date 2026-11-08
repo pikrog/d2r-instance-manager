@@ -1,6 +1,6 @@
-﻿using AvaloniaApplication1.Toast.Descriptors;
+﻿using D2RInstanceManager.Toast.Descriptors;
 
-namespace AvaloniaApplication1.Toast;
+namespace D2RInstanceManager.Toast;
 
 public class ToastService(IToastController controller)
 {

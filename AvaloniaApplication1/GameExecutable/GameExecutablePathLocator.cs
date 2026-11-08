@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using AvaloniaApplication1.GameExecutable.Providers;
+using D2RInstanceManager.GameExecutable.Providers;
 
-namespace AvaloniaApplication1.GameExecutable;
+namespace D2RInstanceManager.GameExecutable;
 
 public class GameExecutablePathLocator(IEnumerable<IGameExecutablePathProvider> providers) : IGameExecutablePathLocator
 {

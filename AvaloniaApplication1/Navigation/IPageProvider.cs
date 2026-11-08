@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AvaloniaApplication1.Navigation;
+namespace D2RInstanceManager.Navigation;
 
 public interface IPageProvider
 {

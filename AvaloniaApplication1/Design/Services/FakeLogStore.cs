@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using AvaloniaApplication1.Log;
+using D2RInstanceManager.Log;
 
-namespace AvaloniaApplication1.Design.Services;
+namespace D2RInstanceManager.Design.Services;
 
 public class FakeLogStore : ILogStoreReader
 {

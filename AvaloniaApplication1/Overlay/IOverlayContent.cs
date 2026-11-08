@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace AvaloniaApplication1.Overlay;
+namespace D2RInstanceManager.Overlay;
 
 public interface IOverlayContent;
 

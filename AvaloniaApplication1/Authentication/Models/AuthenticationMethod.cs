@@ -1,4 +1,4 @@
-﻿namespace AvaloniaApplication1.Authentication.Models;
+﻿namespace D2RInstanceManager.Authentication.Models;
 
 public enum AuthenticationMethod
 {

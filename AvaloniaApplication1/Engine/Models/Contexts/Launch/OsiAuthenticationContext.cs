@@ -1,3 +1,3 @@
-﻿namespace AvaloniaApplication1.Engine.Models.Contexts.Launch;
+﻿namespace D2RInstanceManager.Engine.Models.Contexts.Launch;
 
 public sealed record OsiAuthenticationContext(string RegionAddress) : AuthenticationContext;

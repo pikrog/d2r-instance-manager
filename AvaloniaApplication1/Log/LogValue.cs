@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AvaloniaApplication1.Log;
+namespace D2RInstanceManager.Log;
 
 public abstract record LogValue
 {

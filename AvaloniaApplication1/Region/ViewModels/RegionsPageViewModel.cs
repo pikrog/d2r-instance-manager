@@ -2,17 +2,17 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using AvaloniaApplication1.Card;
-using AvaloniaApplication1.Card.ViewModels;
-using AvaloniaApplication1.Dialog;
-using AvaloniaApplication1.Navigation;
-using AvaloniaApplication1.Overlay;
-using AvaloniaApplication1.Overlay.Dialog.DiscardChanges;
-using AvaloniaApplication1.Region.Models;
+using D2RInstanceManager.Card;
+using D2RInstanceManager.Card.ViewModels;
+using D2RInstanceManager.Dialog;
+using D2RInstanceManager.Navigation;
+using D2RInstanceManager.Overlay;
+using D2RInstanceManager.Overlay.Dialog.DiscardChanges;
+using D2RInstanceManager.Region.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace AvaloniaApplication1.Region.ViewModels;
+namespace D2RInstanceManager.Region.ViewModels;
 
 public partial class RegionsPageViewModel : PageViewModel, IDialogParticipant
 {

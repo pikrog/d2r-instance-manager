@@ -1,5 +1,5 @@
-﻿using AvaloniaApplication1.Engine.Platform.Process;
+﻿using D2RInstanceManager.Engine.Platform.Process;
 
-namespace AvaloniaApplication1.Engine.Models.Effects;
+namespace D2RInstanceManager.Engine.Models.Effects;
 
 public sealed record MonitorProcessExit(ProcessManager ProcessManager, uint ForcefulExitCode) : Effect;

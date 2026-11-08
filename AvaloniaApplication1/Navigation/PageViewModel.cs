@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using AvaloniaApplication1.Common;
+using D2RInstanceManager.Common;
 
-namespace AvaloniaApplication1.Navigation;
+namespace D2RInstanceManager.Navigation;
 
 public abstract class PageViewModel : ViewModelBase
 {

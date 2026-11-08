@@ -1,7 +1,7 @@
 ﻿using System;
-using AvaloniaApplication1.Secret.Options.Encryption;
+using D2RInstanceManager.Secret.Options.Encryption;
 
-namespace AvaloniaApplication1.GlobalSettings;
+namespace D2RInstanceManager.GlobalSettings;
 
 public static class ProtectionSelectionMapper
 {

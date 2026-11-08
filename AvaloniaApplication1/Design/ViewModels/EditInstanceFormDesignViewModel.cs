@@ -1,13 +1,13 @@
 ﻿using System;
 using Avalonia.Input;
-using AvaloniaApplication1.Account.Models;
-using AvaloniaApplication1.Design.Services;
-using AvaloniaApplication1.Display;
-using AvaloniaApplication1.HotKey;
-using AvaloniaApplication1.Instance.ViewModels;
-using AvaloniaApplication1.Region.Models;
+using D2RInstanceManager.Account.Models;
+using D2RInstanceManager.Design.Services;
+using D2RInstanceManager.Display;
+using D2RInstanceManager.HotKey;
+using D2RInstanceManager.Instance.ViewModels;
+using D2RInstanceManager.Region.Models;
 
-namespace AvaloniaApplication1.Design.ViewModels;
+namespace D2RInstanceManager.Design.ViewModels;
 
 public class EditInstanceFormDesignViewModel : EditInstanceFormViewModel
 {

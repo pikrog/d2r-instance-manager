@@ -1,4 +1,4 @@
-﻿namespace AvaloniaApplication1.HotKey.Coordination;
+﻿namespace D2RInstanceManager.HotKey.Coordination;
 
 public record HotKeyBinding(KeyCombination KeyCombination, HotKeyCommand Command);
 

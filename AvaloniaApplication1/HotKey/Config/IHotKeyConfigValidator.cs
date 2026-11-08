@@ -1,6 +1,6 @@
-﻿using AvaloniaApplication1.HotKey.Coordination;
+﻿using D2RInstanceManager.HotKey.Coordination;
 
-namespace AvaloniaApplication1.HotKey.Config;
+namespace D2RInstanceManager.HotKey.Config;
 
 public interface IHotKeyConfigValidator
 {

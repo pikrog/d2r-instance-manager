@@ -3,9 +3,9 @@ using System.Globalization;
 using Avalonia;
 using Avalonia.Data.Converters;
 using Avalonia.Input;
-using AvaloniaApplication1.HotKey;
+using D2RInstanceManager.HotKey;
 
-namespace AvaloniaApplication1.Common.Converters;
+namespace D2RInstanceManager.Common.Converters;
 
 public sealed class KeyCombinationToKeyGestureConverter : IValueConverter
 {

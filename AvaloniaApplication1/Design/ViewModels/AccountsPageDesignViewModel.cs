@@ -1,7 +1,7 @@
-using AvaloniaApplication1.Design.Services;
-using AccountsPageViewModel = AvaloniaApplication1.Account.ViewModels.AccountsPageViewModel;
+using D2RInstanceManager.Design.Services;
+using AccountsPageViewModel = D2RInstanceManager.Account.ViewModels.AccountsPageViewModel;
 
-namespace AvaloniaApplication1.Design.ViewModels;
+namespace D2RInstanceManager.Design.ViewModels;
 
 public class AccountsPageDesignViewModel : AccountsPageViewModel
 {

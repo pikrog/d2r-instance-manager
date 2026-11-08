@@ -1,8 +1,8 @@
-﻿using AvaloniaApplication1.Engine.CommandLine;
-using AvaloniaApplication1.Engine.Models.Contexts;
-using AvaloniaApplication1.Engine.Platform.Process;
+﻿using D2RInstanceManager.Engine.CommandLine;
+using D2RInstanceManager.Engine.Models.Contexts;
+using D2RInstanceManager.Engine.Platform.Process;
 
-namespace AvaloniaApplication1.Engine.Factories;
+namespace D2RInstanceManager.Engine.Factories;
 
 public class ProcessStartRequestFactory(IArgumentStringBuilder argumentStringBuilder)
 {

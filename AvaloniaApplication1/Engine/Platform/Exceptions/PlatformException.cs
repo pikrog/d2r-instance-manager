@@ -1,7 +1,7 @@
 ﻿using System;
-using AvaloniaApplication1.Engine.Exceptions;
+using D2RInstanceManager.Engine.Exceptions;
 
-namespace AvaloniaApplication1.Engine.Platform.Exceptions;
+namespace D2RInstanceManager.Engine.Platform.Exceptions;
 
 public abstract class PlatformException : DomainException
 {

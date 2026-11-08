@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AvaloniaApplication1.HotKey.Coordination;
-using AvaloniaApplication1.Instance.Models;
-using AvaloniaApplication1.Instance.Models.EventArgs;
-using AvaloniaApplication1.Instance.Models.Issues.HotKey;
+using D2RInstanceManager.HotKey.Coordination;
+using D2RInstanceManager.Instance.Models;
+using D2RInstanceManager.Instance.Models.EventArgs;
+using D2RInstanceManager.Instance.Models.Issues.HotKey;
 
-namespace AvaloniaApplication1.Instance;
+namespace D2RInstanceManager.Instance;
 
 public class InstancePresenter : IInstancePresenter
 {

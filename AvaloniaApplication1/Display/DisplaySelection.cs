@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace AvaloniaApplication1.Display;
+namespace D2RInstanceManager.Display;
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "$type")]
 [JsonDerivedType(typeof(Primary), "primary")]

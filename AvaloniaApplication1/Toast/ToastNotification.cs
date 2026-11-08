@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using Avalonia.Threading;
-using AvaloniaApplication1.Toast.Descriptors;
+using D2RInstanceManager.Toast.Descriptors;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace AvaloniaApplication1.Toast;
+namespace D2RInstanceManager.Toast;
 
 public sealed partial class ToastNotification : ObservableObject, IDisposable
 {

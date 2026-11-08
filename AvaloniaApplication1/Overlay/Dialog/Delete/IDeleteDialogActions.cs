@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace AvaloniaApplication1.Overlay.Dialog.Delete;
+namespace D2RInstanceManager.Overlay.Dialog.Delete;
 
 public interface IDeleteDialogActions
 {

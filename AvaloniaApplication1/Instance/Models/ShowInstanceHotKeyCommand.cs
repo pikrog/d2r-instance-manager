@@ -1,6 +1,6 @@
 ﻿using System;
-using AvaloniaApplication1.HotKey.Coordination;
+using D2RInstanceManager.HotKey.Coordination;
 
-namespace AvaloniaApplication1.Instance.Models;
+namespace D2RInstanceManager.Instance.Models;
 
 public sealed record ShowInstanceHotKeyCommand(Guid InstanceId) : HotKeyCommand;

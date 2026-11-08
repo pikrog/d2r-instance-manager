@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 
-namespace AvaloniaApplication1.Overlay.Dialog.Delete;
+namespace D2RInstanceManager.Overlay.Dialog.Delete;
 
 public partial class DeleteDialog : UserControl
 {

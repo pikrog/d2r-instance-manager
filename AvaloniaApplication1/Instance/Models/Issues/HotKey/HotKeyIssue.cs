@@ -1,5 +1,5 @@
-﻿using AvaloniaApplication1.HotKey;
+﻿using D2RInstanceManager.HotKey;
 
-namespace AvaloniaApplication1.Instance.Models.Issues.HotKey;
+namespace D2RInstanceManager.Instance.Models.Issues.HotKey;
 
 public abstract record HotKeyIssue(KeyCombination KeyCombination) : InstanceIssue;

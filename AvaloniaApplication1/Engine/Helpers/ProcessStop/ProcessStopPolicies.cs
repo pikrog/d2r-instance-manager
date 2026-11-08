@@ -1,6 +1,6 @@
 ﻿using System;
-using AvaloniaApplication1.Engine.Common;
+using D2RInstanceManager.Engine.Common;
 
-namespace AvaloniaApplication1.Engine.Helpers.ProcessStop;
+namespace D2RInstanceManager.Engine.Helpers.ProcessStop;
 
 public record ProcessStopPolicies(RetryPolicy GracefulProcessStopRetryPolicy, TimeSpan ForcefulProcessStopTimeout, uint ForcefulExitCode = RetryingProcessStopper.DefaultForcefulExitCode);

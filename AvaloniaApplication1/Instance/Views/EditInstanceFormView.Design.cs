@@ -1,6 +1,6 @@
-﻿using AvaloniaApplication1.Design.Services;
+﻿using D2RInstanceManager.Design.Services;
 
-namespace AvaloniaApplication1.Instance.Views;
+namespace D2RInstanceManager.Instance.Views;
 
 public partial class EditInstanceFormView
 {

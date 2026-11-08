@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-namespace AvaloniaApplication1.Log;
+namespace D2RInstanceManager.Log;
 
 public class LogService : ILogService
 {

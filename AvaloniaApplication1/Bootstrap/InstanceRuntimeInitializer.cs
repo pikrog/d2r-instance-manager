@@ -1,10 +1,10 @@
 using System.Linq;
-using AvaloniaApplication1.Config;
-using AvaloniaApplication1.Engine;
-using AvaloniaApplication1.Initialization;
-using AvaloniaApplication1.Log.Instance;
+using D2RInstanceManager.Config;
+using D2RInstanceManager.Engine;
+using D2RInstanceManager.Initialization;
+using D2RInstanceManager.Log.Instance;
 
-namespace AvaloniaApplication1.Bootstrap;
+namespace D2RInstanceManager.Bootstrap;
 
 public class InstanceRuntimeInitializer(
     ConfigContext configContext,

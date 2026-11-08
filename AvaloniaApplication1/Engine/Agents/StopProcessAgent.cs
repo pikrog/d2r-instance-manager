@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AvaloniaApplication1.Common;
-using AvaloniaApplication1.Engine.Helpers.ProcessStop;
-using AvaloniaApplication1.Engine.Helpers.ProcessStop.Error;
-using AvaloniaApplication1.Engine.Models.Events;
-using AvaloniaApplication1.Engine.Platform.Process;
+using D2RInstanceManager.Common;
+using D2RInstanceManager.Engine.Helpers.ProcessStop;
+using D2RInstanceManager.Engine.Helpers.ProcessStop.Error;
+using D2RInstanceManager.Engine.Models.Events;
+using D2RInstanceManager.Engine.Platform.Process;
 using Microsoft.Extensions.Logging;
 
-namespace AvaloniaApplication1.Engine.Agents;
+namespace D2RInstanceManager.Engine.Agents;
 
 using StopResult = Result<ProcessStopMode, ProcessStopError>;
 

@@ -1,5 +1,5 @@
-﻿using AvaloniaApplication1.Engine.Models.Contexts;
+﻿using D2RInstanceManager.Engine.Models.Contexts;
 
-namespace AvaloniaApplication1.Engine.Models.Effects;
+namespace D2RInstanceManager.Engine.Models.Effects;
 
 public sealed record StartProcess(ProcessStartContext ProcessStartContext) : Effect;

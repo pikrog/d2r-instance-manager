@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Globalization;
 using Avalonia.Data.Converters;
-using AvaloniaApplication1.Navigation;
+using D2RInstanceManager.Navigation;
 
-namespace AvaloniaApplication1.Common.Converters;
+namespace D2RInstanceManager.Common.Converters;
 
 public class IsPageTypeConverter : IValueConverter
 {

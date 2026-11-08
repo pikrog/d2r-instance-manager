@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AvaloniaApplication1.Common;
-using AvaloniaApplication1.Engine.Models;
+using D2RInstanceManager.Common;
+using D2RInstanceManager.Engine.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace AvaloniaApplication1.Overlay.Dialog.ShutdownProgress;
+namespace D2RInstanceManager.Overlay.Dialog.ShutdownProgress;
 
 public partial class ShutdownProgressDialogViewModel : ViewModelBase, IOverlayContent<Unit>
 {

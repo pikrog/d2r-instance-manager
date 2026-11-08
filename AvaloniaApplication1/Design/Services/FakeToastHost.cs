@@ -1,8 +1,8 @@
 ﻿using System.Collections.ObjectModel;
-using AvaloniaApplication1.Toast;
-using AvaloniaApplication1.Toast.Descriptors;
+using D2RInstanceManager.Toast;
+using D2RInstanceManager.Toast.Descriptors;
 
-namespace AvaloniaApplication1.Design.Services;
+namespace D2RInstanceManager.Design.Services;
 
 public class FakeToastHost : ToastHost
 {

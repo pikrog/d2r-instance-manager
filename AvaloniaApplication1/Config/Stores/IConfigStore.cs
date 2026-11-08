@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace AvaloniaApplication1.Config.Stores;
+namespace D2RInstanceManager.Config.Stores;
 
 public interface IConfigStore
 {

@@ -1,6 +1,6 @@
-﻿using AvaloniaApplication1.HotKey.Platform.Registration.Native;
+﻿using D2RInstanceManager.HotKey.Platform.Registration.Native;
 
-namespace AvaloniaApplication1.HotKey.Platform.Registration.Internal;
+namespace D2RInstanceManager.HotKey.Platform.Registration.Internal;
 
 public sealed record HotKeyInternalRegistrationSuccess(
     HotKeyHandle Handle,

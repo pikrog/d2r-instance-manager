@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AvaloniaApplication1.Common;
-using AvaloniaApplication1.Engine.Helpers.ProcessStop.Error;
-using AvaloniaApplication1.Engine.Platform;
-using AvaloniaApplication1.Engine.Platform.Process;
+using D2RInstanceManager.Common;
+using D2RInstanceManager.Engine.Helpers.ProcessStop.Error;
+using D2RInstanceManager.Engine.Platform;
+using D2RInstanceManager.Engine.Platform.Process;
 
-namespace AvaloniaApplication1.Engine.Helpers.ProcessStop;
+namespace D2RInstanceManager.Engine.Helpers.ProcessStop;
 
 using StopResult = Result<ProcessStopMode, ProcessStopError>;
 

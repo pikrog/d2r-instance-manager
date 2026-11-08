@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using AvaloniaApplication1.Log.Filter;
-using AvaloniaApplication1.Selectable;
+using D2RInstanceManager.Log.Filter;
+using D2RInstanceManager.Selectable;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData.Binding;
 
-namespace AvaloniaApplication1.Log;
+namespace D2RInstanceManager.Log;
 
 public class NameFilter : ObservableObject
 {

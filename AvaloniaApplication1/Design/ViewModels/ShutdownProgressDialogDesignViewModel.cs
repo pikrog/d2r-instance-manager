@@ -1,9 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using AvaloniaApplication1.Engine.Models;
-using AvaloniaApplication1.Overlay.Dialog.ShutdownProgress;
+using D2RInstanceManager.Engine.Models;
+using D2RInstanceManager.Overlay.Dialog.ShutdownProgress;
 
-namespace AvaloniaApplication1.Design.ViewModels;
+namespace D2RInstanceManager.Design.ViewModels;
 
 public class ShutdownProgressDialogDesignViewModel() : ShutdownProgressDialogViewModel([
     new ShutdownRequest(Task.CompletedTask, true),

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace AvaloniaApplication1.Selectable;
+namespace D2RInstanceManager.Selectable;
 
 public interface ISelectable : INotifyPropertyChanged
 {

@@ -1,7 +1,7 @@
 ﻿using System;
-using AvaloniaApplication1.Engine.Platform;
+using D2RInstanceManager.Engine.Platform;
 
-namespace AvaloniaApplication1.Display;
+namespace D2RInstanceManager.Display;
 
 public static class DisplayResolver
 {

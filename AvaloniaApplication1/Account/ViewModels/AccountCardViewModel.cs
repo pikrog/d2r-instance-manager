@@ -1,8 +1,8 @@
 ﻿using System;
-using AvaloniaApplication1.Card.ViewModels;
+using D2RInstanceManager.Card.ViewModels;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace AvaloniaApplication1.Account.ViewModels;
+namespace D2RInstanceManager.Account.ViewModels;
 
 public partial class AccountCardViewModel : CardViewModel
 {

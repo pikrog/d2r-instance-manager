@@ -1,5 +1,5 @@
-﻿using AvaloniaApplication1.Region.ViewModels;
+﻿using D2RInstanceManager.Region.ViewModels;
 
-namespace AvaloniaApplication1.Design.ViewModels;
+namespace D2RInstanceManager.Design.ViewModels;
 
 public class DeleteRegionDialogDesignViewModel() : DeleteRegionDialogViewModel("Europe", 3);

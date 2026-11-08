@@ -1,4 +1,4 @@
-﻿namespace AvaloniaApplication1.GlobalSettings.Issues;
+﻿namespace D2RInstanceManager.GlobalSettings.Issues;
 
 public sealed record UnrecognizedExecutable(string Path) : GameExecutablePathIssue
 {

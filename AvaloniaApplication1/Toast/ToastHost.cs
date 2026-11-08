@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 
-namespace AvaloniaApplication1.Toast;
+namespace D2RInstanceManager.Toast;
 
 public class ToastHost : IToastHost, IToastController
 {

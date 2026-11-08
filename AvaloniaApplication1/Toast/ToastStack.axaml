@@ -2,12 +2,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:toast="clr-namespace:AvaloniaApplication1.Toast"
-             xmlns:semantic="clr-namespace:AvaloniaApplication1.Semantic"
-             xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
-             xmlns:descriptors="clr-namespace:AvaloniaApplication1.Toast.Descriptors"
+             xmlns:toast="clr-namespace:D2RInstanceManager.Toast"
+             xmlns:semantic="clr-namespace:D2RInstanceManager.Semantic"
+             xmlns:controls="clr-namespace:D2RInstanceManager.Controls"
+             xmlns:descriptors="clr-namespace:D2RInstanceManager.Toast.Descriptors"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="AvaloniaApplication1.Toast.ToastStack"
+             x:Class="D2RInstanceManager.Toast.ToastStack"
              x:Name="Root">
     <UserControl.Resources>
         <x:Double x:Key="ToastIdleOpacity">0.85</x:Double>

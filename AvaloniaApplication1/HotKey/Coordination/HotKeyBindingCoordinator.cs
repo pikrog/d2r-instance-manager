@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using AvaloniaApplication1.HotKey.Platform;
-using AvaloniaApplication1.HotKey.Platform.Registration.Internal;
-using AvaloniaApplication1.HotKey.Platform.Registration.Native;
+using D2RInstanceManager.HotKey.Platform;
+using D2RInstanceManager.HotKey.Platform.Registration.Internal;
+using D2RInstanceManager.HotKey.Platform.Registration.Native;
 
-namespace AvaloniaApplication1.HotKey.Coordination;
+namespace D2RInstanceManager.HotKey.Coordination;
 
 public abstract class HotKeyBindingCoordinator<THotKeyCommand> where THotKeyCommand : HotKeyCommand
 {

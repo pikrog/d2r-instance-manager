@@ -1,7 +1,7 @@
 ﻿using System;
-using AvaloniaApplication1.HotKey.Platform;
+using D2RInstanceManager.HotKey.Platform;
 
-namespace AvaloniaApplication1.Design.Services;
+namespace D2RInstanceManager.Design.Services;
 
 public class FakeHotKeySuspensionCoordinator : IHotKeySuspensionCoordinator
 {

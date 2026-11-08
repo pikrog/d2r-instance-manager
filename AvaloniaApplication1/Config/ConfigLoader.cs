@@ -1,11 +1,11 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
-using AvaloniaApplication1.Config.Stores;
-using AvaloniaApplication1.GlobalSettings;
-using AvaloniaApplication1.Region.Models;
+using D2RInstanceManager.Config.Stores;
+using D2RInstanceManager.GlobalSettings;
+using D2RInstanceManager.Region.Models;
 using Microsoft.Extensions.Logging;
 
-namespace AvaloniaApplication1.Config;
+namespace D2RInstanceManager.Config;
 
 public class ConfigLoader(IConfigStore configStore, ILogger<ConfigLoader> logger)
 {

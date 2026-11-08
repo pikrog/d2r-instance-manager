@@ -1,4 +1,4 @@
-﻿namespace AvaloniaApplication1.Engine.Common;
+﻿namespace D2RInstanceManager.Engine.Common;
 
 public readonly struct RedactedString(string value)
 {

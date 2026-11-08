@@ -1,4 +1,4 @@
-﻿namespace AvaloniaApplication1.Engine.Platform;
+﻿namespace D2RInstanceManager.Engine.Platform;
 
 public enum RequestState
 {

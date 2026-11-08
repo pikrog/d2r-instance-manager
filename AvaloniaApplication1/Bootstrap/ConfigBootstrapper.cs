@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
-using AvaloniaApplication1.Config;
-using AvaloniaApplication1.Config.Stores;
+using D2RInstanceManager.Config;
+using D2RInstanceManager.Config.Stores;
 using Microsoft.Extensions.Logging;
 using Serilog;
 
-namespace AvaloniaApplication1.Bootstrap;
+namespace D2RInstanceManager.Bootstrap;
 
 public static class ConfigBootstrapper
 {

@@ -1,6 +1,6 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="clr-namespace:AvaloniaApplication1.Controls">
+        xmlns:controls="clr-namespace:D2RInstanceManager.Controls">
     <Design.PreviewWith>
         <StackPanel Orientation="Vertical" Margin="10" Spacing="8">
             <Button>Regular</Button>

@@ -2,7 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace AvaloniaApplication1.Instance.Views;
+namespace D2RInstanceManager.Instance.Views;
 
 public partial class InstanceIssueRowView : UserControl
 {

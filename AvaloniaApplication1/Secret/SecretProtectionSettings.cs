@@ -1,8 +1,8 @@
 ﻿using System.Text;
-using AvaloniaApplication1.Secret.Data;
-using AvaloniaApplication1.Secret.Options.Encryption;
+using D2RInstanceManager.Secret.Data;
+using D2RInstanceManager.Secret.Options.Encryption;
 
-namespace AvaloniaApplication1.Secret;
+namespace D2RInstanceManager.Secret;
 
 public record SecretProtectionSettings
 {

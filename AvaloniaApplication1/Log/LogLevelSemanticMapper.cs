@@ -1,7 +1,7 @@
 ﻿using System;
-using AvaloniaApplication1.Semantic;
+using D2RInstanceManager.Semantic;
 
-namespace AvaloniaApplication1.Log;
+namespace D2RInstanceManager.Log;
 
 public static class LogLevelSemanticMapper
 {

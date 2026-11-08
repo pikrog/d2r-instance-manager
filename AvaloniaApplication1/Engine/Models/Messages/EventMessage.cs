@@ -1,5 +1,5 @@
-﻿using AvaloniaApplication1.Engine.Models.Events;
+﻿using D2RInstanceManager.Engine.Models.Events;
 
-namespace AvaloniaApplication1.Engine.Models.Messages;
+namespace D2RInstanceManager.Engine.Models.Messages;
 
 public record EventMessage(Event Event) : Message;

@@ -1,4 +1,4 @@
-﻿namespace AvaloniaApplication1.GlobalSettings;
+﻿namespace D2RInstanceManager.GlobalSettings;
 
 public record GlobalSettingsDraft(
     string GameExecutablePath, 

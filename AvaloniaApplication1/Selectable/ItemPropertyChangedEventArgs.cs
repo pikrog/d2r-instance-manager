@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AvaloniaApplication1.Selectable;
+namespace D2RInstanceManager.Selectable;
 
 public class ItemPropertyChangedEventArgs<T>(T item, string? propertyName) : EventArgs
     where T : class

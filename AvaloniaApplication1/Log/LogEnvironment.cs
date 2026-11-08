@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace AvaloniaApplication1.Log;
+namespace D2RInstanceManager.Log;
 
 public class LogEnvironment
 {

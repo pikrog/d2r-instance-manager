@@ -1,8 +1,8 @@
-using AvaloniaApplication1.Design.Services;
-using AvaloniaApplication1.GlobalSettings.Issues;
-using AvaloniaApplication1.Instance.ViewModels;
+using D2RInstanceManager.Design.Services;
+using D2RInstanceManager.GlobalSettings.Issues;
+using D2RInstanceManager.Instance.ViewModels;
 
-namespace AvaloniaApplication1.Design.ViewModels;
+namespace D2RInstanceManager.Design.ViewModels;
 
 public sealed class InstancesPageDesignViewModel : InstancesPageViewModel
 {

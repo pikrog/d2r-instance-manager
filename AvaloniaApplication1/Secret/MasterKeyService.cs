@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AvaloniaApplication1.Secret;
+namespace D2RInstanceManager.Secret;
 
 public class MasterKeyService : IMasterKeyProvider
 {

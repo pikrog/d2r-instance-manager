@@ -4,7 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 
-namespace AvaloniaApplication1.Controls;
+namespace D2RInstanceManager.Controls;
 
 public class MultiSelectFilter : TemplatedControl
 {

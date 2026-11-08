@@ -2,7 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace AvaloniaApplication1.Overlay.Dialog.DiscardChanges;
+namespace D2RInstanceManager.Overlay.Dialog.DiscardChanges;
 
 public partial class DiscardChangesDialogView : UserControl
 {

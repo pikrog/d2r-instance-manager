@@ -6,22 +6,22 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Threading;
-using AvaloniaApplication1.Dialog;
-using AvaloniaApplication1.Display;
-using AvaloniaApplication1.GlobalSettings;
-using AvaloniaApplication1.GlobalSettings.Issues;
-using AvaloniaApplication1.Instance.Models;
-using AvaloniaApplication1.Instance.Models.EventArgs;
-using AvaloniaApplication1.Navigation;
-using AvaloniaApplication1.Notification;
-using AvaloniaApplication1.Overlay;
-using AvaloniaApplication1.Selectable;
+using D2RInstanceManager.Dialog;
+using D2RInstanceManager.Display;
+using D2RInstanceManager.GlobalSettings;
+using D2RInstanceManager.GlobalSettings.Issues;
+using D2RInstanceManager.Instance.Models;
+using D2RInstanceManager.Instance.Models.EventArgs;
+using D2RInstanceManager.Navigation;
+using D2RInstanceManager.Notification;
+using D2RInstanceManager.Overlay;
+using D2RInstanceManager.Selectable;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AvaloniaApplication1.Instance.ViewModels;
+namespace D2RInstanceManager.Instance.ViewModels;
 
 public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
 {

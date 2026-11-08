@@ -2,7 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace AvaloniaApplication1.Overlay.Dialog.ShutdownProgress;
+namespace D2RInstanceManager.Overlay.Dialog.ShutdownProgress;
 
 public partial class ShutdownProgressDialogView : UserControl
 {

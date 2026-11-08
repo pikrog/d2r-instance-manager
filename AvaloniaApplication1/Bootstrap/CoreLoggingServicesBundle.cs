@@ -1,9 +1,9 @@
-﻿using AvaloniaApplication1.Log;
-using AvaloniaApplication1.Log.Instance;
-using AvaloniaApplication1.Notification;
+﻿using D2RInstanceManager.Log;
+using D2RInstanceManager.Log.Instance;
+using D2RInstanceManager.Notification;
 using Serilog;
 
-namespace AvaloniaApplication1.Bootstrap;
+namespace D2RInstanceManager.Bootstrap;
 
 public record CoreLoggingServicesBundle(
     ILogger Logger,

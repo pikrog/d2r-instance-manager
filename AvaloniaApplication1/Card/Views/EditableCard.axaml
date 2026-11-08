@@ -2,10 +2,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:views="clr-namespace:AvaloniaApplication1.Card.Views"
-             xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
+             xmlns:views="clr-namespace:D2RInstanceManager.Card.Views"
+             xmlns:controls="clr-namespace:D2RInstanceManager.Controls"
              mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="200"
-             x:Class="AvaloniaApplication1.Card.Views.EditableCard"
+             x:Class="D2RInstanceManager.Card.Views.EditableCard"
              x:Name="Root"
              ClipToBounds="False">
     <UserControl.Styles>

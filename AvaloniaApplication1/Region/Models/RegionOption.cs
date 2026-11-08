@@ -1,5 +1,5 @@
 ﻿using System;
 
-namespace AvaloniaApplication1.Region.Models;
+namespace D2RInstanceManager.Region.Models;
 
 public record RegionOption(Guid Id, string Name);

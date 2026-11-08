@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 
-namespace AvaloniaApplication1.Controls;
+namespace D2RInstanceManager.Controls;
 
 [PseudoClasses(RevealedPseudoClass)]
 public class RevealableContent : ContentControl

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using AvaloniaApplication1.Engine.CommandLine;
+using D2RInstanceManager.Engine.CommandLine;
 
-namespace AvaloniaApplication1.Engine.Models.Contexts;
+namespace D2RInstanceManager.Engine.Models.Contexts;
 
 public sealed record ProcessStartContext(
     string ExecutablePath,

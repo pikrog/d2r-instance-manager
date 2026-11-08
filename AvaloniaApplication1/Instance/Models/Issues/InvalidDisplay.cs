@@ -1,4 +1,4 @@
-﻿namespace AvaloniaApplication1.Instance.Models.Issues;
+﻿namespace D2RInstanceManager.Instance.Models.Issues;
 
 public sealed record InvalidDisplay : InstanceIssue
 {

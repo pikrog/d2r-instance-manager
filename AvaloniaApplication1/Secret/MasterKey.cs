@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 
-namespace AvaloniaApplication1.Secret;
+namespace D2RInstanceManager.Secret;
 
 public sealed class MasterKey(byte[] key)
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 
-namespace AvaloniaApplication1.Engine.Platform;
+namespace D2RInstanceManager.Engine.Platform;
 
 public record DisplayInfo(int Index, IntPtr Handle, string Id, string Description, int Width, int Height, bool IsPrimary)
 {

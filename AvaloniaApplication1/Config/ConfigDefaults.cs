@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AvaloniaApplication1.Config;
+namespace D2RInstanceManager.Config;
 
 public static class ConfigDefaults
 {

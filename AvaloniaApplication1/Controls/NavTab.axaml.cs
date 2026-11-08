@@ -1,9 +1,9 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
-using AvaloniaApplication1.Semantic;
+using D2RInstanceManager.Semantic;
 
-namespace AvaloniaApplication1.Controls;
+namespace D2RInstanceManager.Controls;
 
 [PseudoClasses(ActivePseudoClass)]
 public class NavTab : Button

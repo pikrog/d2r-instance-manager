@@ -1,4 +1,4 @@
-﻿namespace AvaloniaApplication1.Secret.Requests;
+﻿namespace D2RInstanceManager.Secret.Requests;
 
 public sealed record DpapiCurrentUserRequest : EncryptionRequest
 {

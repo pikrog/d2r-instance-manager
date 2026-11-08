@@ -1,9 +1,9 @@
-﻿using AvaloniaApplication1.Engine.Mappers;
-using AvaloniaApplication1.Engine.Models.Contexts;
-using AvaloniaApplication1.Engine.Models.Contexts.Launch;
-using AvaloniaApplication1.Engine.Platform;
+﻿using D2RInstanceManager.Engine.Mappers;
+using D2RInstanceManager.Engine.Models.Contexts;
+using D2RInstanceManager.Engine.Models.Contexts.Launch;
+using D2RInstanceManager.Engine.Platform;
 
-namespace AvaloniaApplication1.Engine.Factories;
+namespace D2RInstanceManager.Engine.Factories;
 
 public static class ProcessStartContextFactory
 {

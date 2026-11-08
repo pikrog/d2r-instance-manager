@@ -1,5 +1,5 @@
-﻿using AvaloniaApplication1.Engine.Coordination;
+﻿using D2RInstanceManager.Engine.Coordination;
 
-namespace AvaloniaApplication1.Engine.Models.Events;
+namespace D2RInstanceManager.Engine.Models.Events;
 
 public sealed record LaunchLeaseGranted(LaunchLease Lease) : Event;

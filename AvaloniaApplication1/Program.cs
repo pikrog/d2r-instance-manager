@@ -2,7 +2,7 @@
 using Avalonia;
 using ReactiveUI.Avalonia;
 
-namespace AvaloniaApplication1
+namespace D2RInstanceManager
 {
     internal sealed class Program
     {

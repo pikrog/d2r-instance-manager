@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AvaloniaApplication1.Common;
-using AvaloniaApplication1.Engine.Common;
-using AvaloniaApplication1.Engine.Platform.Process;
+using D2RInstanceManager.Common;
+using D2RInstanceManager.Engine.Common;
+using D2RInstanceManager.Engine.Platform.Process;
 
-namespace AvaloniaApplication1.Engine.Helpers.MultiboxUnlock;
+namespace D2RInstanceManager.Engine.Helpers.MultiboxUnlock;
 
 using MultiboxUnlockResult = Result<ProcessIdentity, RetryingMultiboxUnlockError>;
 

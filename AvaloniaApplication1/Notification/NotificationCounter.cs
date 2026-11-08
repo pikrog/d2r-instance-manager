@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace AvaloniaApplication1.Notification;
+namespace D2RInstanceManager.Notification;
 
 public class NotificationCounter(int initialCount = 0) : INotificationSource, INotificationSink, INotificationAcknowledger
 {

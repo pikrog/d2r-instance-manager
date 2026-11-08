@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace AvaloniaApplication1;
+namespace D2RInstanceManager;
 
 public class AppDataEnvironment
 {

@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AvaloniaApplication1.Engine.Exceptions;
-using AvaloniaApplication1.Engine.Factories;
-using AvaloniaApplication1.Engine.Models;
-using AvaloniaApplication1.Engine.Models.Contexts.Launch;
-using AvaloniaApplication1.Engine.Models.StateMachine;
-using AvaloniaApplication1.Engine.Platform;
+using D2RInstanceManager.Engine.Exceptions;
+using D2RInstanceManager.Engine.Factories;
+using D2RInstanceManager.Engine.Models;
+using D2RInstanceManager.Engine.Models.Contexts.Launch;
+using D2RInstanceManager.Engine.Models.StateMachine;
+using D2RInstanceManager.Engine.Platform;
 
-namespace AvaloniaApplication1.Engine;
+namespace D2RInstanceManager.Engine;
 
 public class InstanceManager(InstanceEngineFactory engineFactory)
 {

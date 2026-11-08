@@ -4,7 +4,7 @@ using Avalonia;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
 
-namespace AvaloniaApplication1.Common.Converters;
+namespace D2RInstanceManager.Common.Converters;
 
 public class BrushToColorConverter : IValueConverter
 {

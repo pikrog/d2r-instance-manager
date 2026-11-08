@@ -1,11 +1,11 @@
 ﻿using System;
-using AvaloniaApplication1.HotKey.Coordination;
-using AvaloniaApplication1.HotKey.Platform;
-using AvaloniaApplication1.Initialization;
-using AvaloniaApplication1.Instance.Models;
-using AvaloniaApplication1.Instance.Models.EventArgs;
+using D2RInstanceManager.HotKey.Coordination;
+using D2RInstanceManager.HotKey.Platform;
+using D2RInstanceManager.Initialization;
+using D2RInstanceManager.Instance.Models;
+using D2RInstanceManager.Instance.Models.EventArgs;
 
-namespace AvaloniaApplication1.Instance;
+namespace D2RInstanceManager.Instance;
 
 public class InstanceHotKeyBindingCoordinator : 
     HotKeyBindingCoordinator<ShowInstanceHotKeyCommand, Guid>,

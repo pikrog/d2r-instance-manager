@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using AvaloniaApplication1.Common;
-using AvaloniaApplication1.Secret;
+using D2RInstanceManager.Common;
+using D2RInstanceManager.Secret;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace AvaloniaApplication1.Unlock;
+namespace D2RInstanceManager.Unlock;
 
 public partial class UnlockWindowViewModel(IUnlockService unlockService) : ViewModelBase
 {

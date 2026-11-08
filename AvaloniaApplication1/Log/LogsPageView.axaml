@@ -2,12 +2,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:log="clr-namespace:AvaloniaApplication1.Log"
-             xmlns:design="clr-namespace:AvaloniaApplication1.Design.ViewModels"
-             xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
-             xmlns:filter="clr-namespace:AvaloniaApplication1.Log.Filter"
+             xmlns:log="clr-namespace:D2RInstanceManager.Log"
+             xmlns:design="clr-namespace:D2RInstanceManager.Design.ViewModels"
+             xmlns:controls="clr-namespace:D2RInstanceManager.Controls"
+             xmlns:filter="clr-namespace:D2RInstanceManager.Log.Filter"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="AvaloniaApplication1.Log.LogsPageView"
+             x:Class="D2RInstanceManager.Log.LogsPageView"
              x:DataType="log:LogsPageViewModel">
     
     <Design.DataContext>

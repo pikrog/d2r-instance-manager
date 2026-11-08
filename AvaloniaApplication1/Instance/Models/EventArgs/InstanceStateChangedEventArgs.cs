@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AvaloniaApplication1.Instance.Models.EventArgs;
+namespace D2RInstanceManager.Instance.Models.EventArgs;
 
 public class InstanceStateChangedEventArgs(Guid instanceId) : System.EventArgs
 {

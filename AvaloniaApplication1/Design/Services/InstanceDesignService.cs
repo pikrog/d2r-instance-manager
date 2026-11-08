@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using AvaloniaApplication1.Config;
-using AvaloniaApplication1.Display;
-using AvaloniaApplication1.Engine;
-using AvaloniaApplication1.Instance;
-using AvaloniaApplication1.Instance.Models;
-using AvaloniaApplication1.Instance.Models.Issues;
-using AvaloniaApplication1.Log.Instance;
-using AvaloniaApplication1.Notification;
+using D2RInstanceManager.Config;
+using D2RInstanceManager.Display;
+using D2RInstanceManager.Engine;
+using D2RInstanceManager.Instance;
+using D2RInstanceManager.Instance.Models;
+using D2RInstanceManager.Instance.Models.Issues;
+using D2RInstanceManager.Log.Instance;
+using D2RInstanceManager.Notification;
 using Microsoft.Extensions.Logging;
 
-namespace AvaloniaApplication1.Design.Services;
+namespace D2RInstanceManager.Design.Services;
 
 public class InstanceDesignService(
     ConfigService configService,

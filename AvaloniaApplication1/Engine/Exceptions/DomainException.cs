@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AvaloniaApplication1.Engine.Exceptions;
+namespace D2RInstanceManager.Engine.Exceptions;
 
 public abstract class DomainException : Exception
 {

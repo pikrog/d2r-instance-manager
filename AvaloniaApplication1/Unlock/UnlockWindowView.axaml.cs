@@ -5,7 +5,7 @@ using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Controls;
 
-namespace AvaloniaApplication1.Unlock;
+namespace D2RInstanceManager.Unlock;
 
 public partial class UnlockWindowView : Window
 {

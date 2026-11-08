@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace AvaloniaApplication1.Config;
+namespace D2RInstanceManager.Config;
 
 public class ConfigEnvironment
 {

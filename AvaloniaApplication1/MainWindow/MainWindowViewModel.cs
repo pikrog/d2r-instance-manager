@@ -1,21 +1,21 @@
 using System;
 using System.Threading.Tasks;
 using Avalonia.Threading;
-using AvaloniaApplication1.Common;
-using AvaloniaApplication1.Dialog;
-using AvaloniaApplication1.Instance;
-using AvaloniaApplication1.Instance.ViewModels;
-using AvaloniaApplication1.Navigation;
-using AvaloniaApplication1.Notification;
-using AvaloniaApplication1.Overlay;
-using AvaloniaApplication1.Overlay.Dialog.ShutdownProgress;
-using AvaloniaApplication1.Overlay.Dialog.StopInstances;
-using AvaloniaApplication1.Toast;
+using D2RInstanceManager.Common;
+using D2RInstanceManager.Dialog;
+using D2RInstanceManager.Instance;
+using D2RInstanceManager.Instance.ViewModels;
+using D2RInstanceManager.Navigation;
+using D2RInstanceManager.Notification;
+using D2RInstanceManager.Overlay;
+using D2RInstanceManager.Overlay.Dialog.ShutdownProgress;
+using D2RInstanceManager.Overlay.Dialog.StopInstances;
+using D2RInstanceManager.Toast;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AvaloniaApplication1.MainWindow;
+namespace D2RInstanceManager.MainWindow;
 
 public partial class MainWindowViewModel : ViewModelBase, IDialogParticipant
 {

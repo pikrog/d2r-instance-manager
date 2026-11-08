@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AvaloniaApplication1.HotKey.Platform;
+namespace D2RInstanceManager.HotKey.Platform;
 
 public class HotKeyPressedEventArgs(KeyCombination keyCombination) : EventArgs
 {

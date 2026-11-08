@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AvaloniaApplication1.Engine.CommandLine;
+namespace D2RInstanceManager.Engine.CommandLine;
 
 public interface IArgumentStringBuilder
 {

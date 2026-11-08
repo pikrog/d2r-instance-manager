@@ -1,4 +1,4 @@
-﻿namespace AvaloniaApplication1.Overlay.Dialog.StopInstances;
+﻿namespace D2RInstanceManager.Overlay.Dialog.StopInstances;
 
 public enum StopInstancesAction
 {

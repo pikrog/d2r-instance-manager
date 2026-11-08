@@ -1,12 +1,12 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using AvaloniaApplication1.Account;
-using AvaloniaApplication1.Display;
-using AvaloniaApplication1.HotKey.Config;
-using AvaloniaApplication1.Instance.Models;
-using AvaloniaApplication1.Region;
+using D2RInstanceManager.Account;
+using D2RInstanceManager.Display;
+using D2RInstanceManager.HotKey.Config;
+using D2RInstanceManager.Instance.Models;
+using D2RInstanceManager.Region;
 
-namespace AvaloniaApplication1.Instance.ViewModels;
+namespace D2RInstanceManager.Instance.ViewModels;
 
 public class EditInstanceFormViewModelFactory(
     IHotKeyConfigValidator hotKeyConfigValidator, 

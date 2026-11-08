@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using AvaloniaApplication1.Notification;
+using D2RInstanceManager.Notification;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AvaloniaApplication1.Log;
+namespace D2RInstanceManager.Log;
 
 public sealed class LogStore(
     [FromKeyedServices(NotificationCounterKey.Logs)] INotificationSink notificationSink) 

@@ -1,3 +1,3 @@
-﻿namespace AvaloniaApplication1.Secret.Requests;
+﻿namespace D2RInstanceManager.Secret.Requests;
 
 public sealed record AesGcmRequest(string Passphrase) : KeyBasedEncryptionRequest(Passphrase);

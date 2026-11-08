@@ -1,5 +1,5 @@
-﻿using AvaloniaApplication1.Engine.Common;
+﻿using D2RInstanceManager.Engine.Common;
 
-namespace AvaloniaApplication1.Engine.Models.Contexts.Arguments;
+namespace D2RInstanceManager.Engine.Models.Contexts.Arguments;
 
 public sealed record CliArgumentsContext(string AccountUsername, RedactedString AccountPassword, string RegionAddress) : AuthenticationArgumentsContext;

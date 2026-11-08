@@ -1,8 +1,8 @@
 ﻿using System;
-using AvaloniaApplication1.Engine.Coordination;
+using D2RInstanceManager.Engine.Coordination;
 using Microsoft.Extensions.Logging;
 
-namespace AvaloniaApplication1.Engine.Factories;
+namespace D2RInstanceManager.Engine.Factories;
 
 public class InstanceEngineFactory(LaunchCoordinator coordinator, ProcessStartRequestFactory processStartRequestFactory, ILoggerFactory loggerFactory)
 {

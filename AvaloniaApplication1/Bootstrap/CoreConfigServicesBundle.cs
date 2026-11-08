@@ -1,7 +1,7 @@
-﻿using AvaloniaApplication1.Config;
-using AvaloniaApplication1.Config.Stores;
+﻿using D2RInstanceManager.Config;
+using D2RInstanceManager.Config.Stores;
 
-namespace AvaloniaApplication1.Bootstrap;
+namespace D2RInstanceManager.Bootstrap;
 
 public record CoreConfigServicesBundle(
     ConfigEnvironment ConfigEnvironment,

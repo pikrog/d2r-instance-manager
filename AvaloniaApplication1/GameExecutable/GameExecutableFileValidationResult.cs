@@ -1,4 +1,4 @@
-﻿namespace AvaloniaApplication1.GameExecutable;
+﻿namespace D2RInstanceManager.GameExecutable;
 
 public readonly record struct GameExecutableFileValidationResult(
     GameExecutableFileValidationResultCode Code,

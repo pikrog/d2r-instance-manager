@@ -1,8 +1,8 @@
 ﻿using System;
-using AvaloniaApplication1.Common;
-using AvaloniaApplication1.HotKey.Platform.Registration.Native;
+using D2RInstanceManager.Common;
+using D2RInstanceManager.HotKey.Platform.Registration.Native;
 
-namespace AvaloniaApplication1.HotKey.Platform;
+namespace D2RInstanceManager.HotKey.Platform;
 
 public interface IHotKeyService
 {

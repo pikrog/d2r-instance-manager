@@ -1,7 +1,7 @@
 ﻿using System;
-using AvaloniaApplication1.Secret.Requests;
+using D2RInstanceManager.Secret.Requests;
 
-namespace AvaloniaApplication1.GlobalSettings;
+namespace D2RInstanceManager.GlobalSettings;
 
 public static class EncryptionRequestMapper
 {

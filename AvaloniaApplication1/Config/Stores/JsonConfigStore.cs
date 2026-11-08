@@ -2,10 +2,10 @@
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using AvaloniaApplication1.Config.Exceptions;
+using D2RInstanceManager.Config.Exceptions;
 using Microsoft.Extensions.Logging;
 
-namespace AvaloniaApplication1.Config.Stores;
+namespace D2RInstanceManager.Config.Stores;
 
 public class JsonConfigStore(ConfigEnvironment configEnvironment, ILogger<JsonConfigStore> logger) : IConfigStore
 {

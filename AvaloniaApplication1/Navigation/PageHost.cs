@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace AvaloniaApplication1.Navigation;
+namespace D2RInstanceManager.Navigation;
 
 public partial class PageHost : ObservableObject, IPageHost, IPageController
 {

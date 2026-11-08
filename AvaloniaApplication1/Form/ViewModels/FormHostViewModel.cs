@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace AvaloniaApplication1.Form.ViewModels;
+namespace D2RInstanceManager.Form.ViewModels;
 
 public abstract partial class FormHostViewModel<TForm>(TForm form) : ObservableObject 
     where TForm : FormViewModelBase

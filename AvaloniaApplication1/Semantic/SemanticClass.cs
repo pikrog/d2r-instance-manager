@@ -1,6 +1,6 @@
 ﻿using Avalonia;
 
-namespace AvaloniaApplication1.Semantic;
+namespace D2RInstanceManager.Semantic;
 
 public class SemanticClass : AvaloniaObject
 {

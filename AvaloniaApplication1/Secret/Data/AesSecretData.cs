@@ -1,3 +1,3 @@
-﻿namespace AvaloniaApplication1.Secret.Data;
+﻿namespace D2RInstanceManager.Secret.Data;
 
 public sealed record AesSecretData(byte[] Payload, byte[] Nonce, byte[] Tag) : SecretData(Payload);

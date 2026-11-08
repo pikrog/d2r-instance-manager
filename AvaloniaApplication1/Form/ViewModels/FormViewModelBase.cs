@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace AvaloniaApplication1.Form.ViewModels;
+namespace D2RInstanceManager.Form.ViewModels;
 
 public abstract class FormViewModelBase : ObservableValidator, INotifyDataErrorInfo, IFormViewModel
 {

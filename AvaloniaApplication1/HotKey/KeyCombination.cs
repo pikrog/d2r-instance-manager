@@ -1,7 +1,7 @@
 ﻿using Avalonia.Input;
-using AvaloniaApplication1.Common;
+using D2RInstanceManager.Common;
 
-namespace AvaloniaApplication1.HotKey;
+namespace D2RInstanceManager.HotKey;
 
 public record KeyCombination(Key Key, KeyModifiers KeyModifiers = KeyModifiers.None)
 {

@@ -1,7 +1,7 @@
-﻿using AvaloniaApplication1.Secret;
-using AvaloniaApplication1.Secret.Protectors;
+﻿using D2RInstanceManager.Secret;
+using D2RInstanceManager.Secret.Protectors;
 
-namespace AvaloniaApplication1.Design.Services;
+namespace D2RInstanceManager.Design.Services;
 
 public sealed class FakeSecretProtectorFactory : ISecretProtectorFactory
 {

@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls;
 
-namespace AvaloniaApplication1.Region.Views;
+namespace D2RInstanceManager.Region.Views;
 
 public partial class RegionsPageView : UserControl
 {

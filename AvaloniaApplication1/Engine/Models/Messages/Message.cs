@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
 
-namespace AvaloniaApplication1.Engine.Models.Messages;
+namespace D2RInstanceManager.Engine.Models.Messages;
 
 public abstract record Message;

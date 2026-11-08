@@ -1,5 +1,5 @@
-﻿using AvaloniaApplication1.Engine.Common;
+﻿using D2RInstanceManager.Engine.Common;
 
-namespace AvaloniaApplication1.Engine.CommandLine;
+namespace D2RInstanceManager.Engine.CommandLine;
 
 public sealed record SensitiveParametrizedArgument(string Name, RedactedString Value) : Argument;

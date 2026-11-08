@@ -1,8 +1,8 @@
 ﻿using System.Text;
-using AvaloniaApplication1.Account.Models;
-using AvaloniaApplication1.Secret;
+using D2RInstanceManager.Account.Models;
+using D2RInstanceManager.Secret;
 
-namespace AvaloniaApplication1.Account;
+namespace D2RInstanceManager.Account;
 
 public class AccountSnapshotTransformer(ISecretProtectorFactory secretProtectorFactory)
 {

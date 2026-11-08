@@ -1,6 +1,6 @@
-using AvaloniaApplication1.Engine;
+using D2RInstanceManager.Engine;
 
-namespace AvaloniaApplication1.Log;
+namespace D2RInstanceManager.Log;
 
 public static class LogProperties
 {

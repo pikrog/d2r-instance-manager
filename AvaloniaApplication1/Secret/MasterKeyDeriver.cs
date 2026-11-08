@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
-using AvaloniaApplication1.Secret.Options.Encryption;
+using D2RInstanceManager.Secret.Options.Encryption;
 
-namespace AvaloniaApplication1.Secret;
+namespace D2RInstanceManager.Secret;
 
 public sealed class MasterKeyDeriver : IMasterKeyDeriver
 {

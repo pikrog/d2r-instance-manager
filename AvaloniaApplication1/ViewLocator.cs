@@ -3,10 +3,10 @@ using System.Diagnostics.CodeAnalysis;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Media;
-using AvaloniaApplication1.Common;
+using D2RInstanceManager.Common;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AvaloniaApplication1;
+namespace D2RInstanceManager;
 
 /// <summary>
 /// Given a view model, returns the corresponding view if possible.

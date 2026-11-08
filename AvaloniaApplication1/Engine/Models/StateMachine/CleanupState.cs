@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AvaloniaApplication1.Engine.Models.StateMachine;
+namespace D2RInstanceManager.Engine.Models.StateMachine;
 
 [Flags]
 public enum CleanupItem

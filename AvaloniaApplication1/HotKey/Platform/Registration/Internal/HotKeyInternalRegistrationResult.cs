@@ -1,3 +1,3 @@
-﻿namespace AvaloniaApplication1.HotKey.Platform.Registration.Internal;
+﻿namespace D2RInstanceManager.HotKey.Platform.Registration.Internal;
 
 public abstract record HotKeyInternalRegistrationResult;

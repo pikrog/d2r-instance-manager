@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
-using AvaloniaApplication1.Form;
-using AvaloniaApplication1.Form.ViewModels;
+using D2RInstanceManager.Form;
+using D2RInstanceManager.Form.ViewModels;
 
-namespace AvaloniaApplication1.Dialog;
+namespace D2RInstanceManager.Dialog;
 
 public static class DialogHelper
 {

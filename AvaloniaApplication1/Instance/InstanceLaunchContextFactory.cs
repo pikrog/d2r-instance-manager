@@ -1,18 +1,18 @@
 ﻿using System;
-using AvaloniaApplication1.Account;
-using AvaloniaApplication1.Authentication.Models;
-using AvaloniaApplication1.Common;
-using AvaloniaApplication1.Config;
-using AvaloniaApplication1.Display;
-using AvaloniaApplication1.Engine.Common;
-using AvaloniaApplication1.Engine.Helpers.ProcessStop;
-using AvaloniaApplication1.Engine.Models.Contexts.Launch;
-using AvaloniaApplication1.GameExecutable;
-using AvaloniaApplication1.GlobalSettings;
-using AvaloniaApplication1.Instance.Models;
+using D2RInstanceManager.Account;
+using D2RInstanceManager.Authentication.Models;
+using D2RInstanceManager.Common;
+using D2RInstanceManager.Config;
+using D2RInstanceManager.Display;
+using D2RInstanceManager.Engine.Common;
+using D2RInstanceManager.Engine.Helpers.ProcessStop;
+using D2RInstanceManager.Engine.Models.Contexts.Launch;
+using D2RInstanceManager.GameExecutable;
+using D2RInstanceManager.GlobalSettings;
+using D2RInstanceManager.Instance.Models;
 using Microsoft.Extensions.Logging;
 
-namespace AvaloniaApplication1.Instance;
+namespace D2RInstanceManager.Instance;
 
 using LaunchPreparation = Result<EngineLaunchContext, InstanceLaunchFailure>;
 

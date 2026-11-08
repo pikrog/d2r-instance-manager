@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using AvaloniaApplication1.Engine.Agents;
-using AvaloniaApplication1.Engine.Coordination;
-using AvaloniaApplication1.Engine.Factories;
-using AvaloniaApplication1.Engine.Helpers.MultiboxUnlock;
-using AvaloniaApplication1.Engine.Helpers.ProcessStop;
-using AvaloniaApplication1.Engine.Models.Contexts.Launch;
-using AvaloniaApplication1.Engine.Models.Effects;
-using AvaloniaApplication1.Engine.Models.Events;
-using AvaloniaApplication1.Engine.Models.Messages;
-using AvaloniaApplication1.Engine.Models.StateMachine;
+using D2RInstanceManager.Engine.Agents;
+using D2RInstanceManager.Engine.Coordination;
+using D2RInstanceManager.Engine.Factories;
+using D2RInstanceManager.Engine.Helpers.MultiboxUnlock;
+using D2RInstanceManager.Engine.Helpers.ProcessStop;
+using D2RInstanceManager.Engine.Models.Contexts.Launch;
+using D2RInstanceManager.Engine.Models.Effects;
+using D2RInstanceManager.Engine.Models.Events;
+using D2RInstanceManager.Engine.Models.Messages;
+using D2RInstanceManager.Engine.Models.StateMachine;
 using Microsoft.Extensions.Logging;
 
-namespace AvaloniaApplication1.Engine;
+namespace D2RInstanceManager.Engine;
 
 public class InstanceEngine : IAsyncDisposable
 {

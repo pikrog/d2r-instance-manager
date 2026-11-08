@@ -2,7 +2,7 @@
 using Avalonia;
 using Avalonia.Controls;
 
-namespace AvaloniaApplication1.Toast;
+namespace D2RInstanceManager.Toast;
 
 public partial class ToastStack : UserControl
 {

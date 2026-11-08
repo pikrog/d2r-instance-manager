@@ -1,5 +1,5 @@
 ﻿using System;
 
-namespace AvaloniaApplication1.Common;
+namespace D2RInstanceManager.Common;
 
 public abstract class ApplicationException(string message) : Exception(message);

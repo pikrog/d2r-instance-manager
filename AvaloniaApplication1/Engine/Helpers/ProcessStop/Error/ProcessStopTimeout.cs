@@ -1,3 +1,3 @@
-﻿namespace AvaloniaApplication1.Engine.Helpers.ProcessStop.Error;
+﻿namespace D2RInstanceManager.Engine.Helpers.ProcessStop.Error;
 
 public sealed record ProcessStopTimeout : ProcessStopError;

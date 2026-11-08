@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Threading;
-using AvaloniaApplication1.Engine.Platform.Exceptions;
-using AvaloniaApplication1.Engine.Platform.Process;
+using D2RInstanceManager.Engine.Platform.Exceptions;
+using D2RInstanceManager.Engine.Platform.Process;
 
-namespace AvaloniaApplication1.Engine.Platform;
+namespace D2RInstanceManager.Engine.Platform;
 
 public class KernelObject(ProcessIdentity processIdentity, IntPtr sourceHandle, string type, string name)
 {

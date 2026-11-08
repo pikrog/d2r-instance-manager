@@ -1,5 +1,5 @@
-﻿using AvaloniaApplication1.Selectable;
+﻿using D2RInstanceManager.Selectable;
 
-namespace AvaloniaApplication1.Log.Filter;
+namespace D2RInstanceManager.Log.Filter;
 
 public abstract class FilterSelection : SelectableObservable;

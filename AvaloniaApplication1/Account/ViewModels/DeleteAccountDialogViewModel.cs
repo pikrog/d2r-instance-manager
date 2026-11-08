@@ -1,6 +1,6 @@
-﻿using AvaloniaApplication1.Overlay.Dialog.Delete;
+﻿using D2RInstanceManager.Overlay.Dialog.Delete;
 
-namespace AvaloniaApplication1.Account.ViewModels;
+namespace D2RInstanceManager.Account.ViewModels;
 
 public class DeleteAccountDialogViewModel(string? displayName, string username, int instanceCount) 
     : DeleteDialogViewModelBase

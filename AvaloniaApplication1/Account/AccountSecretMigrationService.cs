@@ -1,8 +1,8 @@
 ﻿using System.Linq;
-using AvaloniaApplication1.Config;
-using AvaloniaApplication1.Secret;
+using D2RInstanceManager.Config;
+using D2RInstanceManager.Secret;
 
-namespace AvaloniaApplication1.Account;
+namespace D2RInstanceManager.Account;
 
 public static class AccountSecretMigrationService
 {

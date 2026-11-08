@@ -1,4 +1,4 @@
-﻿namespace AvaloniaApplication1.Secret.Options.Encryption;
+﻿namespace D2RInstanceManager.Secret.Options.Encryption;
 
 public sealed record DpapiCurrentUserEncryption : EncryptionOptions
 {

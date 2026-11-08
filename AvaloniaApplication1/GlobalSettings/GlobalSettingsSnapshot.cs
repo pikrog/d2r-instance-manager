@@ -1,7 +1,7 @@
-﻿using AvaloniaApplication1.Authentication.Models;
-using AvaloniaApplication1.Secret;
+﻿using D2RInstanceManager.Authentication.Models;
+using D2RInstanceManager.Secret;
 
-namespace AvaloniaApplication1.GlobalSettings;
+namespace D2RInstanceManager.GlobalSettings;
 
 public record GlobalSettingsSnapshot
 {

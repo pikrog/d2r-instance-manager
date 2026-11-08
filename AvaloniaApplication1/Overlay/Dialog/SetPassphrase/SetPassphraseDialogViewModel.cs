@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
-using AvaloniaApplication1.Common;
+using D2RInstanceManager.Common;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace AvaloniaApplication1.Overlay.Dialog.SetPassphrase;
+namespace D2RInstanceManager.Overlay.Dialog.SetPassphrase;
 
 public partial class SetPassphraseDialogViewModel : ViewModelBase, IOverlayContent<SetPassphraseResult>
 {

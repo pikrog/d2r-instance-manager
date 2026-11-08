@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace AvaloniaApplication1.Log.Filter;
+namespace D2RInstanceManager.Log.Filter;
 
 public sealed partial class NamedFilterSelection(string name) : FilterSelection
 {

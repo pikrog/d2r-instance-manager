@@ -1,4 +1,4 @@
-﻿namespace AvaloniaApplication1.Engine.CommandLine;
+﻿namespace D2RInstanceManager.Engine.CommandLine;
 
 public class ShellExecuteArgumentFormatter(string argumentNamePrefix = "-", string argumentNameValueSeparator = " ") : IArgumentFormatter
 {

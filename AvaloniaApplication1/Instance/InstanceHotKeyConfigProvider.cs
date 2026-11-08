@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Input;
-using AvaloniaApplication1.Config;
-using AvaloniaApplication1.HotKey.Config;
-using AvaloniaApplication1.HotKey.Coordination;
-using AvaloniaApplication1.Instance.Models;
+using D2RInstanceManager.Config;
+using D2RInstanceManager.HotKey.Config;
+using D2RInstanceManager.HotKey.Coordination;
+using D2RInstanceManager.Instance.Models;
 
-namespace AvaloniaApplication1.Instance;
+namespace D2RInstanceManager.Instance;
 
 public class InstanceHotKeyConfigProvider(ConfigService configService) : IHotKeyConfigProvider<ShowInstanceHotKeyCommand>
 {

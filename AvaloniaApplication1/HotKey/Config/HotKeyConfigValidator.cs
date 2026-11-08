@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using AvaloniaApplication1.HotKey.Coordination;
+using D2RInstanceManager.HotKey.Coordination;
 
-namespace AvaloniaApplication1.HotKey.Config;
+namespace D2RInstanceManager.HotKey.Config;
 
 public class HotKeyConfigValidator(IEnumerable<IHotKeyConfigProvider> providers) : IHotKeyConfigValidator
 {

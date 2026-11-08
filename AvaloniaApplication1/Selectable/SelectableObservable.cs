@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace AvaloniaApplication1.Selectable;
+namespace D2RInstanceManager.Selectable;
 
 public partial class SelectableObservable : ObservableObject, ISelectable
 {

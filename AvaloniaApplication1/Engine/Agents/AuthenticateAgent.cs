@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AvaloniaApplication1.Engine.Models.Contexts.Launch;
-using AvaloniaApplication1.Engine.Models.Events;
+using D2RInstanceManager.Engine.Models.Contexts.Launch;
+using D2RInstanceManager.Engine.Models.Events;
 
-namespace AvaloniaApplication1.Engine.Agents;
+namespace D2RInstanceManager.Engine.Agents;
 
 public enum AuthenticationResult
 {

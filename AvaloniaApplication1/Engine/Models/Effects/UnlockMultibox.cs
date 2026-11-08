@@ -1,5 +1,5 @@
-﻿using AvaloniaApplication1.Engine.Common;
+﻿using D2RInstanceManager.Engine.Common;
 
-namespace AvaloniaApplication1.Engine.Models.Effects;
+namespace D2RInstanceManager.Engine.Models.Effects;
 
 public sealed record UnlockMultibox(RetryPolicy RetryPolicy, uint ExpectedProcessId) : Effect;

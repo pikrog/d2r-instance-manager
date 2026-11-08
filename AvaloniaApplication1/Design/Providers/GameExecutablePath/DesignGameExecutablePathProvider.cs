@@ -1,6 +1,6 @@
-﻿using AvaloniaApplication1.GameExecutable.Providers;
+﻿using D2RInstanceManager.GameExecutable.Providers;
 
-namespace AvaloniaApplication1.Design.Providers.GameExecutablePath;
+namespace D2RInstanceManager.Design.Providers.GameExecutablePath;
 
 public class DesignGameExecutablePathProvider : IGameExecutablePathProvider
 {

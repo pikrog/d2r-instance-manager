@@ -1,7 +1,7 @@
-﻿using AvaloniaApplication1.GlobalSettings;
-using AvaloniaApplication1.GlobalSettings.Issues;
+﻿using D2RInstanceManager.GlobalSettings;
+using D2RInstanceManager.GlobalSettings.Issues;
 
-namespace AvaloniaApplication1.Design.Services;
+namespace D2RInstanceManager.Design.Services;
 
 public class FakeGlobalSettingsPathValidator : IGlobalSettingsPathValidator
 {

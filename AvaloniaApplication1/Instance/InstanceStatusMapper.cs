@@ -1,12 +1,12 @@
 ﻿using System;
-using AvaloniaApplication1.Engine.Common;
-using AvaloniaApplication1.Engine.Helpers.MultiboxUnlock;
-using AvaloniaApplication1.Engine.Helpers.ProcessStop.Error;
-using AvaloniaApplication1.Engine.Models.Events;
-using AvaloniaApplication1.Engine.Models.StateMachine;
-using AvaloniaApplication1.Instance.Models;
+using D2RInstanceManager.Engine.Common;
+using D2RInstanceManager.Engine.Helpers.MultiboxUnlock;
+using D2RInstanceManager.Engine.Helpers.ProcessStop.Error;
+using D2RInstanceManager.Engine.Models.Events;
+using D2RInstanceManager.Engine.Models.StateMachine;
+using D2RInstanceManager.Instance.Models;
 
-namespace AvaloniaApplication1.Instance;
+namespace D2RInstanceManager.Instance;
 
 public static class InstanceStatusMapper
 {

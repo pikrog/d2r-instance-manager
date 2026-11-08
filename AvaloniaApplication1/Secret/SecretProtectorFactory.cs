@@ -1,10 +1,10 @@
 ﻿using System;
-using AvaloniaApplication1.Config;
-using AvaloniaApplication1.Secret.Options.Encryption;
-using AvaloniaApplication1.Secret.Options.Protector;
-using AvaloniaApplication1.Secret.Protectors;
+using D2RInstanceManager.Config;
+using D2RInstanceManager.Secret.Options.Encryption;
+using D2RInstanceManager.Secret.Options.Protector;
+using D2RInstanceManager.Secret.Protectors;
 
-namespace AvaloniaApplication1.Secret;
+namespace D2RInstanceManager.Secret;
 
 public class SecretProtectorFactory(ConfigService configService, IMasterKeyProvider keyProvider) 
     : ISecretProtectorFactory

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace AvaloniaApplication1.Engine.Platform.Process;
+namespace D2RInstanceManager.Engine.Platform.Process;
 
 public record ProcessError(int NativeErrorCode, ProcessOperation Operation, uint? Id = null, IntPtr? Handle = null, string? FileName = null)
 {

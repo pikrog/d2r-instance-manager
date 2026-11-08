@@ -1,4 +1,4 @@
-namespace AvaloniaApplication1.Initialization;
+namespace D2RInstanceManager.Initialization;
 
 public interface IRuntimeInitializer
 {

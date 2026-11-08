@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace AvaloniaApplication1.Overlay;
+namespace D2RInstanceManager.Overlay;
 
 public partial class OverlayHost : ObservableObject, IOverlayHost, IOverlayController
 {

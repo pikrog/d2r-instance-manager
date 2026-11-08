@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using AvaloniaApplication1.Engine.Models.Contexts.Launch;
-using AvaloniaApplication1.Engine.Models.Effects;
-using AvaloniaApplication1.Engine.Models.Events;
-using AvaloniaApplication1.Engine.Models.StateMachine;
+using D2RInstanceManager.Engine.Models.Contexts.Launch;
+using D2RInstanceManager.Engine.Models.Effects;
+using D2RInstanceManager.Engine.Models.Events;
+using D2RInstanceManager.Engine.Models.StateMachine;
 
-namespace AvaloniaApplication1.Engine;
+namespace D2RInstanceManager.Engine;
 
 public static class InstanceStateMachine
 {

@@ -6,15 +6,15 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
-using AvaloniaApplication1.Instance;
-using AvaloniaApplication1.Navigation;
-using AvaloniaApplication1.Notification;
+using D2RInstanceManager.Instance;
+using D2RInstanceManager.Navigation;
+using D2RInstanceManager.Notification;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData.Binding;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace AvaloniaApplication1.Log;
+namespace D2RInstanceManager.Log;
 
 public partial class LogsPageViewModel : PageViewModel
 {

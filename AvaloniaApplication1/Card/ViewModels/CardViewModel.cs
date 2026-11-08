@@ -1,5 +1,5 @@
-﻿using AvaloniaApplication1.Common;
+﻿using D2RInstanceManager.Common;
 
-namespace AvaloniaApplication1.Card.ViewModels;
+namespace D2RInstanceManager.Card.ViewModels;
 
 public abstract class CardViewModel : ViewModelBase;

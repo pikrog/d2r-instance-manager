@@ -1,4 +1,4 @@
-﻿namespace AvaloniaApplication1.Engine.Helpers.ProcessStop;
+﻿namespace D2RInstanceManager.Engine.Helpers.ProcessStop;
 
 public enum ProcessStopMode
 {

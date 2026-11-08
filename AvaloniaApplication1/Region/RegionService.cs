@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AvaloniaApplication1.Config;
-using AvaloniaApplication1.Region.Models;
+using D2RInstanceManager.Config;
+using D2RInstanceManager.Region.Models;
 
-namespace AvaloniaApplication1.Region;
+namespace D2RInstanceManager.Region;
 
 public class RegionService(ConfigService configService)
 {

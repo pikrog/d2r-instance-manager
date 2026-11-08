@@ -1,6 +1,6 @@
-﻿using AvaloniaApplication1.Semantic;
+﻿using D2RInstanceManager.Semantic;
 
-namespace AvaloniaApplication1.Toast.Descriptors;
+namespace D2RInstanceManager.Toast.Descriptors;
 
 public abstract record ToastDescriptor(ToastSeverity Severity)
 {

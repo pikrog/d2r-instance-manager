@@ -1,8 +1,8 @@
 ﻿using System;
-using AvaloniaApplication1.Engine.Models.Contexts.Arguments;
-using AvaloniaApplication1.Engine.Models.Contexts.Launch;
+using D2RInstanceManager.Engine.Models.Contexts.Arguments;
+using D2RInstanceManager.Engine.Models.Contexts.Launch;
 
-namespace AvaloniaApplication1.Engine.Mappers;
+namespace D2RInstanceManager.Engine.Mappers;
 
 public static class ArgumentsContextMapper
 {

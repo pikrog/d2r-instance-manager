@@ -5,7 +5,7 @@ using System.Linq;
 using Serilog.Events;
 using Serilog.Templates;
 
-namespace AvaloniaApplication1.Log;
+namespace D2RInstanceManager.Log;
 
 public static class LogEntryMapper
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AvaloniaApplication1.Semantic;
+namespace D2RInstanceManager.Semantic;
 
 public static class SemanticClassMapper
 {

@@ -1,9 +1,9 @@
 ﻿using System;
-using AvaloniaApplication1.Config;
-using AvaloniaApplication1.Secret;
-using AvaloniaApplication1.Secret.Options.Encryption;
+using D2RInstanceManager.Config;
+using D2RInstanceManager.Secret;
+using D2RInstanceManager.Secret.Options.Encryption;
 
-namespace AvaloniaApplication1.Unlock;
+namespace D2RInstanceManager.Unlock;
 
 public class UnlockService(ConfigService configService, MasterKeyService keyService, IMasterKeyDeriver keyDeriver)
     : IUnlockService

@@ -1,5 +1,5 @@
-﻿using AvaloniaApplication1.Engine.Coordination;
+﻿using D2RInstanceManager.Engine.Coordination;
 
-namespace AvaloniaApplication1.Engine.Models.Effects;
+namespace D2RInstanceManager.Engine.Models.Effects;
 
 public sealed record ReleaseLaunchLease(LaunchLease Lease) : Effect;

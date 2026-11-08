@@ -1,4 +1,4 @@
-namespace AvaloniaApplication1.CommandLine;
+namespace D2RInstanceManager.CommandLine;
 
 public class CliOptions
 {

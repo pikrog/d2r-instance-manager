@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using System.Windows.Input;
-using AvaloniaApplication1.Common;
+using D2RInstanceManager.Common;
 using CommunityToolkit.Mvvm.Input;
 
-namespace AvaloniaApplication1.Overlay.Dialog.Delete;
+namespace D2RInstanceManager.Overlay.Dialog.Delete;
 
 public abstract partial class DeleteDialogViewModelBase : ViewModelBase, IOverlayContent<bool>, IDeleteDialogActions
 {

@@ -1,7 +1,7 @@
 ﻿using System;
-using AvaloniaApplication1.Dialog;
+using D2RInstanceManager.Dialog;
 
-namespace AvaloniaApplication1.Form.ViewModels;
+namespace D2RInstanceManager.Form.ViewModels;
 
 public class FormDialogViewModel<TForm>(TForm form) : FormHostViewModel<TForm>(form), IDialogAware 
     where TForm : FormViewModelBase

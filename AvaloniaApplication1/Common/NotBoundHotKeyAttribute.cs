@@ -1,12 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using Avalonia.Input;
-using AvaloniaApplication1.HotKey;
-using AvaloniaApplication1.HotKey.Config;
-using AvaloniaApplication1.HotKey.Coordination;
-using AvaloniaApplication1.Languages;
+using D2RInstanceManager.HotKey;
+using D2RInstanceManager.HotKey.Config;
+using D2RInstanceManager.HotKey.Coordination;
+using D2RInstanceManager.Languages;
 
-namespace AvaloniaApplication1.Common;
+namespace D2RInstanceManager.Common;
 
 public sealed class NotBoundHotKeyAttribute(string? identityPropertyName = null) : ValidationAttribute(Validation.NotBoundHotKeyAttribute_ErrorMessage)
 {

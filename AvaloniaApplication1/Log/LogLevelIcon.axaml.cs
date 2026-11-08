@@ -1,9 +1,9 @@
 ﻿using System;
 using Avalonia;
 using Avalonia.Controls;
-using AvaloniaApplication1.Semantic;
+using D2RInstanceManager.Semantic;
 
-namespace AvaloniaApplication1.Log;
+namespace D2RInstanceManager.Log;
 
 public partial class LogLevelIcon : UserControl
 {

@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using AvaloniaApplication1.Secret.Requests;
+using D2RInstanceManager.Secret.Requests;
 
-namespace AvaloniaApplication1.Secret;
+namespace D2RInstanceManager.Secret;
 
 public interface ISecretMigrationCoordinator
 {

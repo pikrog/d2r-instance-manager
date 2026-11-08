@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using AvaloniaApplication1.Config;
+using D2RInstanceManager.Config;
 
-namespace AvaloniaApplication1.Display;
+namespace D2RInstanceManager.Display;
 
 public class DisplayService(ConfigService configService)
 {

@@ -1,6 +1,6 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="using:AvaloniaApplication1.Controls">
+        xmlns:controls="using:D2RInstanceManager.Controls">
     <Design.PreviewWith>
         <StackPanel Margin="10" Width="200" Height="240">
             <controls:NavTab SvgPath="/Assets/images/user.svg" IsActive="True" 

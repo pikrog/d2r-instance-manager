@@ -1,9 +1,9 @@
 ﻿using System;
-using AvaloniaApplication1.Account;
-using AvaloniaApplication1.Instance.Models;
-using AvaloniaApplication1.Region;
+using D2RInstanceManager.Account;
+using D2RInstanceManager.Instance.Models;
+using D2RInstanceManager.Region;
 
-namespace AvaloniaApplication1.Instance;
+namespace D2RInstanceManager.Instance;
 
 public class InstanceValidation(AccountService accountService, RegionService regionService)
 {

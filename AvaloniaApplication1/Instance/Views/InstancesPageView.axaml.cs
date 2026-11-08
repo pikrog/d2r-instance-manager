@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls;
 
-namespace AvaloniaApplication1.Instance.Views;
+namespace D2RInstanceManager.Instance.Views;
 
 public partial class InstancesPageView : UserControl
 {

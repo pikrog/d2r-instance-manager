@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AvaloniaApplication1.Engine.Platform.Process;
+namespace D2RInstanceManager.Engine.Platform.Process;
 
 public record ProcessStartRequest
 {

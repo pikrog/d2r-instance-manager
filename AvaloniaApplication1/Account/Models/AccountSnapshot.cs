@@ -1,6 +1,6 @@
 ﻿using System;
-using AvaloniaApplication1.Secret.Data;
+using D2RInstanceManager.Secret.Data;
 
-namespace AvaloniaApplication1.Account.Models;
+namespace D2RInstanceManager.Account.Models;
 
 public record AccountSnapshot(Guid Id, string? DisplayName, string Username, SecretData Password);

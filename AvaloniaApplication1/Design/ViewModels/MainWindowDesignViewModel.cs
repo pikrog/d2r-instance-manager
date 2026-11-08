@@ -1,7 +1,7 @@
-using AvaloniaApplication1.Design.Services;
-using MainWindowViewModel = AvaloniaApplication1.MainWindow.MainWindowViewModel;
+using D2RInstanceManager.Design.Services;
+using MainWindowViewModel = D2RInstanceManager.MainWindow.MainWindowViewModel;
 
-namespace AvaloniaApplication1.Design.ViewModels;
+namespace D2RInstanceManager.Design.ViewModels;
 
 public class MainWindowDesignViewModel : MainWindowViewModel
 {

@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using System.Windows.Input;
-using AvaloniaApplication1.Common;
+using D2RInstanceManager.Common;
 using CommunityToolkit.Mvvm.Input;
 
-namespace AvaloniaApplication1.Overlay.Dialog.StopInstances;
+namespace D2RInstanceManager.Overlay.Dialog.StopInstances;
 
 public class StopInstancesDialogViewModel(int instanceCount) : ViewModelBase, IOverlayContent<StopInstancesAction>
 {

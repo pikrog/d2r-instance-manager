@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AvaloniaApplication1.Engine.Exceptions;
+namespace D2RInstanceManager.Engine.Exceptions;
 
 public class InvalidInstanceStateException(string message) : InstanceException(message)
 {

@@ -6,7 +6,7 @@ using Avalonia.Controls.Metadata;
 using Avalonia.Data;
 using Avalonia.Media;
 
-namespace AvaloniaApplication1.Card.Views;
+namespace D2RInstanceManager.Card.Views;
 
 [PseudoClasses(Card.DimmedPseudoClass, EditingPseudoClass)]
 public partial class EditableCard : UserControl

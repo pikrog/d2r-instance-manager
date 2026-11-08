@@ -1,7 +1,7 @@
 ﻿using Avalonia.Controls;
-using AvaloniaApplication1.HotKey.Platform;
+using D2RInstanceManager.HotKey.Platform;
 
-namespace AvaloniaApplication1.Instance.Views;
+namespace D2RInstanceManager.Instance.Views;
 
 public partial class EditInstanceFormView : Window
 {

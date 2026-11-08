@@ -1,9 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using AvaloniaApplication1.Config;
-using AvaloniaApplication1.Config.Stores;
+using D2RInstanceManager.Config;
+using D2RInstanceManager.Config.Stores;
 
-namespace AvaloniaApplication1.Design.Config;
+namespace D2RInstanceManager.Design.Config;
 
 public class DummyConfigStore : IConfigStore
 {

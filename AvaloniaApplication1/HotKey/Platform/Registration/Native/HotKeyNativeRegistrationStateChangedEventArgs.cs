@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AvaloniaApplication1.HotKey.Platform.Registration.Native;
+namespace D2RInstanceManager.HotKey.Platform.Registration.Native;
 
 public sealed class HotKeyNativeRegistrationStateChangedEventArgs(HotKeyRegistrationToken token, HotKeyNativeRegistrationState state) : EventArgs
 {

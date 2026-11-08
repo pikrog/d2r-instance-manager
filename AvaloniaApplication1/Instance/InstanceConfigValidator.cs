@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using AvaloniaApplication1.Config;
-using AvaloniaApplication1.Display;
-using AvaloniaApplication1.Instance.Models;
-using AvaloniaApplication1.Instance.Models.Issues;
+using D2RInstanceManager.Config;
+using D2RInstanceManager.Display;
+using D2RInstanceManager.Instance.Models;
+using D2RInstanceManager.Instance.Models.Issues;
 
-namespace AvaloniaApplication1.Instance;
+namespace D2RInstanceManager.Instance;
 
 public class InstanceConfigValidator(ConfigService configService)
 {

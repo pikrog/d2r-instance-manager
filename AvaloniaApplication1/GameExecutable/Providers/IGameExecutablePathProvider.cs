@@ -1,4 +1,4 @@
-﻿namespace AvaloniaApplication1.GameExecutable.Providers;
+﻿namespace D2RInstanceManager.GameExecutable.Providers;
 
 public interface IGameExecutablePathProvider
 {

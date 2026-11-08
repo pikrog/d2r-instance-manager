@@ -1,6 +1,6 @@
 using System.CommandLine;
 
-namespace AvaloniaApplication1.CommandLine;
+namespace D2RInstanceManager.CommandLine;
 
 public static class CliParser
 {

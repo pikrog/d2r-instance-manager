@@ -1,9 +1,9 @@
 ﻿using System;
-using AvaloniaApplication1.Initialization;
-using AvaloniaApplication1.Toast;
-using AvaloniaApplication1.Toast.Descriptors;
+using D2RInstanceManager.Initialization;
+using D2RInstanceManager.Toast;
+using D2RInstanceManager.Toast.Descriptors;
 
-namespace AvaloniaApplication1.Display;
+namespace D2RInstanceManager.Display;
 
 public class DisplayConfigChangeNotifier(IDisplayConfigMonitor monitor, ToastService toastService) : IRuntimeInitializer
 {

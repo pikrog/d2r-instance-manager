@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Immutable;
-using AvaloniaApplication1.Engine.Common;
-using AvaloniaApplication1.Engine.Coordination;
-using AvaloniaApplication1.Engine.Models.Contexts;
-using AvaloniaApplication1.Engine.Models.Contexts.Launch;
-using AvaloniaApplication1.Engine.Models.Events;
-using AvaloniaApplication1.Engine.Platform.Process;
+using D2RInstanceManager.Engine.Common;
+using D2RInstanceManager.Engine.Coordination;
+using D2RInstanceManager.Engine.Models.Contexts;
+using D2RInstanceManager.Engine.Models.Contexts.Launch;
+using D2RInstanceManager.Engine.Models.Events;
+using D2RInstanceManager.Engine.Platform.Process;
 
-namespace AvaloniaApplication1.Engine.Models.StateMachine;
+namespace D2RInstanceManager.Engine.Models.StateMachine;
 
 public sealed record Session : IDisposable
 {

@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using AvaloniaApplication1.Account.Models;
-using AvaloniaApplication1.Display;
-using AvaloniaApplication1.GlobalSettings;
-using AvaloniaApplication1.Instance.Models;
-using AvaloniaApplication1.Region.Models;
+using D2RInstanceManager.Account.Models;
+using D2RInstanceManager.Display;
+using D2RInstanceManager.GlobalSettings;
+using D2RInstanceManager.Instance.Models;
+using D2RInstanceManager.Region.Models;
 
-namespace AvaloniaApplication1.Config;
+namespace D2RInstanceManager.Config;
 
 public class AppConfig
 {

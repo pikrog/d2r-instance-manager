@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AvaloniaApplication1.Notification;
+namespace D2RInstanceManager.Notification;
 
 public interface INotificationSource
 {

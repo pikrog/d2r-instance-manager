@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AvaloniaApplication1.Common;
+namespace D2RInstanceManager.Common;
 
 public class RequiredIfAttribute(string propertyName, object targetValue) : RequiredAttribute
 {

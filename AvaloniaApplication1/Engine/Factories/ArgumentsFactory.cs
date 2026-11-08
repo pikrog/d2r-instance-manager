@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using AvaloniaApplication1.Engine.CommandLine;
-using AvaloniaApplication1.Engine.Models.Contexts.Arguments;
+using D2RInstanceManager.Engine.CommandLine;
+using D2RInstanceManager.Engine.Models.Contexts.Arguments;
 
-namespace AvaloniaApplication1.Engine.Factories;
+namespace D2RInstanceManager.Engine.Factories;
 
 public static class ArgumentsFactory
 {

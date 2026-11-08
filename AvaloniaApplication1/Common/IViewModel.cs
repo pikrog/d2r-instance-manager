@@ -1,3 +1,3 @@
-﻿namespace AvaloniaApplication1.Common;
+﻿namespace D2RInstanceManager.Common;
 
 public interface IViewModel;

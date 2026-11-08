@@ -1,5 +1,5 @@
-﻿using AvaloniaApplication1.Instance.ViewModels;
+﻿using D2RInstanceManager.Instance.ViewModels;
 
-namespace AvaloniaApplication1.Design.ViewModels;
+namespace D2RInstanceManager.Design.ViewModels;
 
 public class DeleteInstanceDialogDesignViewModel() : DeleteInstanceDialogViewModel("Mule [EU]");

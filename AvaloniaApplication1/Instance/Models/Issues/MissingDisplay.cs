@@ -1,6 +1,6 @@
-﻿using AvaloniaApplication1.Display;
+﻿using D2RInstanceManager.Display;
 
-namespace AvaloniaApplication1.Instance.Models.Issues;
+namespace D2RInstanceManager.Instance.Models.Issues;
 
 public sealed record MissingDisplay(DisplaySnapshot Display, bool IsFallbackAllowed) : InstanceIssue
 {

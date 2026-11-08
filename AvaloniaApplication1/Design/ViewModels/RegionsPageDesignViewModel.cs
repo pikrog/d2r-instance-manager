@@ -1,7 +1,7 @@
-using AvaloniaApplication1.Design.Services;
-using AvaloniaApplication1.Region.ViewModels;
+using D2RInstanceManager.Design.Services;
+using D2RInstanceManager.Region.ViewModels;
 
-namespace AvaloniaApplication1.Design.ViewModels;
+namespace D2RInstanceManager.Design.ViewModels;
 
 public sealed class RegionsPageDesignViewModel : RegionsPageViewModel
 {

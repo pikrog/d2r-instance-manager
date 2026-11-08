@@ -1,8 +1,8 @@
-﻿using AvaloniaApplication1.Design.Services;
-using AvaloniaApplication1.Log;
+﻿using D2RInstanceManager.Design.Services;
+using D2RInstanceManager.Log;
 using Microsoft.Extensions.Logging.Abstractions;
 
-namespace AvaloniaApplication1.Design.ViewModels;
+namespace D2RInstanceManager.Design.ViewModels;
 
 public class LogsPageDesignViewModel : LogsPageViewModel
 {

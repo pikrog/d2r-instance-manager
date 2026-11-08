@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
-using AvaloniaApplication1.Account;
-using AvaloniaApplication1.Config;
-using AvaloniaApplication1.Secret.Options.Encryption;
-using AvaloniaApplication1.Secret.Options.Protector;
-using AvaloniaApplication1.Secret.Requests;
+using D2RInstanceManager.Account;
+using D2RInstanceManager.Config;
+using D2RInstanceManager.Secret.Options.Encryption;
+using D2RInstanceManager.Secret.Options.Protector;
+using D2RInstanceManager.Secret.Requests;
 
-namespace AvaloniaApplication1.Secret;
+namespace D2RInstanceManager.Secret;
 
 public class SecretMigrationCoordinator(
     ConfigService configService,

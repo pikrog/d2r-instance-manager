@@ -1,4 +1,4 @@
-﻿namespace AvaloniaApplication1.Card.ViewModels;
+﻿namespace D2RInstanceManager.Card.ViewModels;
 
 public sealed class AddCardViewModel : CardViewModel
 {

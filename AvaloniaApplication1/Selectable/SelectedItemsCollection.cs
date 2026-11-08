@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace AvaloniaApplication1.Selectable;
+namespace D2RInstanceManager.Selectable;
 
 public sealed class SelectedItemsCollection<T> : ObservableObject, INotifyCollectionChanged where T : SelectableObservable
 {

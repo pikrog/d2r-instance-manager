@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AvaloniaApplication1.Languages {
+namespace D2RInstanceManager.Languages {
     using System;
     
     
@@ -38,7 +38,7 @@ namespace AvaloniaApplication1.Languages {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("AvaloniaApplication1.Languages.Validation", typeof(Validation).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("D2RInstanceManager.Languages.Validation", typeof(Validation).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

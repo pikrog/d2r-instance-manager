@@ -1,6 +1,6 @@
-﻿using AvaloniaApplication1.Secret.Protectors;
+﻿using D2RInstanceManager.Secret.Protectors;
 
-namespace AvaloniaApplication1.Secret;
+namespace D2RInstanceManager.Secret;
 
 public interface ISecretProtectorFactory
 {

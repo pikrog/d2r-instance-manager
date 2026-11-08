@@ -1,4 +1,4 @@
-﻿namespace AvaloniaApplication1.Engine.Helpers.MultiboxUnlock;
+﻿namespace D2RInstanceManager.Engine.Helpers.MultiboxUnlock;
 
 public enum RetryingMultiboxUnlockError
 {

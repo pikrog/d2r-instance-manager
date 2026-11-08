@@ -5,14 +5,14 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
-using AvaloniaApplication1.Bootstrap;
-using AvaloniaApplication1.CommandLine;
-using AvaloniaApplication1.MainWindow;
-using AvaloniaApplication1.Unlock;
+using D2RInstanceManager.Bootstrap;
+using D2RInstanceManager.CommandLine;
+using D2RInstanceManager.MainWindow;
+using D2RInstanceManager.Unlock;
 using Microsoft.Extensions.DependencyInjection;
 
 
-namespace AvaloniaApplication1
+namespace D2RInstanceManager
 {
     public partial class App : Application
     {

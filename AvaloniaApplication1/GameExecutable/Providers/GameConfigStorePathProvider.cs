@@ -2,7 +2,7 @@
 using System.IO;
 using Microsoft.Win32;
 
-namespace AvaloniaApplication1.GameExecutable.Providers;
+namespace D2RInstanceManager.GameExecutable.Providers;
 
 [SuppressMessage("Interoperability", "CA1416")]
 public class GameConfigStorePathProvider : IGameExecutablePathProvider

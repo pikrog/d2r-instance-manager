@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Threading;
-using AvaloniaApplication1.Secret;
+using D2RInstanceManager.Secret;
 
-namespace AvaloniaApplication1.Unlock;
+namespace D2RInstanceManager.Unlock;
 
 public class UnlockCoordinator(
     IUnlockService service,

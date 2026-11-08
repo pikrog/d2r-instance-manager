@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AvaloniaApplication1.Config.Stores;
+using D2RInstanceManager.Config.Stores;
 
-namespace AvaloniaApplication1.Config;
+namespace D2RInstanceManager.Config;
 
 public class ConfigService(AppConfig appConfig, IConfigStore configStore)
 {

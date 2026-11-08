@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AvaloniaApplication1.Common;
-using AvaloniaApplication1.Engine.Factories;
-using AvaloniaApplication1.Engine.Models.Contexts;
-using AvaloniaApplication1.Engine.Models.Events;
-using AvaloniaApplication1.Engine.Platform.Process;
+using D2RInstanceManager.Common;
+using D2RInstanceManager.Engine.Factories;
+using D2RInstanceManager.Engine.Models.Contexts;
+using D2RInstanceManager.Engine.Models.Events;
+using D2RInstanceManager.Engine.Platform.Process;
 using Microsoft.Extensions.Logging;
 
-namespace AvaloniaApplication1.Engine.Agents;
+namespace D2RInstanceManager.Engine.Agents;
 
 using ProcessResult = Result<ProcessManager, ProcessError>;
 

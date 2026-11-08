@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using AvaloniaApplication1.Config;
-using AvaloniaApplication1.GlobalSettings.Issues;
+using D2RInstanceManager.Config;
+using D2RInstanceManager.GlobalSettings.Issues;
 
-namespace AvaloniaApplication1.GlobalSettings;
+namespace D2RInstanceManager.GlobalSettings;
 
 public class GlobalSettingsValidator(ConfigService configService, IGlobalSettingsPathValidator pathValidator) 
     : IGlobalSettingsValidator

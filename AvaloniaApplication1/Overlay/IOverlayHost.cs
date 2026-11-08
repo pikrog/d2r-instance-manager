@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace AvaloniaApplication1.Overlay;
+namespace D2RInstanceManager.Overlay;
 
 public interface IOverlayHost : INotifyPropertyChanged
 {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using AvaloniaApplication1.Card.ViewModels;
+using D2RInstanceManager.Card.ViewModels;
 
-namespace AvaloniaApplication1.Card;
+namespace D2RInstanceManager.Card;
 
 public sealed class CardCollection<T> : IDisposable where T : CardViewModel
 {

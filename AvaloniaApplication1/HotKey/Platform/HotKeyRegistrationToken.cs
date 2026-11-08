@@ -1,3 +1,3 @@
-﻿namespace AvaloniaApplication1.HotKey.Platform;
+﻿namespace D2RInstanceManager.HotKey.Platform;
 
 public sealed class HotKeyRegistrationToken;

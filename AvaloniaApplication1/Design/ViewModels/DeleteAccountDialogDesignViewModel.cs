@@ -1,5 +1,5 @@
-﻿using AvaloniaApplication1.Account.ViewModels;
+﻿using D2RInstanceManager.Account.ViewModels;
 
-namespace AvaloniaApplication1.Design.ViewModels;
+namespace D2RInstanceManager.Design.ViewModels;
 
 public class DeleteAccountDialogDesignViewModel() : DeleteAccountDialogViewModel("User", "user@mail.com", 3);

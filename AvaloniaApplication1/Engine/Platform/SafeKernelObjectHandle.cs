@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Win32.SafeHandles;
 
-namespace AvaloniaApplication1.Engine.Platform;
+namespace D2RInstanceManager.Engine.Platform;
 
 internal sealed class SafeKernelObjectHandle : SafeHandleZeroOrMinusOneIsInvalid
 {

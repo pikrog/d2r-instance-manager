@@ -1,7 +1,7 @@
-﻿using AvaloniaApplication1.Engine.Common;
-using AvaloniaApplication1.Engine.Helpers.ProcessStop;
+﻿using D2RInstanceManager.Engine.Common;
+using D2RInstanceManager.Engine.Helpers.ProcessStop;
 
-namespace AvaloniaApplication1.Engine.Models.Contexts.Launch;
+namespace D2RInstanceManager.Engine.Models.Contexts.Launch;
 
 public record EnginePolicies
 (

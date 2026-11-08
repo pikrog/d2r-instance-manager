@@ -1,8 +1,8 @@
 ﻿using System;
-using AvaloniaApplication1.CommandLine;
-using AvaloniaApplication1.Log;
+using D2RInstanceManager.CommandLine;
+using D2RInstanceManager.Log;
 
-namespace AvaloniaApplication1.Bootstrap;
+namespace D2RInstanceManager.Bootstrap;
 
 public static class LogLevelMapper
 {

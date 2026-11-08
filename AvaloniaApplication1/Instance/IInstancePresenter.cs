@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using AvaloniaApplication1.Instance.Models;
-using AvaloniaApplication1.Instance.Models.EventArgs;
+using D2RInstanceManager.Instance.Models;
+using D2RInstanceManager.Instance.Models.EventArgs;
 
-namespace AvaloniaApplication1.Instance;
+namespace D2RInstanceManager.Instance;
 
 public interface IInstancePresenter
 {

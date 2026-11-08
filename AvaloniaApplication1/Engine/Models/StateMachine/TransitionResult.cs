@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using AvaloniaApplication1.Engine.Models.Effects;
+using D2RInstanceManager.Engine.Models.Effects;
 
-namespace AvaloniaApplication1.Engine.Models.StateMachine;
+namespace D2RInstanceManager.Engine.Models.StateMachine;
 
 public sealed record TransitionResult(Session Session, IReadOnlyList<Effect> Effects)
 {

@@ -2,10 +2,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:setPassphrase="clr-namespace:AvaloniaApplication1.Overlay.Dialog.SetPassphrase"
-             xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
+             xmlns:setPassphrase="clr-namespace:D2RInstanceManager.Overlay.Dialog.SetPassphrase"
+             xmlns:controls="clr-namespace:D2RInstanceManager.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="AvaloniaApplication1.Overlay.Dialog.SetPassphrase.SetPassphraseDialogView"
+             x:Class="D2RInstanceManager.Overlay.Dialog.SetPassphrase.SetPassphraseDialogView"
              x:DataType="setPassphrase:SetPassphraseDialogViewModel">
     <controls:Dialog>
         <controls:Dialog.Header>

@@ -4,7 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Data;
 
-namespace AvaloniaApplication1.Card.Views;
+namespace D2RInstanceManager.Card.Views;
 
 [PseudoClasses(DimmedPseudoClass)]
 public class Card : ContentControl

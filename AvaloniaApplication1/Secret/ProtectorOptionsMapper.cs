@@ -1,8 +1,8 @@
 ﻿using System;
-using AvaloniaApplication1.Secret.Options.Encryption;
-using AvaloniaApplication1.Secret.Options.Protector;
+using D2RInstanceManager.Secret.Options.Encryption;
+using D2RInstanceManager.Secret.Options.Protector;
 
-namespace AvaloniaApplication1.Secret;
+namespace D2RInstanceManager.Secret;
 
 public static class ProtectorOptionsMapper
 {

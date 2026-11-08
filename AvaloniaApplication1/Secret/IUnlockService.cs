@@ -1,4 +1,4 @@
-﻿namespace AvaloniaApplication1.Secret;
+﻿namespace D2RInstanceManager.Secret;
 
 public interface IUnlockService
 {

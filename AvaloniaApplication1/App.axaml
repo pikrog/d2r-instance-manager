@@ -1,8 +1,8 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="AvaloniaApplication1.App"
-             xmlns:local="using:AvaloniaApplication1"
-             xmlns:converters="clr-namespace:AvaloniaApplication1.Common.Converters"
+             x:Class="D2RInstanceManager.App"
+             xmlns:local="using:D2RInstanceManager"
+             xmlns:converters="clr-namespace:D2RInstanceManager.Common.Converters"
              RequestedThemeVariant="Default">
     <Application.DataTemplates>
         <local:ViewLocator />

@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
-using AvaloniaApplication1.Selectable;
+using D2RInstanceManager.Selectable;
 
-namespace AvaloniaApplication1.Design.Controls.MultiSelectFilter;
+namespace D2RInstanceManager.Design.Controls.MultiSelectFilter;
 
 public static partial class MultiSelectFilterDesignData
 {

@@ -1,4 +1,4 @@
-﻿namespace AvaloniaApplication1.Instance.Models;
+﻿namespace D2RInstanceManager.Instance.Models;
 
 public enum InstanceStatus
 {

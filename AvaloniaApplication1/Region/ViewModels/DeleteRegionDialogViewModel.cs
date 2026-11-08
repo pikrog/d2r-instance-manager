@@ -1,6 +1,6 @@
-﻿using AvaloniaApplication1.Overlay.Dialog.Delete;
+﻿using D2RInstanceManager.Overlay.Dialog.Delete;
 
-namespace AvaloniaApplication1.Region.ViewModels;
+namespace D2RInstanceManager.Region.ViewModels;
 
 public class DeleteRegionDialogViewModel(string regionName, int instanceCount) : DeleteDialogViewModelBase
 {

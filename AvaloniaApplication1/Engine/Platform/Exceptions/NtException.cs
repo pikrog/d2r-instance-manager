@@ -1,4 +1,4 @@
-﻿namespace AvaloniaApplication1.Engine.Platform.Exceptions;
+﻿namespace D2RInstanceManager.Engine.Platform.Exceptions;
 
 internal class NtException : PlatformException
 {

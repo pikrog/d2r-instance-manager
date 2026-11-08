@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace AvaloniaApplication1.Engine.Platform;
+namespace D2RInstanceManager.Engine.Platform;
 
 internal static partial class WinApi
 {

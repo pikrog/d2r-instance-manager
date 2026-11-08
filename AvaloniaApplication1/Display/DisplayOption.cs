@@ -1,4 +1,4 @@
-﻿namespace AvaloniaApplication1.Display;
+﻿namespace D2RInstanceManager.Display;
 
 public abstract record DisplayOption
 {

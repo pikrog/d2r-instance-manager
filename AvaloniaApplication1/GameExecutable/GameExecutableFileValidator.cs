@@ -2,7 +2,7 @@
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace AvaloniaApplication1.GameExecutable;
+namespace D2RInstanceManager.GameExecutable;
 
 using ValidationResult = GameExecutableFileValidationResult;
 using ValidationResultCode = GameExecutableFileValidationResultCode;

@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
-using AvaloniaApplication1.Common;
+using D2RInstanceManager.Common;
 using CommunityToolkit.Mvvm.Input;
 
-namespace AvaloniaApplication1.Overlay.Dialog.DiscardChanges;
+namespace D2RInstanceManager.Overlay.Dialog.DiscardChanges;
 
 public partial class DiscardChangesDialogViewModel : ViewModelBase, IOverlayContent<bool>
 {

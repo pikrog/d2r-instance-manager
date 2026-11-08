@@ -1,17 +1,17 @@
 ﻿using System.Threading.Tasks;
-using AvaloniaApplication1.Dialog;
-using AvaloniaApplication1.GameExecutable;
-using AvaloniaApplication1.GlobalSettings.Issues;
-using AvaloniaApplication1.Navigation;
-using AvaloniaApplication1.Overlay;
-using AvaloniaApplication1.Overlay.Dialog.SetPassphrase;
-using AvaloniaApplication1.Semantic;
-using AvaloniaApplication1.Toast;
-using AvaloniaApplication1.Toast.Descriptors;
+using D2RInstanceManager.Dialog;
+using D2RInstanceManager.GameExecutable;
+using D2RInstanceManager.GlobalSettings.Issues;
+using D2RInstanceManager.Navigation;
+using D2RInstanceManager.Overlay;
+using D2RInstanceManager.Overlay.Dialog.SetPassphrase;
+using D2RInstanceManager.Semantic;
+using D2RInstanceManager.Toast;
+using D2RInstanceManager.Toast.Descriptors;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace AvaloniaApplication1.GlobalSettings;
+namespace D2RInstanceManager.GlobalSettings;
 
 public partial class GlobalSettingsPageViewModel(
     GlobalSettingsService globalSettingsService,

@@ -1,5 +1,5 @@
 ﻿using System;
 
-namespace AvaloniaApplication1.Engine.Common;
+namespace D2RInstanceManager.Engine.Common;
 
 public record RetryPolicy(TimeSpan Delay, int MaxRetries);

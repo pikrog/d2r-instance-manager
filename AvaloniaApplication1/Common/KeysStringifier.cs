@@ -2,7 +2,7 @@
 using Avalonia.Input;
 using Avalonia.Win32.Input;
 
-namespace AvaloniaApplication1.Common;
+namespace D2RInstanceManager.Common;
 
 public static class KeysStringifier
 {

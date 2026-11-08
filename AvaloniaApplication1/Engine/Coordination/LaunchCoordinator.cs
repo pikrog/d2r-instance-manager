@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace AvaloniaApplication1.Engine.Coordination;
+namespace D2RInstanceManager.Engine.Coordination;
 
 public class LaunchCoordinator
 {

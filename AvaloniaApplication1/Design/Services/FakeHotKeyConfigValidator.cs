@@ -1,8 +1,8 @@
-﻿using AvaloniaApplication1.HotKey;
-using AvaloniaApplication1.HotKey.Config;
-using AvaloniaApplication1.HotKey.Coordination;
+﻿using D2RInstanceManager.HotKey;
+using D2RInstanceManager.HotKey.Config;
+using D2RInstanceManager.HotKey.Coordination;
 
-namespace AvaloniaApplication1.Design.Services;
+namespace D2RInstanceManager.Design.Services;
 
 public class FakeHotKeyConfigValidator : IHotKeyConfigValidator
 {

@@ -1,6 +1,6 @@
-﻿using AvaloniaApplication1.Form.ViewModels;
+﻿using D2RInstanceManager.Form.ViewModels;
 
-namespace AvaloniaApplication1.Instance.ViewModels;
+namespace D2RInstanceManager.Instance.ViewModels;
 
 public class EditInstanceFormDialogViewModel(EditInstanceFormViewModel form)
     : FormDialogViewModel<EditInstanceFormViewModel>(form)

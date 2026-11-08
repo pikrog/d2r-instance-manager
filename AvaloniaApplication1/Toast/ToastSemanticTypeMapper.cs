@@ -1,7 +1,7 @@
 ﻿using System;
-using AvaloniaApplication1.Semantic;
+using D2RInstanceManager.Semantic;
 
-namespace AvaloniaApplication1.Toast;
+namespace D2RInstanceManager.Toast;
 
 public static class ToastSemanticTypeMapper
 {

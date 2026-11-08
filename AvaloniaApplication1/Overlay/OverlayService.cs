@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace AvaloniaApplication1.Overlay;
+namespace D2RInstanceManager.Overlay;
 
 public class OverlayService(IOverlayController controller)
 {

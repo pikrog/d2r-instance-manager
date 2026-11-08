@@ -1,7 +1,7 @@
 ﻿using System;
-using AvaloniaApplication1.HotKey;
+using D2RInstanceManager.HotKey;
 
-namespace AvaloniaApplication1.Instance.Models.Issues.HotKey;
+namespace D2RInstanceManager.Instance.Models.Issues.HotKey;
 
 public sealed record FailedHotKeyRegistration(KeyCombination KeyCombination, Exception Exception) : HotKeyIssue(KeyCombination)
 {

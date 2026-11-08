@@ -1,3 +1,3 @@
-﻿namespace AvaloniaApplication1.Config.Exceptions;
+﻿namespace D2RInstanceManager.Config.Exceptions;
 
 public class InvalidConfigReferenceException(string message) : ConfigException(message);

@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
-using AvaloniaApplication1.Config;
-using AvaloniaApplication1.Secret;
+using D2RInstanceManager.Config;
+using D2RInstanceManager.Secret;
 
-namespace AvaloniaApplication1.GlobalSettings;
+namespace D2RInstanceManager.GlobalSettings;
 
 public class GlobalSettingsService(ConfigService configService, ISecretMigrationCoordinator secretMigrationCoordinator)
 {

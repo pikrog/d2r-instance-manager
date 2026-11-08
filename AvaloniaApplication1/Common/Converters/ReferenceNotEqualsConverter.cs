@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Avalonia.Data.Converters;
 
-namespace AvaloniaApplication1.Common.Converters;
+namespace D2RInstanceManager.Common.Converters;
 
 public class ReferenceNotEqualsConverter : IMultiValueConverter
 {

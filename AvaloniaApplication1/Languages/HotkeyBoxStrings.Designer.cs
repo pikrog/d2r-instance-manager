@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AvaloniaApplication1.Languages {
+namespace D2RInstanceManager.Languages {
     using System;
     
     
@@ -38,7 +38,7 @@ namespace AvaloniaApplication1.Languages {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("AvaloniaApplication1.Languages.HotkeyBoxStrings", typeof(HotkeyBoxStrings).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("D2RInstanceManager.Languages.HotkeyBoxStrings", typeof(HotkeyBoxStrings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

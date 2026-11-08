@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls;
 
-namespace AvaloniaApplication1.Account.Views;
+namespace D2RInstanceManager.Account.Views;
 
 public partial class AccountsPageView : UserControl
 {

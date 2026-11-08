@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AvaloniaApplication1.Account.Models;
-using AvaloniaApplication1.Config;
+using D2RInstanceManager.Account.Models;
+using D2RInstanceManager.Config;
 
-namespace AvaloniaApplication1.Account;
+namespace D2RInstanceManager.Account;
 
 public class AccountService(ConfigService configService, AccountSnapshotTransformer transformer)
 {

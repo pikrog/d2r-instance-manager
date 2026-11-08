@@ -1,4 +1,4 @@
-﻿namespace AvaloniaApplication1.Log;
+﻿namespace D2RInstanceManager.Log;
 
 public class LogSettings
 {

@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls;
 
-namespace AvaloniaApplication1;
+namespace D2RInstanceManager;
 
 public partial class InitialWindowView : Window
 {
