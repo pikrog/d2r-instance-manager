@@ -37,7 +37,7 @@ public static class DesignServices
 
     private static readonly IConfigStore ConfigStore = new DummyConfigStore();
     
-    private static readonly ConfigService ConfigService = new(ConfigContext, ConfigStore);
+    private static readonly ConfigService ConfigService = new(AppConfig, ConfigStore);
 
     public static readonly OverlayHost OverlayHost = new();
     

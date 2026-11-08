@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 namespace AvaloniaApplication1.Config;
 
@@ -7,7 +6,11 @@ public class ConfigEnvironment
 {
     private const string ConfigFileName = "config.json";
     
+    private const string TempConfigFileName = $"{ConfigFileName}.tmp";
+    
     public required string FilePath { get; init; }
+    
+    public required string TempFilePath { get; init; }
     
     public required string DirectoryPath { get; init; }
 
@@ -15,11 +18,13 @@ public class ConfigEnvironment
     {
         var directoryPath = environment.DirectoryPath;
         var configFilePath = Path.Combine(directoryPath, ConfigFileName);
+        var tempFilePath = Path.Combine(directoryPath, TempConfigFileName);
         
         return new ConfigEnvironment
         {
             DirectoryPath = directoryPath,
-            FilePath = configFilePath
+            FilePath = configFilePath,
+            TempFilePath = tempFilePath
         };
     }
 }

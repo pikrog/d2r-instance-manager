@@ -8,17 +8,19 @@ public class GlobalSettingsService(ConfigService configService, ISecretMigration
 {
     public async Task SaveAsync(GlobalSettingsDraft draft)
     {
-        // Validate draft
-
-        var snapshot = GetSnapshot() with
+        await configService.ChangeAsync(context =>
         {
-            GameExecutablePath = draft.GameExecutablePath,
-            CenterMouseCursorInShownWindow = draft.CenterMouseCursorInShownWindow,
-            FallbackToPrimaryDisplayIfInvalid = draft.FallbackToPrimaryDisplayIfInvalid,
-            CloseInstancesOnAppExit = draft.CloseInstancesOnAppExit
-        };
-        
-        await configService.ChangeAsync(context => context.UpdateGlobalSettings(snapshot));   
+            var snapshot = GetSnapshot() with
+            {
+                GameExecutablePath = draft.GameExecutablePath,
+                CenterMouseCursorInShownWindow = draft.CenterMouseCursorInShownWindow,
+                FallbackToPrimaryDisplayIfInvalid = draft.FallbackToPrimaryDisplayIfInvalid,
+                CloseInstancesOnAppExit = draft.CloseInstancesOnAppExit
+            };
+            
+            context.UpdateGlobalSettings(snapshot);
+        });
+    }
 
     public Task SetProtectionSettingsAsync(ProtectionSelection selection, string? passphrase)
     {

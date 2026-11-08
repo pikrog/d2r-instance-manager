@@ -5,20 +5,27 @@ using AvaloniaApplication1.Config.Stores;
 
 namespace AvaloniaApplication1.Config;
 
-public class ConfigService(ConfigContext configContext, IConfigStore configStore)
+public class ConfigService(AppConfig appConfig, IConfigStore configStore)
 {
     private readonly SemaphoreSlim _semaphore = new(1, 1);
     
-    public IConfigReader Config => configContext;
+    private ConfigContext _configContext = new(appConfig);
+
+    public IConfigReader Config => _configContext;
     
     public async Task ChangeAsync(Action<ConfigContext> change)
     {
         await _semaphore.WaitAsync();
         try
         {
-            change(configContext);
-            var config = configContext.GetAppConfigCopy();
-            await configStore.SaveAsync(config);
+            var workingConfig = _configContext.GetAppConfigCopy();
+            var workingContext = new ConfigContext(workingConfig);
+            
+            change(workingContext);
+            
+            await configStore.SaveAsync(workingConfig);
+            
+            _configContext = workingContext;
         }
         finally
         {
