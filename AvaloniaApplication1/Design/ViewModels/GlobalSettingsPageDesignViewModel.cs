@@ -3,7 +3,15 @@ using AvaloniaApplication1.GlobalSettings;
 
 namespace AvaloniaApplication1.Design.ViewModels;
 
-public class GlobalSettingsPageDesignViewModel() : GlobalSettingsPageViewModel(DesignServices.GlobalSettingsService,
-    DesignServices.GameExecutablePathLocator,
-    DesignServices.ToastService,
-    DesignServices.OverlayService);
+public class GlobalSettingsPageDesignViewModel : GlobalSettingsPageViewModel
+{
+    public GlobalSettingsPageDesignViewModel() : base(DesignServices.GlobalSettingsService,
+        DesignServices.GameExecutablePathLocator,
+        new FakeGlobalSettingsPathValidator(),
+        DesignServices.ToastService,
+        DesignServices.OverlayService)
+    {
+        ValidateGameExecutablePath();
+    }
+}
+

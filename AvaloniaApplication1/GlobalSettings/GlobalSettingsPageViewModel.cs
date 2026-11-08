@@ -1,9 +1,11 @@
 ﻿using System.Threading.Tasks;
 using AvaloniaApplication1.Dialog;
 using AvaloniaApplication1.GameExecutable;
+using AvaloniaApplication1.GlobalSettings.Issues;
 using AvaloniaApplication1.Navigation;
 using AvaloniaApplication1.Overlay;
 using AvaloniaApplication1.Overlay.Dialog.SetPassphrase;
+using AvaloniaApplication1.Semantic;
 using AvaloniaApplication1.Toast;
 using AvaloniaApplication1.Toast.Descriptors;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -48,6 +50,26 @@ public partial class GlobalSettingsPageViewModel(
     private GlobalSettingsDraft? _savedDraft;
 
     private ProtectionSelection? _savedProtectionSelection;
+    
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(GameExecutablePathIssueSemantic), nameof(IsGameExecutablePathInvalid))]
+    public partial GameExecutablePathIssue? GameExecutablePathIssue { get; private set; }
+    
+    public SemanticType? GameExecutablePathIssueSemantic
+    {
+        get
+        {
+            if (GameExecutablePathIssue is null)
+                return null;
+            
+            return GameExecutablePathIssue.RequiresAttention
+                ? SemanticType.Danger
+                : SemanticType.Warning;
+        }
+    }
+    
+    public bool IsGameExecutablePathInvalid => 
+        GameExecutablePathIssue is not null && GameExecutablePathIssue.RequiresAttention;
 
     private void Refresh()
     {
@@ -103,6 +125,8 @@ public partial class GlobalSettingsPageViewModel(
         var path = await this.PickPathByOpenFilePicker(openFileOptions);
         if (path is not null)
             GameExecutablePath = path;
+        
+        ValidateGameExecutablePath();
     }
 
     [RelayCommand]
@@ -118,6 +142,8 @@ public partial class GlobalSettingsPageViewModel(
         }
         
         GameExecutablePath = path;
+        
+        ValidateGameExecutablePath();
         
         var toast = new GameExecutableFound(path);
         toastService.Show(toast);
@@ -152,9 +178,13 @@ public partial class GlobalSettingsPageViewModel(
 
     }
 
+    public void ValidateGameExecutablePath() => 
+        GameExecutablePathIssue = gameExecutablePathValidator.Validate(GameExecutablePath);
+
     public override Task OnEnterAsync()
     {
         Refresh();
+        ValidateGameExecutablePath();
         return Task.CompletedTask;
     }
     

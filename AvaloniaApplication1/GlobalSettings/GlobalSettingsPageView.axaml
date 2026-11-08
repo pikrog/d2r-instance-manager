@@ -2,10 +2,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
              xmlns:dialog="clr-namespace:AvaloniaApplication1.Dialog"
              xmlns:globalSettings="clr-namespace:AvaloniaApplication1.GlobalSettings"
              xmlns:design="clr-namespace:AvaloniaApplication1.Design.ViewModels"
+             xmlns:issues="clr-namespace:AvaloniaApplication1.GlobalSettings.Issues"
+             xmlns:semantic="clr-namespace:AvaloniaApplication1.Semantic"
+             xmlns:controls="clr-namespace:AvaloniaApplication1.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="AvaloniaApplication1.GlobalSettings.GlobalSettingsPageView"
              x:DataType="globalSettings:GlobalSettingsPageViewModel"
@@ -14,88 +16,165 @@
         <design:GlobalSettingsPageDesignViewModel />
     </Design.DataContext>
     
-    <Border Classes="outlined hovering rounded" Padding="15">
-        <ScrollViewer>
-            <StackPanel>
-                <StackPanel.Styles>
-                    <Style Selector="controls|Section">
-                        <Setter Property="Margin" Value="0 8 0 2"/>    <!--todo: StackPanel spacing + StackPanel per label + input-->
-                    </Style>
-                    <Style Selector="StackPanel > TextBox,ComboBox,CheckBox,controls|HotkeyBox">
-                        <Setter Property="Margin" Value="0 0 0 16"/>
-                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                    </Style>
-                    <Style Selector="StackPanel > TextBlock"> 
-                        <Setter Property="Margin" Value="0,0,0,4"/> 
-                    </Style>
-                </StackPanel.Styles>
-                
-                <TextBlock x:Name="GameExecutablePathLabel">Game executable path</TextBlock>
-                <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="4">
-
-                    <TextBox Grid.Column="0" Classes="h1" 
-                             AutomationProperties.LabeledBy="{Binding #GameExecutablePathLabel}"
-                             Text="{Binding GameExecutablePath}"/>
-                    <Button Grid.Column="1" Classes="icon" Command="{Binding BrowseForGameExecutablePathCommand}">
-                        <Svg Classes="default-foreground" Path="/Assets/images/browse.svg" />
-                    </Button>
-                    <Button Grid.Column="2" Classes="icon" Command="{Binding AutoDetectGameExecutablePathCommand}">
-                        <Svg Classes="default-foreground" Path="/Assets/images/auto.svg" />
-                    </Button>
-                </Grid>
-
-                <controls:Section Title="Behavior"/>
-
-                <CheckBox IsChecked="{Binding FallbackToPrimaryDisplayIfInvalid}"
-                          Margin="0 0 0 8">Fall back to the primary display if the target display is unavailable</CheckBox>
-                <CheckBox IsChecked="{Binding CenterMouseCursorInShownWindow}"
-                          Margin="0 0 0 8">Center the mouse cursor when showing an instance window</CheckBox>
-                
-                <controls:Section Title="Password protection" />
-                
-                <StackPanel Orientation="Vertical">
-                    <RadioButton GroupName="encryption" 
-                                 IsChecked="{Binding IsProtectionDisabledSelected,Mode=OneWay}" 
-                                 Command="{Binding SelectProtectionOptionCommand}" 
-                                 CommandParameter="{x:Static globalSettings:ProtectionSelection.Disabled}">
-                        Disabled
-                    </RadioButton>
-                    <RadioButton GroupName="encryption" 
-                                 IsChecked="{Binding IsProtectionByWindowsAccountSelected,Mode=OneWay}"
-                                 Command="{Binding SelectProtectionOptionCommand}" 
-                                 CommandParameter="{x:Static globalSettings:ProtectionSelection.ProtectedByWindowsAccount}">
-                        Protected by your Windows account
-                    </RadioButton>
+    <UserControl.Styles>
+        <Style Selector="ContentControl.issue TextBlock">
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        
+        <Style Selector="ContentControl.issue.danger TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource DangerContent}" />
+        </Style>
+        
+        <Style Selector="ContentControl.issue.warning TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource WarningContent}" />
+        </Style>
+        
+        <Style Selector="Border.settings-card">
+            <Setter Property="Padding" Value="22" />
+        </Style>
+        
+        <Style Selector="Border.settings-card:pointerover controls|RevealableContent">
+            <Setter Property="IsRevealed" Value="True" />
+        </Style>
+    </UserControl.Styles>
+    
+    <UserControl.DataTemplates>
+        <DataTemplate x:DataType="issues:MissingExecutablePath">
+            <TextBlock>The game executable path is missing.</TextBlock>
+        </DataTemplate>
+    
+        <DataTemplate x:DataType="issues:ExecutableFileNotFound">
+            <TextBlock>The game executable file was not found.</TextBlock>
+        </DataTemplate>
+    
+        <DataTemplate x:DataType="issues:InvalidExecutableFileFormat">
+            <TextBlock>The file is not a valid 64-bit executable.</TextBlock>
+        </DataTemplate>
+    
+        <DataTemplate x:DataType="issues:UnrecognizedExecutable">
+            <TextBlock>
+                The executable file does not contain the expected metadata for Diablo II: Resurrected.
+            </TextBlock>
+        </DataTemplate>
+    </UserControl.DataTemplates>
+    
+    <ScrollViewer>
+        <StackPanel Spacing="16">
+            <Border Classes="outlined hovering rounded settings-card">
+                <StackPanel Orientation="Vertical" Spacing="10">
+                    <TextBlock Classes="h2" Name="GameExecutablePathLabel">Game executable path</TextBlock>
                     
-                    <Grid ColumnDefinitions="Auto, *">
-                        <RadioButton Grid.Column="0" GroupName="encryption" 
-                                     IsChecked="{Binding IsProtectionByPassphraseSelected,Mode=OneWay}"
-                                     Command="{Binding SelectProtectionOptionCommand}" 
-                                     CommandParameter="{x:Static globalSettings:ProtectionSelection.ProtectedByPassphrase}">
-                            Protected by a passphrase
-                        </RadioButton>
+                    <Grid ColumnDefinitions="*,Auto,Auto" RowDefinitions="Auto, Auto" 
+                          ColumnSpacing="4" RowSpacing="8">
+                        <TextBox Grid.Row="0" Grid.Column="0" 
+                                 Classes="h1"
+                                 Classes.error="{Binding GameExecutablePathIssue.RequiresAttention, FallbackValue={x:False}}"
+                                 AutomationProperties.LabeledBy="{Binding #GameExecutablePathLabel}"
+                                 Text="{Binding GameExecutablePath}"
+                                 LostFocus="GameExecutablePathTextBox_LostFocus"/>
                         
-                        <Button Grid.Column="1" HorizontalAlignment="Right"
-                                Classes="neutral"
-                                IsEnabled="{Binding IsProtectionByPassphraseSelected}"
-                                Command="{Binding SetPassphraseCommand}"
-                                ToolTip.ShowOnDisabled="True"
-                                ToolTip.ServiceEnabled="{Binding !IsProtectionByPassphraseSelected}">
-                            <ToolTip.Tip>
-                                <TextBlock>
-                                    You can set the passphrase only when using the
-                                    <Run FontWeight="Bold">[Protected by a passphrase]</Run>
-                                    password protection option.
-                                </TextBlock>
-                            </ToolTip.Tip>
-                            <StackPanel Orientation="Horizontal" Spacing="8">
-                                <Svg Classes="default-foreground"  Path="/Assets/images/key.svg" Height="20"/>
-                                <TextBlock>Set the passphrase</TextBlock>
-                            </StackPanel>
+                        <Button Grid.Row="0" Grid.Column="1" 
+                                Classes="icon" 
+                                Command="{Binding BrowseForGameExecutablePathCommand}">
+                            <Svg Classes="default-foreground" Path="/Assets/images/browse.svg" />
                         </Button>
+                        
+                        <Button Grid.Row="0" Grid.Column="2"
+                                Classes="icon" 
+                                Command="{Binding AutoDetectGameExecutablePathCommand}">
+                            <Svg Classes="default-foreground" Path="/Assets/images/auto.svg" />
+                        </Button>
+                        
+                        <ContentControl Grid.Row="1" Grid.Column="0" Classes="issue" 
+                                        semantic:SemanticClass.Type="{Binding GameExecutablePathIssueSemantic}"
+                                        Content="{Binding GameExecutablePathIssue}"
+                                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                            <ContentControl.ContentTemplate>
+                                <DataTemplate x:DataType="issues:GameExecutablePathIssue">
+                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" Margin="1 0">
+                                        <Panel Grid.Column="0" Width="16" VerticalAlignment="Top" Margin="0 0.5 0 0">
+                                            <Svg Classes="warning" Path="/Assets/images/warning.svg" IsVisible="{Binding !RequiresAttention}"/>
+                                            <Svg Classes="danger" Path="/Assets/images/error.svg" IsVisible="{Binding RequiresAttention}"/>
+                                        </Panel>
+                                        
+                                        <ContentControl Grid.Column="1" Content="{Binding}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ContentControl.ContentTemplate>
+                        </ContentControl>
                     </Grid>
                 </StackPanel>
-            </StackPanel>
-        </ScrollViewer>
-    </Border>
+            </Border>
+                
+            <Border Classes="outlined hovering rounded settings-card">
+                <StackPanel Orientation="Vertical" Spacing="10">
+                    <TextBlock Classes="h2">Behavior</TextBlock>
+                    <StackPanel Orientation="Vertical">
+                        <Grid ColumnDefinitions="*, Auto">
+                            <TextBlock Grid.Column="0" VerticalAlignment="Center">Fall back to the primary display if the target display is unavailable</TextBlock>
+                            <ToggleSwitch Grid.Column="1"  IsChecked="{Binding FallbackToPrimaryDisplayIfInvalid}"
+                                          OnContent="" OffContent=""/>
+                        </Grid>
+                        
+                        <Grid ColumnDefinitions="*, Auto">
+                            <TextBlock Grid.Column="0" VerticalAlignment="Center">Center the mouse cursor when showing an instance window</TextBlock>
+                            <ToggleSwitch Grid.Column="1" IsChecked="{Binding CenterMouseCursorInShownWindow}"
+                                          OnContent="" OffContent="" />
+                        </Grid>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            
+            <Border Classes="outlined hovering rounded settings-card">
+                <StackPanel Orientation="Vertical" Spacing="10">
+                    <TextBlock Classes="h2">Password protection</TextBlock>
+                    <StackPanel Orientation="Vertical">
+                        <RadioButton GroupName="encryption" 
+                                     IsChecked="{Binding IsProtectionDisabledSelected,Mode=OneWay}" 
+                                     Command="{Binding SelectProtectionOptionCommand}" 
+                                     CommandParameter="{x:Static globalSettings:ProtectionSelection.Disabled}">
+                            Disabled
+                        </RadioButton>
+                        
+                        <RadioButton GroupName="encryption" 
+                                     IsChecked="{Binding IsProtectionByWindowsAccountSelected,Mode=OneWay}"
+                                     Command="{Binding SelectProtectionOptionCommand}" 
+                                     CommandParameter="{x:Static globalSettings:ProtectionSelection.ProtectedByWindowsAccount}">
+                            Protected by your Windows account
+                        </RadioButton>
+                        
+                        <Grid ColumnDefinitions="Auto, *">
+                            <RadioButton Grid.Column="0" GroupName="encryption" 
+                                         IsChecked="{Binding IsProtectionByPassphraseSelected,Mode=OneWay}"
+                                         Command="{Binding SelectProtectionOptionCommand}" 
+                                         CommandParameter="{x:Static globalSettings:ProtectionSelection.ProtectedByPassphrase}">
+                                Protected by a passphrase
+                            </RadioButton>
+                            
+                            <Button Grid.Column="1" HorizontalAlignment="Right"
+                                    Classes="neutral"
+                                    IsEnabled="{Binding IsProtectionByPassphraseSelected}"
+                                    Command="{Binding SetPassphraseCommand}"
+                                    ToolTip.ShowOnDisabled="True"
+                                    ToolTip.ServiceEnabled="{Binding !IsProtectionByPassphraseSelected}">
+                                <ToolTip.Tip>
+                                    <TextBlock>
+                                        You can set the passphrase only when using the
+                                        <Run FontWeight="Bold">[Protected by a passphrase]</Run>
+                                        password protection option.
+                                    </TextBlock>
+                                </ToolTip.Tip>
+                                
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <Svg Classes="inherit-foreground" Path="/Assets/images/key.svg" Height="20"/>
+                                    
+                                    <TextBlock Classes="inherit-foreground">Set the passphrase</TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>
