@@ -70,11 +70,15 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
                     
-                <TextBlock x:Name="AuthenticationMethodLabel">Authentication method</TextBlock>
+                <TextBlock x:Name="AuthenticationMethodLabel" 
+                           IsVisible="False">
+                    Authentication method
+                </TextBlock>
                 <ComboBox AutomationProperties.LabeledBy="{Binding #AuthenticationMethodLabel}"
                           ItemsSource="{x:Static instance1:EditInstanceFormViewModel.AuthenticationMethodOptions}"
                           SelectedItem="{Binding SelectedAuthenticationMethod}"
-                          IsEditable="False" IsEnabled="{Binding IsOnlineMode}">
+                          IsEditable="False" IsEnabled="{Binding IsOnlineMode}"
+                          IsVisible="False">
                     <ComboBox.ItemTemplate>
                         <DataTemplate x:DataType="{x:Type dtos1:AuthenticationMethodOption}">
                             <TextBlock Text="{Binding Label}"/>

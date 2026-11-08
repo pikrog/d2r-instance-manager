@@ -35,16 +35,14 @@ public partial class EditInstanceFormViewModel : FormViewModelBase
     [RequiredIf(nameof(IsOnlineMode), true)]
     public partial AccountOption? SelectedAccount { get; set; }
 
-    public static IReadOnlyList<AuthenticationMethodOption> AuthenticationMethodOptions { get; } =
-    [
-        new(AuthenticationMethod.OsiTokenRegistry, "OSI Token registry"),
-        new(AuthenticationMethod.CommandLineArguments, "Command-line arguments")
-    ];
+    public static IReadOnlyList<AuthenticationMethodOption> AuthenticationMethodOptions => 
+        AuthenticationMethodOption.AllOptions;
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
     [RequiredIf(nameof(IsOnlineMode), true)]
-    public partial AuthenticationMethodOption? SelectedAuthenticationMethod { get; set; }
+    public partial AuthenticationMethodOption? SelectedAuthenticationMethod { get; set; } =
+        AuthenticationMethodOption.CommandLineArguments;
     
     public IReadOnlyList<RegionOption> Regions { get; set; }
     
