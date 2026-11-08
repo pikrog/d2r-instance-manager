@@ -65,7 +65,7 @@
                           IsEditable="False" IsEnabled="{Binding IsOnlineMode}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate x:DataType="{x:Type models:AccountOption}">
-                            <TextBlock Text="{Binding Username}"/>
+                            <TextBlock Text="{Binding Label}"/>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
