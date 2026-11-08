@@ -6,6 +6,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ApplicationIcon>Assets\images\logo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -53,10 +54,6 @@
     </Compile>
     <Compile Update="Region\Views\RegionsPageView.axaml.cs">
       <DependentUpon>RegionsPageView.axaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Region\Views\EditRegionFormView.axaml.cs">
-      <DependentUpon>EditRegionFormView.axaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Instance\Views\EditInstanceFormView.axaml.cs">

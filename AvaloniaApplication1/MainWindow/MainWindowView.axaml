@@ -17,8 +17,8 @@
         Width="900" Height="620"
         x:Class="AvaloniaApplication1.MainWindow.MainWindowView"
         x:DataType="mainWindow:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
-        Title="AvaloniaApplication1"
+        Icon="/Assets/images/logo.png"
+        Title="D2R Instance Manager"
         dialog:DialogService.Register="{Binding}"
         Background="{DynamicResource PrimaryBackground}">
     <Window.Styles>

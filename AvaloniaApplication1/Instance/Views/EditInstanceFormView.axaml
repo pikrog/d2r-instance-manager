@@ -15,7 +15,9 @@
              x:Class="AvaloniaApplication1.Instance.Views.EditInstanceFormView"
              x:DataType="instance1:EditInstanceFormDialogViewModel"
              x:Name="Root"
-             WindowStartupLocation="CenterOwner">
+             WindowStartupLocation="CenterOwner"
+             Icon="/Assets/images/logo.png"
+             Title="Edit Instance">
     <Design.DataContext>
         <designViewModels:EditInstanceFormDesignViewModel/>
     </Design.DataContext>
