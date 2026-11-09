@@ -111,7 +111,7 @@
                                                  Command="{Binding SetPageCommand}"
                                                  CommandParameter="{x:Type instance:InstancesPageViewModel}"
                                                  IsActive="{Binding PageHost.CurrentPage,
-                                                            Converter={StaticResource IsPageTypeConverter}, 
+                                                            Converter={StaticResource IsPageTypeAssignableToConverter}, 
                                                             ConverterParameter={x:Type instance:InstancesPageViewModel}}"
                                                  BadgeCount="{Binding InstancesNotificationCount}">
                                     Instances
@@ -120,7 +120,7 @@
                                                  Command="{Binding SetPageCommand}" 
                                                  CommandParameter="{x:Type account:AccountsPageViewModel}"
                                                  IsActive="{Binding PageHost.CurrentPage,
-                                                            Converter={StaticResource IsPageTypeConverter}, 
+                                                            Converter={StaticResource IsPageTypeAssignableToConverter}, 
                                                             ConverterParameter={x:Type account:AccountsPageViewModel}}">
                                     Accounts
                                 </controls:NavTab>
@@ -128,7 +128,7 @@
                                                  Command="{Binding SetPageCommand}" 
                                                  CommandParameter="{x:Type region:RegionsPageViewModel}"
                                                  IsActive="{Binding PageHost.CurrentPage,
-                                                            Converter={StaticResource IsPageTypeConverter}, 
+                                                            Converter={StaticResource IsPageTypeAssignableToConverter}, 
                                                             ConverterParameter={x:Type region:RegionsPageViewModel}}">
                                     Regions
                                 </controls:NavTab>
@@ -137,7 +137,7 @@
                                                  Command="{Binding SetPageCommand}" 
                                                  CommandParameter="{x:Type logs:LogsPageViewModel}"
                                                  IsActive="{Binding PageHost.CurrentPage,
-                                                            Converter={StaticResource IsPageTypeConverter}, 
+                                                            Converter={StaticResource IsPageTypeAssignableToConverter}, 
                                                             ConverterParameter={x:Type logs:LogsPageViewModel}}"
                                                  BadgeCount="{Binding LogsNotificationCount}">
                                     Logs
@@ -146,7 +146,7 @@
                                                  Command="{Binding SetPageCommand}" 
                                                  CommandParameter="{x:Type settings:GlobalSettingsPageViewModel}"
                                                  IsActive="{Binding PageHost.CurrentPage,
-                                                            Converter={StaticResource IsPageTypeConverter}, 
+                                                            Converter={StaticResource IsPageTypeAssignableToConverter}, 
                                                             ConverterParameter={x:Type settings:GlobalSettingsPageViewModel}}">
                                     Global settings
                                 </controls:NavTab>

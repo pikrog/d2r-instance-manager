@@ -5,13 +5,13 @@ using D2RInstanceManager.Navigation;
 
 namespace D2RInstanceManager.Common.Converters;
 
-public class IsPageTypeConverter : IValueConverter
+public class IsPageTypeAssignableTo : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is not PageViewModel page || parameter is not Type pageType)
             return false;
-        return page.GetType() == pageType;
+        return page.GetType().IsAssignableTo(pageType);
     }
 
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
