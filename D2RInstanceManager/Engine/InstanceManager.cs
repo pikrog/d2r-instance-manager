@@ -34,6 +34,11 @@ public class InstanceManager(InstanceEngineFactory engineFactory)
 
     public void Remove(Guid id)
     {
+        if (!_instances.TryGetValue(id, out var instance))
+            return;
+        
+        instance.StateChanged -= OnInstanceStateChanged;
+        
         _instances.Remove(id);
     }
 
