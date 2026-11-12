@@ -95,6 +95,10 @@ public static class DesignServices
     
     public static readonly PageHost PageHost = new();
     
+    public static readonly FakeToastHost ToastHost = new();
+
+    public static readonly ToastService ToastService = new(ToastHost);
+    
     private static readonly InstanceLaunchContextFactory InstanceLaunchContextFactory = new(ConfigService,
         AccountSnapshotTransformer,
         GameExecutableFileValidator,
@@ -103,6 +107,11 @@ public static class DesignServices
     public static readonly NotificationCounter InstanceNotificationCounter = new();
 
     private static readonly InstanceActivityTracker InstanceActivityTracker = new();
+
+    private static readonly InstanceExitReporter InstanceExitReporter = new(InstanceNameRegistry,
+        InstanceNotificationCounter,
+        ToastService,
+        NullLogger<InstanceExitReporter>.Instance);
     
     public static InstanceService InstanceService { get; } = 
         new InstanceDesignService(
@@ -112,7 +121,7 @@ public static class DesignServices
             InstanceNameRegistry,
             InstanceLaunchContextFactory,
             InstanceActivityTracker,
-            InstanceNotificationCounter,
+            InstanceExitReporter,
             NullLogger<InstanceService>.Instance);
 
     public static readonly IInstancePresenter InstancePresenter = new InstanceDesignPresenter(InstanceService);
@@ -120,10 +129,6 @@ public static class DesignServices
     private static readonly PageDesignProvider PageProvider = new();
     
     public static readonly NavigationService NavigationService = new(PageHost, PageProvider);
-    
-    public static readonly FakeToastHost ToastHost = new();
-
-    public static readonly ToastService ToastService = new(ToastHost);
 
     private static readonly IHotKeyConfigValidator HotKeyConfigValidator = new FakeHotKeyConfigValidator();
 

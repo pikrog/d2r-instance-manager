@@ -1,4 +1,5 @@
 ﻿using System;
+using D2RInstanceManager.Common;
 using D2RInstanceManager.Engine.Helpers.MultiboxUnlock;
 
 namespace D2RInstanceManager.Engine.Models.Events;
@@ -12,4 +13,6 @@ public sealed record MultiboxUnlockFailed : FailedEvent<RetryingMultiboxUnlockEr
     public MultiboxUnlockFailed(Exception exception) : base(exception)
     {
     }
+
+    protected override string GetKnownErrorMessage(RetryingMultiboxUnlockError error) => error.ToDisplayString();
 };

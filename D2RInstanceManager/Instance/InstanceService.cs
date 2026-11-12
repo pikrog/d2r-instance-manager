@@ -5,15 +5,12 @@ using System.Threading.Tasks;
 using D2RInstanceManager.Config;
 using D2RInstanceManager.Display;
 using D2RInstanceManager.Engine;
-using D2RInstanceManager.Engine.Common;
 using D2RInstanceManager.Engine.Models;
 using D2RInstanceManager.Engine.Models.StateMachine;
 using D2RInstanceManager.Instance.Models;
 using D2RInstanceManager.Instance.Models.EventArgs;
 using D2RInstanceManager.Log;
 using D2RInstanceManager.Log.Instance;
-using D2RInstanceManager.Notification;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace D2RInstanceManager.Instance;
@@ -32,7 +29,7 @@ public class InstanceService : IInstanceConfigProvider
     
     private readonly InstanceActivityTracker _activityTracker;
 
-    private readonly INotificationSink _notificationSink;
+    private readonly InstanceExitReporter _exitReporter;
 
     private readonly ILogger<InstanceService> _logger;
 
@@ -50,7 +47,7 @@ public class InstanceService : IInstanceConfigProvider
         InstanceNameRegistry instanceNameRegistry,
         InstanceLaunchContextFactory launchContextFactory,
         InstanceActivityTracker activityTracker,
-        [FromKeyedServices(NotificationCounterKey.Instances)] INotificationSink notificationSink,
+        InstanceExitReporter exitReporter,
         ILogger<InstanceService> logger)
     {
         _configService = configService;
@@ -59,7 +56,7 @@ public class InstanceService : IInstanceConfigProvider
         _instanceNameRegistry = instanceNameRegistry;
         _launchContextFactory = launchContextFactory;
         _activityTracker = activityTracker;
-        _notificationSink = notificationSink;
+        _exitReporter = exitReporter;
         _logger = logger;
 
         _instanceManager.InstanceStateChanged += OnInstanceStateChanged;
@@ -70,38 +67,12 @@ public class InstanceService : IInstanceConfigProvider
         var transition = _activityTracker.Update(snapshot.Id, snapshot.IsActive);
 
         if (transition.BecameInactive)
-            ReportInstanceStopped(snapshot);
+            _exitReporter.Report(snapshot);
 
         InstanceStateChanged?.Invoke(this, snapshot);
 
         if (transition.NewActiveCount is { } activeCount)
             ActiveCountChanged?.Invoke(this, activeCount);
-    }
-
-    private void ReportInstanceStopped(RuntimeSnapshot snapshot)
-    {
-        var failed = snapshot.Errors.Any();
-
-        if (failed || snapshot.ProcessExitResult is not ProcessExitResult.Success)
-            _notificationSink.Increment();
-
-        var instanceName = _instanceNameRegistry.Get(snapshot.Id);
-        using var _ = _logger.BeginScope(new Dictionary<string, object?> { { LogProperties.InstanceName, instanceName } });
-
-        if (failed)
-            _logger.LogError("Instance failed");
-        else switch (snapshot.ProcessExitResult)
-        {
-            case ProcessExitResult.Failure:
-                _logger.LogError("Instance crashed");
-                break;
-            case ProcessExitResult.Terminated:
-                _logger.LogWarning("Instance terminated");
-                break;
-            default:
-                _logger.LogInformation("Instance stopped");
-                break;
-        }
     }
 
     private async Task AddAsync(InstanceSnapshot snapshot, DisplaySnapshot? displaySnapshotToCache)

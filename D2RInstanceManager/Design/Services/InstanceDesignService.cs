@@ -7,7 +7,6 @@ using D2RInstanceManager.Instance;
 using D2RInstanceManager.Instance.Models;
 using D2RInstanceManager.Instance.Models.Issues;
 using D2RInstanceManager.Log.Instance;
-using D2RInstanceManager.Notification;
 using Microsoft.Extensions.Logging;
 
 namespace D2RInstanceManager.Design.Services;
@@ -19,9 +18,9 @@ public class InstanceDesignService(
     InstanceNameRegistry registry,
     InstanceLaunchContextFactory factory,
     InstanceActivityTracker activityTracker,
-    INotificationSink notificationSink,
+    InstanceExitReporter exitReporter,
     ILogger<InstanceService> logger) 
-    : InstanceService(configService, validator, manager, registry, factory, activityTracker, notificationSink, logger)
+    : InstanceService(configService, validator, manager, registry, factory, activityTracker, exitReporter, logger)
 {
     public override IReadOnlyList<InstanceSummary> GetSummaries() => [
         new(Guid.NewGuid(), "Main", InstanceStatus.Running, true, []),

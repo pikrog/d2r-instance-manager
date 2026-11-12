@@ -12,4 +12,6 @@ public sealed record ProcessStartFailed : FailedEvent<ProcessError>
     public ProcessStartFailed(Exception exception) : base(exception)
     {
     }
+
+    protected override string GetKnownErrorMessage(ProcessError error) => error.Message;
 }

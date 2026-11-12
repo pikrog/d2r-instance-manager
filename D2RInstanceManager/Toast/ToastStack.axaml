@@ -143,6 +143,42 @@
                 </TextBlock>
             </StackPanel>
         </DataTemplate>
+    
+        <DataTemplate x:DataType="descriptors:InstanceFailed">
+            <StackPanel Classes="toast-content">
+                <TextBlock>
+                    Instance failed
+                </TextBlock>
+                <TextBlock>
+                    Instance <Run Text="{Binding Name}" /> failed.
+                </TextBlock>
+                <TextBlock>
+                    Error: <Run Text="{Binding Error.Message}" />.
+                </TextBlock>
+            </StackPanel>
+        </DataTemplate>
+    
+        <DataTemplate x:DataType="descriptors:InstanceCrashed">
+            <StackPanel Classes="toast-content">
+                <TextBlock>
+                    Instance crashed
+                </TextBlock>
+                <TextBlock>
+                    Instance <Run Text="{Binding Name}" /> crashed. 
+                </TextBlock>
+            </StackPanel>
+        </DataTemplate>
+        
+        <DataTemplate x:DataType="descriptors:InstanceTerminated">
+            <StackPanel Classes="toast-content">
+                <TextBlock>
+                    Instance terminated
+                </TextBlock>
+                <TextBlock>
+                    Instance <Run Text="{Binding Name}" /> could not be closed gracefully on time.
+                </TextBlock>
+            </StackPanel>
+        </DataTemplate>
     </UserControl.DataTemplates>
 
     <ItemsControl Classes="toast-stack" ItemsSource="{Binding Host.Toasts,ElementName=Root}">

@@ -112,6 +112,7 @@ public static class ServiceCollectionExtension
             services.AddSingleton<IInstancePresenter, InstancePresenter>();
             services.AddSingleton<InstanceLaunchContextFactory>();
             services.AddSingleton<InstanceActivityTracker>();
+            services.AddSingleton<InstanceExitReporter>();
             services.AddNotificationCounter(NotificationCounterKey.Instances);
             services.AddSingleton<InstanceHotKeyBindingCoordinator>();
             services.AddSingleton<InstanceHotKeyConfigProvider>();
