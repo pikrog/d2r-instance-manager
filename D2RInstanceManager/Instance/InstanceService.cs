@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using D2RInstanceManager.Config;
 using D2RInstanceManager.Display;
@@ -31,6 +30,8 @@ public class InstanceService : IInstanceConfigProvider
     
     private readonly InstanceLaunchContextFactory _launchContextFactory;
     
+    private readonly InstanceActivityTracker _activityTracker;
+
     private readonly INotificationSink _notificationSink;
 
     private readonly ILogger<InstanceService> _logger;
@@ -39,28 +40,16 @@ public class InstanceService : IInstanceConfigProvider
     
     public event EventHandler<InstanceConfigChangedEventArgs>? InstanceConfigChanged;
 
-    private readonly Lock _instanceActivityStatesLock = new();
-    
-    private readonly Dictionary<Guid, bool> _instanceActivityStates = [];
-
-    private int _cachedActiveCount;
-
-    public int CachedActiveCount
-    {
-        get
-        {
-            lock (_instanceActivityStatesLock)
-                return _cachedActiveCount;
-        }
-    }
-    
     public event EventHandler<int>? ActiveCountChanged;
 
+    public int CachedActiveCount => _activityTracker.ActiveCount;
+    
     public InstanceService(ConfigService configService,
         InstanceConfigValidator validator,
         InstanceManager instanceManager,
         InstanceNameRegistry instanceNameRegistry,
         InstanceLaunchContextFactory launchContextFactory,
+        InstanceActivityTracker activityTracker,
         [FromKeyedServices(NotificationCounterKey.Instances)] INotificationSink notificationSink,
         ILogger<InstanceService> logger)
     {
@@ -69,6 +58,7 @@ public class InstanceService : IInstanceConfigProvider
         _instanceManager = instanceManager;
         _instanceNameRegistry = instanceNameRegistry;
         _launchContextFactory = launchContextFactory;
+        _activityTracker = activityTracker;
         _notificationSink = notificationSink;
         _logger = logger;
 
@@ -77,53 +67,43 @@ public class InstanceService : IInstanceConfigProvider
 
     private void OnInstanceStateChanged(object? sender, RuntimeSnapshot snapshot)
     {
-        bool previousActivityState;
-        int? newActiveCount = null;
+        var transition = _activityTracker.Update(snapshot.Id, snapshot.IsActive);
 
-        lock (_instanceActivityStatesLock)
-        {
-            previousActivityState = _instanceActivityStates.GetValueOrDefault(snapshot.Id);
-            _instanceActivityStates[snapshot.Id] = snapshot.IsActive;
-
-            if (previousActivityState != snapshot.IsActive)
-            {
-                _cachedActiveCount += snapshot.IsActive ? 1 : -1;
-                newActiveCount = _cachedActiveCount;
-            }
-        }
-
-        if (previousActivityState 
-            && !snapshot.IsActive 
-            && (snapshot.Errors.Any() || snapshot.ProcessExitResult is not ProcessExitResult.Success))
-            _notificationSink.Increment();
-
-        if (previousActivityState && !snapshot.IsActive)
-        {
-            var instanceName = _instanceNameRegistry.Get(snapshot.Id);
-            using var _ = _logger.BeginScope(new Dictionary<string, object?>{{ LogProperties.InstanceName, instanceName }});
-
-            if (snapshot.Errors.Any())
-                _logger.LogError("Instance failed");
-            else switch (snapshot.ProcessExitResult)
-            {
-                case ProcessExitResult.Failure:
-                    _logger.LogError("Instance crashed");
-                    break;
-                case ProcessExitResult.Terminated:
-                    _logger.LogWarning("Instance terminated");
-                    break;
-                default:
-                    _logger.LogInformation("Instance stopped");
-                    break;
-            }
-        }
+        if (transition.BecameInactive)
+            ReportInstanceStopped(snapshot);
 
         InstanceStateChanged?.Invoke(this, snapshot);
-        
-        if (newActiveCount is { } activeCount)
+
+        if (transition.NewActiveCount is { } activeCount)
             ActiveCountChanged?.Invoke(this, activeCount);
     }
-    
+
+    private void ReportInstanceStopped(RuntimeSnapshot snapshot)
+    {
+        var failed = snapshot.Errors.Any();
+
+        if (failed || snapshot.ProcessExitResult is not ProcessExitResult.Success)
+            _notificationSink.Increment();
+
+        var instanceName = _instanceNameRegistry.Get(snapshot.Id);
+        using var _ = _logger.BeginScope(new Dictionary<string, object?> { { LogProperties.InstanceName, instanceName } });
+
+        if (failed)
+            _logger.LogError("Instance failed");
+        else switch (snapshot.ProcessExitResult)
+        {
+            case ProcessExitResult.Failure:
+                _logger.LogError("Instance crashed");
+                break;
+            case ProcessExitResult.Terminated:
+                _logger.LogWarning("Instance terminated");
+                break;
+            default:
+                _logger.LogInformation("Instance stopped");
+                break;
+        }
+    }
+
     private async Task AddAsync(InstanceSnapshot snapshot, DisplaySnapshot? displaySnapshotToCache)
     {
         await _configService.ChangeAsync(context =>
@@ -189,16 +169,12 @@ public class InstanceService : IInstanceConfigProvider
         await _configService.ChangeAsync(context => context.RemoveInstance(id));
         _instanceNameRegistry.Remove(id);
         _instanceManager.Remove(id);
+        
+        var newActiveCount = _activityTracker.Remove(snapshot.Id);
 
         var eventArgs = new InstanceConfigChangedEventArgs(snapshot.Id, snapshot);
         InstanceConfigChanged?.Invoke(this, eventArgs);
 
-        int? newActiveCount = null;
-        lock (_instanceActivityStatesLock)
-        {
-            if (_instanceActivityStates.Remove(snapshot.Id, out var wasActive) && wasActive)
-                newActiveCount = --_cachedActiveCount;
-        }
         if (newActiveCount is { } count)
             ActiveCountChanged?.Invoke(this, count);
     }

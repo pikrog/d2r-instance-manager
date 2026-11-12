@@ -18,9 +18,10 @@ public class InstanceDesignService(
     InstanceManager manager,
     InstanceNameRegistry registry,
     InstanceLaunchContextFactory factory,
+    InstanceActivityTracker activityTracker,
     INotificationSink notificationSink,
     ILogger<InstanceService> logger) 
-    : InstanceService(configService, validator, manager, registry, factory, notificationSink, logger)
+    : InstanceService(configService, validator, manager, registry, factory, activityTracker, notificationSink, logger)
 {
     public override IReadOnlyList<InstanceSummary> GetSummaries() => [
         new(Guid.NewGuid(), "Main", InstanceStatus.Running, true, []),

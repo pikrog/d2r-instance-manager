@@ -101,6 +101,8 @@ public static class DesignServices
         NullLogger<InstanceLaunchContextFactory>.Instance);
 
     public static readonly NotificationCounter InstanceNotificationCounter = new();
+
+    private static readonly InstanceActivityTracker InstanceActivityTracker = new();
     
     public static InstanceService InstanceService { get; } = 
         new InstanceDesignService(
@@ -109,6 +111,7 @@ public static class DesignServices
             InstanceManager, 
             InstanceNameRegistry,
             InstanceLaunchContextFactory,
+            InstanceActivityTracker,
             InstanceNotificationCounter,
             NullLogger<InstanceService>.Instance);
 

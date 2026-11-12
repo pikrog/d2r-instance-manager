@@ -88,14 +88,11 @@ public static class ServiceCollectionExtension
         
         public void AddApplicationServices()
         {
-            services.AddSingleton<InstanceConfigValidator>();
             services.AddSingleton<IGlobalSettingsPathValidator, GlobalSettingsPathValidator>();
             services.AddSingleton<IGlobalSettingsValidator, GlobalSettingsValidator>();
             
             services.AddSingleton<AccountService>();
             services.AddSingleton<RegionService>();
-            services.AddSingleton<InstanceService>();
-            services.AddSingleton<IInstanceConfigProvider>(sp => sp.GetRequiredService<InstanceService>());
             services.AddSingleton<GlobalSettingsService>();
             services.AddSingleton<DisplayService>();
             
@@ -109,11 +106,19 @@ public static class ServiceCollectionExtension
             
             services.AddSingleton<AccountSnapshotTransformer>();
             
-            services.AddSingleton<InstanceLaunchContextFactory>();
-
-            services.AddNotificationCounter(NotificationCounterKey.Instances);
-
+            services.AddSingleton<InstanceService>();
+            services.AddSingleton<IInstanceConfigProvider>(sp => sp.GetRequiredService<InstanceService>());
+            services.AddSingleton<InstanceConfigValidator>();
             services.AddSingleton<IInstancePresenter, InstancePresenter>();
+            services.AddSingleton<InstanceLaunchContextFactory>();
+            services.AddSingleton<InstanceActivityTracker>();
+            services.AddNotificationCounter(NotificationCounterKey.Instances);
+            services.AddSingleton<InstanceHotKeyBindingCoordinator>();
+            services.AddSingleton<InstanceHotKeyConfigProvider>();
+            services.AddSingleton<IHotKeyConfigProvider, InstanceHotKeyConfigProvider>(
+                sp => sp.GetRequiredService<InstanceHotKeyConfigProvider>());
+            services.AddTransient<InstancesPageViewModel>();
+            services.AddSingleton<EditInstanceFormViewModelFactory>();
             
             services.AddSingleton<IGameExecutablePathProvider, GameConfigStorePathProvider>();
             services.AddSingleton<IGameExecutablePathProvider, UninstallEntryPathProvider>();
@@ -134,14 +139,11 @@ public static class ServiceCollectionExtension
             services.AddSingleton<DisplayConfigMonitor>();
             services.AddSingleton<IDisplayConfigMonitor>(sp => sp.GetRequiredService<DisplayConfigMonitor>());
             services.AddSingleton<DisplayConfigChangeNotifier>();
-
-            services.AddTransient<InstancesPageViewModel>();
+            
             services.AddTransient<AccountsPageViewModel>();
             services.AddTransient<RegionsPageViewModel>();
             services.AddTransient<LogsPageViewModel>();
             services.AddTransient<GlobalSettingsPageViewModel>();
-            
-            services.AddSingleton<EditInstanceFormViewModelFactory>();
             
             services.AddSingleton<PageHost>();
             services.AddSingleton<IPageHost>(sp => sp.GetRequiredService<PageHost>());
@@ -154,10 +156,6 @@ public static class ServiceCollectionExtension
             services.AddSingleton<HotKeyRegistrationManager>();
             services.AddSingleton<IHotKeySuspensionCoordinator>(sp => sp.GetRequiredService<HotKeyRegistrationManager>());
             services.AddSingleton<IHotKeyConfigValidator, HotKeyConfigValidator>();
-            
-            services.AddSingleton<InstanceHotKeyBindingCoordinator>();
-            services.AddSingleton<InstanceHotKeyConfigProvider>();
-            services.AddSingleton<IHotKeyConfigProvider, InstanceHotKeyConfigProvider>(sp => sp.GetRequiredService<InstanceHotKeyConfigProvider>());
 
             services.AddSingleton<IUnlockService, UnlockService>();
             services.AddSingleton<UnlockCoordinator>();
