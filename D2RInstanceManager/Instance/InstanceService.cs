@@ -65,6 +65,9 @@ public class InstanceService : IInstanceConfigProvider
     private void OnInstanceStateChanged(object? sender, RuntimeSnapshot snapshot)
     {
         var transition = _activityTracker.Update(snapshot.Id, snapshot.IsActive);
+        
+        if (transition.IsIgnored)
+            return;
 
         if (transition.BecameInactive)
             _exitReporter.Report(snapshot);
@@ -85,6 +88,7 @@ public class InstanceService : IInstanceConfigProvider
                 context.SaveDisplay(displaySnapshotToCache);
         });
         _instanceNameRegistry.Set(snapshot.Id, snapshot.Name);
+        _activityTracker.Register(snapshot.Id);
         _instanceManager.Register(snapshot.Id);
 
         var eventArgs = new InstanceConfigChangedEventArgs(snapshot.Id, newSnapshot: snapshot);

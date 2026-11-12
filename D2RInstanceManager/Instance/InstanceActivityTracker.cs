@@ -11,6 +11,8 @@ public sealed class InstanceActivityTracker
 
     private readonly Dictionary<Guid, bool> _states = [];
 
+    private readonly HashSet<Guid> _removed = [];
+
     private int _activeCount;
 
     public int ActiveCount
@@ -22,10 +24,19 @@ public sealed class InstanceActivityTracker
         }
     }
     
+    public void Register(Guid id)
+    {
+        lock (_lock)
+            _removed.Remove(id);
+    }
+    
     public ActivityTransition Update(Guid id, bool isActive)
     {
         lock (_lock)
         {
+            if (_removed.Contains(id))
+                return ActivityTransition.Ignored;
+
             var wasActive = _states.GetValueOrDefault(id);
             _states[id] = isActive;
 
@@ -36,11 +47,13 @@ public sealed class InstanceActivityTracker
             return new ActivityTransition(wasActive, isActive, _activeCount);
         }
     }
-
+    
     public int? Remove(Guid id)
     {
         lock (_lock)
         {
+            _removed.Add(id);
+
             return _states.Remove(id, out var wasActive) && wasActive
                 ? --_activeCount
                 : null;
