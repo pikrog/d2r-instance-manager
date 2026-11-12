@@ -9,7 +9,8 @@ namespace D2RInstanceManager.Log;
 
 public static class LogEntryMapper
 {
-    private static readonly ExpressionTemplate MessageTemplate = new("{@m}");
+    private static readonly ExpressionTemplate MessageTemplate = 
+        new("{@m}{#if @x is not null}. {Inspect(@x).Message}{#end}");
 
     private static string RenderMessage(LogEvent logEvent)
     {

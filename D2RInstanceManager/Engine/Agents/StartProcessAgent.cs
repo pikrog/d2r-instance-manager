@@ -32,13 +32,14 @@ public class StartProcessAgent(ProcessStartContext startContext, ProcessStartReq
         }
         else
         {
-            logger.LogError(
-                "Process start failed: {Error} ({NativeErrorCode})",
-                result.Error.FailureReason, result.Error.NativeErrorCode);
+            logger.LogError("Process start failed. {ErrorMessage}", result.Error.Message);
         }
 
         return result;
     }
+
+    protected override void OnGenericException(Exception exception) =>
+        logger.LogError(exception, "Process start failed");
 
     protected override ErrorEvent CreateErrorForGenericException(Exception exception) =>
         new ProcessStartFailed(exception);

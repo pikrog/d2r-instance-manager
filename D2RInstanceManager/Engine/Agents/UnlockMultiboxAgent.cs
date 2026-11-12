@@ -20,7 +20,7 @@ public class UnlockMultiboxAgent(RetryingMultiboxUnlocker unlocker, uint expecte
         
         if (!result.IsSuccess)
         {
-            logger.LogError("Multibox unlock failed: {Error}", result.Error);
+            logger.LogError("Multibox unlock failed. {Error}", result.Error);
         }
         else if (result.Value.Id != expectedProcessId)
         {
@@ -35,6 +35,9 @@ public class UnlockMultiboxAgent(RetryingMultiboxUnlocker unlocker, uint expecte
         
         return result;
     }
+    
+    protected override void OnGenericException(Exception exception) => 
+        logger.LogError(exception, "Multibox unlock failed");
 
     protected override ErrorEvent CreateErrorForGenericException(Exception exception) => 
         new MultiboxUnlockFailed(exception);

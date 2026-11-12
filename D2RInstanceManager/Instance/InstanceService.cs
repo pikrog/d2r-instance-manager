@@ -75,9 +75,6 @@ public class InstanceService : IInstanceConfigProvider
         _instanceManager.InstanceStateChanged += OnInstanceStateChanged;
     }
 
-    private static bool HasInstanceFailed(RuntimeSnapshot snapshot) =>
-        snapshot.Errors.Any() || snapshot.ProcessExitResult is not ProcessExitResult.Success;
-
     private void OnInstanceStateChanged(object? sender, RuntimeSnapshot snapshot)
     {
         bool previousActivityState;
@@ -95,18 +92,30 @@ public class InstanceService : IInstanceConfigProvider
             }
         }
 
-        if (previousActivityState && !snapshot.IsActive && HasInstanceFailed(snapshot))
+        if (previousActivityState 
+            && !snapshot.IsActive 
+            && (snapshot.Errors.Any() || snapshot.ProcessExitResult is not ProcessExitResult.Success))
             _notificationSink.Increment();
 
         if (previousActivityState && !snapshot.IsActive)
         {
             var instanceName = _instanceNameRegistry.Get(snapshot.Id);
             using var _ = _logger.BeginScope(new Dictionary<string, object?>{{ LogProperties.InstanceName, instanceName }});
-            
-            if (HasInstanceFailed(snapshot))
+
+            if (snapshot.Errors.Any())
                 _logger.LogError("Instance failed");
-            else
-                _logger.LogInformation("Instance stopped");
+            else switch (snapshot.ProcessExitResult)
+            {
+                case ProcessExitResult.Failure:
+                    _logger.LogError("Instance crashed");
+                    break;
+                case ProcessExitResult.Terminated:
+                    _logger.LogWarning("Instance terminated");
+                    break;
+                default:
+                    _logger.LogInformation("Instance stopped");
+                    break;
+            }
         }
 
         InstanceStateChanged?.Invoke(this, snapshot);
@@ -240,6 +249,8 @@ public class InstanceService : IInstanceConfigProvider
         var snapshot = GetConfigSnapshot(id);
 
         using var _ = _logger.BeginScope(new Dictionary<string, object> { { LogProperties.InstanceName, snapshot.Name } });
+        
+        _logger.LogInformation("Instance launch requested");
 
         var preparation = _launchContextFactory.Create(snapshot);
         if (!preparation.IsSuccess)
@@ -247,8 +258,6 @@ public class InstanceService : IInstanceConfigProvider
 
         await _instanceManager.LaunchAsync(snapshot.Id, preparation.Value);
         
-        _logger.LogInformation("Instance launch requested");
-
         return null;
     }
 

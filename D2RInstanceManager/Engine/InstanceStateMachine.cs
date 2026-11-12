@@ -155,6 +155,9 @@ public static class InstanceStateMachine
             case (State.Stopping, LaunchLeaseCanceled):
                 return To(session.CompleteCleanup(CleanupItem.LaunchLease), State.Stopping);
 
+            case (_, UnexpectedError):
+                return To(session, State.Inactive, [new Reset()]);
+            
             default:
                 return new TransitionResult(session);
         }

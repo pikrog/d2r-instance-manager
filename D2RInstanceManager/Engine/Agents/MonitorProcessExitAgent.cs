@@ -28,13 +28,12 @@ public class MonitorProcessExitAgent(ProcessManager processManager, uint forcefu
         else
         {
             logger.LogError(
-                "Failed to get exit code for process {ProcessId}: {Error} ({NativeErrorCode})",
-                processManager.Id, result.Error.FailureReason, result.Error.NativeErrorCode);
+                "Failed to get exit code for process {ProcessId}. {ErrorMessage})",
+                processManager.Id, result.Error.Message);
         }
 
         return result;
     }
-
 
     protected override Event MapAgentResultToEvent(ExitCodeResult result)
     {

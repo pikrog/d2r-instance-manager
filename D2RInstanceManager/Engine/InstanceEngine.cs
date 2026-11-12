@@ -290,8 +290,12 @@ public class InstanceEngine : IAsyncDisposable
         }
         catch (Exception e)
         {
-            var error = new UnexpectedError(e, agent.GetType().Name);
+            var agentName = agent.GetType().Name;
+            
+            var error = new UnexpectedError(e, agentName);
             await PublishAsync(error);
+            
+            _logger.LogError(e, "Unexpected error in agent {AgentName}", agentName);
         }
     }
 

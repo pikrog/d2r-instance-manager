@@ -23,22 +23,26 @@ public class StopProcessAgent(ProcessManager processManager, RetryingProcessStop
         {
             logger.LogTrace("Process {ProcessId} stopped (mode: {ProcessStopMode})", processManager.Id, result.Value);
         }
-        else if (result.Error is ProcessStopOperationError { Error: var processError })
+        else switch (result.Error)
         {
-            logger.LogError(
-                "Failed to stop process {ProcessId}: {Error} ({NativeErrorCode})",
-                processManager.Id, processError.FailureReason, processError.NativeErrorCode);
+            case ProcessStopOperationError { Error: var processError }:
+                logger.LogError(
+                    "Failed to stop process {ProcessId}. {ErrorMessage})", 
+                    processManager.Id, processError.Message);
+                break;
+            case ProcessStopTimeout:
+                logger.LogError("Failed to stop process {ProcessId} (timeout)", processManager.Id);
+                break;
+            default:
+                throw new InvalidOperationException("Unexpected process stop error");
         }
-        else if (result.Error is ProcessStopTimeout)
-        {
-            logger.LogError("Failed to stop process {ProcessId} (timeout)", processManager.Id);
-        }
-        else
-            throw new InvalidOperationException("Unexpected process stop error");
         
         return result;
             
     }
+    
+    protected override void OnGenericException(Exception exception) =>
+        logger.LogError(exception, "Failed to stop process {ProcessId}", processManager.Id);
 
     protected override ErrorEvent CreateErrorForGenericException(Exception exception) => 
         new ProcessStopFailed(exception);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using D2RInstanceManager.Common;
 
 namespace D2RInstanceManager.Engine.Platform.Process;
 
@@ -48,4 +49,7 @@ public record ProcessError(int NativeErrorCode, ProcessOperation Operation, uint
             };
         }
     }
+
+    public string Message =>
+        $"{Operation.ToDisplayString()} failed with error: {FailureReason.ToDisplayString()} ({NativeErrorCode}";
 }
