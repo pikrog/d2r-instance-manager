@@ -18,12 +18,14 @@ public class DisplayService(ConfigService configService)
             .Prepend(DisplayOption.Primary.Instance)
             .ToList();
         
-        if (selection is null || options.Any(o => DisplayMatcher.IsMatch(selection, o))) 
+        if (selection is null || options.Any(o => DisplayMatcher.IsMatch(selection, o)) 
+                              || !configService.Config.DisplayExists(selection.Id)) 
             return options;
-        
+
         var cachedDisplay = configService.Config.GetDisplay(selection.Id);
         var disconnectedOption = new DisplayOption.Specific(null, cachedDisplay, false);
         options.Add(disconnectedOption);
+
         return options;
     }
 }
