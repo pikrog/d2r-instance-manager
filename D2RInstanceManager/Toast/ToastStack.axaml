@@ -6,6 +6,7 @@
              xmlns:semantic="clr-namespace:D2RInstanceManager.Semantic"
              xmlns:controls="clr-namespace:D2RInstanceManager.Controls"
              xmlns:descriptors="clr-namespace:D2RInstanceManager.Toast.Descriptors"
+             xmlns:models="clr-namespace:D2RInstanceManager.Instance.Models"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="D2RInstanceManager.Toast.ToastStack"
              x:Name="Root">
@@ -96,7 +97,7 @@
         <Style Selector="StackPanel.toast-content">
             <Setter Property="Spacing" Value="6" />
 
-            <Style Selector="^ > TextBlock">
+            <Style Selector="^ TextBlock">
                 <Setter Property="FontSize" Value="12" />
                 <Setter Property="VerticalAlignment" Value="Center" />
                 <Setter Property="TextWrapping" Value="Wrap" />
@@ -176,6 +177,65 @@
                 </TextBlock>
                 <TextBlock>
                     Instance <Run Text="{Binding Name}" /> could not be closed gracefully on time.
+                </TextBlock>
+            </StackPanel>
+        </DataTemplate>
+        
+        <DataTemplate x:DataType="models:InstanceLaunchFailure+DisplayUnavailable">
+            <Grid>
+                <TextBlock IsVisible="{Binding HasNoDisplayData}">
+                    Could not resolve the display.
+                </TextBlock>
+                            
+                <TextBlock IsVisible="{Binding HasDisplayIdOnly}">
+                    Could not resolve the display <Run Text="{Binding DisplayId}" />.
+                </TextBlock>
+                            
+                <TextBlock IsVisible="{Binding HasDisplaySnapshot}">
+                    Could not resolve the display
+                    <Run Text="{Binding DisplaySnapshot.Description}" /> [<Run Text="{Binding DisplaySnapshot.Width}" />x<Run Text="{Binding DisplaySnapshot.Height}" />].
+                </TextBlock>
+            </Grid>
+        </DataTemplate>
+        
+                    
+        <DataTemplate x:DataType="models:InstanceLaunchFailure+ExecutablePathMissing">
+            <TextBlock>
+                The game executable path is missing.
+            </TextBlock>
+        </DataTemplate>
+        
+        <DataTemplate x:DataType="models:InstanceLaunchFailure+ExecutableNotFound">
+            <TextBlock>
+                The game executable was not found: <Run Text="{Binding Path}"/>.
+            </TextBlock>
+        </DataTemplate>
+        
+        <DataTemplate x:DataType="models:InstanceLaunchFailure+ExecutableInvalidFormat">
+            <TextBlock>
+                The game executable is not a valid 64-bit binary: <Run Text="{Binding Path}"/>.
+            </TextBlock>
+        </DataTemplate>
+        
+        <DataTemplate x:DataType="descriptors:InstanceLaunchFailed">
+            <StackPanel Classes="toast-content">
+                <TextBlock>
+                    Launch failed
+                </TextBlock>
+                <TextBlock>
+                    Failed to launch the instance <Run Text="{Binding Failure.Name}" />.
+                </TextBlock>
+                <ContentControl Content="{Binding Failure.Failure}" />
+            </StackPanel>
+        </DataTemplate>
+        
+        <DataTemplate x:DataType="descriptors:MultipleInstancesLaunchFailed">
+            <StackPanel Classes="toast-content">
+                <TextBlock>
+                    Launch failed
+                </TextBlock>
+                <TextBlock>
+                    Failed to launch <Run Text="{Binding Count}" /> instances.
                 </TextBlock>
             </StackPanel>
         </DataTemplate>

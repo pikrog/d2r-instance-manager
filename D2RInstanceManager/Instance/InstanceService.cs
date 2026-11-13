@@ -195,7 +195,7 @@ public class InstanceService : IInstanceConfigProvider
 
     public Task<int> GetActiveCountAsync() => _instanceManager.GetActiveCountAsync();
 
-    public async Task<InstanceLaunchFailure?> LaunchAsync(Guid id)
+    public async Task<NamedInstanceLaunchFailure?> LaunchAsync(Guid id)
     {
         var snapshot = GetConfigSnapshot(id);
 
@@ -205,7 +205,7 @@ public class InstanceService : IInstanceConfigProvider
 
         var preparation = _launchContextFactory.Create(snapshot);
         if (!preparation.IsSuccess)
-            return preparation.Error;
+            return new NamedInstanceLaunchFailure(snapshot.Name, preparation.Error);
 
         await _instanceManager.LaunchAsync(snapshot.Id, preparation.Value);
         

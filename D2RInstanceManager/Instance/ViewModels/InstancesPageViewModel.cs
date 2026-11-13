@@ -18,6 +18,8 @@ using D2RInstanceManager.Overlay;
 using D2RInstanceManager.Selectable;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using D2RInstanceManager.Toast;
+using D2RInstanceManager.Toast.Descriptors;
 using DynamicData;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -38,6 +40,8 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
     private readonly EditInstanceFormViewModelFactory _formFactory;
     
     private readonly INotificationAcknowledger _notificationAcknowledger;
+    
+    private readonly ToastService _toastService;
     
     private readonly IDisplayConfigMonitor _displayConfigMonitor;
 
@@ -62,6 +66,7 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         NavigationService navigationService,
         EditInstanceFormViewModelFactory formFactory,
         [FromKeyedServices(NotificationCounterKey.Instances)] INotificationAcknowledger notificationAcknowledger,
+        ToastService toastService,
         IDisplayConfigMonitor displayConfigMonitor)
     {
         _instanceService = instanceService;
@@ -71,6 +76,7 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         _navigationService = navigationService;
         _formFactory = formFactory;
         _notificationAcknowledger = notificationAcknowledger;
+        _toastService = toastService;
         _displayConfigMonitor = displayConfigMonitor;
         
         Instances = new ReadOnlyObservableCollection<InstanceItemViewModel>(_instances);
@@ -267,23 +273,36 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
         RefreshInstances();
     }
     
+    private async Task<NamedInstanceLaunchFailure?> LaunchCoreAsync(InstanceItemViewModel instance)
+    {
+        instance.IsLaunchPending = true;
+        try
+        {
+            return await _instanceService.LaunchAsync(instance.Id);
+        }
+        finally
+        {
+            instance.IsLaunchPending = false;
+        }
+    }
+
     private bool CanLaunch(InstanceItemViewModel instance) => instance.CanLaunch && FirstGlobalSettingsIssue is null;
+
+    private void ShowSingleLaunchFailureToast(NamedInstanceLaunchFailure failure)
+    {
+        var toast = new InstanceLaunchFailed(failure);
+        _toastService.Show(toast);
+    }
 
     [RelayCommand(CanExecute = nameof(CanLaunch))]
     private async Task Launch(InstanceItemViewModel instance)
     {
         if (!CanLaunch(instance))
             return;
-        
-        instance.IsLaunchPending = true;
-        try
-        {
-            await _instanceService.LaunchAsync(instance.Id);
-        }
-        finally
-        {
-            instance.IsLaunchPending = false;
-        }
+
+        var failure = await LaunchCoreAsync(instance);
+        if (failure is { } f)
+            ShowSingleLaunchFailureToast(f);
     }
     
     private static bool CanStop(InstanceItemViewModel instance) => instance.CanStop;
@@ -313,10 +332,24 @@ public partial class InstancesPageViewModel : PageViewModel, IDialogParticipant
     [RelayCommand(CanExecute = nameof(CanLaunchSelected))]
     private async Task LaunchSelected()
     {
-        var launchTasks = SelectedInstances.Items
-            .Where(CanLaunch)
-            .Select(i => _instanceService.LaunchAsync(i.Id));
-        await Task.WhenAll(launchTasks);
+        var items = SelectedInstances.Items.Where(CanLaunch).ToList();
+
+        var results = await Task.WhenAll(items.Select(async i =>
+            (Instance: i, Failure: await LaunchCoreAsync(i))));
+
+        var failed = results.Where(r => r.Failure is not null).ToList();
+        switch (failed.Count)
+        {
+            case 0:
+                return;
+            case 1:
+                ShowSingleLaunchFailureToast(failed[0].Failure!);
+                break;
+            default:
+                var toast = new MultipleInstancesLaunchFailed(failed.Count);
+                _toastService.Show(toast);
+                break;
+        }
     }
     
     private bool CanStopSelected => SelectedInstances.Items.Any(CanStop);

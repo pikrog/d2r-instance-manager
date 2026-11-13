@@ -22,17 +22,29 @@ public class InstanceLaunchContextFactory(
     IGameExecutableFileValidator gameExecutableFileValidator,
     ILogger<InstanceLaunchContextFactory> logger)
 {
+    private (string?, DisplaySnapshot?) TryGetCachedDisplay(InstanceSnapshot instance)
+    {
+        var selectionId = (instance.Display as DisplaySelection.Specific)?.Id;
+        return selectionId is not null && configService.Config.DisplayExists(selectionId)
+            ? (selectionId, configService.Config.GetDisplay(selectionId))
+            : (selectionId, null);
+    }
+    
     public LaunchPreparation Create(InstanceSnapshot instance)
     {
         var settings = configService.Config.GetGlobalSettings();
 
         var authenticationContext = CreateAuthenticationContext(instance);
 
-        var displayResolution = DisplayResolver.ResolveDisplayId(instance.Display, 
+        var resolvedDisplay = DisplayResolver.ResolveDisplayId(instance.Display, 
             settings.FallbackToPrimaryDisplayIfInvalid);
-        
-        if (displayResolution is not { Id: var displayId, IsFallback: var isFallback })
-            return LaunchPreparation.Failure(InstanceLaunchFailure.DisplayUnavailable);
+
+        if (resolvedDisplay is not { Id: var displayId, IsFallback: var isFallback })
+        {
+            var (selectionId, cachedDisplay) = TryGetCachedDisplay(instance);
+            var displayUnavailable = new InstanceLaunchFailure.DisplayUnavailable(selectionId, cachedDisplay);
+            return LaunchPreparation.Failure(displayUnavailable);
+        }
 
         if (isFallback)
             LogDisplayFallback(displayId);
@@ -112,13 +124,13 @@ public class InstanceLaunchContextFactory(
                 return null;
             case GameExecutableFileValidationResultCode.MissingPath:
                 logger.LogError("The game executable path is missing");
-                return InstanceLaunchFailure.ExecutablePathMissing;
+                return InstanceLaunchFailure.ExecutablePathMissing.Instance;
             case GameExecutableFileValidationResultCode.FileNotFound:
                 logger.LogError("The game executable file was not found: {GameExecutablePath}", path);
-                return InstanceLaunchFailure.ExecutableNotFound;
+                return new InstanceLaunchFailure.ExecutableNotFound(path);
             case GameExecutableFileValidationResultCode.InvalidExecutableFormat:
                 logger.LogError("The game executable file has an invalid format: {GameExecutablePath}", path);
-                return InstanceLaunchFailure.ExecutableInvalidFormat;
+                return new InstanceLaunchFailure.ExecutableInvalidFormat(path);
             default:
                 throw new InvalidOperationException($"Unknown game executable file validation result {result}");
         }
