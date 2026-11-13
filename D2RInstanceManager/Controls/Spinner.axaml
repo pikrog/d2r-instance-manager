@@ -20,6 +20,7 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <Path Data="{StaticResource SpinnerGeometry}"
+                      UseLayoutRounding="False"
                       Width="24" Height="24"
                       StrokeThickness="1" StrokeLineCap="Round" StrokeDashArray="48,16"
                       Stroke="{DynamicResource PrimaryForeground}" />
