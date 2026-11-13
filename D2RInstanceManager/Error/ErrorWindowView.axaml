@@ -1,0 +1,52 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:error="clr-namespace:D2RInstanceManager.Error"
+        xmlns:design="clr-namespace:D2RInstanceManager.Design.ViewModels"
+        mc:Ignorable="d"
+        MinWidth="400" MaxWidth="600"
+        SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterScreen"
+        CanResize="False" CanMaximize="False"
+        x:Class="D2RInstanceManager.Error.ErrorWindowView"
+        x:DataType="error:ErrorWindowViewModel"
+        Title="D2R Instance Manager — Error"
+        Background="{DynamicResource PrimaryBackground}">
+    <Design.DataContext>
+        <design:ErrorWindowDesignViewModel />
+    </Design.DataContext>
+    
+    <Window.DataTemplates>
+        <DataTemplate x:DataType="error:ErrorDescriptor+StartupFailure">
+            <TextBlock Classes="paragraph">Application start failed.</TextBlock>
+        </DataTemplate>
+    
+        <DataTemplate x:DataType="error:ErrorDescriptor+RuntimeFailure">
+            <TextBlock Classes="paragraph">An error occurred during application execution.</TextBlock>
+        </DataTemplate>
+    
+        <DataTemplate x:DataType="error:ErrorDescriptor+ShutdownFailure">
+            <TextBlock Classes="paragraph">Application exit failed.</TextBlock>
+        </DataTemplate>
+    </Window.DataTemplates>
+    
+    <Grid Margin="24" RowSpacing="24" RowDefinitions="Auto,*,Auto">
+        <Grid Grid.Row="0" ColumnDefinitions="Auto,*" ColumnSpacing="12">
+            <Svg Grid.Column="0" Classes="danger" Height="32" Path="/Assets/images/error.svg" />
+            <TextBlock Grid.Column="1" Classes="h1" VerticalAlignment="Center">Fatal error</TextBlock>
+        </Grid>
+        
+        <StackPanel Grid.Row="1" Classes="dialog-text">
+            <ContentControl Content="{Binding ErrorDescriptor}" />
+            <TextBlock Classes="paragraph" Text="{Binding ErrorDescriptor.Exception.Message}" />
+        </StackPanel>
+        
+        <StackPanel Grid.Row="2" Classes="dialog-actions">
+            <Button Classes="dialog-action danger" IsDefault="True" 
+                    Command="{Binding ExitCommand}">
+                Exit
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>

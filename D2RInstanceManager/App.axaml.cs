@@ -7,6 +7,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using D2RInstanceManager.Bootstrap;
 using D2RInstanceManager.CommandLine;
+using D2RInstanceManager.Error;
 using D2RInstanceManager.MainWindow;
 using D2RInstanceManager.Unlock;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +25,8 @@ namespace D2RInstanceManager
         
         public static IServiceProvider Services => _services ?? throw new InvalidOperationException("Services not initialized");
         
+        private Window? _mainWindow;
+        
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
@@ -31,8 +34,6 @@ namespace D2RInstanceManager
 
         private async Task InitializeAsync(IClassicDesktopStyleApplicationLifetime desktop)
         {
-            // todo: error window
-            
             desktop.ShutdownRequested += OnShutdownRequested;
             desktop.Exit += (_, _) => _services?.Dispose();
             
@@ -64,15 +65,15 @@ namespace D2RInstanceManager
                 
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    var mainWindow = new MainWindowView
+                    _mainWindow = new MainWindowView
                     {
                         DataContext = mainWindowViewModel,
                     };
-                    mainWindow.Closing += OnMainWindowClosing;
+                    _mainWindow.Closing += OnMainWindowClosing;
 
-                    _services.GetRequiredService<WindowRuntimeBootstrapper>().Bootstrap(mainWindow);
+                    _services.GetRequiredService<WindowRuntimeBootstrapper>().Bootstrap(_mainWindow);
                     
-                    desktop.MainWindow = mainWindow;
+                    desktop.MainWindow = _mainWindow;
                     desktop.MainWindow.Show();
                     initialWindow.Close();
                 });
@@ -80,13 +81,99 @@ namespace D2RInstanceManager
             {
                 Serilog.Log.Fatal(e, "Application failed to start");
                 
-                await Dispatcher.UIThread.InvokeAsync(() => desktop.Shutdown(1));
+                await Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    SetProgressBarVisibility(false);
+                    
+                    var error = new ErrorDescriptor.StartupFailure(e);
+                    ShowErrorWindow(error);
+                    
+                    Shutdown(1);
+                });
             }
 
             return;
 
-            DispatcherOperation<double> SetProgressBarVisibilityAsync(bool visible) =>
-                Dispatcher.UIThread.InvokeAsync(() => initialWindow.ProgressBar.Opacity = visible ? 1 : 0);
+            void SetProgressBarVisibility(bool visible) => initialWindow.ProgressBar.Opacity = visible ? 1 : 0;
+            
+            DispatcherOperation SetProgressBarVisibilityAsync(bool visible) =>
+                Dispatcher.UIThread.InvokeAsync(() => SetProgressBarVisibility(visible));
+        }
+        
+        private void Shutdown(int exitCode = 0)
+        {
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+                desktop.Shutdown(exitCode);
+            else
+                Environment.Exit(exitCode);
+        }
+
+        private void RegisterExceptionHandlers()
+        {
+            Dispatcher.UIThread.UnhandledException += OnUiThreadUnhandledException;
+            AppDomain.CurrentDomain.UnhandledException += OnAppDomainUnhandledException;
+            TaskScheduler.UnobservedTaskException += OnUnobservedTaskException;
+        }
+        
+        private bool _isShowingErrorWindow;
+
+        private void ShowErrorWindow(ErrorDescriptor errorDescriptor)
+        {
+            if (_isShowingErrorWindow)
+                return;
+
+            _isShowingErrorWindow = true;
+
+            try
+            {
+                var errorWindowViewModel = new ErrorWindowViewModel(errorDescriptor);
+                var errorWindow = new ErrorWindowView
+                {
+                    DataContext = errorWindowViewModel,
+                };
+                errorWindowViewModel.ExitAction = errorWindow.Close;
+
+                var frame = new DispatcherFrame();
+                errorWindow.Closed += (_, _) => frame.Continue = false;
+                
+                if (_mainWindow is not null)
+                    errorWindow.ShowDialog(_mainWindow);
+                else
+                    errorWindow.Show();
+                
+                Dispatcher.UIThread.PushFrame(frame);
+            }
+            catch (Exception exception)
+            {
+                Serilog.Log.Fatal(exception,"Failed to show error window");
+            }
+            finally
+            {
+                _isShowingErrorWindow = false;
+            }
+        }
+
+        private void OnUiThreadUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            Serilog.Log.Fatal(e.Exception, "Unhandled UI thread exception");
+            
+            e.Handled = true;
+
+            var error = new ErrorDescriptor.RuntimeFailure(e.Exception);
+            ShowErrorWindow(error);
+            
+            Shutdown(1);
+        }
+
+        private void OnAppDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Serilog.Log.Fatal(e.ExceptionObject as Exception, "Unhandled app domain exception");
+        }
+
+        private void OnUnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e)
+        {
+            Serilog.Log.Fatal(e.Exception, "Unhandled task exception");
+            e.SetObserved();
         }
 
         private void OnShutdownRequested(object? sender, ShutdownRequestedEventArgs e)
@@ -113,9 +200,6 @@ namespace D2RInstanceManager
                 
                 if (mainWindow.DataContext is not MainWindowViewModel viewModel)
                     return;
-                
-                if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop)
-                    return;
 
                 e.Cancel = true;
 
@@ -133,7 +217,7 @@ namespace D2RInstanceManager
                     
                     mainWindow.Closing -= OnMainWindowClosing;
 
-                    desktop.Shutdown();
+                    Shutdown();
                 }
                 finally
                 {
@@ -143,11 +227,23 @@ namespace D2RInstanceManager
             catch (Exception exception)
             {
                 Serilog.Log.Fatal(exception, "Application failed to exit");
+                
+                await Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    var error = new ErrorDescriptor.ShutdownFailure(exception);
+                    ShowErrorWindow(error);
+                
+                    _shutdownWasHandledInternally = true;
+                    
+                    Shutdown(1);
+                });
             }
         }
 
         public override void OnFrameworkInitializationCompleted()
         {
+            RegisterExceptionHandlers();
+            
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 _ = InitializeAsync(desktop);
